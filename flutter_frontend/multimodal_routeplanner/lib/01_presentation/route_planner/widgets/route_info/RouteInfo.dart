@@ -9,8 +9,7 @@ class RouteInfo extends StatelessWidget {
   final Trip trip;
   final bool visible;
 
-  const RouteInfo({Key? key, required this.trip, required this.visible})
-      : super(key: key);
+  const RouteInfo({Key? key, required this.trip, required this.visible}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -43,16 +42,12 @@ class RouteInfo extends StatelessWidget {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: stringMappingHelper
-                                      .mapModeStringToIcon(trip.mode.toString()),
+                                  child: stringMappingHelper.mapModeStringToIcon(trip.mode.toString()),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                      stringMappingHelper
-                                          .mapModeStringToToolTip(trip.mode),
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold)),
+                                  child: Text(stringMappingHelper.mapModeStringToToolTip(trip.mode),
+                                      style: const TextStyle(fontWeight: FontWeight.bold)),
                                 ),
                               ],
                             ),
@@ -60,50 +55,44 @@ class RouteInfo extends StatelessWidget {
                               height: 4,
                             ),
                             // Header Row 2
-                            Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                              Column(
                                 children: [
-                                  Column(
-                                    children: [
-                                      Row(children: [
-                                        const Icon(Icons.timer),
-                                        Text(
-                                            '${trip.duration.toStringAsFixed(2)} min')
-                                      ])
-                                    ],
-                                  ),
-                                  Column(children: [
-                                    Row(
-                                      children: [
-                                        const Icon(Icons.route),
-                                        Text(
-                                            '${trip.distance.toStringAsFixed(2)} km')
-                                      ],
-                                    ),
-                                  ]),
-                                ]),
+                                  Row(children: [
+                                    const Icon(Icons.timer),
+                                    Text('${trip.duration.toStringAsFixed(2)} min')
+                                  ])
+                                ],
+                              ),
+                              Column(children: [
+                                Row(
+                                  children: [
+                                    const Icon(Icons.route),
+                                    Text('${trip.distance.toStringAsFixed(2)} km')
+                                  ],
+                                ),
+                              ]),
+                            ]),
                             const Divider(
                               thickness: 1,
                             ),
-                            // MobiScore information
+                            // Mobi-Score information
                             ExpansionTile(
                               title: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  const Text('MobiScore '),
+                                  const Text('Mobi-Score '),
                                   SizedBox(
                                     width: 100,
                                     height: 50,
                                     child: Image(
-                                      image: stringMappingHelper
-                                          .mapMobiScoreStringToPath(
-                                              trip.mobiScore),
+                                      image: stringMappingHelper.mapMobiScoreStringToPath(trip.mobiScore),
                                     ),
                                   ),
                                 ],
                               ),
                               subtitle: const Text(
-                                'erfahre mehr zum MobiScore',
+                                'erfahre mehr zum Mobi-Score',
                                 style: TextStyle(fontSize: 12),
                                 textAlign: TextAlign.right,
                               ),
@@ -112,7 +101,7 @@ class RouteInfo extends StatelessWidget {
                                   children: const [
                                     SizedBox(height: 8),
                                     Text(
-                                      'Der MobiScore ist eine Kenngröße, die die Nachhaltigkeit einer Route im urbanen Verkehr beschreibt. Diese wird aus den externen Kosten und der Routendistanz berechnet.',
+                                      'Der Mobi-Score ist eine Kenngröße, die die Nachhaltigkeit einer Route im urbanen Verkehr beschreibt. Diese wird aus den externen Kosten und der Routendistanz berechnet.',
                                       textAlign: TextAlign.justify,
                                       textWidthBasis: TextWidthBasis.parent,
                                       style: TextStyle(fontSize: 14),
@@ -133,10 +122,8 @@ class RouteInfo extends StatelessWidget {
                                   const Text('Kosten'),
                                   Column(
                                     children: [
-                                      Text(
-                                          'intern: ${trip.costs.internalCosts.all.toStringAsFixed(2)} €'),
-                                      Text(
-                                          'extern: ${trip.costs.externalCosts.all.toStringAsFixed(2)} €')
+                                      Text('intern: ${trip.costs.internalCosts.all.toStringAsFixed(2)} €'),
+                                      Text('extern: ${trip.costs.externalCosts.all.toStringAsFixed(2)} €')
                                     ],
                                   )
                                 ],
@@ -160,38 +147,31 @@ class RouteInfo extends StatelessWidget {
                                     const SizedBox(height: 4),
                                     ExternalCostsDetailRow(
                                         externalCostName: 'Unfallkosten',
-                                        externalCostValue:
-                                            trip.costs.externalCosts.accidents,
+                                        externalCostValue: trip.costs.externalCosts.accidents,
                                         costIcon: Icons.emergency),
                                     ExternalCostsDetailRow(
                                         externalCostName: 'Klimaschäden',
-                                        externalCostValue:
-                                            trip.costs.externalCosts.climate,
+                                        externalCostValue: trip.costs.externalCosts.climate,
                                         costIcon: Icons.eco),
                                     ExternalCostsDetailRow(
                                         externalCostName: 'Luftverschmutzung',
-                                        externalCostValue:
-                                            trip.costs.externalCosts.air,
+                                        externalCostValue: trip.costs.externalCosts.air,
                                         costIcon: Icons.air),
                                     ExternalCostsDetailRow(
                                         externalCostName: 'Lärmbelastung',
-                                        externalCostValue:
-                                            trip.costs.externalCosts.noise,
+                                        externalCostValue: trip.costs.externalCosts.noise,
                                         costIcon: Icons.volume_up),
                                     ExternalCostsDetailRow(
                                         externalCostName: 'Fächenverbrauch',
-                                        externalCostValue:
-                                            trip.costs.externalCosts.space,
+                                        externalCostValue: trip.costs.externalCosts.space,
                                         costIcon: Icons.location_city),
                                     ExternalCostsDetailRow(
                                         externalCostName: 'Stau',
-                                        externalCostValue:
-                                            trip.costs.externalCosts.congestion,
+                                        externalCostValue: trip.costs.externalCosts.congestion,
                                         costIcon: Icons.traffic),
                                     ExternalCostsDetailRow(
                                         externalCostName: 'Barriereeffekte',
-                                        externalCostValue:
-                                            trip.costs.externalCosts.barrier,
+                                        externalCostValue: trip.costs.externalCosts.barrier,
                                         costIcon: Icons.fence),
                                     const SizedBox(height: 8),
                                   ],
@@ -204,8 +184,7 @@ class RouteInfo extends StatelessWidget {
                             alignment: Alignment.topRight,
                             child: IconButton(
                                 onPressed: () {
-                                  BlocProvider.of<RouteInfoBloc>(context)
-                                      .add(HideRouteInfoEvent(trip: trip));
+                                  BlocProvider.of<RouteInfoBloc>(context).add(HideRouteInfoEvent(trip: trip));
                                 },
                                 icon: const Icon(Icons.close))),
                       ],
