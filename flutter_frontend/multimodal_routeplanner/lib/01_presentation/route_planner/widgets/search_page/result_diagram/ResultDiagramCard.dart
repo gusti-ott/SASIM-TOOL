@@ -24,6 +24,15 @@ class ResultDiagramCard extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'wähle eine Kategorie im Dropdown-Menü um deine Routen zu vergleichen',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 14, fontStyle: FontStyle.italic, color: themeData.colorScheme.onSecondary),
+                ),
+              ),
               const TitleDropdown(),
               Expanded(
                 child: BlocBuilder<DiagramTypeBloc, DiagramTypeState>(

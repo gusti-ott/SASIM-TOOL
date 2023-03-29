@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_page.dart';
+import 'package:multimodal_routeplanner/01_presentation/RoutePlannerScreen.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/cost_details_bloc.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/diagram_type_bloc.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/route_planner/advanced_route_planner_bloc.dart';

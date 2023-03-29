@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/diagram_type_bloc.dart';
 
@@ -22,8 +21,7 @@ class TitleDropdown extends StatelessWidget {
             style: TextStyle(color: themeData.colorScheme.onSecondary),
             onChanged: (DiagramTypeEnum? newValue) {
               if (newValue != null) {
-                BlocProvider.of<DiagramTypeBloc>(context)
-                    .add(DiagramTypeChangedEvent(diagramType: newValue));
+                BlocProvider.of<DiagramTypeBloc>(context).add(DiagramTypeChangedEvent(diagramType: newValue));
               }
             },
             items: <DiagramTypeEnum>[
@@ -49,13 +47,12 @@ class TitleDropdown extends StatelessWidget {
         } else {
           return DropdownButton<DiagramTypeEnum>(
             value: DiagramTypeEnum.externalCosts,
-            icon: const Icon(Icons.arrow_downward),
+            icon: const Icon(Icons.arrow_drop_down),
             elevation: 16,
             style: TextStyle(color: themeData.colorScheme.onSecondary),
             onChanged: (DiagramTypeEnum? newValue) {
               if (newValue != null) {
-                BlocProvider.of<DiagramTypeBloc>(context)
-                    .add(DiagramTypeChangedEvent(diagramType: newValue));
+                BlocProvider.of<DiagramTypeBloc>(context).add(DiagramTypeChangedEvent(diagramType: newValue));
               }
             },
             items: <DiagramTypeEnum>[
