@@ -89,7 +89,7 @@ class OtpController:
             # input_time = '1:02pm&date=22-02-2020'
         start = t.time()
         response = requests.get(
-            "http://0.0.0.0:8080/otp/routers/default/plan?fromPlace=" + start_location + "&toPlace=" +
+            "http://127.0.0.1:8080/otp/routers/default/plan?fromPlace=" + start_location + "&toPlace=" +
             end_location + "&time=" + str(input_time.hour) + ":" + str(input_time.minute) + "&date=" +
             str(input_time.month) + "-" + str(input_time.day) + "-" + str(input_time.year) + "&mode=" +
             mode + "&maxWalkDistance=50000&arriveBy=false")
