@@ -3,7 +3,6 @@ from enum import Enum
 from controllers.costs.CostsController import CostsController
 from controllers.mobi_score.MobiScoreController import MobiScoreController
 from controllers.muenchenapi.MunchenapiController import MuenchenapiController
-from controllers.mvv.MvvController import MvvController
 from controllers.otp.OtpController import OtpController
 from controllers.sharing.EmmyController import EmmyController
 from controllers.sharing.ShareNowController import ShareNowController
@@ -25,6 +24,10 @@ from model.enums.mode.SharingMode import SharingMode
 from model.enums.mode.TripMode import TripMode
 from model.enums.trip_type.TripType import TripType
 
+# from controllers.mvv.MvvController import MvvController
+from flask_app.controllers.efa_mvv.EfaMvvTripController import EfaMvvRouteController
+from flask_app.model.enums.tarif_zone.MvvTarifZone import MvvTarifZone
+
 
 # TODO: enable different types of routing controller
 class RoutingType(Enum):
@@ -37,7 +40,8 @@ class TripController:
 
         self._routing_controller = OtpController()
         # self._routing_controller = MuenchenapiController()
-        self._mvv_controller = MvvController()
+        # self._pt_controller = MvvController()
+        self._pt_controller = EfaMvvRouteController()
 
         self._emmy_controller = EmmyController()
         self._share_now_controller = ShareNowController()
@@ -50,7 +54,8 @@ class TripController:
 
         self._geo_helper = GeoHelper()
 
-    def get_trip(self, start_location: Location, end_location: Location, trip_mode: TripMode) -> Trip:
+    def get_trip(self, start_location: Location, end_location: Location, trip_mode: TripMode, start_id=None,
+                 end_id=None) -> Trip:
 
         trip_type = self._get_trip_type_from_trip_mode(trip_mode=trip_mode)
 
@@ -68,12 +73,19 @@ class TripController:
                                          trip_mode=trip_mode)
 
         elif (trip_type == TripType.TYPE_3):
-            trip = self._get_trip_type_3_4(start_location=start_location, end_location=end_location,
-                                           trip_type=TripType.TYPE_3, trip_mode=trip_mode)
+            # trip = self._get_trip_type_3_4(start_location=start_location, end_location=end_location,
+            #                                trip_type=TripType.TYPE_3, trip_mode=trip_mode)
+            trip = self._get_trip_type_3_4_efa(start_location=start_location, end_location=end_location,
+                                               trip_type=TripType.TYPE_3, trip_mode=trip_mode, start_id=start_id,
+                                               end_id=end_id)
 
         elif (trip_type == TripType.TYPE_4):
-            trip = self._get_trip_type_3_4(start_location=start_location, end_location=end_location,
-                                           trip_type=TripType.TYPE_4, trip_mode=trip_mode)
+            # trip = self._get_trip_type_3_4(start_location=start_location, end_location=end_location,
+            #                                trip_type=TripType.TYPE_4, trip_mode=trip_mode)
+            trip = self._get_trip_type_3_4_efa(start_location=start_location, end_location=end_location,
+                                               trip_type=TripType.TYPE_3, trip_mode=trip_mode, start_id=start_id,
+                                               end_id=end_id)
+
 
         else:
             print("Error: trip type now valid")
@@ -300,6 +312,106 @@ class TripController:
         )
 
         internal_trip_costs = self._costs_controller.get_internal_public_transport_costs(mvv_trip_data.mvv_ticket_name)
+        total_costs = Costs(
+            internal_costs=internal_trip_costs,
+            external_costs=total_external_costs
+        )
+
+        trip = Trip(
+            start_location=start_location,
+            end_location=end_location,
+            trip_mode=trip_mode,
+            segments=segments,
+            duration=total_duration,
+            distance=total_distance,
+            costs=total_costs,
+            mobi_score=mobi_score
+        )
+
+        return trip
+
+    def _get_trip_type_3_4_efa(self, start_location: Location, end_location: Location, trip_type: TripType,
+                               trip_mode: TripMode, start_id: str, end_id: str):
+
+        # mvv_response = self._mvv_controller.get_response(start_location=start_location, end_location=end_location)
+        # mvv_trip_data = self._mvv_controller.get_mvv_trip_data(mvv_response)
+
+        efa_response = self._pt_controller.get_response(start_id=start_id, end_id=end_id)
+        efa_trip = self._pt_controller.get_mvv_trip_data(efa_response)
+
+        segments = []
+        total_distance = 0
+        total_internal_costs = InternalCosts()
+        total_external_costs = ExternalCosts()
+
+        for i in range(len(efa_trip.efa_segments)):
+
+            if (trip_type == TripType.TYPE_4 and i == 0):
+
+                end_location_bike = efa_trip.efa_segments[0].waypoints[-1]
+                router_response = self._routing_controller.get_response(
+                    start_location=start_location,
+                    end_location=end_location_bike,
+                    mode=TripMode.BICYCLE)
+
+                mode = IndividualMode.WALK
+                duration = self._routing_controller.get_duration(router_response)
+                distance = self._routing_controller.get_distance(router_response)
+                waypoints = self._routing_controller.get_waypoints(router_response)
+                internal_costs = self._costs_controller.get_internal_costs(distance, duration, mode)
+                external_costs = self._costs_controller.get_external_costs(distance, mode)
+                costs = Costs(
+                    internal_costs=internal_costs,
+                    external_costs=external_costs
+                )
+
+                segments.append(IndividualSegment(
+                    mode=mode,
+                    duration=duration,
+                    distance=distance,
+                    costs=costs,
+                    waypoints=waypoints
+                ))
+
+            else:
+                mode = efa_trip.efa_segments[i].mode
+                duration = efa_trip.efa_segments[i].duration
+                distance = efa_trip.efa_segments[i].distance
+                waypoints = efa_trip.efa_segments[i].waypoints
+                from_tarif_zone = MvvTarifZone.none
+                to_tarif_zone = MvvTarifZone.none
+
+                external_costs = self._costs_controller.get_external_costs(distance, mode)
+                internal_costs = InternalCosts(internal_costs=0)
+
+                costs = Costs(
+                    internal_costs=internal_costs,
+                    external_costs=external_costs
+                )
+
+                segments.append(PublicTransportSegment(
+                    mode=mode,
+                    duration=duration,
+                    distance=distance,
+                    costs=costs,
+                    waypoints=waypoints,
+                    from_tarif_zone=from_tarif_zone,
+                    to_tarif_zone=to_tarif_zone
+                ))
+
+            total_distance += distance
+            total_internal_costs += internal_costs
+            total_external_costs += external_costs
+
+        total_duration = efa_trip.total_duration
+
+        direct_distance = self._geo_helper.get_distance(start_location=start_location, end_location=end_location)
+        mobi_score = self._mobi_score_controller.get_mobi_score(
+            external_costs=total_external_costs,
+            direct_distance=direct_distance
+        )
+
+        internal_trip_costs = InternalCosts(internal_costs=efa_trip.ticket_price)
         total_costs = Costs(
             internal_costs=internal_trip_costs,
             external_costs=total_external_costs
