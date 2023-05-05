@@ -5,15 +5,13 @@ from typing import List
 
 import mvg_api
 
-from controllers.mvv.MvvHelper import MvvHelper
-from controllers.mvv.MvvHelper import MvvSegmentData
-from controllers.mvv.MvvHelper import MvvSegmentType
-from controllers.mvv.MvvHelper import MvvTripData
-from model.entities.location.Location import Location
-from model.enums.mode.IndividualMode import IndividualMode
-from model.enums.mode.PublicTransportMode import PublicTransportMode
-from model.enums.tarif_zone.MvvTarifZone import MvvTarifZone
-from helpers.GeoHelper import GeoHelper
+from flask_app.controllers.mvv.MvvHelper import MvvHelper
+from flask_app.controllers.mvv.MvvHelper import MvvSegmentData
+from flask_app.controllers.mvv.MvvHelper import MvvSegmentType
+from flask_app.controllers.mvv.MvvHelper import MvvTripData
+from flask_app.helpers.GeoHelper import GeoHelper
+from flask_app.model.entities.location.Location import Location
+from flask_app.model.enums.mode.IndividualMode import IndividualMode
 
 
 class MvvController:
@@ -125,6 +123,3 @@ class MvvController:
                                mvv_ticket_name=mvv_ticket_name)
 
         return mvv_data
-
-
-
