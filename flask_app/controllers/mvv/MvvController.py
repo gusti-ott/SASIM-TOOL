@@ -4,16 +4,13 @@ from datetime import datetime
 from typing import List
 
 import mvg_api
-
 from controllers.mvv.MvvHelper import MvvHelper
 from controllers.mvv.MvvHelper import MvvSegmentData
 from controllers.mvv.MvvHelper import MvvSegmentType
 from controllers.mvv.MvvHelper import MvvTripData
+from helpers.GeoHelper import GeoHelper
 from model.entities.location.Location import Location
 from model.enums.mode.IndividualMode import IndividualMode
-from model.enums.mode.PublicTransportMode import PublicTransportMode
-from model.enums.tarif_zone.MvvTarifZone import MvvTarifZone
-from helpers.GeoHelper import GeoHelper
 
 
 class MvvController:
@@ -119,7 +116,7 @@ class MvvController:
 
         trip_from_tarif_zone = segments[0].from_tarif_zone
         trip_to_tarif_zone = segments[0].to_tarif_zone
-        mvv_ticket_name = response[0].get('efaTicketIds')[0]
+        mvv_ticket_name = response[0].get('efaTicketIds')[1]
 
         mvv_data = MvvTripData(mvv_trip=segments, from_tarf_zone=trip_from_tarif_zone, to_tarif_zone=trip_to_tarif_zone,
                                mvv_ticket_name=mvv_ticket_name)
