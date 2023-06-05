@@ -4,10 +4,10 @@ from typing import List
 
 import pandas as pd
 
-from model.entities.location.Location import Location
-from model.enums.mode.IndividualMode import IndividualMode
-from model.enums.mode.PublicTransportMode import PublicTransportMode
-from model.enums.tarif_zone.MvvTarifZone import MvvTarifZone
+from flask_app.model.entities.location.Location import Location
+from flask_app.model.enums.mode.IndividualMode import IndividualMode
+from flask_app.model.enums.mode.PublicTransportMode import PublicTransportMode
+from flask_app.model.enums.tarif_zone.MvvTarifZone import MvvTarifZone
 
 
 class MvvSegmentType(Enum):
@@ -15,6 +15,8 @@ class MvvSegmentType(Enum):
     WALK_THERE = auto()
     WALK_AWAY = auto()
     TRANSPORTATION = auto()
+
+
 @dataclass
 class MvvSegmentData:
     waypoints: List[Location]

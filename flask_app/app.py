@@ -1,11 +1,14 @@
 from flask import Flask, request, redirect
-from flask_cors import CORS
-from flask import send_from_directory
 from flask import render_template
+from flask import send_from_directory
 from flask_caching import Cache
+from flask_cors import CORS
 
+from controllers.efa_mvv.EfaMvvCoordController import EfaMvvCoordController
+from controllers.efa_mvv.EfaMvvStopFinderController import EfaMvvStopFinder
 from controllers.geocoding.GeocodingController import GeocodingController
 from controllers.trip.TripController import TripController
+from flask_app.model.entities.location.Location import Location
 from helpers.ApiHelper import ApiHelper
 
 config = {
@@ -50,19 +53,30 @@ def return_trip():
     api_helper = ApiHelper()
 
     input_start_address = str(request.args['inputStartAddress'])
-    start_location = get_geolocation(input_start_address)
+    # start_location = get_geolocation(input_start_address)
+    start_location_and_id = get_efa_geolocation(input_start_address)
+    start_location = start_location_and_id[0]
+    start_id = start_location_and_id[1]
 
     input_end_address = str(request.args['inputEndAddress'])
-    end_location = get_geolocation(input_end_address)
+    # end_location = get_geolocation(input_end_address)
+    end_location_and_id = get_efa_geolocation(input_end_address)
+    end_location = end_location_and_id[0]
+    end_id = end_location_and_id[1]
 
     input_trip_mode = str(request.args['tripMode'])
     trip_mode = api_helper.get_trip_mode_from_input(input_trip_mode)
 
-    trip_controller = TripController()
+    df_sharing_vehicles = get_efa_sharing_vehicles(start_location)
+
+    trip_controller = TripController(df_sharing_vehicles)
     trip = trip_controller.get_trip(
         start_location=start_location,
         end_location=end_location,
-        trip_mode=trip_mode
+        trip_mode=trip_mode,
+        start_id=start_id,
+        end_id=end_id,
+        df_sharing_vehicels=df_sharing_vehicles
     )
 
     list_segments = []
@@ -174,9 +188,28 @@ def return_trip():
 
     return dict_new_result
 
+
 @cache.memoize(300)
 def get_geolocation(address: str):
     geocoding_controller = GeocodingController()
 
     return geocoding_controller.get_location(address)
 
+
+@cache.memoize(300)
+def get_efa_geolocation(address: str):
+    efa_stop_finder = EfaMvvStopFinder()
+    response = efa_stop_finder.get_response(address=address)
+    location = efa_stop_finder.get_location(response=response)
+    id = efa_stop_finder.get_efa_location_id(response=response)
+
+    return location, id
+
+
+@cache.memoize(300)
+def get_efa_sharing_vehicles(start_address: Location):
+    efa_coords_controller = EfaMvvCoordController()
+    response = efa_coords_controller.get_response(start_address)
+    df_sharing_vehices = efa_coords_controller.get_closest_vehicles_each(response, start_address)
+
+    return df_sharing_vehices

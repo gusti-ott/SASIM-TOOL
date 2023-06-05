@@ -4,13 +4,14 @@ from datetime import datetime
 from typing import List
 
 import mvg_api
-from controllers.mvv.MvvHelper import MvvHelper
-from controllers.mvv.MvvHelper import MvvSegmentData
-from controllers.mvv.MvvHelper import MvvSegmentType
-from controllers.mvv.MvvHelper import MvvTripData
-from helpers.GeoHelper import GeoHelper
-from model.entities.location.Location import Location
-from model.enums.mode.IndividualMode import IndividualMode
+
+from flask_app.controllers.mvv.MvvHelper import MvvHelper
+from flask_app.controllers.mvv.MvvHelper import MvvSegmentData
+from flask_app.controllers.mvv.MvvHelper import MvvSegmentType
+from flask_app.controllers.mvv.MvvHelper import MvvTripData
+from flask_app.helpers.GeoHelper import GeoHelper
+from flask_app.model.entities.location.Location import Location
+from flask_app.model.enums.mode.IndividualMode import IndividualMode
 
 
 class MvvController:

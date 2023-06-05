@@ -46,7 +46,7 @@ class AdvancedSearchInput extends StatelessWidget {
       AdvancedRouteButtonWidget(
         loadFirstTrip: () {
           routeBlocProvider
-              .add(RouteFirstTripEvent(startAddress, endAddress, MobilityMode(mode: MobilityModeEnum.bike)));
+              .add(RouteFirstTripEvent(startAddress, endAddress, MobilityMode(mode: MobilityModeEnum.mvg)));
         },
       ),
     ]);

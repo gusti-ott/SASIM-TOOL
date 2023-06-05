@@ -15,5 +15,11 @@ class TripMode(Enum):
     FLINKSTER = 'FLINKSTER'
     SHARENOW = 'SHARENOW'
 
+    # new since MENTZ API
+    MILES = 'MILES'
+    MVG_BIKE = 'MVG_BIKE'
+    LIME = 'LIME'
+    TIER_EBIKE = 'TIER_EBIKE'
+
     PT = 'PT'
     INTERMODAL_PT_BIKE = 'INTERMODAL_PT_BIKE'
