@@ -1,4 +1,4 @@
-from flask_app.model.enums.mode.Mode import Mode
+from model.enums.mode.Mode import Mode
 
 
 class PublicTransportMode(Mode):

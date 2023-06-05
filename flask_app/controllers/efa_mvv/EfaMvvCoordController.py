@@ -3,11 +3,10 @@ import time
 
 import pandas as pd
 import requests
-
-from flask_app.controllers.efa_mvv.EfaMvvHelper import EfaMvvHelper
-from flask_app.helpers.GeoHelper import GeoHelper
-from flask_app.model.entities.location.Location import Location
-from flask_app.model.enums.mode.TripMode import TripMode
+from controllers.efa_mvv.EfaMvvHelper import EfaMvvHelper
+from helpers.GeoHelper import GeoHelper
+from model.entities.location.Location import Location
+from model.enums.mode.TripMode import TripMode
 
 
 class EfaMvvCoordController:

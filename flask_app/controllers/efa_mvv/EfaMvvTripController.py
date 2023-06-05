@@ -3,10 +3,9 @@ import time
 from datetime import datetime
 
 import requests
-
-from flask_app.controllers.efa_mvv.EfaMvvHelper import EfaMvvHelper, EfaTripData, EfaSegmentData, PtSegmentType
-from flask_app.helpers.GeoHelper import GeoHelper
-from flask_app.model.enums.mode.IndividualMode import IndividualMode
+from controllers.efa_mvv.EfaMvvHelper import EfaMvvHelper, EfaTripData, EfaSegmentData, PtSegmentType
+from helpers.GeoHelper import GeoHelper
+from model.enums.mode.IndividualMode import IndividualMode
 
 
 class EfaMvvRouteController:

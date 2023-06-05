@@ -2,9 +2,8 @@ import json
 import time
 
 import requests
-
 # TODO: check if file location including 'flask_app/.../'  is working on VM
-from flask_app.model.entities.location.Location import Location
+from model.entities.location.Location import Location
 
 
 class EfaMvvStopFinder:

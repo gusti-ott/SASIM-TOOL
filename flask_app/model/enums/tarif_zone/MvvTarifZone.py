@@ -1,4 +1,4 @@
-from flask_app.model.enums.tarif_zone.TarifZone import TarifZone
+from model.enums.tarif_zone.TarifZone import TarifZone
 
 class MvvTarifZone(TarifZone):
     ZONE_M = 'm'

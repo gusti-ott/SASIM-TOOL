@@ -3,12 +3,11 @@ from enum import Enum, auto
 from typing import List
 
 import pandas as pd
-
-from flask_app.model.entities.location.Location import Location
-from flask_app.model.enums.mode.IndividualMode import IndividualMode
-from flask_app.model.enums.mode.PublicTransportMode import PublicTransportMode
-from flask_app.model.enums.mode.TripMode import TripMode
-from flask_app.model.enums.tarif_zone.MvvTarifZone import MvvTarifZone
+from model.entities.location.Location import Location
+from model.enums.mode.IndividualMode import IndividualMode
+from model.enums.mode.PublicTransportMode import PublicTransportMode
+from model.enums.mode.TripMode import TripMode
+from model.enums.tarif_zone.MvvTarifZone import MvvTarifZone
 
 
 class PtSegmentType(Enum):

@@ -2,8 +2,7 @@ from typing import List
 
 import geopy.distance
 import pandas as pd
-
-from flask_app.model.entities.location.Location import Location
+from model.entities.location.Location import Location
 
 
 class GeoHelper:
