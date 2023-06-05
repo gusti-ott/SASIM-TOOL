@@ -8,8 +8,8 @@ from controllers.efa_mvv.EfaMvvCoordController import EfaMvvCoordController
 from controllers.efa_mvv.EfaMvvStopFinderController import EfaMvvStopFinder
 from controllers.geocoding.GeocodingController import GeocodingController
 from controllers.trip.TripController import TripController
-from flask_app.model.entities.location.Location import Location
 from helpers.ApiHelper import ApiHelper
+from model.entities.location.Location import Location
 
 config = {
     "DEBUG": True,          # some Flask specific configs
