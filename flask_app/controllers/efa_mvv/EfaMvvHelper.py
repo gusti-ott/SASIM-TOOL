@@ -7,6 +7,7 @@ import pandas as pd
 from flask_app.model.entities.location.Location import Location
 from flask_app.model.enums.mode.IndividualMode import IndividualMode
 from flask_app.model.enums.mode.PublicTransportMode import PublicTransportMode
+from flask_app.model.enums.mode.TripMode import TripMode
 from flask_app.model.enums.tarif_zone.MvvTarifZone import MvvTarifZone
 
 
@@ -63,3 +64,59 @@ class EfaMvvHelper:
         df_locations = df_path.apply(lambda x: Location(lat=x[0], lon=x[1]), axis=1)
         list_locations = df_locations.values.tolist()
         return list_locations
+
+    def efa_sharing_mode_to_trip_mode(self, mode: str) -> TripMode or None:
+        if (mode == 'CALL_A_BIKE'):
+            return TripMode.CAB
+
+        elif (mode == 'SHARE NOW'):
+            return TripMode.SHARENOW
+
+        elif (mode == 'Emmy'):
+            return TripMode.EMMY
+
+        elif (mode == 'MILES Mobility'):
+            return TripMode.MILES
+
+        elif (mode == 'MVG Rad'):
+            return TripMode.MVG_BIKE
+
+        elif (mode == 'Lime'):
+            return TripMode.LIME
+
+        elif (mode == 'TIER e-scooter'):
+            return TripMode.TIER
+
+        elif (mode == 'TIER e-bike'):
+            return TripMode.TIER_EBIKE
+
+        else:
+            return None
+
+    def trip_mode_to_efa_sharing_mode(self, trip_mode: TripMode) -> str or None:
+        if (trip_mode.value == TripMode.CAB.value):
+            return 'CALL_A_BIKE'
+
+        elif (trip_mode.value == TripMode.SHARENOW.value):
+            return 'SHARE NOW'
+
+        elif (trip_mode.value == TripMode.EMMY.value):
+            return 'Emmy'
+
+        elif (trip_mode.value == TripMode.MILES.value):
+            return 'MILES Mobility'
+
+        elif (trip_mode.value == TripMode.MVG_BIKE.value):
+            return 'MVG Rad'
+
+        elif (trip_mode.value == TripMode.LIME.value):
+            return 'Lime'
+
+        elif (trip_mode.value == TripMode.TIER.value):
+            return 'TIER e-scooter'
+
+        elif (trip_mode.value == TripMode.TIER_EBIKE.value):
+            return 'TIER e-bike'
+
+        else:
+            return None

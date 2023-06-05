@@ -4,9 +4,11 @@ from flask import send_from_directory
 from flask_caching import Cache
 from flask_cors import CORS
 
+from controllers.efa_mvv.EfaMvvCoordController import EfaMvvCoordController
 from controllers.efa_mvv.EfaMvvStopFinderController import EfaMvvStopFinder
 from controllers.geocoding.GeocodingController import GeocodingController
 from controllers.trip.TripController import TripController
+from flask_app.model.entities.location.Location import Location
 from helpers.ApiHelper import ApiHelper
 
 config = {
@@ -65,13 +67,16 @@ def return_trip():
     input_trip_mode = str(request.args['tripMode'])
     trip_mode = api_helper.get_trip_mode_from_input(input_trip_mode)
 
-    trip_controller = TripController()
+    df_sharing_vehicles = get_efa_sharing_vehicles(start_location)
+
+    trip_controller = TripController(df_sharing_vehicles)
     trip = trip_controller.get_trip(
         start_location=start_location,
         end_location=end_location,
         trip_mode=trip_mode,
         start_id=start_id,
-        end_id=end_id
+        end_id=end_id,
+        df_sharing_vehicels=df_sharing_vehicles
     )
 
     list_segments = []
@@ -199,3 +204,12 @@ def get_efa_geolocation(address: str):
     id = efa_stop_finder.get_efa_location_id(response=response)
 
     return location, id
+
+
+@cache.memoize(300)
+def get_efa_sharing_vehicles(start_address: Location):
+    efa_coords_controller = EfaMvvCoordController()
+    response = efa_coords_controller.get_response(start_address)
+    df_sharing_vehices = efa_coords_controller.get_closest_vehicles_each(response, start_address)
+
+    return df_sharing_vehices

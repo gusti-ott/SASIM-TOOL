@@ -1,5 +1,6 @@
 from enum import Enum
 
+import pandas as pd
 from controllers.costs.CostsController import CostsController
 from controllers.mobi_score.MobiScoreController import MobiScoreController
 from controllers.muenchenapi.MunchenapiController import MuenchenapiController
@@ -24,6 +25,7 @@ from model.enums.mode.SharingMode import SharingMode
 from model.enums.mode.TripMode import TripMode
 from model.enums.trip_type.TripType import TripType
 
+from flask_app.controllers.efa_mvv.EfaMvvCoordController import EfaMvvCoordController
 # from controllers.mvv.MvvController import MvvController
 from flask_app.controllers.efa_mvv.EfaMvvTripController import EfaMvvRouteController
 from flask_app.model.enums.tarif_zone.MvvTarifZone import MvvTarifZone
@@ -36,7 +38,9 @@ class RoutingType(Enum):
 
 
 class TripController:
-    def __init__(self):
+    def __init__(self, df_sharing_vehicles: pd.DataFrame):
+
+        self._df_sharing_vehicles = df_sharing_vehicles
 
         self._routing_controller = OtpController()
         # self._routing_controller = MuenchenapiController()
@@ -49,12 +53,15 @@ class TripController:
         self._call_a_bike_controller = CallABikeController()
         self._flinkster_controller = FlinksterController()
 
+        self._efa_coords_controller = EfaMvvCoordController()
+
         self._costs_controller = CostsController()
         self._mobi_score_controller = MobiScoreController()
 
         self._geo_helper = GeoHelper()
 
-    def get_trip(self, start_location: Location, end_location: Location, trip_mode: TripMode, start_id=None,
+    def get_trip(self, start_location: Location, end_location: Location, trip_mode: TripMode,
+                 df_sharing_vehicels: pd.DataFrame, start_id=None,
                  end_id=None) -> Trip:
 
         trip_type = self._get_trip_type_from_trip_mode(trip_mode=trip_mode)
@@ -70,7 +77,7 @@ class TripController:
             mode = self._get_mode_from_trip_mode(trip_mode=trip_mode)
 
             trip = self._get_trip_type_2(start_location=start_location, end_location=end_location, sharing_mode=mode,
-                                         trip_mode=trip_mode)
+                                         trip_mode=trip_mode, df_sharing_vehicles=df_sharing_vehicels)
 
         elif (trip_type == TripType.TYPE_3):
             # trip = self._get_trip_type_3_4(start_location=start_location, end_location=end_location,
@@ -85,7 +92,6 @@ class TripController:
             trip = self._get_trip_type_3_4_efa(start_location=start_location, end_location=end_location,
                                                trip_type=TripType.TYPE_3, trip_mode=trip_mode, start_id=start_id,
                                                end_id=end_id)
-
 
         else:
             print("Error: trip type now valid")
@@ -150,11 +156,11 @@ class TripController:
         return trip
 
     def _get_trip_type_2(self, start_location: Location, end_location: Location, sharing_mode: SharingMode,
-                         trip_mode: TripMode):
+                         trip_mode: TripMode, df_sharing_vehicles: pd.DataFrame):
 
         # 1. get sharing position
-        location_closest_vehicle = self._get_sharing_position(start_location=start_location, sharing_mode=sharing_mode)
-
+        location_closest_vehicle = self._efa_coords_controller.get_location_closest_vehicle_single(df_sharing_vehicles,
+                                                                                                   trip_mode)
         # 2. get walk waypoints, distance, duration, costs
         router_response_walk = self._routing_controller.get_response(
             start_location=start_location,
@@ -233,6 +239,7 @@ class TripController:
 
         return trip
 
+    ### deprecated function
     def _get_trip_type_3_4(self, start_location: Location, end_location: Location, trip_type: TripType,
                            trip_mode: TripMode):
 
@@ -452,6 +459,13 @@ class TripController:
             closest_vehicle = None
 
         return closest_vehicle
+
+    def _fetch_sharing_vehicles_efa(self, start_location: Location):
+
+        response = self._efa_coords_controller.get_response(start_location, radius=1000)
+        df_all_vehicles = self._efa_coords_controller.get_closest_vehicles_each(response, location)
+
+        return df_all_vehicles
 
     def _get_trip_type_from_trip_mode(self, trip_mode: TripMode) -> TripType or None:
 

@@ -39,4 +39,6 @@ class EfaMvvStopFinder:
 # efaMvvStopFinder = EfaMvvStopFinder()
 # response = efaMvvStopFinder.get_response('Ansprengerstr.22, München')
 # id = efaMvvStopFinder.get_efa_location_id(response)
+# location = efaMvvStopFinder.get_location(response)
 # print(id)
+# print(location)

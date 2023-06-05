@@ -41,7 +41,9 @@ class EfaMvvRouteController:
         # loop over whole set of trip
         for i in range(len(efa_legs)):
 
-            if (efa_legs[i].get('transportation').get('product').get('name') != 'footpath'):
+            leg_mode = efa_legs[i].get('transportation').get('product').get('name')
+
+            if (leg_mode != 'footpath'):
                 # 1. create pt segment
                 pt_mode = self._efa_mvv_helper.get_mode(
                     mode_name=efa_legs[i].get('transportation').get('product').get('name'))
@@ -90,6 +92,8 @@ class EfaMvvRouteController:
                 mode = IndividualMode.WALK
                 waypoints = self._efa_mvv_helper.get_path_as_locations(efa_legs[i].get('coords'))
                 distance = efa_legs[i].get('distance')
+                if (distance == None):
+                    distance = self._geo_helper.calculate_total_distance_from_location_list(waypoints)
                 duration = efa_legs[i].get('duration') / 60
 
                 if (i == 0):
