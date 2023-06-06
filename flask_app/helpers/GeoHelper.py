@@ -2,7 +2,6 @@ from typing import List
 
 import geopy.distance
 import pandas as pd
-
 from model.entities.location.Location import Location
 
 

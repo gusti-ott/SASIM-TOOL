@@ -8,3 +8,4 @@ class MvvTarifZone(TarifZone):
     ZONE_4 = '4'
     ZONE_5 = '5'
     ZONE_6 = '6'
+    none = ''

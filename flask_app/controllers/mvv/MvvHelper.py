@@ -3,7 +3,6 @@ from enum import Enum, auto
 from typing import List
 
 import pandas as pd
-
 from model.entities.location.Location import Location
 from model.enums.mode.IndividualMode import IndividualMode
 from model.enums.mode.PublicTransportMode import PublicTransportMode
@@ -15,6 +14,8 @@ class MvvSegmentType(Enum):
     WALK_THERE = auto()
     WALK_AWAY = auto()
     TRANSPORTATION = auto()
+
+
 @dataclass
 class MvvSegmentData:
     waypoints: List[Location]
