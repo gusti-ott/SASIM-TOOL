@@ -1,7 +1,7 @@
 import json
-import time as t
 from datetime import datetime
 from typing import List
+import math as m
 
 import pandas as pd
 import polyline
@@ -74,7 +74,7 @@ class OtpController:
             print('OTP KeyError duration')
             return 0
 
-        return duration / 60
+        return duration/60
 
     def get_response(self, start_location: Location, end_location: Location, mode: TripMode,
                      input_time=None, input_waxWalkDistance='500'):
@@ -96,7 +96,7 @@ class OtpController:
         #     str(input_time.month) + "-" + str(input_time.day) + "-" + str(input_time.year) + "&mode=" +
         #     mode + "&maxWalkDistance=50000&arriveBy=false")
 
-        # IP of SASIM IP
+        # IP of locally running otp server
         response = requests.get(
             "OTP_BASE_URL/otp/routers/default/plan?fromPlace=" + start_location + "&toPlace=" +
             end_location + "&time=" + str(input_time.hour) + ":" + str(input_time.minute) + "&date=" +

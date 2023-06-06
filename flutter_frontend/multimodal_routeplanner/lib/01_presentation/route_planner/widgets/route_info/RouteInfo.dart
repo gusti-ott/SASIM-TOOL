@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:multimodal_routeplanner/01_presentation/helpers/ModeMapingHelper.dart';
+import 'package:multimodal_routeplanner/01_presentation/helpers/StringFormattingHelper.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner/widgets/route_info/ExternalCostsDetailRow.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/route_info/info_dropdown_costs_cubit.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/route_info/info_dropdown_mobiscore_cubit.dart';
@@ -62,7 +63,8 @@ class RouteInfo extends StatelessWidget {
                                 children: [
                                   Row(children: [
                                     const Icon(Icons.timer),
-                                    Text('${trip.duration.toStringAsFixed(2)} min')
+                                    Text(
+                                        '${StringFormattingHelper().convertSecondsToMinutesAndSeconds(totalSeconds: trip.duration.floor())} min')
                                   ])
                                 ],
                               ),
