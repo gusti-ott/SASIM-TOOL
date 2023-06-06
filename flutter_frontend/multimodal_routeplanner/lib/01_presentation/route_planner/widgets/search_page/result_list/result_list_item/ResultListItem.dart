@@ -58,7 +58,7 @@ class ResultListItem3 extends StatelessWidget {
                             textAlign: TextAlign.left,
                             text: TextSpan(
                               text: StringFormattingHelper()
-                                  .convertSecondsToMinutesAndSeconds(totalSeconds: trip.duration.floor()),
+                                  .convertSecondsToMinutesAndSeconds(totalMinutes: trip.duration),
                               style: const TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
                               children: const [

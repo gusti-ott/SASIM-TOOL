@@ -64,7 +64,7 @@ class RouteInfo extends StatelessWidget {
                                   Row(children: [
                                     const Icon(Icons.timer),
                                     Text(
-                                        '${StringFormattingHelper().convertSecondsToMinutesAndSeconds(totalSeconds: trip.duration.floor())} min')
+                                        '${StringFormattingHelper().convertSecondsToMinutesAndSeconds(totalMinutes: trip.duration)} min')
                                   ])
                                 ],
                               ),
