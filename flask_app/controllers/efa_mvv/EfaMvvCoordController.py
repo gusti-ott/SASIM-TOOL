@@ -69,8 +69,6 @@ class EfaMvvCoordController:
 
     def get_location_closest_vehicle_single(self, df_vehicles: pd.DataFrame, trip_mode: TripMode):
 
-        print(df_vehicles)
-
         mode = self.efaMvvHelper.trip_mode_to_efa_sharing_mode(trip_mode)
         vehicle_location = df_vehicles.loc[df_vehicles['mode'] == str(mode), 'vehicle_location'].values[0]
         return vehicle_location

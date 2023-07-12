@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner/widgets/search_page/result_list/result_list_item/ResultListItem.dart';
+
 import '../../../../../03_domain/entities/Trip.dart';
 import '../result_diagram/ResultDiagramCard.dart';
 
@@ -17,17 +18,16 @@ class ResultList extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text('klicke auf ein Ergebnis um die Route anzuzeigen',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 14,
-                    fontStyle: FontStyle.italic,
-                    color: themeData.colorScheme.onPrimary)),
+            child: Text(
+              'klicke auf ein Ergebnis um die Route anzuzeigen',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 14, fontStyle: FontStyle.italic, color: themeData.colorScheme.onPrimary),
+            ),
           ),
           //loop over list of trips and return the results
 
-          for (var i = 0; i < trips.length; i++)
-            (ResultListItem3(trips: trips, trip: trips[i], index: i)),
+          for (var i = 0; i < trips.length; i++) (ResultListItem3(trips: trips, trip: trips[i], index: i)),
 
           // show a diagram with some date2
           if (trips.isNotEmpty)
