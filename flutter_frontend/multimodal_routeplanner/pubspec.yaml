@@ -34,7 +34,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.1
-  flutter_map: any
+  flutter_map: ^1.0.0
   flutter_map_tappable_polyline: any
   http: ^0.13.4
   latlong2: any
