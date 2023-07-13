@@ -170,18 +170,18 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_map
-      sha256: f1ff0f7c897cb72531851a8c6f5b9847449c01da3550026d0a0a3734ece4d8f8
+      sha256: "5286f72f87deb132daa1489442d6cc46e986fc105cb727d9ae1b602b35b1d1f3"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.1"
+    version: "5.0.0"
   flutter_map_tappable_polyline:
     dependency: "direct main"
     description:
       name: flutter_map_tappable_polyline
-      sha256: "9e6462e5dbcd3d7adbceb4ad43fbd002e484b633f90bd5c8d9eee2a9e2b8b9b7"
+      sha256: cce36d28df6d0e9df8f0332cacdfd2b9a86e21cc32fe69bc2bf06faacc72e929
       url: "https://pub.dev"
     source: hosted
-    version: "3.2.0"
+    version: "5.0.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -191,10 +191,10 @@ packages:
     dependency: "direct main"
     description:
       name: http
-      sha256: "6aa2946395183537c8b880962d935877325d6a09a2867c3970c05c0fed6ac482"
+      sha256: "759d1a329847dd0f39226c688d3e06a6b8679668e350e2891a6474f8b4bb8525"
       url: "https://pub.dev"
     source: hosted
-    version: "0.13.5"
+    version: "1.1.0"
   http_parser:
     dependency: transitive
     description:
@@ -239,10 +239,10 @@ packages:
     dependency: "direct main"
     description:
       name: latlong2
-      sha256: "408993a0e3f46e79ce1f129e4cb0386eef6d48dfa6394939ecacfbd7049154ec"
+      sha256: "18712164760cee655bc790122b0fd8f3d5b3c36da2cb7bf94b68a197fbb0811b"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.1"
+    version: "0.9.0"
   lints:
     dependency: transitive
     description:
@@ -339,14 +339,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.1"
-  positioned_tap_detector_2:
-    dependency: transitive
-    description:
-      name: positioned_tap_detector_2
-      sha256: "52e06863ad3e1f82b058fd05054fc8c9caeeb3b47d5cea7a24bd9320746059c1"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.4"
   proj4dart:
     dependency: transitive
     description:
@@ -416,14 +408,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.1"
-  tuple:
-    dependency: transitive
-    description:
-      name: tuple
-      sha256: "0ea99cd2f9352b2586583ab2ce6489d1f95a5f6de6fb9492faaf97ae2060f0aa"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.1"
   typed_data:
     dependency: transitive
     description:
@@ -473,5 +457,5 @@ packages:
     source: hosted
     version: "3.1.1"
 sdks:
-  dart: ">=3.0.0-0 <4.0.0"
-  flutter: ">=2.5.0"
+  dart: ">=3.0.0 <4.0.0"
+  flutter: ">=3.10.0"
