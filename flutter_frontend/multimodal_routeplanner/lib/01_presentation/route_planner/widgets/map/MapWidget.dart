@@ -1,9 +1,14 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_tappable_polyline/flutter_map_tappable_polyline.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner/widgets/map/StartMarker.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/visualization_bloc.dart';
+import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
+import 'package:multimodal_routeplanner/03_domain/entities/Waypoint.dart';
 import 'package:multimodal_routeplanner/config/munich_geo_values.dart';
 import 'package:multimodal_routeplanner/values.dart';
 
@@ -29,7 +34,13 @@ class _MapWidgetState extends State<MapWidget> {
     return BlocConsumer<VisualizationBloc, VisualizationState>(
       listener: (context, state) {
         if (state is VisualizationChangedState) {
-          _mapController.move(state.selectedTrip.segments.first.waypoints.first.getLatLng(), 13);
+          LatLngBounds bounds = _fitTripBounds(state.selectedTrip);
+          _mapController.fitBounds(
+            bounds,
+            options: const FitBoundsOptions(
+              padding: EdgeInsets.all(48),
+            ),
+          );
         }
       },
       builder: (context, state) {
@@ -46,7 +57,7 @@ class _MapWidgetState extends State<MapWidget> {
               attributions: [
                 TextSourceAttribution('OpenStreetMap contributors',
                     onTap: () {} // => launchUrl(Uri.parse('https://openstreetmap.org/copyright')),
-                    ),
+                ),
               ],
             ),
           ],
@@ -86,6 +97,20 @@ class _MapWidgetState extends State<MapWidget> {
         );
       },
     );
+  }
+
+  LatLngBounds _fitTripBounds(Trip selectedTrip) {
+    List<Waypoint> allWaypoints = selectedTrip.segments.expand((segment) => segment.waypoints).toList();
+    double maxLat = allWaypoints.map((latLng) => latLng.lat).reduce(max);
+    double maxLon = allWaypoints.map((latLng) => latLng.lon).reduce(max);
+    double minLat = allWaypoints.map((latLng) => latLng.lat).reduce(min);
+    double minLon = allWaypoints.map((latLng) => latLng.lon).reduce(min);
+    LatLngBounds bounds = LatLngBounds(
+      LatLng(maxLat, maxLon),
+      LatLng(minLat, minLon),
+    );
+
+    return bounds;
   }
 
   mapSegmentModeToColor(String segmentType) {
