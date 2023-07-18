@@ -37,11 +37,9 @@ class _MapContentState extends State<MapContent> {
           LatLngBounds bounds = _fitTripBounds(state.selectedTrip);
           _mapController.fitBounds(
             bounds,
-            options: const FitBoundsOptions(
-              padding: EdgeInsets.all(96),
-            ),
+            options: const FitBoundsOptions(padding: EdgeInsets.all(96)),
           );
-          print(state.selectedTrip);
+          FocusScope.of(context).requestFocus(FocusNode());
         } else if (state is VisualizationRemovedState) {
           _mapController.move(munichCenter, 13);
         }
@@ -66,8 +64,9 @@ class _MapContentState extends State<MapContent> {
           ],
           children: [
             TileLayer(
-                urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                subdomains: const ['a', 'b', 'c']),
+              urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+              subdomains: const ['a', 'b', 'c'],
+            ),
             if (state is VisualizationChangedState)
               TappablePolylineLayer(
                   polylineCulling: true,
