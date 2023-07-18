@@ -14,14 +14,14 @@ import 'package:multimodal_routeplanner/values.dart';
 
 import 'StopMarker.dart';
 
-class MapWidget extends StatefulWidget {
-  const MapWidget({Key? key}) : super(key: key);
+class MapContent extends StatefulWidget {
+  const MapContent({Key? key}) : super(key: key);
 
   @override
-  State<MapWidget> createState() => _MapWidgetState();
+  State<MapContent> createState() => _MapContentState();
 }
 
-class _MapWidgetState extends State<MapWidget> {
+class _MapContentState extends State<MapContent> {
   final MapController _mapController = MapController();
 
   @override
@@ -38,9 +38,12 @@ class _MapWidgetState extends State<MapWidget> {
           _mapController.fitBounds(
             bounds,
             options: const FitBoundsOptions(
-              padding: EdgeInsets.all(48),
+              padding: EdgeInsets.all(96),
             ),
           );
+          print(state.selectedTrip);
+        } else if (state is VisualizationRemovedState) {
+          _mapController.move(munichCenter, 13);
         }
       },
       builder: (context, state) {
@@ -57,7 +60,7 @@ class _MapWidgetState extends State<MapWidget> {
               attributions: [
                 TextSourceAttribution('OpenStreetMap contributors',
                     onTap: () {} // => launchUrl(Uri.parse('https://openstreetmap.org/copyright')),
-                ),
+                    ),
               ],
             ),
           ],

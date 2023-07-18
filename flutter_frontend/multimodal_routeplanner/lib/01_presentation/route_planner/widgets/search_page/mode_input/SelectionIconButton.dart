@@ -35,9 +35,7 @@ class AdvancedSelectionIconButton extends StatelessWidget {
       builder: (context, state) {
         {
           if (state is TripAddedOrRemoved) {
-            isSelected =
-                state.trips[modeMappingHelper.mapModeToStringMode(mode)] !=
-                    null;
+            isSelected = state.trips[modeMappingHelper.mapModeToStringMode(mode)] != null;
           }
 
           return IntrinsicWidth(
@@ -47,54 +45,33 @@ class AdvancedSelectionIconButton extends StatelessWidget {
                 IconButton(
                     onPressed: () {
                       if (trips[stringMode] == null) {
-                        routeBlocProvider.add(
-                            RouteTripEvent(startAddress, endAddress, mode));
+                        routeBlocProvider.add(RouteTripEvent(startAddress, endAddress, mode));
                       } else {
                         if (isSelected) {
-                          routeBlocProvider.add(RemoveTripFromListEvent(
-                              stringMode, selectedTrips));
+                          routeBlocProvider.add(RemoveTripFromListEvent(stringMode, selectedTrips));
                         } else {
                           if (trips[stringMode] != null) {
-                            routeBlocProvider.add(AddTripToListEvent(
-                                trips[stringMode]!, selectedTrips));
+                            routeBlocProvider.add(AddTripToListEvent(trips[stringMode]!, selectedTrips));
                           }
                         }
                       }
                     },
-                    icon: modeMappingHelper
-                                .mapModeStringToIcon(stringMode)
-                                .runtimeType ==
-                            Icon
+                    icon: modeMappingHelper.mapModeStringToIcon(stringMode).runtimeType == Icon
                         ? modeMappingHelper.mapModeStringToIcon(stringMode)
                         : Container(
                             foregroundDecoration: BoxDecoration(
-                                color: isSelected
-                                    ? Colors.transparent
-                                    : Colors.grey,
-                                backgroundBlendMode: isSelected
-                                    ? BlendMode.color
-                                    : BlendMode.saturation,
+                                color: isSelected ? Colors.transparent : Colors.grey,
+                                backgroundBlendMode: isSelected ? BlendMode.color : BlendMode.saturation,
                                 shape: BoxShape.circle),
-                            child: modeMappingHelper
-                                .mapModeStringToIcon(stringMode),
+                            child: modeMappingHelper.mapModeStringToIcon(stringMode),
                           ),
-                    iconSize: modeMappingHelper
-                                .mapModeStringToIcon(stringMode)
-                                .runtimeType ==
-                            Icon
-                        ? 25
-                        : 40,
-                    tooltip:
-                        modeMappingHelper.mapModeStringToToolTip(stringMode),
-                    color: isSelected
-                        ? themeData.colorScheme.secondary
-                        : Colors.white),
+                    iconSize: modeMappingHelper.mapModeStringToIcon(stringMode).runtimeType == Icon ? 25 : 40,
+                    tooltip: modeMappingHelper.mapModeStringToToolTip(stringMode),
+                    color: isSelected ? themeData.colorScheme.secondary : Colors.white),
                 Divider(
                   height: 4,
                   thickness: 3,
-                  color: isSelected
-                      ? themeData.colorScheme.secondary
-                      : Colors.grey,
+                  color: isSelected ? themeData.colorScheme.secondary : Colors.grey,
                   indent: 16,
                   endIndent: 16,
                 )

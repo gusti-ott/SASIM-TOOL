@@ -1,9 +1,9 @@
 /// Horizontal bar chart with bar label renderer example and hidden domain axis.
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
+import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
+import 'package:multimodal_routeplanner/03_domain/enums/DiagramTypeEnum.dart';
 
-import '../../../../../03_domain/entities/Trip.dart';
-import '../../../../../03_domain/enums/DiagramTypeEnum.dart';
 import 'DiagramHelper.dart';
 
 class ResultDiagramBarWidget extends StatelessWidget {
