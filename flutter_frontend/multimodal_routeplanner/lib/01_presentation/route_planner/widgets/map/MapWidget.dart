@@ -39,7 +39,10 @@ class _MapContentState extends State<MapContent> {
             bounds,
             options: const FitBoundsOptions(padding: EdgeInsets.all(96)),
           );
-          FocusScope.of(context).requestFocus(FocusNode());
+
+          // this is a bug fix, because map doesn't focus to max resolution after fitBounds method
+          double currentZoom = _mapController.zoom;
+          _mapController.move(bounds.center, currentZoom - 0.01);
         } else if (state is VisualizationRemovedState) {
           _mapController.move(munichCenter, 13);
         }
