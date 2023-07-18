@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -6,147 +8,112 @@ import 'package:latlong2/latlong.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner/widgets/map/StartMarker.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/visualization_bloc.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
+import 'package:multimodal_routeplanner/03_domain/entities/Waypoint.dart';
+import 'package:multimodal_routeplanner/config/munich_geo_values.dart';
 import 'package:multimodal_routeplanner/values.dart';
-
 
 import 'StopMarker.dart';
 
-class MapWidget extends StatelessWidget {
-  const MapWidget({Key? key}) : super(key: key);
+class MapContent extends StatefulWidget {
+  const MapContent({Key? key}) : super(key: key);
+
+  @override
+  State<MapContent> createState() => _MapContentState();
+}
+
+class _MapContentState extends State<MapContent> {
+  final MapController _mapController = MapController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        BlocBuilder<VisualizationBloc, VisualizationState>(
-          builder: (context, routePlannerState) {
-            if (routePlannerState is VisualizationChangedState) {
-              Trip selectedTrip = routePlannerState.selectedTrip;
-
-              return FlutterMap(
-                options: MapOptions(
-                  plugins: [
-                    TappablePolylineMapPlugin(),
+    return BlocConsumer<VisualizationBloc, VisualizationState>(
+      listener: (context, state) {
+        if (state is VisualizationChangedState) {
+          LatLngBounds bounds = _fitTripBounds(state.selectedTrip);
+          _mapController.fitBounds(
+            bounds,
+            options: const FitBoundsOptions(
+              padding: EdgeInsets.all(96),
+            ),
+          );
+          print(state.selectedTrip);
+        } else if (state is VisualizationRemovedState) {
+          _mapController.move(munichCenter, 13);
+        }
+      },
+      builder: (context, state) {
+        return FlutterMap(
+          mapController: _mapController,
+          options: MapOptions(
+            onMapReady: () {},
+            center: munichCenter,
+            zoom: 13.0,
+          ),
+          nonRotatedChildren: [
+            RichAttributionWidget(
+              animationConfig: const ScaleRAWA(), // Or `FadeRAWA` as is default
+              attributions: [
+                TextSourceAttribution('OpenStreetMap contributors',
+                    onTap: () {} // => launchUrl(Uri.parse('https://openstreetmap.org/copyright')),
+                    ),
+              ],
+            ),
+          ],
+          children: [
+            TileLayer(
+                urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                subdomains: const ['a', 'b', 'c']),
+            if (state is VisualizationChangedState)
+              TappablePolylineLayer(
+                  polylineCulling: true,
+                  polylines: [
+                    // visualize selected
+                    for (var i = 0; i < state.selectedTrip.segments.length; i++)
+                      TaggedPolyline(
+                        points: state.selectedTrip.segments[i].getWaypointInLagLng(),
+                        tag: "selected",
+                        strokeWidth: 5,
+                        color: mapSegmentModeToColor(state.selectedTrip.segments[i].mode),
+                      ),
                   ],
-                  center: LatLng(48.1662627, 11.5768211),
-                  zoom: 13.0,
-                ),
-                layers: [
-                  TileLayerOptions(
-                      urlTemplate:
-                          "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                      subdomains: ['a', 'b', 'c']),
-                  TappablePolylineLayerOptions(
-                      polylineCulling: true,
-                      polylines: [
-
-                        // visualize selected
-                        for (var i = 0; i < selectedTrip.segments.length; i++)
-                          TaggedPolyline(
-                            points:
-                                selectedTrip.segments[i].getWaypointInLagLng(),
-                            tag: "selected",
-                            strokeWidth: 5,
-                            color: mapSegmentModeToColor(
-                                selectedTrip.segments[i].mode),
-                          ),
-                      ],
-                      onTap: (polylines, tapPosition) => {},
-                      onMiss: (tapPosition) {}),
-                  MarkerLayerOptions(
-                    markers: [
-                      Marker(
-                        point: selectedTrip.segments.first.waypoints.first
-                            .getLatLng(),
-                        builder: (ctx) => const StartMarker(),
-                      ),
-                      Marker(
-                        point: selectedTrip.segments.last.waypoints.last
-                            .getLatLng(),
-                        builder: (ctx) => const StopMarker(),
-                      ),
-                      /*Marker(
-                        width: 150,
-                        height: 108,
-                        point: fastestTrip.segments.length > 1
-                            ? fastestTrip
-                                .segments[1]
-                                .waypoints[
-                                    (fastestTrip.segments[1].waypoints.length /
-                                            2)
-                                        .ceil()]
-                                .getLatLng()
-                            : fastestTrip
-                                .segments[0]
-                                .waypoints[
-                                    (fastestTrip.segments[0].waypoints.length /
-                                            2)
-                                        .ceil()]
-                                .getLatLng(),
-                        builder: (ctx) => RouteMarker(
-                          trip: fastestTrip,
-                          routeMarkerType: RouteMarkerType.fastest,
-                        ),
-                        anchorPos: AnchorPos.align(AnchorAlign.right),
-                      ),
-                      Marker(
-                        width: 250,
-                        height: 108,
-                        point: lowestExternalCostsTrip.segments.length > 1
-                            ? lowestExternalCostsTrip
-                                .segments[1]
-                                .waypoints[(lowestExternalCostsTrip
-                                            .segments[1].waypoints.length /
-                                        2)
-                                    .ceil()]
-                                .getLatLng()
-                            : lowestExternalCostsTrip
-                                .segments[0]
-                                .waypoints[(lowestExternalCostsTrip
-                                            .segments[0].waypoints.length /
-                                        2)
-                                    .ceil()]
-                                .getLatLng(),
-                        builder: (ctx) => RouteMarker(
-                          trip: lowestExternalCostsTrip,
-                          routeMarkerType: RouteMarkerType.lowestExternalCosts,
-                        ),
-                        anchorPos: AnchorPos.align(AnchorAlign.left),
-                      ),*/
-                    ],
+                  onTap: (polylines, tapPosition) => {},
+                  onMiss: (tapPosition) {}),
+            if (state is VisualizationChangedState)
+              MarkerLayer(
+                markers: [
+                  Marker(
+                    point: state.selectedTrip.segments.first.waypoints.first.getLatLng(),
+                    builder: (ctx) => const StartMarker(),
+                  ),
+                  Marker(
+                    point: state.selectedTrip.segments.last.waypoints.last.getLatLng(),
+                    builder: (ctx) => const StopMarker(),
                   ),
                 ],
-              );
-            } else {
-              return FlutterMap(
-                options: MapOptions(
-                  plugins: [
-                    TappablePolylineMapPlugin(),
-                  ],
-                  center: LatLng(48.1662627, 11.5768211),
-                  zoom: 13.0,
-                ),
-                layers: [
-                  TileLayerOptions(
-                      urlTemplate:
-                          "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                      subdomains: ['a', 'b', 'c']),
-
-                ],
-              );
-            }
-          },
-        ),
-        Container(
-            alignment: Alignment.bottomRight,
-            width: double.infinity,
-            height: double.infinity,
-            child: const Text(
-              "© OpenStreetMap",
-              style: TextStyle(backgroundColor: Colors.grey, fontSize: 14),
-            ))
-      ],
+              ),
+          ],
+        );
+      },
     );
+  }
+
+  LatLngBounds _fitTripBounds(Trip selectedTrip) {
+    List<Waypoint> allWaypoints = selectedTrip.segments.expand((segment) => segment.waypoints).toList();
+    double maxLat = allWaypoints.map((latLng) => latLng.lat).reduce(max);
+    double maxLon = allWaypoints.map((latLng) => latLng.lon).reduce(max);
+    double minLat = allWaypoints.map((latLng) => latLng.lat).reduce(min);
+    double minLon = allWaypoints.map((latLng) => latLng.lon).reduce(min);
+    LatLngBounds bounds = LatLngBounds(
+      LatLng(maxLat, maxLon),
+      LatLng(minLat, minLon),
+    );
+
+    return bounds;
   }
 
   mapSegmentModeToColor(String segmentType) {

@@ -38,7 +38,7 @@ class AdvancedRoutePlannerPage extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          const MapWidget(),
+          const MapContent(),
           Row(children: [
             Align(
               alignment: Alignment.topLeft,
@@ -56,6 +56,9 @@ class AdvancedRoutePlannerPage extends StatelessWidget {
                             endAddress = state.endAddress;
 
                             routeBlocProvider.add(AddTripToListEvent(state.trip, selectedTrips));
+                            BlocProvider.of<VisualizationBloc>(context).add(
+                              ChangeRouteVizualizationEvent(selectedTrip: state.trip, trips: [state.trip]),
+                            );
                           } else if (state is TripLoaded) {
                             String mode = state.trip.mode;
                             if (savedTrips[mode] == null) {

@@ -1,12 +1,10 @@
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:multimodal_routeplanner/01_presentation/helpers/ModeMapingHelper.dart';
-
-import '../../../../../03_domain/entities/Trip.dart';
-import '../../../../../03_domain/enums/DiagramTypeEnum.dart';
+import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
+import 'package:multimodal_routeplanner/03_domain/enums/DiagramTypeEnum.dart';
 
 class DiagramHelper {
-  List<charts.Series<DiagramData, String>> createDiagramDataBarStacked(
-      {required List<Trip> trips}) {
+  List<charts.Series<DiagramData, String>> createDiagramDataBarStacked({required List<Trip> trips}) {
     List<charts.Series<DiagramData, String>> results = [];
 
     List<DiagramData> airData = [];
@@ -20,18 +18,12 @@ class DiagramHelper {
     // this is WRONG! need different Lists for airData (Car) and airData (Bike))
     for (var i = 0; i < trips.length; i++) {
       airData.add(DiagramData(trips[i].mode, trips[i].costs.externalCosts.air));
-      noiseData
-          .add(DiagramData(trips[i].mode, trips[i].costs.externalCosts.noise));
-      climateData.add(
-          DiagramData(trips[i].mode, trips[i].costs.externalCosts.climate));
-      accidentsData.add(
-          DiagramData(trips[i].mode, trips[i].costs.externalCosts.accidents));
-      spaceData
-          .add(DiagramData(trips[i].mode, trips[i].costs.externalCosts.space));
-      barrierData.add(
-          DiagramData(trips[i].mode, trips[i].costs.externalCosts.barrier));
-      congestionData.add(
-          DiagramData(trips[i].mode, trips[i].costs.externalCosts.congestion));
+      noiseData.add(DiagramData(trips[i].mode, trips[i].costs.externalCosts.noise));
+      climateData.add(DiagramData(trips[i].mode, trips[i].costs.externalCosts.climate));
+      accidentsData.add(DiagramData(trips[i].mode, trips[i].costs.externalCosts.accidents));
+      spaceData.add(DiagramData(trips[i].mode, trips[i].costs.externalCosts.space));
+      barrierData.add(DiagramData(trips[i].mode, trips[i].costs.externalCosts.barrier));
+      congestionData.add(DiagramData(trips[i].mode, trips[i].costs.externalCosts.congestion));
     }
 
     results.add(charts.Series<DiagramData, String>(
@@ -92,32 +84,24 @@ class DiagramHelper {
       if (diagramType == DiagramTypeEnum.externalCosts) {
         data.add(DiagramData(trips[i].mode, trips[i].costs.externalCosts.all));
       } else if (diagramType == DiagramTypeEnum.accidents) {
-        data.add(
-            DiagramData(trips[i].mode, trips[i].costs.externalCosts.accidents));
+        data.add(DiagramData(trips[i].mode, trips[i].costs.externalCosts.accidents));
       } else if (diagramType == DiagramTypeEnum.air) {
         data.add(DiagramData(trips[i].mode, trips[i].costs.externalCosts.air));
       } else if (diagramType == DiagramTypeEnum.climate) {
-        data.add(
-            DiagramData(trips[i].mode, trips[i].costs.externalCosts.climate));
+        data.add(DiagramData(trips[i].mode, trips[i].costs.externalCosts.climate));
       } else if (diagramType == DiagramTypeEnum.noise) {
-        data.add(
-            DiagramData(trips[i].mode, trips[i].costs.externalCosts.noise));
+        data.add(DiagramData(trips[i].mode, trips[i].costs.externalCosts.noise));
       } else if (diagramType == DiagramTypeEnum.space) {
-        data.add(
-            DiagramData(trips[i].mode, trips[i].costs.externalCosts.space));
+        data.add(DiagramData(trips[i].mode, trips[i].costs.externalCosts.space));
       } else if (diagramType == DiagramTypeEnum.barrier) {
-        data.add(
-            DiagramData(trips[i].mode, trips[i].costs.externalCosts.barrier));
+        data.add(DiagramData(trips[i].mode, trips[i].costs.externalCosts.barrier));
       } else if (diagramType == DiagramTypeEnum.congestion) {
-        data.add(DiagramData(
-            trips[i].mode, trips[i].costs.externalCosts.congestion));
+        data.add(DiagramData(trips[i].mode, trips[i].costs.externalCosts.congestion));
       } else if (diagramType == DiagramTypeEnum.internalCosts) {
         data.add(DiagramData(trips[i].mode, trips[i].costs.internalCosts.all));
       } else if (diagramType == DiagramTypeEnum.costs) {
         data.add(DiagramData(
-            trips[i].mode,
-            (trips[i].costs.internalCosts.all +
-                trips[i].costs.externalCosts.all)));
+            trips[i].mode, (trips[i].costs.internalCosts.all + trips[i].costs.externalCosts.all)));
       } else if (diagramType == DiagramTypeEnum.distance) {
         data.add(DiagramData(trips[i].mode, trips[i].distance));
       } else if (diagramType == DiagramTypeEnum.duration) {
@@ -149,8 +133,7 @@ class DiagramHelper {
     return results;
   }
 
-  List<charts.Series<DiagramData, String>> createDiagramDataReversed(
-      {required List<Trip> trips}) {
+  List<charts.Series<DiagramData, String>> createDiagramDataReversed({required List<Trip> trips}) {
     List<charts.Series<DiagramData, String>> results = [];
 
     for (var i = 0; i < trips.length; i++) {

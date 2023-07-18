@@ -4,9 +4,8 @@ import 'package:multimodal_routeplanner/01_presentation/helpers/ModeMapingHelper
 import 'package:multimodal_routeplanner/01_presentation/helpers/StringFormattingHelper.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner/widgets/search_page/result_list/result_list_item/RouteIndicator.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/route_info_bloc.dart';
+import 'package:multimodal_routeplanner/02_application/bloc/visualization_bloc.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
-
-import '../../../../../../02_application/bloc/visualization_bloc.dart';
 
 class ResultListItem3 extends StatelessWidget {
   final List<Trip> trips;
