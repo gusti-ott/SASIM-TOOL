@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/MobilityMode.dart';
@@ -6,7 +5,6 @@ import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 import 'package:multimodal_routeplanner/03_domain/usecases/route_usecases.dart';
 
 part 'advanced_route_planner_event.dart';
-
 part 'advanced_route_planner_state.dart';
 
 class AdvancedRoutePlannerBloc

@@ -1,17 +1,18 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-
-import '../../03_domain/entities/MobilityMode.dart';
-import '../../03_domain/entities/Trip.dart';
-import '../../03_domain/enums/MobilityModeEnum.dart';
-import '../models/trip_model.dart';
+import 'package:multimodal_routeplanner/03_domain/entities/MobilityMode.dart';
+import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
+import 'package:multimodal_routeplanner/03_domain/enums/MobilityModeEnum.dart';
+import 'package:multimodal_routeplanner/04_infrastructure/models/trip_model.dart';
 
 /// requests a trip from Route Planner REST-Api
 /// throws a server-exception if respond code is not 200
 abstract class RouteRemoteDatasource {
   Future<Trip> getSingleRouteFromApi(
-      {required String startInput, required String endInput, required MobilityMode mode});
+      {required String startInput,
+      required String endInput,
+      required MobilityMode mode});
 }
 
 class RouteRemoteDatasourceImpl implements RouteRemoteDatasource {
@@ -19,7 +20,9 @@ class RouteRemoteDatasourceImpl implements RouteRemoteDatasource {
 
   @override
   Future<Trip> getSingleRouteFromApi(
-      {required String startInput, required String endInput, required MobilityMode mode}) async {
+      {required String startInput,
+      required String endInput,
+      required MobilityMode mode}) async {
     // TODO: implement getSingleRouteFromApi
 
     String modeString = mapMode(mode: mode);

@@ -1,8 +1,6 @@
 import 'package:multimodal_routeplanner/03_domain/entities/Costs/Costs.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Segment.dart';
 
-import 'MobilityMode.dart';
-
 class Trip {
   final double distance;
   final double duration;

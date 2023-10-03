@@ -1,3 +1,5 @@
+from flask_app.model.entities.location.Location import Location
+
 # Ansprengerstr. 22
 lat1 = 48.1663834
 lon1 = 11.5748712

@@ -3,26 +3,26 @@ import 'package:flutter/material.dart';
 class AppTheme {
   AppTheme._();
 
-  static final Color _lightPrimaryColor = Color(0xFF485696);
-  static final Color _lightOnPrimaryColor = Color(0xFFFE7E7E7);
-  static const Color _lightTextColorPrimary = Color(0xFFFE7E7E7);
+  static const Color _lightPrimaryColor = Color(0xFF0563c4);
+  static const Color _lightOnPrimaryColor = Color(0xfffe7e7e7);
+  static const Color _lightTextColorPrimary = Color(0xfffe7e7e7);
 
-  static final Color _lightSecondaryColor = Color(0xFFF9C784);
+  static const Color _lightSecondaryColor = Color(0xFFd96252);
   //static final Color _lightSecondaryColor = Color(0xFFFC7A1E);
-  static final Color _lightOnSecondaryColor = Color.fromARGB(255, 17, 17, 17);
+  static const Color _lightOnSecondaryColor = Color.fromARGB(255, 17, 17, 17);
   static const Color _lightTextColorSecondary = Color.fromARGB(255, 17, 17, 17);
 
-  static final Color _lightTertiaryColor = Color(0xFFA5D6A7);
-  static final Color _lightOnTertiaryColor = Color(0x000000);
-  static const Color _lightTextColorTertiary = Color(0x000000);
+  static const Color _lightTertiaryColor = Color(0xFFA5D6A7);
+  static const Color _lightOnTertiaryColor = Color(0x00000000);
+  static const Color _lightTextColorTertiary = Color(0x00000000);
 
-  static final Color _darkPrimaryColor = Color(0xFF485696);
-  static final Color _darkOnPrimaryColor = Color(0xFFFE7E7E7);
+  static const Color _darkPrimaryColor = Color(0xFF485696);
+  static const Color _darkOnPrimaryColor = Color(0xfffe7e7e7);
   static const Color _darkTextColorPrimary = Color.fromARGB(255, 206, 246, 181);
 
-  static final Color _darkSecondaryColor = Color(0xFFF9C784);
+  static const Color _darkSecondaryColor = Color(0xFFF9C784);
   //static final Color _lightSecondaryColor = Color(0xFFFC7A1E);
-  static final Color _darkOnSecondaryColor = Color.fromARGB(255, 17, 17, 17);
+  static const Color _darkOnSecondaryColor = Color.fromARGB(255, 17, 17, 17);
   static const Color _darkTextColorSecondary = Color.fromARGB(255, 10, 10, 10);
 
   static const Color _appbarColorLight = Color(0xFF707BAB);
@@ -81,7 +81,7 @@ class AppTheme {
           backgroundColor: _appbarColorLight,
           selectedItemColor: _bottomNavigationBarIconColorSelected,
           unselectedItemColor: _bottomNavigationBarIconColorUnselected),
-      colorScheme: ColorScheme.light(
+      colorScheme: const ColorScheme.light(
           primary: _lightPrimaryColor,
           onPrimary: _lightOnPrimaryColor,
           secondary: _lightSecondaryColor,
@@ -100,7 +100,7 @@ class AppTheme {
           backgroundColor: _appbarColorDark,
           selectedItemColor: _bottomNavigationBarIconColorSelected,
           unselectedItemColor: _bottomNavigationBarIconColorUnselected),
-      colorScheme: ColorScheme.light(
+      colorScheme: const ColorScheme.light(
           primary: _darkPrimaryColor,
           onPrimary: _darkOnPrimaryColor,
           secondary: _darkSecondaryColor,
