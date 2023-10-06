@@ -1,9 +1,9 @@
 /* import 'dart:html';
 
 import 'package:latlong2/latlong.dart';
-import 'package:multimodal_routeplanner/03_domain/entities/Costs/Costs.dart';
-import 'package:multimodal_routeplanner/03_domain/entities/Costs/ExternalCosts.dart';
-import 'package:multimodal_routeplanner/03_domain/entities/Costs/InternalCosts.dart';
+import 'package:multimodal_routeplanner/03_domain/entities/costs/Costs.dart';
+import 'package:multimodal_routeplanner/03_domain/entities/costs/ExternalCosts.dart';
+import 'package:multimodal_routeplanner/03_domain/entities/costs/InternalCosts.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Segment.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 import 'package:multimodal_routeplanner/03_domain/enums/MobilityMode.dart';

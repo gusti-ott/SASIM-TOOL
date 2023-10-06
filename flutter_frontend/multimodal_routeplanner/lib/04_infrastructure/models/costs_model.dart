@@ -1,6 +1,6 @@
-import 'package:multimodal_routeplanner/03_domain/entities/Costs/Costs.dart';
-import 'package:multimodal_routeplanner/03_domain/entities/Costs/ExternalCosts.dart';
-import 'package:multimodal_routeplanner/03_domain/entities/Costs/InternalCosts.dart';
+import 'package:multimodal_routeplanner/03_domain/entities/costs/Costs.dart';
+import 'package:multimodal_routeplanner/03_domain/entities/costs/ExternalCosts.dart';
+import 'package:multimodal_routeplanner/03_domain/entities/costs/InternalCosts.dart';
 import 'package:multimodal_routeplanner/04_infrastructure/models/external_costs_model.dart';
 import 'package:multimodal_routeplanner/04_infrastructure/models/internal_costs_model.dart';
 

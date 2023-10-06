@@ -19,6 +19,9 @@ class _SearchScreenState extends State<SearchScreen> {
       TextEditingController();
   final TextEditingController _controllerEndLocation = TextEditingController();
 
+  bool _startInputValid = true;
+  bool _endInputValid = true;
+
   @override
   Widget build(BuildContext context) {
     const double searchAreaWidth = 800;
@@ -56,6 +59,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             BlocProvider.of<AddressPickerBloc>(context)
                                 .add(StartAddressInputChanged(value));
                           },
+                          _startInputValid,
                         ),
                         const Icon(
                           Icons.double_arrow,
@@ -70,6 +74,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             BlocProvider.of<AddressPickerBloc>(context)
                                 .add(EndAddressInputChanged(value));
                           },
+                          _endInputValid,
                         ),
                       ],
                     ),
@@ -96,14 +101,28 @@ class _SearchScreenState extends State<SearchScreen> {
                                 const SizedBox(height: 64),
                                 InkWell(
                                   onTap: () {
-                                    context.goNamed(
-                                      'result-screen',
-                                      queryParameters: {
-                                        'startInput':
-                                            _controllerStartLocation.text,
-                                        'endInput': _controllerEndLocation.text,
-                                      },
-                                    );
+                                    setState(() {
+                                      _startInputValid =
+                                          _controllerStartLocation
+                                              .text.isNotEmpty;
+                                    });
+
+                                    setState(() {
+                                      _endInputValid = _controllerEndLocation
+                                          .text.isNotEmpty;
+                                    });
+
+                                    if (_startInputValid && _endInputValid) {
+                                      context.goNamed(
+                                        'result-screen',
+                                        queryParameters: {
+                                          'startInput':
+                                              _controllerStartLocation.text,
+                                          'endInput':
+                                              _controllerEndLocation.text,
+                                        },
+                                      );
+                                    }
                                   },
                                   child: Container(
                                       height: 50,
@@ -159,43 +178,43 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget addressInputField(
-      double width,
-      String labelText,
-      TextEditingController textEditingController,
-      Function(String) onChangedCallback) {
+    double width,
+    String labelText,
+    TextEditingController textEditingController,
+    Function(String) onChangedCallback,
+    bool isValid,
+  ) {
     return SizedBox(
       width: width,
       child: TextFormField(
         controller: textEditingController,
         keyboardType: TextInputType.streetAddress,
         decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.white,
-            label: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(labelText),
-            ),
-            labelStyle: const TextStyle(color: Colors.black)),
+          filled: true,
+          fillColor: Colors.white,
+          label: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(labelText),
+          ),
+          labelStyle: const TextStyle(color: Colors.black),
+          error: isValid ? null : erroWidget(labelText),
+          // errorText: isValide ? null : 'Bitte gib eine $labelText an',
+        ),
         onChanged: (value) {
           onChangedCallback(value);
-          /*if (addressType == AddressType.startAddress) {
-            BlocProvider.of<AddressPickerBloc>(context)
-                .add(StartAddressInputChanged(value));
-          }
-          if (addressType == AddressType.endAddress) {
-            BlocProvider.of<AddressPickerBloc>(context)
-                .add(EndAddressInputChanged(value));
-          }*/
         },
         onEditingComplete: () => _focusNodeEndLocation.requestFocus(),
-        validator: (String? value) {
-          //TODO: fix validation
-          if (value == null || value.isEmpty) {
-            return "Bitte gib eine $labelText an";
-          }
-          return null;
-        },
       ),
     );
   }
+}
+
+Widget erroWidget(String labelText) {
+  return Container(
+    color: Colors.red,
+    child: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text('Bitte gib eine $labelText an'),
+    ),
+  );
 }

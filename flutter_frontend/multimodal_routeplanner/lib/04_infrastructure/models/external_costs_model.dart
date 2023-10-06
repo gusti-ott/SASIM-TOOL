@@ -1,4 +1,4 @@
-import 'package:multimodal_routeplanner/03_domain/entities/Costs/ExternalCosts.dart';
+import 'package:multimodal_routeplanner/03_domain/entities/costs/ExternalCosts.dart';
 
 class ExternalCostsModel extends ExternalCosts {
   ExternalCostsModel(

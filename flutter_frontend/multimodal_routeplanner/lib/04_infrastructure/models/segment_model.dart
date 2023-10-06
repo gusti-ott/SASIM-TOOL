@@ -1,6 +1,6 @@
 import 'package:multimodal_routeplanner/04_infrastructure/models/waypoint_model.dart';
 
-import '../../03_domain/entities/Costs/Costs.dart';
+import '../../03_domain/entities/costs/Costs.dart';
 import '../../03_domain/entities/Segment.dart';
 import '../../03_domain/entities/Waypoint.dart';
 import 'costs_model.dart';

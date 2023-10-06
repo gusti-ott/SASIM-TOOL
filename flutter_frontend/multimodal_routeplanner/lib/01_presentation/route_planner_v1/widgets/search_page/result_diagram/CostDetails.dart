@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../02_application/bloc/cost_details/cost_details_bloc.dart';
-import '../../../../../03_domain/entities/Costs/Costs.dart';
+import '../../../../../03_domain/entities/costs/Costs.dart';
 
 class CostDetails extends StatelessWidget {
   final Costs costs;

@@ -23,12 +23,15 @@ class TitleImage extends StatelessWidget {
                   Colors.black.withOpacity(0.5), // Adjust opacity for darkness
             ),
           ),
-          Center(
-            child: Text('erfahre die wahren Kosten deiner Mobilität',
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineLarge!
-                    .copyWith(color: Colors.white, fontSize: 64)),
+          Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: Center(
+              child: Text('erfahre die wahren Kosten deiner Mobilität',
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineLarge!
+                      .copyWith(color: Colors.white, fontSize: 64)),
+            ),
           ),
           mcubeLogo()
           // Other widgets can be added on top of the image in the Stack

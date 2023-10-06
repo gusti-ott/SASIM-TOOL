@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
-import '../../../03_domain/entities/Costs/Costs.dart';
+import '../../../03_domain/entities/costs/Costs.dart';
 
 part 'cost_details_event.dart';
 part 'cost_details_state.dart';

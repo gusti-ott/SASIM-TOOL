@@ -1,5 +1,5 @@
-import 'package:multimodal_routeplanner/03_domain/entities/Costs/ExternalCosts.dart';
-import 'package:multimodal_routeplanner/03_domain/entities/Costs/InternalCosts.dart';
+import 'package:multimodal_routeplanner/03_domain/entities/costs/ExternalCosts.dart';
+import 'package:multimodal_routeplanner/03_domain/entities/costs/InternalCosts.dart';
 
 class Costs {
   final ExternalCosts externalCosts;

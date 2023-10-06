@@ -1,5 +1,5 @@
 import 'package:latlong2/latlong.dart';
-import 'package:multimodal_routeplanner/03_domain/entities/Costs/Costs.dart';
+import 'package:multimodal_routeplanner/03_domain/entities/costs/Costs.dart';
 
 import 'Waypoint.dart';
 
