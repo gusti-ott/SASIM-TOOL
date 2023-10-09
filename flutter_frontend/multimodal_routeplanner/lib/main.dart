@@ -8,6 +8,7 @@ import 'package:multimodal_routeplanner/02_application/bloc/route_info/info_drop
 import 'package:multimodal_routeplanner/02_application/bloc/route_info/info_dropdown_mobiscore_cubit.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/route_planner/advanced_route_planner_bloc.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/route_planner_bloc.dart';
+import 'package:multimodal_routeplanner/02_application/bloc/sasim_2/trips_cubit.dart';
 import 'package:multimodal_routeplanner/config/go_router.dart';
 
 import '02_application/bloc/route_info/route_info_bloc.dart';
@@ -61,6 +62,7 @@ class _MyAppState extends State<MyApp> {
           BlocProvider(
             create: (BuildContext context) => AddressPickerBloc(),
           ),
+          BlocProvider(create: (BuildContext context) => TripsCubit()),
         ],
         child: MaterialApp.router(
           title: 'Route Planner',

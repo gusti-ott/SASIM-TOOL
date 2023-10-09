@@ -22,7 +22,7 @@ Trip trip1 = Trip(
     ),
   ),
   segments: [],
-  mode: 'PKW',
+  mode: 'CAR',
   mobiScore: 'D',
 );
 
@@ -43,7 +43,7 @@ Trip trip2 = Trip(
     ),
   ),
   segments: [],
-  mode: 'Fahrrad',
+  mode: 'BICYCLE',
   mobiScore: 'B',
 );
 
@@ -64,7 +64,7 @@ Trip trip3 = Trip(
     ),
   ),
   segments: [],
-  mode: 'ÖPNV',
+  mode: 'PT',
   mobiScore: 'A',
 );
 
@@ -85,8 +85,8 @@ Trip trip4 = Trip(
     ),
   ),
   segments: [],
-  mode: 'zu Fuß',
+  mode: 'WALK',
   mobiScore: 'A',
 );
 
-List<Trip> mockListTrips = [trip1, trip2, trip3, trip4];
+// List<Trip> mockListTrips = [trip1, trip2, trip3, trip4];

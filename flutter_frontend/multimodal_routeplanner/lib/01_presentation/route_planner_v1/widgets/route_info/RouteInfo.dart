@@ -54,7 +54,8 @@ class RouteInfo extends StatelessWidget {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
                                       stringMappingHelper
-                                          .mapModeStringToToolTip(trip.mode),
+                                          .mapModeStringToGermanString(
+                                              trip.mode),
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold)),
                                 ),

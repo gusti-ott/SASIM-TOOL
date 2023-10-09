@@ -26,7 +26,7 @@ class TitleImage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(32.0),
             child: Center(
-              child: Text('erfahre die wahren Kosten deiner Mobilität',
+              child: Text('Erfahre die wahren Kosten deiner Mobilität',
                   style: Theme.of(context)
                       .textTheme
                       .headlineLarge!

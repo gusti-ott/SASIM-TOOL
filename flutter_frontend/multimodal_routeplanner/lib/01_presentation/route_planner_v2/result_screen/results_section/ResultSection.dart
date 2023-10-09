@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/result_screen/results_section/ResultTable.dart';
+import 'package:multimodal_routeplanner/02_application/bloc/sasim_2/trips_cubit.dart';
 
 class ResultSection extends StatelessWidget {
   const ResultSection(
@@ -14,8 +16,35 @@ class ResultSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         routeInfoHeader(context),
-        ResultTable(),
+        BlocBuilder<TripsCubit, TripsState>(
+          builder: (context, state) {
+            if (state is TripsLoading) {
+              return const Center(child: LinearProgressIndicator());
+            }
+            if (state is TripsLoaded) {
+              return ResultTable(listTrips: state.trips);
+            }
+            if (state is TripsError) {
+              return errorWidget(context, state: state);
+            }
+            return errorWidget(context);
+          },
+        ),
       ],
+    );
+  }
+
+  Center errorWidget(BuildContext context, {TripsError? state}) {
+    return Center(
+      child: Column(
+        children: [
+          Text(
+            'irgendwas ist schiefgegangen',
+            style: Theme.of(context).textTheme.headlineLarge,
+          ),
+          if (state != null) Text(state.message),
+        ],
+      ),
     );
   }
 
