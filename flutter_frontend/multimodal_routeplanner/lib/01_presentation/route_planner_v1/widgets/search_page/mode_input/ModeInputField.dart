@@ -35,8 +35,11 @@ class AdvancedModeInputField extends StatelessWidget {
                     thickness: 3, color: themeData.colorScheme.onPrimary)),
             Padding(
               padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-              child: Text("individuelle Wege",
-                  style: themeData.textTheme.headline1),
+              child: Text(
+                "individuelle Wege",
+                style: themeData.textTheme.titleLarge!
+                    .copyWith(color: themeData.colorScheme.onPrimary),
+              ),
             ),
             Expanded(
                 child: Divider(
@@ -117,7 +120,8 @@ class AdvancedModeInputField extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
               child: Text("Wege mit Sharing",
-                  style: themeData.textTheme.headline1),
+                  style: themeData.textTheme.titleLarge!
+                      .copyWith(color: themeData.colorScheme.onPrimary)),
             ),
             Expanded(
                 child: Divider(
@@ -158,8 +162,9 @@ class AdvancedModeInputField extends StatelessWidget {
                     thickness: 3, color: themeData.colorScheme.onPrimary)),
             Padding(
               padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-              child:
-                  Text("Wege mit ÖPNV", style: themeData.textTheme.headline1),
+              child: Text("Wege mit ÖPNV",
+                  style: themeData.textTheme.titleLarge!
+                      .copyWith(color: themeData.colorScheme.onPrimary)),
             ),
             Expanded(
                 child: Divider(

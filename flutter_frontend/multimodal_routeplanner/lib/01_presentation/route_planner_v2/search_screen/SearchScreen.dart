@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/McubeLogo.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/search_screen/address_picker/AddressPickerList.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/address_picker/address_picker_bloc.dart';
+import 'package:multimodal_routeplanner/logger.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -80,10 +81,24 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                     BlocBuilder<AddressPickerBloc, AddressPickerState>(
                       builder: (context, state) {
+                        getLogger().w(state.toString());
+
                         return Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
+                            Column(
+                              children: [
+                                if (state is RetrievingStartAddress)
+                                  const SizedBox(
+                                      width: textInputWidth,
+                                      child: LinearProgressIndicator(
+                                        color: Colors.white,
+                                      )),
+                                if (state is! StartAddressRetrieved)
+                                  emptyAddressPicker(textInputWidth),
+                              ],
+                            ),
                             if (state is StartAddressRetrieved)
                               AddressPickerList(
                                   width: textInputWidth,
@@ -94,8 +109,6 @@ class _SearchScreenState extends State<SearchScreen> {
                                     BlocProvider.of<AddressPickerBloc>(context)
                                         .add(PickStartAddress(address));
                                   }),
-                            if (state is! StartAddressRetrieved)
-                              emptyAddressPicker(textInputWidth),
                             Column(
                               children: [
                                 const SizedBox(height: 64),
@@ -144,6 +157,19 @@ class _SearchScreenState extends State<SearchScreen> {
                                 ),
                               ],
                             ),
+                            Column(
+                              children: [
+                                if (state is RetrievingEndAddress)
+                                  const SizedBox(
+                                    width: textInputWidth,
+                                    child: LinearProgressIndicator(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                if (state is! EndAddressRetrieved)
+                                  emptyAddressPicker(textInputWidth),
+                              ],
+                            ),
                             if (state is EndAddressRetrieved)
                               AddressPickerList(
                                   width: textInputWidth,
@@ -154,8 +180,6 @@ class _SearchScreenState extends State<SearchScreen> {
                                     BlocProvider.of<AddressPickerBloc>(context)
                                         .add(PickEndAddress(address));
                                   }),
-                            if (state is! EndAddressRetrieved)
-                              emptyAddressPicker(textInputWidth),
                           ],
                         );
                       },
@@ -173,6 +197,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget emptyAddressPicker(double width) {
     return Container(
       width: width,
+      height: 0,
       decoration: const BoxDecoration(color: Colors.white),
     );
   }

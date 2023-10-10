@@ -32,7 +32,7 @@ class ResultDiagramCard extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 14,
                       fontStyle: FontStyle.italic,
-                      color: themeData.colorScheme.onSecondary),
+                      color: themeData.colorScheme.onPrimaryContainer),
                 ),
               ),
               const TitleDropdown(),

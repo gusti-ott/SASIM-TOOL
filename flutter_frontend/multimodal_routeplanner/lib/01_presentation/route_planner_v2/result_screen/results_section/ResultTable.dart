@@ -18,16 +18,19 @@ class _ResultTableState extends State<ResultTable> {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     ScrollController scrollController = ScrollController();
 
-    return CustomScrollbar(
-      scrollDirection: Axis.horizontal,
-      controller: scrollController,
-      child: Container(
-        width: 1200,
-        color: colorScheme.primary,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ResultDataTable(
-            listTrips: widget.listTrips,
+    return Padding(
+      padding: const EdgeInsets.all(64.0),
+      child: CustomScrollbar(
+        scrollDirection: Axis.horizontal,
+        controller: scrollController,
+        child: Container(
+          width: 1200,
+          color: colorScheme.primary,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ResultDataTable(
+              listTrips: widget.listTrips,
+            ),
           ),
         ),
       ),
@@ -48,8 +51,6 @@ class _ResultDataTableState extends State<ResultDataTable> {
   late Trip selectedTrip1;
   late Trip selectedTrip2;
   late Trip selectedTrip3;
-
-  late List<String> listModes;
 
   void onDropdown1Changed(Trip value) {
     setState(() {
@@ -78,8 +79,6 @@ class _ResultDataTableState extends State<ResultDataTable> {
     selectedTrip1 = widget.listTrips[0];
     selectedTrip2 = widget.listTrips[1];
     selectedTrip3 = widget.listTrips[2];
-
-    listModes = widget.listTrips.map((trip) => trip.mode).toList();
   }
 
   @override
@@ -98,7 +97,7 @@ class _ResultDataTableState extends State<ResultDataTable> {
         3: FlexColumnWidth(5),
       },
       children: [
-        headerDropdownRow(listModes),
+        headerDropdownRow(),
         tripInfoRow(context),
         rowSpacer(),
         internalCostsRow(),
@@ -119,7 +118,7 @@ class _ResultDataTableState extends State<ResultDataTable> {
     ]);
   }
 
-  TableRow headerDropdownRow(List<String> listModes) {
+  TableRow headerDropdownRow() {
     return TableRow(
       children: [
         const SizedBox(),
@@ -188,6 +187,7 @@ class _ResultDataTableState extends State<ResultDataTable> {
 
   Widget headerItem(Trip selectedTrip, void Function(Trip) onChanged) {
     ModeMappingHelper modeMappingHelper = ModeMappingHelper();
+    List<String> listModes = widget.listTrips.map((trip) => trip.mode).toList();
 
     return TableCell(
       child: Center(

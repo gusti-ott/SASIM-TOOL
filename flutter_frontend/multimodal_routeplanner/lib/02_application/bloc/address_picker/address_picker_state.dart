@@ -5,7 +5,11 @@ abstract class AddressPickerState {}
 
 class AddressPickerInitial extends AddressPickerState {}
 
-class RetrievingAddress extends AddressPickerState {}
+abstract class RetrievingAddress extends AddressPickerState {}
+
+class RetrievingStartAddress implements RetrievingAddress {}
+
+class RetrievingEndAddress implements RetrievingAddress {}
 
 abstract class AddressRetrieved extends AddressPickerState {
   final List<Address> listAddresses;

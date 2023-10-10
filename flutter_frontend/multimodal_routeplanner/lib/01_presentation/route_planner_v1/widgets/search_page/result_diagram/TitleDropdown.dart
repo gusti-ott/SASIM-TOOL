@@ -18,7 +18,7 @@ class TitleDropdown extends StatelessWidget {
             value: state.type,
             icon: const Icon(Icons.arrow_downward),
             elevation: 16,
-            style: TextStyle(color: themeData.colorScheme.onSecondary),
+            style: TextStyle(color: themeData.colorScheme.onPrimaryContainer),
             onChanged: (DiagramTypeEnum? newValue) {
               if (newValue != null) {
                 BlocProvider.of<DiagramTypeBloc>(context)
@@ -41,7 +41,11 @@ class TitleDropdown extends StatelessWidget {
             ].map<DropdownMenuItem<DiagramTypeEnum>>((DiagramTypeEnum value) {
               return DropdownMenuItem<DiagramTypeEnum>(
                 value: value,
-                child: Text(MapDiagramTypeToString(value)),
+                child: Text(
+                  MapDiagramTypeToString(value),
+                  style: themeData.textTheme.titleMedium!.copyWith(
+                      color: themeData.colorScheme.onPrimaryContainer),
+                ),
               );
             }).toList(),
           );
@@ -73,7 +77,9 @@ class TitleDropdown extends StatelessWidget {
             ].map<DropdownMenuItem<DiagramTypeEnum>>((DiagramTypeEnum value) {
               return DropdownMenuItem<DiagramTypeEnum>(
                 value: value,
-                child: Text(MapDiagramTypeToString(value)),
+                child: Text(MapDiagramTypeToString(value),
+                    style: themeData.textTheme.titleMedium!.copyWith(
+                        color: themeData.colorScheme.onPrimaryContainer)),
               );
             }).toList(),
           );

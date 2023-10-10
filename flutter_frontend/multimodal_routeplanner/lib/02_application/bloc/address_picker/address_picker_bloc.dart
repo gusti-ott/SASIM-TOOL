@@ -14,7 +14,11 @@ class AddressPickerBloc extends Bloc<AddressPickerEvent, AddressPickerState> {
     on<AddressPickerEvent>(
       (event, emit) async {
         if (event is AddressInputChanged) {
-          emit(RetrievingAddress());
+          if (event is StartAddressInputChanged) {
+            emit(RetrievingStartAddress());
+          } else if (event is EndAddressInputChanged) {
+            emit(RetrievingEndAddress());
+          }
 
           List<Address> listAddresses = await addressPickerUsecases.getAddress(
               inputAddress: event.addressInput);
