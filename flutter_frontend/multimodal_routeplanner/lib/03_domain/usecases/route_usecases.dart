@@ -64,7 +64,7 @@ class RoutePlannerUsecases {
           mode: MobilityMode(mode: MobilityModeEnum.car));
       listTrips.add(carTrip);
     } catch (e) {
-      logger.e(e.toString());
+      logger.e('could not fetch CAR trip: ${e.toString()}');
     }
 
     // get bike trip
@@ -75,7 +75,7 @@ class RoutePlannerUsecases {
           mode: MobilityMode(mode: MobilityModeEnum.bike));
       listTrips.add(bikeTrip);
     } catch (e) {
-      logger.e(e.toString());
+      logger.e('could not fetch BIKE trip: ${e.toString()}');
     }
 
     // get walk trip
@@ -86,7 +86,7 @@ class RoutePlannerUsecases {
           mode: MobilityMode(mode: MobilityModeEnum.walk));
       listTrips.add(walkTrip);
     } catch (e) {
-      logger.e(e.toString());
+      logger.e('could not fetch WALK trip: ${e.toString()}');
     }
 
     // get pt trip
@@ -97,7 +97,7 @@ class RoutePlannerUsecases {
           mode: MobilityMode(mode: MobilityModeEnum.mvg));
       listTrips.add(ptTrip);
     } catch (e) {
-      logger.e(e.toString());
+      logger.e('could not fetch PT trip: ${e.toString()}');
     }
 
     // get intermodal trip
@@ -108,7 +108,7 @@ class RoutePlannerUsecases {
           mode: MobilityMode(mode: MobilityModeEnum.intermodal));
       listTrips.add(intermodalTrip);
     } catch (e) {
-      logger.e(e.toString());
+      logger.e('could not fetch INTERMODAL trip: ${e.toString()}');
     }
 
     return listTrips;

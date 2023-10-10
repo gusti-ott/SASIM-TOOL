@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/01_presentation/helpers/CustomScrollbar.dart';
 import 'package:multimodal_routeplanner/01_presentation/helpers/ModeMapingHelper.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/result_screen/results_section/table_cells/ExternalCostsItem.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/result_screen/results_section/table_cells/HeaderItem.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/result_screen/results_section/table_cells/InternalCostsItem.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/result_screen/results_section/table_cells/MobiScoreItem.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/result_screen/results_section/table_cells/RowHeaderItem.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/result_screen/results_section/table_cells/TripInfoItem.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 
-class ResultTable extends StatefulWidget {
+class ResultTable extends StatelessWidget {
   const ResultTable({super.key, required this.listTrips});
 
   final List<Trip> listTrips;
 
-  @override
-  State<ResultTable> createState() => _ResultTableState();
-}
-
-class _ResultTableState extends State<ResultTable> {
   @override
   Widget build(BuildContext context) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
@@ -29,7 +30,7 @@ class _ResultTableState extends State<ResultTable> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: ResultDataTable(
-              listTrips: widget.listTrips,
+              listTrips: listTrips,
             ),
           ),
         ),
@@ -47,7 +48,8 @@ class ResultDataTable extends StatefulWidget {
   State<ResultDataTable> createState() => _ResultDataTableState();
 }
 
-class _ResultDataTableState extends State<ResultDataTable> {
+class _ResultDataTableState extends State<ResultDataTable>
+    with SingleTickerProviderStateMixin {
   late Trip selectedTrip1;
   late Trip selectedTrip2;
   late Trip selectedTrip3;
@@ -122,13 +124,20 @@ class _ResultDataTableState extends State<ResultDataTable> {
     return TableRow(
       children: [
         const SizedBox(),
-        headerItem(selectedTrip1, (selectedTrip1) {
-          onDropdown1Changed(selectedTrip1);
-        }),
-        headerItem(selectedTrip2,
-            (selectedTrip2) => onDropdown2Changed(selectedTrip2)),
-        headerItem(selectedTrip3,
-            (selectedTrip3) => onDropdown3Changed(selectedTrip3)),
+        HeaderItem(
+            listTrips: widget.listTrips,
+            selectedTrip: selectedTrip1,
+            onChanged: (selectedTrip1) {
+              onDropdown1Changed(selectedTrip1);
+            }),
+        HeaderItem(
+            listTrips: widget.listTrips,
+            selectedTrip: selectedTrip2,
+            onChanged: (selectedTrip2) => onDropdown2Changed(selectedTrip2)),
+        HeaderItem(
+            listTrips: widget.listTrips,
+            selectedTrip: selectedTrip3,
+            onChanged: (selectedTrip3) => onDropdown3Changed(selectedTrip3)),
       ],
     );
   }
@@ -138,15 +147,18 @@ class _ResultDataTableState extends State<ResultDataTable> {
 
     return TableRow(children: [
       const SizedBox(),
-      tripInfoItem(
-          modeMappingHelper.mapModeStringToIconData(selectedTrip1.mode),
-          selectedTrip1),
-      tripInfoItem(
-          modeMappingHelper.mapModeStringToIconData(selectedTrip2.mode),
-          selectedTrip2),
-      tripInfoItem(
-          modeMappingHelper.mapModeStringToIconData(selectedTrip3.mode),
-          selectedTrip3),
+      TripInfoItem(
+          iconData:
+              modeMappingHelper.mapModeStringToIconData(selectedTrip1.mode),
+          selectedTrip: selectedTrip1),
+      TripInfoItem(
+          iconData:
+              modeMappingHelper.mapModeStringToIconData(selectedTrip2.mode),
+          selectedTrip: selectedTrip2),
+      TripInfoItem(
+          iconData:
+              modeMappingHelper.mapModeStringToIconData(selectedTrip3.mode),
+          selectedTrip: selectedTrip3),
     ]);
   }
 
@@ -154,10 +166,10 @@ class _ResultDataTableState extends State<ResultDataTable> {
     return TableRow(
       decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
       children: [
-        rowHeaderItem('interne\nKosten'),
-        internalCostsItem(selectedTrip1),
-        internalCostsItem(selectedTrip2),
-        internalCostsItem(selectedTrip3),
+        const RowHeaderItem(text: 'interne\nKosten'),
+        InternalCostsItem(selectedTrip: selectedTrip1),
+        InternalCostsItem(selectedTrip: selectedTrip2),
+        InternalCostsItem(selectedTrip: selectedTrip3),
       ],
     );
   }
@@ -166,156 +178,34 @@ class _ResultDataTableState extends State<ResultDataTable> {
     return TableRow(
         decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
         children: [
-          rowHeaderItem('externe\nKosten'),
-          externalCostsItem(selectedTrip1),
-          externalCostsItem(selectedTrip2),
-          externalCostsItem(selectedTrip3),
+          const RowHeaderItem(text: 'externe\nKosten'),
+          ExternalCostsItem(selectedTrip: selectedTrip1),
+          ExternalCostsItem(selectedTrip: selectedTrip2),
+          ExternalCostsItem(selectedTrip: selectedTrip3),
         ]);
   }
 
-  mobiScoreRow() {
+  TableRow mobiScoreRow() {
     return TableRow(
       decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
       children: [
-        rowHeaderItem('Mobi-\nScore'),
-        mobiScoreItem(selectedTrip1),
-        mobiScoreItem(selectedTrip2),
-        mobiScoreItem(selectedTrip3),
+        const RowHeaderItem(text: 'Mobi-\nScore'),
+        MobiScoreItem(selectedTrip: selectedTrip1),
+        MobiScoreItem(selectedTrip: selectedTrip2),
+        MobiScoreItem(selectedTrip: selectedTrip3),
       ],
     );
   }
 
-  Widget headerItem(Trip selectedTrip, void Function(Trip) onChanged) {
-    ModeMappingHelper modeMappingHelper = ModeMappingHelper();
-    List<String> listModes = widget.listTrips.map((trip) => trip.mode).toList();
-
-    return TableCell(
-      child: Center(
-        child: DropdownButton<String>(
-          alignment: Alignment.center,
-          dropdownColor: Theme.of(context).colorScheme.secondary,
-          value: selectedTrip.mode,
-          style: Theme.of(context)
-              .textTheme
-              .headlineSmall!
-              .copyWith(color: Theme.of(context).colorScheme.onPrimary),
-          onChanged: (value) {
-            onChanged(
-                widget.listTrips.firstWhere((trip) => trip.mode == value));
-          },
-          iconSize: 32,
-          iconEnabledColor: Theme.of(context).colorScheme.onPrimary,
-          items: listModes
-              .map((String value) => DropdownMenuItem<String>(
-                    alignment: Alignment.center,
-                    value: value,
-                    child: Text(
-                        modeMappingHelper.mapModeStringToGermanString(value)),
-                  ))
-              .toList(),
-        ),
-      ),
-    );
-  }
-
-  Widget tripInfoItem(IconData icon, Trip selectedTrip) {
-    Color contentColor = Theme.of(context).colorScheme.onPrimary;
-    TextTheme textTheme = Theme.of(context).textTheme;
-
-    return TableCell(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Icon(icon, size: 32, color: contentColor),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.timer_outlined, color: contentColor),
-                  Text(
-                    "${selectedTrip.duration.toStringAsFixed(0)}'",
-                    style: textTheme.titleMedium!.copyWith(color: contentColor),
-                  ),
-                  const SizedBox(width: 16),
-                  Icon(Icons.route_outlined, color: contentColor),
-                  Text(
-                    '${selectedTrip.distance.toStringAsFixed(1)} km',
-                    style: textTheme.titleMedium!.copyWith(color: contentColor),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget internalCostsItem(Trip selectedTrip) {
-    return TableCell(
-      child: Text(
-          '${selectedTrip.costs.internalCosts.all.toStringAsFixed(2)} €',
-          textAlign: TextAlign.center,
-          style: Theme.of(context)
-              .textTheme
-              .titleLarge!
-              .copyWith(color: Theme.of(context).colorScheme.onPrimary)),
-    );
-  }
-
-  Widget externalCostsItem(Trip selectedTrip) {
-    return TableCell(
-      child: Text(
-          '${selectedTrip.costs.externalCosts.all.toStringAsFixed(2)} €',
-          textAlign: TextAlign.center,
-          style: Theme.of(context)
-              .textTheme
-              .titleLarge!
-              .copyWith(color: Theme.of(context).colorScheme.onPrimary)),
-    );
-  }
-
-  mobiScoreItem(Trip selectedTrip) {
-    ModeMappingHelper stringMappingHelper = ModeMappingHelper();
-
-    return TableCell(
-      child: SizedBox(
-        width: 100,
-        height: 50,
-        child: Image(
-          image: stringMappingHelper
-              .mapMobiScoreStringToPath(selectedTrip.mobiScore),
-        ),
-      ),
-    );
-  }
-
-  Widget rowHeaderItem(String text) {
-    ColorScheme colorScheme = Theme.of(context).colorScheme;
-
-    return TableCell(
-      child: Container(
-        decoration: BoxDecoration(
-          border:
-              Border(right: BorderSide(color: colorScheme.onPrimary, width: 2)),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: RotatedBox(
-            quarterTurns: 3,
-            child: Text(text,
-                textAlign: TextAlign.center,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium!
-                    .copyWith(color: Theme.of(context).colorScheme.onPrimary)),
-          ),
-        ),
-      ),
-    );
+  Widget customAnimatedBuilder(
+      {required Animation animation, required Widget childWidget}) {
+    return AnimatedBuilder(
+        animation: animation,
+        builder: (context, child) {
+          return Opacity(
+            opacity: animation.value,
+            child: childWidget,
+          );
+        });
   }
 }
