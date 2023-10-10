@@ -1,19 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:multimodal_routeplanner/01_presentation/helpers/ModeMapingHelper.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/result_screen/results_section/table_cells/CustomAnimatedTableCell.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 
 class TripInfoItem extends StatelessWidget {
   const TripInfoItem(
-      {super.key, required this.iconData, required this.selectedTrip});
+      {super.key,
+      required this.selectedTrip,
+      required this.animationController,
+      required this.animation});
 
-  final IconData iconData;
   final Trip selectedTrip;
+  final AnimationController animationController;
+  final Animation animation;
 
   @override
   Widget build(BuildContext context) {
     Color contentColor = Theme.of(context).colorScheme.onPrimary;
     TextTheme textTheme = Theme.of(context).textTheme;
 
-    return TableCell(
+    ModeMappingHelper modeMappingHelper = ModeMappingHelper();
+    IconData iconData =
+        modeMappingHelper.mapModeStringToIconData(selectedTrip.mode);
+
+    return CustomAnimatedTableCell(
+      selectedTrip: selectedTrip,
+      animationController: animationController,
+      animation: animation,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(

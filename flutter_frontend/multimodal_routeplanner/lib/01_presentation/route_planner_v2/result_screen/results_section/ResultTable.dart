@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/01_presentation/helpers/CustomScrollbar.dart';
-import 'package:multimodal_routeplanner/01_presentation/helpers/ModeMapingHelper.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/result_screen/results_section/table_cells/ExternalCostsItem.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/result_screen/results_section/table_cells/HeaderItem.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/result_screen/results_section/table_cells/InternalCostsItem.dart';
@@ -196,22 +195,21 @@ class _ResultDataTableState extends State<ResultDataTable>
   }
 
   TableRow tripInfoRow(BuildContext context) {
-    ModeMappingHelper modeMappingHelper = ModeMappingHelper();
-
     return TableRow(children: [
       const SizedBox(),
       TripInfoItem(
-          iconData:
-              modeMappingHelper.mapModeStringToIconData(selectedTrip1.mode),
-          selectedTrip: selectedTrip1),
+          selectedTrip: selectedTrip1,
+          animation: _animation1,
+          animationController: _animationController1),
       TripInfoItem(
-          iconData:
-              modeMappingHelper.mapModeStringToIconData(selectedTrip2.mode),
-          selectedTrip: selectedTrip2),
+          selectedTrip: selectedTrip2,
+          animation: _animation2,
+          animationController: _animationController2),
       TripInfoItem(
-          iconData:
-              modeMappingHelper.mapModeStringToIconData(selectedTrip3.mode),
-          selectedTrip: selectedTrip3),
+        selectedTrip: selectedTrip3,
+        animation: _animation3,
+        animationController: _animationController3,
+      ),
     ]);
   }
 
