@@ -49,38 +49,91 @@ class ResultDataTable extends StatefulWidget {
 }
 
 class _ResultDataTableState extends State<ResultDataTable>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late Trip selectedTrip1;
   late Trip selectedTrip2;
   late Trip selectedTrip3;
 
+  late AnimationController _animationController1;
+  late AnimationController _animationController2;
+  late AnimationController _animationController3;
+  late Animation<double> _animation1;
+  late Animation<double> _animation2;
+  late Animation<double> _animation3;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedTrip1 = widget.listTrips[0];
+    selectedTrip2 = widget.listTrips[1];
+    selectedTrip3 = widget.listTrips[2];
+
+    _animationController1 = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+    _animation1 =
+        Tween<double>(begin: 0, end: 1).animate(_animationController1);
+
+    _animationController2 = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+    _animation2 =
+        Tween<double>(begin: 0, end: 1).animate(_animationController2);
+
+    _animationController3 = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+    _animation3 =
+        Tween<double>(begin: 0, end: 1).animate(_animationController3);
+
+    _playAnimation1();
+    _playAnimation2();
+    _playAnimation3();
+  }
+
+  @override
+  void dispose() {
+    _animationController1.dispose();
+    _animationController2.dispose();
+    _animationController3.dispose();
+    super.dispose();
+  }
+
+  void _playAnimation1() {
+    _animationController1.forward(from: 0);
+  }
+
+  void _playAnimation2() {
+    _animationController2.forward(from: 0);
+  }
+
+  void _playAnimation3() {
+    _animationController3.forward(from: 0);
+  }
+
   void onDropdown1Changed(Trip value) {
+    _playAnimation1();
+
     setState(() {
       selectedTrip1 = value;
     });
   }
 
   void onDropdown2Changed(Trip value) {
+    _playAnimation2();
     setState(() {
       selectedTrip2 = value;
     });
   }
 
   void onDropdown3Changed(Trip value) {
+    _playAnimation3();
     setState(() {
       selectedTrip3 = value;
     });
-  }
-
-  //initially set values of selectedMode1 to mode of first trip
-  @override
-  void initState() {
-    super.initState();
-
-    //TODO: check if the trip values are available - if not enough trips, then don't show column
-    selectedTrip1 = widget.listTrips[0];
-    selectedTrip2 = widget.listTrips[1];
-    selectedTrip3 = widget.listTrips[2];
   }
 
   @override
@@ -167,9 +220,18 @@ class _ResultDataTableState extends State<ResultDataTable>
       decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
       children: [
         const RowHeaderItem(text: 'interne\nKosten'),
-        InternalCostsItem(selectedTrip: selectedTrip1),
-        InternalCostsItem(selectedTrip: selectedTrip2),
-        InternalCostsItem(selectedTrip: selectedTrip3),
+        InternalCostsItem(
+            selectedTrip: selectedTrip1,
+            animation: _animation1,
+            animationController: _animationController1),
+        InternalCostsItem(
+            selectedTrip: selectedTrip2,
+            animation: _animation2,
+            animationController: _animationController2),
+        InternalCostsItem(
+            selectedTrip: selectedTrip3,
+            animation: _animation3,
+            animationController: _animationController3),
       ],
     );
   }
@@ -179,9 +241,18 @@ class _ResultDataTableState extends State<ResultDataTable>
         decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
         children: [
           const RowHeaderItem(text: 'externe\nKosten'),
-          ExternalCostsItem(selectedTrip: selectedTrip1),
-          ExternalCostsItem(selectedTrip: selectedTrip2),
-          ExternalCostsItem(selectedTrip: selectedTrip3),
+          ExternalCostsItem(
+              selectedTrip: selectedTrip1,
+              animation: _animation1,
+              animationController: _animationController1),
+          ExternalCostsItem(
+              selectedTrip: selectedTrip2,
+              animation: _animation2,
+              animationController: _animationController2),
+          ExternalCostsItem(
+              selectedTrip: selectedTrip3,
+              animation: _animation3,
+              animationController: _animationController3),
         ]);
   }
 
@@ -190,22 +261,19 @@ class _ResultDataTableState extends State<ResultDataTable>
       decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
       children: [
         const RowHeaderItem(text: 'Mobi-\nScore'),
-        MobiScoreItem(selectedTrip: selectedTrip1),
-        MobiScoreItem(selectedTrip: selectedTrip2),
-        MobiScoreItem(selectedTrip: selectedTrip3),
+        MobiScoreItem(
+            selectedTrip: selectedTrip1,
+            animation: _animation1,
+            animationController: _animationController1),
+        MobiScoreItem(
+            selectedTrip: selectedTrip2,
+            animation: _animation2,
+            animationController: _animationController2),
+        MobiScoreItem(
+            selectedTrip: selectedTrip3,
+            animation: _animation3,
+            animationController: _animationController3),
       ],
     );
-  }
-
-  Widget customAnimatedBuilder(
-      {required Animation animation, required Widget childWidget}) {
-    return AnimatedBuilder(
-        animation: animation,
-        builder: (context, child) {
-          return Opacity(
-            opacity: animation.value,
-            child: childWidget,
-          );
-        });
   }
 }
