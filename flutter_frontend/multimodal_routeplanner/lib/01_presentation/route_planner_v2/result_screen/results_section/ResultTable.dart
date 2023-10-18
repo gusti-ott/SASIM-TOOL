@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:multimodal_routeplanner/01_presentation/dimensions.dart';
 import 'package:multimodal_routeplanner/01_presentation/helpers/CustomScrollbar.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/result_screen/results_section/table_cells/ExternalCostsItem.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/result_screen/results_section/table_cells/HeaderItem.dart';
@@ -24,7 +25,7 @@ class ResultTable extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         controller: scrollController,
         child: Container(
-          width: 1200,
+          width: resultTablewidth,
           color: colorScheme.primary,
           child: Padding(
             padding: const EdgeInsets.all(8.0),

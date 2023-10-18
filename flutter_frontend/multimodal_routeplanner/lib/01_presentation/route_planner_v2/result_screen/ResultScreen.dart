@@ -20,9 +20,83 @@ class ResultScreen extends StatelessWidget {
         child: Column(
           children: [
             const TitleImage(),
-            ResultSection(startAddress: startAddress, endAddress: endAddress),
+            fromToHeader(context),
+            BlocBuilder<TripsCubit, TripsState>(
+              builder: (context, state) {
+                if (state is TripsLoading) {
+                  return const Center(child: LinearProgressIndicator());
+                }
+                if (state is TripsLoaded) {
+                  return ResultSection(listTrips: state.trips);
+                }
+                if (state is TripsError) {
+                  return resultErrorWidget(context, state: state);
+                }
+                return resultErrorWidget(context);
+              },
+            ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget fromToHeader(BuildContext context) {
+    double iconSpace = 32;
+    ColorScheme colorScheme = Theme.of(context).colorScheme;
+    Color contentColor = colorScheme.primary;
+
+    return Padding(
+      padding: const EdgeInsets.all(32.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          addressInfo(context, 'VON', startAddress, contentColor),
+          SizedBox(width: iconSpace),
+          Icon(
+            Icons.double_arrow,
+            color: contentColor,
+            size: 48,
+          ),
+          SizedBox(width: iconSpace),
+          addressInfo(context, 'NACH', endAddress, contentColor),
+        ],
+      ),
+    );
+  }
+
+  Widget addressInfo(
+      BuildContext context, String label, String address, Color contentColor) {
+    TextTheme textTheme = Theme.of(context).textTheme;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: Theme.of(context)
+              .textTheme
+              .titleMedium!
+              .copyWith(color: contentColor, fontWeight: FontWeight.bold),
+        ),
+        Text(
+          address,
+          style: textTheme.bodyLarge!.copyWith(color: contentColor),
+        ),
+      ],
+    );
+  }
+
+  Center resultErrorWidget(BuildContext context, {TripsError? state}) {
+    return Center(
+      child: Column(
+        children: [
+          Text(
+            'irgendwas ist schiefgegangen',
+            style: Theme.of(context).textTheme.headlineLarge,
+          ),
+          if (state != null) Text(state.message),
+        ],
       ),
     );
   }

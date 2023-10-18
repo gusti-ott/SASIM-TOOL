@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:multimodal_routeplanner/02_application/bloc/diagram_type/diagram_type_bloc.dart';
+import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 import 'package:multimodal_routeplanner/03_domain/enums/DiagramTypeEnum.dart';
 
-import '../../../../../02_application/bloc/diagram_type/diagram_type_bloc.dart';
-import '../../../../../03_domain/entities/Trip.dart';
+
 import 'ResultDiagramBar.dart';
 import 'TitleDropdown.dart';
 
