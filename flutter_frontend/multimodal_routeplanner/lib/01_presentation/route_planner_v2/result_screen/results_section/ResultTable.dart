@@ -10,28 +10,37 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/result_
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 
 class ResultTable extends StatelessWidget {
-  const ResultTable({super.key, required this.listTrips});
+  const ResultTable({
+    super.key,
+    required this.listTrips,
+    required this.onTrip1ChangedCallback,
+    required this.onTrip2ChangedCallback,
+    required this.onTrip3ChangedCallback,
+  });
 
   final List<Trip> listTrips;
+  final Function(Trip) onTrip1ChangedCallback;
+  final Function(Trip) onTrip2ChangedCallback;
+  final Function(Trip) onTrip3ChangedCallback;
 
   @override
   Widget build(BuildContext context) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     ScrollController scrollController = ScrollController();
 
-    return Padding(
-      padding: const EdgeInsets.all(64.0),
-      child: CustomScrollbar(
-        scrollDirection: Axis.horizontal,
-        controller: scrollController,
-        child: Container(
-          width: resultTablewidth,
-          color: colorScheme.primary,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ResultDataTable(
-              listTrips: listTrips,
-            ),
+    return CustomScrollbar(
+      scrollDirection: Axis.horizontal,
+      controller: scrollController,
+      child: Container(
+        width: resultTablewidth,
+        color: colorScheme.primary,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ResultDataTable(
+            listTrips: listTrips,
+            onTrip1ChangedCallback: onTrip1ChangedCallback,
+            onTrip2ChangedCallback: onTrip2ChangedCallback,
+            onTrip3ChangedCallback: onTrip3ChangedCallback,
           ),
         ),
       ),
@@ -40,9 +49,17 @@ class ResultTable extends StatelessWidget {
 }
 
 class ResultDataTable extends StatefulWidget {
-  const ResultDataTable({super.key, required this.listTrips});
+  const ResultDataTable(
+      {super.key,
+      required this.listTrips,
+      required this.onTrip1ChangedCallback,
+      required this.onTrip2ChangedCallback,
+      required this.onTrip3ChangedCallback});
 
   final List<Trip> listTrips;
+  final Function(Trip) onTrip1ChangedCallback;
+  final Function(Trip) onTrip2ChangedCallback;
+  final Function(Trip) onTrip3ChangedCallback;
 
   @override
   State<ResultDataTable> createState() => _ResultDataTableState();
@@ -116,7 +133,6 @@ class _ResultDataTableState extends State<ResultDataTable>
 
   void onDropdown1Changed(Trip value) {
     _playAnimation1();
-
     setState(() {
       selectedTrip1 = value;
     });
@@ -181,16 +197,23 @@ class _ResultDataTableState extends State<ResultDataTable>
             listTrips: widget.listTrips,
             selectedTrip: selectedTrip1,
             onChanged: (selectedTrip1) {
+              widget.onTrip1ChangedCallback(selectedTrip1);
               onDropdown1Changed(selectedTrip1);
             }),
         HeaderItem(
             listTrips: widget.listTrips,
             selectedTrip: selectedTrip2,
-            onChanged: (selectedTrip2) => onDropdown2Changed(selectedTrip2)),
+            onChanged: (selectedTrip2) {
+              widget.onTrip2ChangedCallback(selectedTrip2);
+              onDropdown2Changed(selectedTrip2);
+            }),
         HeaderItem(
             listTrips: widget.listTrips,
             selectedTrip: selectedTrip3,
-            onChanged: (selectedTrip3) => onDropdown3Changed(selectedTrip3)),
+            onChanged: (selectedTrip3) {
+              widget.onTrip3ChangedCallback(selectedTrip3);
+              onDropdown3Changed(selectedTrip3);
+            }),
       ],
     );
   }

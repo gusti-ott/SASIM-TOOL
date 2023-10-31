@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/McubeLogo.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/search_screen/address_picker/AddressPickerList.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/address_picker/address_picker_bloc.dart';
-import 'package:multimodal_routeplanner/logger.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -81,8 +80,6 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                     BlocBuilder<AddressPickerBloc, AddressPickerState>(
                       builder: (context, state) {
-                        getLogger().w(state.toString());
-
                         return Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
