@@ -26,9 +26,9 @@ class RoutePlannerScreen extends StatelessWidget {
 
     AdvancedRoutePlannerBloc routeBlocProvider =
         BlocProvider.of<AdvancedRoutePlannerBloc>(context);
-    RouteInfoBloc routeInfoBloc = BlocProvider.of<RouteInfoBloc>(context);
+    /*RouteInfoBloc routeInfoBloc = BlocProvider.of<RouteInfoBloc>(context);
     VisualizationBloc visualizationBloc =
-        BlocProvider.of<VisualizationBloc>(context);
+        BlocProvider.of<VisualizationBloc>(context);*/
 
     Map<String, Trip> selectedTrips = {};
     List<Trip> listSelectedTrips = [];
