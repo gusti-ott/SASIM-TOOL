@@ -6,7 +6,7 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/faq_sec
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/ResultScreen.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/search_screen/SearchScreen.dart';
 
-final _rootNavigatorKey = GlobalKey<NavigatorState>();
+// final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorCalculatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'shellCalculator');
 final _shellNavigatorInfoKey =
@@ -55,7 +55,7 @@ final GoRouter vmrpRouter = GoRouter(
                         //TODO: add error screen or sth
                         return const SearchScreen();
                       }
-                      //TODO: check for format - if not right show error screen
+                      // 22TODO: check for format - if not right show error screen
                     }),
               ]),
           StatefulShellBranch(navigatorKey: _shellNavigatorInfoKey, routes: [

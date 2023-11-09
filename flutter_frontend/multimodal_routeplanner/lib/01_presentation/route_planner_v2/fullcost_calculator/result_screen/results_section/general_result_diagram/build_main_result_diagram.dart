@@ -102,8 +102,32 @@ SizedBox legendColumn(DiagramDataType currentDiagramDataType) {
       width: 200,
       child: Column(
         children: [
+          largeVerticalSpacer,
           legendItem(DiagramDataType.internalCosts),
+          smallVerticalSpacer,
           legendItem(DiagramDataType.externalCosts),
+        ],
+      ),
+    );
+  } else if (currentDiagramDataType == DiagramDataType.externalCosts) {
+    return SizedBox(
+      width: 200,
+      child: Column(
+        children: [
+          largeVerticalSpacer,
+          legendItem(DiagramDataType.accidents),
+          smallVerticalSpacer,
+          legendItem(DiagramDataType.air),
+          smallVerticalSpacer,
+          legendItem(DiagramDataType.barrier),
+          smallVerticalSpacer,
+          legendItem(DiagramDataType.climate),
+          smallVerticalSpacer,
+          legendItem(DiagramDataType.congestion),
+          smallVerticalSpacer,
+          legendItem(DiagramDataType.noise),
+          smallVerticalSpacer,
+          legendItem(DiagramDataType.space),
         ],
       ),
     );
@@ -112,22 +136,20 @@ SizedBox legendColumn(DiagramDataType currentDiagramDataType) {
   return SizedBox();
 }
 
-Expanded legendItem(DiagramDataType diagramDataType) {
-  String legendText = descriptionTextFromDiagramDataType(diagramDataType);
+Widget legendItem(DiagramDataType diagramDataType) {
+  String legendText = titleFromDiagramDataType(diagramDataType);
   Color legendColor = diagramDataTypeToColor(diagramDataType);
 
-  return Expanded(
-    child: Row(
-      children: [
-        Container(
-          width: 20,
-          height: 20,
-          decoration: BoxDecoration(color: legendColor),
-        ),
-        largeHorizontalSpacer,
-        Text(legendText)
-      ],
-    ),
+  return Row(
+    children: [
+      Container(
+        width: 20,
+        height: 20,
+        decoration: BoxDecoration(color: legendColor),
+      ),
+      largeHorizontalSpacer,
+      Text(legendText)
+    ],
   );
 }
 
