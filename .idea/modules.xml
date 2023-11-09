@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/multimodal-costbased-routeplanner.iml" filepath="$PROJECT_DIR$/.idea/multimodal-costbased-routeplanner.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/vmrp-web-app.iml" filepath="$PROJECT_DIR$/.idea/vmrp-web-app.iml" />
     </modules>
   </component>
 </project>

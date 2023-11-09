@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/result_screen/results_section/general_result_diagram/GeneralResultDiagram.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/results_section/general_result_diagram/MainResultDiagram.dart';
 import 'package:multimodal_routeplanner/logger.dart';
 
 Logger logger = getLogger();
@@ -13,8 +13,8 @@ const Color climateColor = Colors.purpleAccent;
 const Color spaceColor = Colors.pink;
 const Color noiseColor = Colors.orangeAccent;
 const Color internalCostsColor = Colors.yellowAccent;
-const Color externalCostsColor = Colors.transparent;
-const Color fullCostsColor = Colors.transparent;
+const Color externalCostsColor = Colors.green;
+const Color fullCostsColor = Colors.black;
 
 Color diagramDataTypeToColor(DiagramDataType diagramDataType) {
   switch (diagramDataType) {

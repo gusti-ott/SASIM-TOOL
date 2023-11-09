@@ -1,5 +1,5 @@
 import 'package:logger/logger.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/result_screen/results_section/general_result_diagram/GeneralResultDiagram.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/results_section/general_result_diagram/MainResultDiagram.dart';
 import 'package:multimodal_routeplanner/logger.dart';
 
 Logger logger = getLogger();
