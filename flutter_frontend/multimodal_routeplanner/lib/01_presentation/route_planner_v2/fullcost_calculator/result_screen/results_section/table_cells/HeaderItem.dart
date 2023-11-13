@@ -3,11 +3,7 @@ import 'package:multimodal_routeplanner/01_presentation/helpers/ModeMapingHelper
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 
 class HeaderItem extends StatelessWidget {
-  const HeaderItem(
-      {super.key,
-      required this.listTrips,
-      required this.onChanged,
-      required this.selectedTrip});
+  const HeaderItem({super.key, required this.listTrips, required this.onChanged, required this.selectedTrip});
 
   final List<Trip> listTrips;
   final void Function(Trip) onChanged;
@@ -31,14 +27,14 @@ class HeaderItem extends StatelessWidget {
           onChanged: (value) {
             onChanged(listTrips.firstWhere((trip) => trip.mode == value));
           },
+          icon: const Icon(Icons.compare_arrows),
           iconSize: 32,
           iconEnabledColor: Theme.of(context).colorScheme.onPrimary,
           items: listModes
               .map((String value) => DropdownMenuItem<String>(
                     alignment: Alignment.center,
                     value: value,
-                    child: Text(
-                        modeMappingHelper.mapModeStringToGermanString(value)),
+                    child: Text(modeMappingHelper.mapModeStringToGermanString(value)),
                   ))
               .toList(),
         ),

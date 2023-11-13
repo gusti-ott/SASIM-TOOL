@@ -60,8 +60,7 @@ class _MapContentState extends State<MapContent> {
               animationConfig: const ScaleRAWA(), // Or `FadeRAWA` as is default
               attributions: [
                 TextSourceAttribution('OpenStreetMap contributors',
-                    onTap:
-                        () {} // => launchUrl(Uri.parse('https://openstreetmap.org/copyright')),
+                    onTap: () {} // => launchUrl(Uri.parse('https://openstreetmap.org/copyright')),
                     ),
               ],
             ),
@@ -78,12 +77,10 @@ class _MapContentState extends State<MapContent> {
                     // visualize selected
                     for (var i = 0; i < state.selectedTrip.segments.length; i++)
                       TaggedPolyline(
-                        points: state.selectedTrip.segments[i]
-                            .getWaypointInLagLng(),
+                        points: state.selectedTrip.segments[i].getWaypointInLagLng(),
                         tag: "selected",
                         strokeWidth: 5,
-                        color: mapSegmentModeToColor(
-                            state.selectedTrip.segments[i].mode),
+                        color: mapSegmentModeToColor(state.selectedTrip.segments[i].mode),
                       ),
                   ],
                   onTap: (polylines, tapPosition) => {},
@@ -92,13 +89,11 @@ class _MapContentState extends State<MapContent> {
               MarkerLayer(
                 markers: [
                   Marker(
-                    point: state.selectedTrip.segments.first.waypoints.first
-                        .getLatLng(),
-                    builder: (ctx) => const StartMarker(),
+                    point: state.selectedTrip.segments.first.waypoints.first.getLatLng(),
+                    builder: (ctx) => StartMarker(mode: state.selectedTrip.mode),
                   ),
                   Marker(
-                    point: state.selectedTrip.segments.last.waypoints.last
-                        .getLatLng(),
+                    point: state.selectedTrip.segments.last.waypoints.last.getLatLng(),
                     builder: (ctx) => const StopMarker(),
                   ),
                 ],
@@ -110,8 +105,7 @@ class _MapContentState extends State<MapContent> {
   }
 
   LatLngBounds _fitTripBounds(Trip selectedTrip) {
-    List<Waypoint> allWaypoints =
-        selectedTrip.segments.expand((segment) => segment.waypoints).toList();
+    List<Waypoint> allWaypoints = selectedTrip.segments.expand((segment) => segment.waypoints).toList();
     double maxLat = allWaypoints.map((latLng) => latLng.lat).reduce(max);
     double maxLon = allWaypoints.map((latLng) => latLng.lon).reduce(max);
     double minLat = allWaypoints.map((latLng) => latLng.lat).reduce(min);

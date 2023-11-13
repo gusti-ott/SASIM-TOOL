@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:multimodal_routeplanner/01_presentation/helpers/ModeMapingHelper.dart';
 
 class StartMarker extends StatelessWidget {
-  const StartMarker({super.key});
+  const StartMarker({super.key, required this.mode});
+
+  final String mode;
 
   @override
   Widget build(BuildContext context) {
+    ModeMappingHelper modeMappingHelper = ModeMappingHelper();
+
     return Container(
         decoration: BoxDecoration(
           color: Colors.green.shade400,
@@ -15,6 +19,6 @@ class StartMarker extends StatelessWidget {
         ),
         height: double.infinity,
         width: double.infinity,
-        child: const Center(child: Icon(Icons.directions_walk_outlined)));
+        child: Center(child: Icon(modeMappingHelper.mapModeStringToIconData(mode))));
   }
 }

@@ -5,7 +5,7 @@ import 'package:multimodal_routeplanner/03_domain/entities/costs/Costs.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/costs/ExternalCosts.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/costs/InternalCosts.dart';
 
-Trip trip1 = Trip(
+Trip mock_trip1 = Trip(
   distance: 1.3,
   duration: 1.1,
   costs: Costs(
@@ -26,7 +26,7 @@ Trip trip1 = Trip(
   mobiScore: 'D',
 );
 
-Trip trip2 = Trip(
+Trip mock_trip = Trip(
   distance: 1.5,
   duration: 1.2,
   costs: Costs(
@@ -47,7 +47,7 @@ Trip trip2 = Trip(
   mobiScore: 'B',
 );
 
-Trip trip3 = Trip(
+Trip trip3_trip = Trip(
   distance: 1.7,
   duration: 1.1,
   costs: Costs(
@@ -68,7 +68,7 @@ Trip trip3 = Trip(
   mobiScore: 'A',
 );
 
-Trip trip4 = Trip(
+Trip trip4_trip = Trip(
   distance: 1.6,
   duration: 0.9,
   costs: Costs(
