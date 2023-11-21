@@ -4,7 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/01_presentation/helpers/ModeMapingHelper.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/results_section/general_result_diagram/MainResultDiagram.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/results_section/general_result_diagram/ExternalCostsDiagram.dart';
 import 'package:multimodal_routeplanner/01_presentation/values/desription_texts.dart';
 import 'package:multimodal_routeplanner/01_presentation/values/diagram_colors.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';

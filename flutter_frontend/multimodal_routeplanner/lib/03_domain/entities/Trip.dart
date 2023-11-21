@@ -1,5 +1,5 @@
-import 'package:multimodal_routeplanner/03_domain/entities/costs/Costs.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Segment.dart';
+import 'package:multimodal_routeplanner/03_domain/entities/costs/Costs.dart';
 
 class Trip {
   final double distance;

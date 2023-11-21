@@ -6,4 +6,8 @@ class Costs {
   final InternalCosts internalCosts;
 
   Costs({required this.externalCosts, required this.internalCosts});
+
+  double getFullcosts() {
+    return externalCosts.all + internalCosts.all;
+  }
 }

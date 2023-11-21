@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/01_presentation/dimensions.dart';
 import 'package:multimodal_routeplanner/01_presentation/helpers/CustomScrollbar.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/results_section/table_cells/ExternalCostsItem.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/results_section/table_cells/CostsItem.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/results_section/table_cells/HeaderItem.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/results_section/table_cells/InternalCostsItem.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/results_section/table_cells/MobiScoreItem.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/results_section/table_cells/RowHeaderItem.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/results_section/table_cells/TripInfoItem.dart';
@@ -16,12 +15,16 @@ class ResultTable extends StatelessWidget {
     required this.onTrip1ChangedCallback,
     required this.onTrip2ChangedCallback,
     required this.onTrip3ChangedCallback,
+    this.externalCostsInfoCallback,
+    this.mobiscoreInfoCallbacK,
   });
 
   final List<Trip> listTrips;
   final Function(Trip) onTrip1ChangedCallback;
   final Function(Trip) onTrip2ChangedCallback;
   final Function(Trip) onTrip3ChangedCallback;
+  final Function? externalCostsInfoCallback;
+  final Function? mobiscoreInfoCallbacK;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +44,8 @@ class ResultTable extends StatelessWidget {
             onTrip1ChangedCallback: onTrip1ChangedCallback,
             onTrip2ChangedCallback: onTrip2ChangedCallback,
             onTrip3ChangedCallback: onTrip3ChangedCallback,
+            externalCostsInfoCallback: externalCostsInfoCallback,
+            mobiscoreInfoCallbacK: mobiscoreInfoCallbacK,
           ),
         ),
       ),
@@ -54,19 +59,22 @@ class ResultDataTable extends StatefulWidget {
       required this.listTrips,
       required this.onTrip1ChangedCallback,
       required this.onTrip2ChangedCallback,
-      required this.onTrip3ChangedCallback});
+      required this.onTrip3ChangedCallback,
+      this.externalCostsInfoCallback,
+      this.mobiscoreInfoCallbacK});
 
   final List<Trip> listTrips;
   final Function(Trip) onTrip1ChangedCallback;
   final Function(Trip) onTrip2ChangedCallback;
   final Function(Trip) onTrip3ChangedCallback;
+  final Function? externalCostsInfoCallback;
+  final Function? mobiscoreInfoCallbacK;
 
   @override
   State<ResultDataTable> createState() => _ResultDataTableState();
 }
 
-class _ResultDataTableState extends State<ResultDataTable>
-    with TickerProviderStateMixin {
+class _ResultDataTableState extends State<ResultDataTable> with TickerProviderStateMixin {
   late Trip selectedTrip1;
   late Trip selectedTrip2;
   late Trip selectedTrip3;
@@ -89,22 +97,19 @@ class _ResultDataTableState extends State<ResultDataTable>
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
-    _animation1 =
-        Tween<double>(begin: 0, end: 1).animate(_animationController1);
+    _animation1 = Tween<double>(begin: 0, end: 1).animate(_animationController1);
 
     _animationController2 = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
-    _animation2 =
-        Tween<double>(begin: 0, end: 1).animate(_animationController2);
+    _animation2 = Tween<double>(begin: 0, end: 1).animate(_animationController2);
 
     _animationController3 = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
-    _animation3 =
-        Tween<double>(begin: 0, end: 1).animate(_animationController3);
+    _animation3 = Tween<double>(begin: 0, end: 1).animate(_animationController3);
 
     _playAnimation1();
     _playAnimation2();
@@ -171,6 +176,8 @@ class _ResultDataTableState extends State<ResultDataTable>
         headerDropdownRow(),
         tripInfoRow(context),
         rowSpacer(),
+        fullcostsRow(),
+        rowSpacer(),
         internalCostsRow(),
         rowSpacer(),
         externalCostsRow(),
@@ -222,13 +229,9 @@ class _ResultDataTableState extends State<ResultDataTable>
     return TableRow(children: [
       const SizedBox(),
       TripInfoItem(
-          selectedTrip: selectedTrip1,
-          animation: _animation1,
-          animationController: _animationController1),
+          selectedTrip: selectedTrip1, animation: _animation1, animationController: _animationController1),
       TripInfoItem(
-          selectedTrip: selectedTrip2,
-          animation: _animation2,
-          animationController: _animationController2),
+          selectedTrip: selectedTrip2, animation: _animation2, animationController: _animationController2),
       TripInfoItem(
         selectedTrip: selectedTrip3,
         animation: _animation3,
@@ -237,21 +240,48 @@ class _ResultDataTableState extends State<ResultDataTable>
     ]);
   }
 
+  TableRow fullcostsRow() {
+    return TableRow(
+      decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
+      children: [
+        const RowHeaderItem(text: 'Voll-\nkosten'),
+        CostsItem(
+            selectedTrip: selectedTrip1,
+            costsValue: selectedTrip1.costs.getFullcosts(),
+            animation: _animation1,
+            animationController: _animationController1),
+        CostsItem(
+            selectedTrip: selectedTrip2,
+            costsValue: selectedTrip2.costs.getFullcosts(),
+            animation: _animation2,
+            animationController: _animationController2),
+        CostsItem(
+            selectedTrip: selectedTrip3,
+            costsValue: selectedTrip3.costs.getFullcosts(),
+            animation: _animation3,
+            animationController: _animationController3),
+      ],
+    );
+  }
+
   TableRow internalCostsRow() {
     return TableRow(
       decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
       children: [
         const RowHeaderItem(text: 'interne\nKosten'),
-        InternalCostsItem(
+        CostsItem(
             selectedTrip: selectedTrip1,
+            costsValue: selectedTrip1.costs.internalCosts.all,
             animation: _animation1,
             animationController: _animationController1),
-        InternalCostsItem(
+        CostsItem(
             selectedTrip: selectedTrip2,
+            costsValue: selectedTrip2.costs.internalCosts.all,
             animation: _animation2,
             animationController: _animationController2),
-        InternalCostsItem(
+        CostsItem(
             selectedTrip: selectedTrip3,
+            costsValue: selectedTrip3.costs.internalCosts.all,
             animation: _animation3,
             animationController: _animationController3),
       ],
@@ -259,23 +289,27 @@ class _ResultDataTableState extends State<ResultDataTable>
   }
 
   TableRow externalCostsRow() {
-    return TableRow(
-        decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
-        children: [
-          const RowHeaderItem(text: 'externe\nKosten'),
-          ExternalCostsItem(
-              selectedTrip: selectedTrip1,
-              animation: _animation1,
-              animationController: _animationController1),
-          ExternalCostsItem(
-              selectedTrip: selectedTrip2,
-              animation: _animation2,
-              animationController: _animationController2),
-          ExternalCostsItem(
-              selectedTrip: selectedTrip3,
-              animation: _animation3,
-              animationController: _animationController3),
-        ]);
+    return TableRow(decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)), children: [
+      const RowHeaderItem(text: 'externe\nKosten'),
+      CostsItem(
+          selectedTrip: selectedTrip1,
+          costsValue: selectedTrip1.costs.externalCosts.all,
+          animation: _animation1,
+          animationController: _animationController1,
+          infoCallback: widget.externalCostsInfoCallback),
+      CostsItem(
+          selectedTrip: selectedTrip2,
+          costsValue: selectedTrip2.costs.externalCosts.all,
+          animation: _animation2,
+          animationController: _animationController2,
+          infoCallback: widget.externalCostsInfoCallback),
+      CostsItem(
+          selectedTrip: selectedTrip3,
+          costsValue: selectedTrip3.costs.externalCosts.all,
+          animation: _animation3,
+          animationController: _animationController3,
+          infoCallback: widget.externalCostsInfoCallback),
+    ]);
   }
 
   TableRow mobiScoreRow() {
@@ -284,17 +318,23 @@ class _ResultDataTableState extends State<ResultDataTable>
       children: [
         const RowHeaderItem(text: 'Mobi-\nScore'),
         MobiScoreItem(
-            selectedTrip: selectedTrip1,
-            animation: _animation1,
-            animationController: _animationController1),
+          selectedTrip: selectedTrip1,
+          animation: _animation1,
+          animationController: _animationController1,
+          infoCallback: widget.mobiscoreInfoCallbacK,
+        ),
         MobiScoreItem(
-            selectedTrip: selectedTrip2,
-            animation: _animation2,
-            animationController: _animationController2),
+          selectedTrip: selectedTrip2,
+          animation: _animation2,
+          animationController: _animationController2,
+          infoCallback: widget.mobiscoreInfoCallbacK,
+        ),
         MobiScoreItem(
-            selectedTrip: selectedTrip3,
-            animation: _animation3,
-            animationController: _animationController3),
+          selectedTrip: selectedTrip3,
+          animation: _animation3,
+          animationController: _animationController3,
+          infoCallback: widget.mobiscoreInfoCallbacK,
+        ),
       ],
     );
   }

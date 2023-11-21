@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/results_section/general_result_diagram/MainResultDiagram.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/results_section/general_result_diagram/ExternalCostsDiagram.dart';
 import 'package:multimodal_routeplanner/logger.dart';
 
 Logger logger = getLogger();
@@ -39,8 +39,7 @@ Color diagramDataTypeToColor(DiagramDataType diagramDataType) {
     case DiagramDataType.fullcosts:
       return fullCostsColor;
     default:
-      logger.w(
-          'diagramDataType $diagramDataType could not be mapped to a color!');
+      logger.w('diagramDataType $diagramDataType could not be mapped to a color!');
       return Colors.transparent;
   }
 }

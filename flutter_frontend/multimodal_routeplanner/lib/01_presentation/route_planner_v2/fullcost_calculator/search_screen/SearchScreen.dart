@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/title_image/TitleImage.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/headers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/search_screen/address_picker/AddressPickerList.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/address_picker/address_picker_bloc.dart';
 
@@ -15,8 +15,7 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   final FocusNode _focusNodeEndLocation = FocusNode();
-  final TextEditingController _controllerStartLocation =
-      TextEditingController();
+  final TextEditingController _controllerStartLocation = TextEditingController();
   final TextEditingController _controllerEndLocation = TextEditingController();
 
   bool _startInputValid = true;
@@ -32,7 +31,9 @@ class _SearchScreenState extends State<SearchScreen> {
         Center(
           child: Column(
             children: [
-              const TitleImage(),
+              const TitleImage(
+                  imagePath: 'assets/title_image/titelbild_ubahn.png',
+                  titleText: 'Was sind die wahren Kosten deiner Mobilität?'),
               const SizedBox(height: 96),
               /*const Image(
                 image: AssetImage('assets/logos/mobiscore_logo.png'),
@@ -67,8 +68,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             'Zieladresse',
                             _controllerEndLocation,
                             (value) {
-                              BlocProvider.of<AddressPickerBloc>(context)
-                                  .add(EndAddressInputChanged(value));
+                              BlocProvider.of<AddressPickerBloc>(context).add(EndAddressInputChanged(value));
                             },
                             _endInputValid,
                           ),
@@ -89,16 +89,14 @@ class _SearchScreenState extends State<SearchScreen> {
                                       child: LinearProgressIndicator(
                                         color: Colors.white,
                                       )),
-                                if (state is! StartAddressRetrieved)
-                                  emptyAddressPicker(textInputWidth),
+                                if (state is! StartAddressRetrieved) emptyAddressPicker(textInputWidth),
                               ],
                             ),
                             if (state is StartAddressRetrieved)
                               AddressPickerList(
                                   width: textInputWidth,
                                   listAddresses: state.listAddresses,
-                                  addressInputController:
-                                      _controllerStartLocation,
+                                  addressInputController: _controllerStartLocation,
                                   onAddressSelectedCallback: (address) {
                                     BlocProvider.of<AddressPickerBloc>(context)
                                         .add(PickStartAddress(address));
@@ -118,19 +116,16 @@ class _SearchScreenState extends State<SearchScreen> {
                                       color: Colors.white,
                                     ),
                                   ),
-                                if (state is! EndAddressRetrieved)
-                                  emptyAddressPicker(textInputWidth),
+                                if (state is! EndAddressRetrieved) emptyAddressPicker(textInputWidth),
                               ],
                             ),
                             if (state is EndAddressRetrieved)
                               AddressPickerList(
                                   width: textInputWidth,
                                   listAddresses: state.listAddresses,
-                                  addressInputController:
-                                      _controllerEndLocation,
+                                  addressInputController: _controllerEndLocation,
                                   onAddressSelectedCallback: (address) {
-                                    BlocProvider.of<AddressPickerBloc>(context)
-                                        .add(PickEndAddress(address));
+                                    BlocProvider.of<AddressPickerBloc>(context).add(PickEndAddress(address));
                                   }),
                           ],
                         );
@@ -170,14 +165,11 @@ class _SearchScreenState extends State<SearchScreen> {
       child: Container(
           height: 50,
           width: 100,
-          decoration:
-              BoxDecoration(color: Theme.of(context).colorScheme.secondary),
+          decoration: BoxDecoration(color: Theme.of(context).colorScheme.secondary),
           child: Center(
             child: Text(
               'GO!',
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSecondary,
-                  fontSize: 24),
+              style: TextStyle(color: Theme.of(context).colorScheme.onSecondary, fontSize: 24),
             ),
           )),
     );

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/headers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/results_section/ResultTable.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/results_section/general_result_diagram/MainResultDiagram.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/results_section/general_result_diagram/ExternalCostsDiagram.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 
 class ResultSection extends StatefulWidget {
@@ -49,23 +50,50 @@ class _ResultSectionState extends State<ResultSection> {
 
   @override
   Widget build(BuildContext context) {
+    var externalCostsKey = GlobalKey();
+    var mobiScoreKey = GlobalKey();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         mediumVerticalSpacer,
         ResultTable(
-            listTrips: widget.listTrips,
-            onTrip1ChangedCallback: updateTrip1,
-            onTrip2ChangedCallback: updateTrip2,
-            onTrip3ChangedCallback: updateTrip3),
+          listTrips: widget.listTrips,
+          onTrip1ChangedCallback: updateTrip1,
+          onTrip2ChangedCallback: updateTrip2,
+          onTrip3ChangedCallback: updateTrip3,
+          externalCostsInfoCallback: () {
+            scrollTo(externalCostsKey);
+          },
+          mobiscoreInfoCallbacK: () {
+            scrollTo(mobiScoreKey);
+          },
+        ),
         extraLargeVerticalSpacer,
-        MainResultDiagram(
+        TitleImage(
+            key: externalCostsKey,
+            imagePath: 'assets/title_image/titelbild_ubahn.png',
+            titleText: 'Das sind die externen Kosten deiner Route',
+            height: 200),
+        extraLargeVerticalSpacer,
+        ExternalCostsDiagram(
           trip1: trip1,
           trip2: trip2,
           trip3: trip3,
         ),
         extraLargeVerticalSpacer,
+        TitleImage(
+            key: mobiScoreKey,
+            imagePath: 'assets/title_image/titelbild_ubahn.png',
+            titleText: 'Was ist der Mobi-Score?',
+            height: 200),
+        extraLargeVerticalSpacer,
       ],
     );
+  }
+
+  void scrollTo(GlobalKey<State<StatefulWidget>> externalCostsKey) {
+    Scrollable.ensureVisible(externalCostsKey.currentContext!,
+        duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
   }
 }

@@ -9,23 +9,19 @@ import 'package:multimodal_routeplanner/01_presentation/values/diagram_colors.da
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 import 'package:multimodal_routeplanner/logger.dart';
 
-class MainResultDiagram extends StatefulWidget {
-  const MainResultDiagram(
-      {super.key,
-      required this.trip1,
-      required this.trip2,
-      required this.trip3});
+class ExternalCostsDiagram extends StatefulWidget {
+  const ExternalCostsDiagram({super.key, required this.trip1, required this.trip2, required this.trip3});
 
   final Trip trip1;
   final Trip trip2;
   final Trip trip3;
 
   @override
-  State<MainResultDiagram> createState() => _MainResultDiagramState();
+  State<ExternalCostsDiagram> createState() => _ExternalCostsDiagramState();
 }
 
-class _MainResultDiagramState extends State<MainResultDiagram> {
-  DiagramDataType currentDiagramDataType = DiagramDataType.fullcosts;
+class _ExternalCostsDiagramState extends State<ExternalCostsDiagram> {
+  DiagramDataType currentDiagramDataType = DiagramDataType.externalCosts;
   int touchedBar = -1;
   int touchedStack = -1;
 
@@ -65,8 +61,7 @@ class _MainResultDiagramState extends State<MainResultDiagram> {
                       widget.trip2,
                       widget.trip3,
                       (FlTouchEvent event, BarTouchResponse? barTouchResponse) {
-                        triggerStackTouchResonse(
-                            event, barTouchResponse, logger);
+                        triggerStackTouchResonse(event, barTouchResponse, logger);
                       },
                       touchedBar,
                       touchedStack,
@@ -88,8 +83,7 @@ class _MainResultDiagramState extends State<MainResultDiagram> {
             SizedBox(
               height: resultDiagramHeight,
               width: 400,
-              child: mainDiagramButtonsColumn(
-                  context, textTheme, colorScheme, resultDiagramHeight),
+              child: mainDiagramButtonsColumn(context, textTheme, colorScheme, resultDiagramHeight),
             )
           ],
         ),
@@ -97,12 +91,12 @@ class _MainResultDiagramState extends State<MainResultDiagram> {
     );
   }
 
-  Column mainDiagramButtonsColumn(BuildContext context, TextTheme textTheme,
-      ColorScheme colorScheme, double resultDiagramHeight) {
+  Column mainDiagramButtonsColumn(
+      BuildContext context, TextTheme textTheme, ColorScheme colorScheme, double resultDiagramHeight) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        mainCategoryButton(context, DiagramDataType.fullcosts),
+        /*mainCategoryButton(context, DiagramDataType.fullcosts),
         smallVerticalSpacer,
         mainCategoryButton(context, DiagramDataType.internalCosts),
         smallVerticalSpacer,
@@ -119,7 +113,7 @@ class _MainResultDiagramState extends State<MainResultDiagram> {
             const Expanded(child: Divider()),
           ],
         ),
-        smallVerticalSpacer,
+        smallVerticalSpacer,*/
         SizedBox(
           height: resultDiagramHeight / 2,
           child: Row(
@@ -129,13 +123,14 @@ class _MainResultDiagramState extends State<MainResultDiagram> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    externalCostsButton(context, DiagramDataType.externalCosts),
+                    smallVerticalSpacer,
                     externalCostsButton(context, DiagramDataType.accidents),
                     smallVerticalSpacer,
                     externalCostsButton(context, DiagramDataType.air),
                     smallVerticalSpacer,
                     externalCostsButton(context, DiagramDataType.noise),
                     smallVerticalSpacer,
-                    externalCostsButton(context, DiagramDataType.climate),
                   ],
                 ),
               ),
@@ -150,7 +145,8 @@ class _MainResultDiagramState extends State<MainResultDiagram> {
                     smallVerticalSpacer,
                     externalCostsButton(context, DiagramDataType.congestion),
                     smallVerticalSpacer,
-                    const Expanded(child: SizedBox()),
+                    externalCostsButton(context, DiagramDataType.climate),
+                    smallVerticalSpacer,
                   ],
                 ),
               )
@@ -161,12 +157,9 @@ class _MainResultDiagramState extends State<MainResultDiagram> {
     );
   }
 
-  void triggerStackTouchResonse(
-      FlTouchEvent event, BarTouchResponse? barTouchResponse, Logger logger) {
+  void triggerStackTouchResonse(FlTouchEvent event, BarTouchResponse? barTouchResponse, Logger logger) {
     setState(() {
-      if (!event.isInterestedForInteractions ||
-          barTouchResponse == null ||
-          barTouchResponse.spot == null) {
+      if (!event.isInterestedForInteractions || barTouchResponse == null || barTouchResponse.spot == null) {
         touchedBar = -1;
         touchedStack = -1;
         return;
@@ -208,19 +201,15 @@ class _MainResultDiagramState extends State<MainResultDiagram> {
     );
   }
 
-  Widget mainCategoryButton(
-      BuildContext context, DiagramDataType diagramDataType) {
+  Widget mainCategoryButton(BuildContext context, DiagramDataType diagramDataType) {
     return Expanded(child: legendItemButton(context, diagramDataType));
   }
 
-  Widget externalCostsButton(
-      BuildContext context, DiagramDataType diagramDataType) {
-    return Expanded(
-        child: SizedBox(child: legendItemButton(context, diagramDataType)));
+  Widget externalCostsButton(BuildContext context, DiagramDataType diagramDataType) {
+    return Expanded(child: SizedBox(child: legendItemButton(context, diagramDataType)));
   }
 
-  Widget legendItemButton(
-      BuildContext context, DiagramDataType diagramDataType) {
+  Widget legendItemButton(BuildContext context, DiagramDataType diagramDataType) {
     return InkWell(
       onTap: () {
         changeDiagramType(diagramDataType);

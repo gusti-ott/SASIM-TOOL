@@ -1,5 +1,5 @@
 import 'package:logger/logger.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/results_section/general_result_diagram/MainResultDiagram.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/results_section/general_result_diagram/ExternalCostsDiagram.dart';
 import 'package:multimodal_routeplanner/logger.dart';
 
 Logger logger = getLogger();
@@ -52,8 +52,7 @@ String titleFromDiagramDataType(DiagramDataType dataType) {
     case DiagramDataType.fullcosts:
       return titleFullcosts;
     default:
-      logger.w(
-          'diagramDataType $dataType could not be mapped to a title for the diagram!');
+      logger.w('diagramDataType $dataType could not be mapped to a title for the diagram!');
       return "unbekannter Titel";
   }
 }
@@ -81,8 +80,7 @@ String descriptionTextFromDiagramDataType(DiagramDataType dataType) {
     case DiagramDataType.fullcosts:
       return descriptionFullcosts;
     default:
-      logger.w(
-          'diagramDataType $dataType could not be mapped to a description for the diagram!');
+      logger.w('diagramDataType $dataType could not be mapped to a description for the diagram!');
       return "unbekannte Beschreibung";
   }
 }
