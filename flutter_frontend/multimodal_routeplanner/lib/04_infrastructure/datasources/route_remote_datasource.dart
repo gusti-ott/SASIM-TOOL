@@ -10,9 +10,7 @@ import 'package:multimodal_routeplanner/04_infrastructure/models/trip_model.dart
 /// throws a server-exception if respond code is not 200
 abstract class RouteRemoteDatasource {
   Future<Trip> getSingleRouteFromApi(
-      {required String startInput,
-      required String endInput,
-      required MobilityMode mode});
+      {required String startInput, required String endInput, required MobilityMode mode});
 }
 
 class RouteRemoteDatasourceImpl implements RouteRemoteDatasource {
@@ -20,19 +18,17 @@ class RouteRemoteDatasourceImpl implements RouteRemoteDatasource {
 
   @override
   Future<Trip> getSingleRouteFromApi(
-      {required String startInput,
-      required String endInput,
-      required MobilityMode mode}) async {
+      {required String startInput, required String endInput, required MobilityMode mode}) async {
     // TODO: implement getSingleRouteFromApi
 
     String modeString = mapMode(mode: mode);
 
     // url for local server
-    // var url =
-    //     "http://127.0.0.1:5000/plattform?inputStartAddress=$startInput&inputEndAddress=$endInput&tripMode=$modeString";
-
     var url =
-        "http://www.sasim.mcube-cluster.de/plattform?inputStartAddress=$startInput&inputEndAddress=$endInput&tripMode=$modeString";
+        "http://127.0.0.1:5000/plattform?inputStartAddress=$startInput&inputEndAddress=$endInput&tripMode=$modeString";
+
+    // var url =
+    //     "http://www.sasim.mcube-cluster.de/plattform?inputStartAddress=$startInput&inputEndAddress=$endInput&tripMode=$modeString";
 
     // var url =
     //     "https://vmrp-web-app.herokuapp.com/plattform?inputStartAddress=$startInput&inputEndAddress=$endInput&tripMode=$modeString";

@@ -333,6 +333,18 @@ class ModeMappingHelper {
       case 'PT':
         return 'ÖPNV';
 
+      case 'METRO':
+        return 'U-Bahn';
+
+      case 'TRAM':
+        return 'Tram';
+
+      case 'BUS':
+        return 'Bus';
+
+      case 'EBUS':
+        return 'E-Bus';
+
       case 'INTERMODAL_PT_BIKE':
         return 'ÖPNV + Fahrrad';
 

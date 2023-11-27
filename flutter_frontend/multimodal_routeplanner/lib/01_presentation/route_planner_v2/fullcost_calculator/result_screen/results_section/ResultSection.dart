@@ -9,25 +9,29 @@ class ResultSection extends StatefulWidget {
   const ResultSection({
     super.key,
     required this.listTrips,
+    required this.realoadCallback,
   });
 
   final List<Trip> listTrips;
+  final Function realoadCallback;
 
   @override
   State<ResultSection> createState() => _ResultSectionState();
 }
 
 class _ResultSectionState extends State<ResultSection> {
-  late Trip trip1;
-  late Trip trip2;
-  late Trip trip3;
+  Trip? trip1;
+  Trip? trip2;
+  Trip? trip3;
 
   @override
   void initState() {
     super.initState();
-    trip1 = widget.listTrips[0];
-    trip2 = widget.listTrips[1];
-    trip3 = widget.listTrips[2];
+    if (widget.listTrips.length >= 3) {
+      trip1 = widget.listTrips[0];
+      trip2 = widget.listTrips[1];
+      trip3 = widget.listTrips[2];
+    }
   }
 
   void updateTrip1(Trip trip) {
@@ -50,6 +54,8 @@ class _ResultSectionState extends State<ResultSection> {
 
   @override
   Widget build(BuildContext context) {
+    TextTheme textTheme = Theme.of(context).textTheme;
+
     var externalCostsKey = GlobalKey();
     var mobiScoreKey = GlobalKey();
 
@@ -57,37 +63,50 @@ class _ResultSectionState extends State<ResultSection> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         mediumVerticalSpacer,
-        ResultTable(
-          listTrips: widget.listTrips,
-          onTrip1ChangedCallback: updateTrip1,
-          onTrip2ChangedCallback: updateTrip2,
-          onTrip3ChangedCallback: updateTrip3,
-          externalCostsInfoCallback: () {
-            scrollTo(externalCostsKey);
-          },
-          mobiscoreInfoCallbacK: () {
-            scrollTo(mobiScoreKey);
-          },
-        ),
-        extraLargeVerticalSpacer,
-        TitleImage(
-            key: externalCostsKey,
-            imagePath: 'assets/title_image/titelbild_ubahn.png',
-            titleText: 'Das sind die externen Kosten deiner Route',
-            height: 200),
-        extraLargeVerticalSpacer,
-        ExternalCostsDiagram(
-          trip1: trip1,
-          trip2: trip2,
-          trip3: trip3,
-        ),
-        extraLargeVerticalSpacer,
-        TitleImage(
-            key: mobiScoreKey,
-            imagePath: 'assets/title_image/titelbild_ubahn.png',
-            titleText: 'Was ist der Mobi-Score?',
-            height: 200),
-        extraLargeVerticalSpacer,
+        if (widget.listTrips.length >= 3) ...[
+          ResultTable(
+            listTrips: widget.listTrips,
+            onTrip1ChangedCallback: updateTrip1,
+            onTrip2ChangedCallback: updateTrip2,
+            onTrip3ChangedCallback: updateTrip3,
+            externalCostsInfoCallback: () {
+              scrollTo(externalCostsKey);
+            },
+            mobiscoreInfoCallbacK: () {
+              scrollTo(mobiScoreKey);
+            },
+          ),
+          extraLargeVerticalSpacer,
+          TitleImage(
+              key: externalCostsKey,
+              imagePath: 'assets/title_image/titelbild_ubahn.png',
+              titleText: 'Das sind die externen Kosten deiner Route',
+              height: 200),
+          extraLargeVerticalSpacer,
+          ExternalCostsDiagram(
+            trip1: trip1!,
+            trip2: trip2!,
+            trip3: trip3!,
+          ),
+          extraLargeVerticalSpacer,
+          TitleImage(
+              key: mobiScoreKey,
+              imagePath: 'assets/title_image/titelbild_ubahn.png',
+              titleText: 'Was ist der Mobi-Score?',
+              height: 200),
+          extraLargeVerticalSpacer,
+        ] else
+          //TODO: implement nice error widget
+          ...[
+          Center(
+              child: Text('...irgendwas ist schiefgegangen, versuche eine neue Route',
+                  style: textTheme.headlineLarge)),
+          TextButton(
+              onPressed: () {
+                widget.realoadCallback();
+              },
+              child: Text('nochmal versuchen')),
+        ]
       ],
     );
   }

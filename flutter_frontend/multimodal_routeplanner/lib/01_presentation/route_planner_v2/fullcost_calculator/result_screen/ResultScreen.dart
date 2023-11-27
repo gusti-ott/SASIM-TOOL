@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/headers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/results_section/ResultSection.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/sasim_2/trips_cubit.dart';
@@ -29,7 +30,11 @@ class ResultScreen extends StatelessWidget {
                   return const Center(child: LinearProgressIndicator());
                 }
                 if (state is TripsLoaded) {
-                  return ResultSection(listTrips: state.trips);
+                  return ResultSection(
+                      listTrips: state.trips,
+                      realoadCallback: () {
+                        context.read<TripsCubit>().loadTrips(startAddress, endAddress);
+                      });
                 }
                 if (state is TripsError) {
                   return resultErrorWidget(context, state: state);
@@ -45,6 +50,7 @@ class ResultScreen extends StatelessWidget {
 
   Widget fromToHeader(BuildContext context) {
     double iconSpace = 32;
+    double newRouteButtonWidth = 100;
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     Color contentColor = colorScheme.primary;
 
@@ -53,6 +59,7 @@ class ResultScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          SizedBox(width: newRouteButtonWidth + iconSpace),
           addressInfo(context, 'VON', startAddress, contentColor),
           SizedBox(width: iconSpace),
           Icon(
@@ -62,6 +69,22 @@ class ResultScreen extends StatelessWidget {
           ),
           SizedBox(width: iconSpace),
           addressInfo(context, 'NACH', endAddress, contentColor),
+          SizedBox(width: iconSpace),
+          InkWell(
+            onTap: () {
+              context.goNamed('search-screen');
+            },
+            child: Container(
+              width: newRouteButtonWidth,
+              decoration: BoxDecoration(
+                color: colorScheme.primaryContainer,
+              ),
+              child: Text('neue Route',
+                  textAlign: TextAlign.center,
+                  style:
+                      Theme.of(context).textTheme.bodyLarge!.copyWith(color: colorScheme.onPrimaryContainer)),
+            ),
+          )
         ],
       ),
     );
