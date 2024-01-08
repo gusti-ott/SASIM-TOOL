@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/headers.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/ResultScreen.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/search_screen/address_picker/AddressPickerList.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/address_picker/address_picker_bloc.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
+
+  static const String routeName = 'search-screen';
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
@@ -35,105 +38,97 @@ class _SearchScreenState extends State<SearchScreen> {
                   imagePath: 'assets/title_image/titelbild_ubahn.png',
                   titleText: 'Was sind die wahren Kosten deiner Mobilität?'),
               const SizedBox(height: 96),
-              /*const Image(
-                image: AssetImage('assets/logos/mobiscore_logo.png'),
-              ),
-              const SizedBox(height: 96),*/
               SizedBox(
-                width: searchAreaWidth,
-                child: Column(
-                  children: [
-                    Form(
-                      key: _formKey,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          addressInputField(
-                            textInputWidth,
-                            'Startadresse',
-                            _controllerStartLocation,
-                            (value) {
-                              BlocProvider.of<AddressPickerBloc>(context)
-                                  .add(StartAddressInputChanged(value));
-                            },
-                            _startInputValid,
-                          ),
-                          const Icon(
-                            Icons.double_arrow,
-                            color: Colors.white,
-                            size: 48,
-                          ),
-                          addressInputField(
-                            textInputWidth,
-                            'Zieladresse',
-                            _controllerEndLocation,
-                            (value) {
-                              BlocProvider.of<AddressPickerBloc>(context).add(EndAddressInputChanged(value));
-                            },
-                            _endInputValid,
-                          ),
-                        ],
-                      ),
-                    ),
-                    BlocBuilder<AddressPickerBloc, AddressPickerState>(
-                      builder: (context, state) {
-                        return Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
+                  width: searchAreaWidth,
+                  child: Form(
+                    key: _formKey,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        BlocBuilder<AddressPickerBloc, AddressPickerState>(
+                          builder: (context, state) {
+                            return Column(
                               children: [
+                                addressInputField(
+                                  textInputWidth,
+                                  'Startadresse',
+                                  _controllerStartLocation,
+                                  (value) {
+                                    BlocProvider.of<AddressPickerBloc>(context)
+                                        .add(StartAddressInputChanged(value));
+                                  },
+                                  _startInputValid,
+                                ),
                                 if (state is RetrievingStartAddress)
                                   const SizedBox(
                                       width: textInputWidth,
                                       child: LinearProgressIndicator(
                                         color: Colors.white,
                                       )),
-                                if (state is! StartAddressRetrieved) emptyAddressPicker(textInputWidth),
+                                if (state is StartAddressRetrieved)
+                                  AddressPickerList(
+                                      width: textInputWidth,
+                                      listAddresses: state.listAddresses,
+                                      addressInputController: _controllerStartLocation,
+                                      onAddressSelectedCallback: (address) {
+                                        BlocProvider.of<AddressPickerBloc>(context)
+                                            .add(PickStartAddress(address));
+                                      }),
                               ],
+                            );
+                          },
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const Icon(
+                              Icons.double_arrow,
+                              color: Colors.white,
+                              size: 48,
                             ),
-                            if (state is StartAddressRetrieved)
-                              AddressPickerList(
-                                  width: textInputWidth,
-                                  listAddresses: state.listAddresses,
-                                  addressInputController: _controllerStartLocation,
-                                  onAddressSelectedCallback: (address) {
+                            const SizedBox(
+                              height: 36,
+                            ),
+                            searchButton(context),
+                          ],
+                        ),
+                        BlocBuilder<AddressPickerBloc, AddressPickerState>(
+                          builder: (context, state) {
+                            return Column(
+                              children: [
+                                addressInputField(
+                                  textInputWidth,
+                                  'Zieladresse',
+                                  _controllerEndLocation,
+                                  (value) {
                                     BlocProvider.of<AddressPickerBloc>(context)
-                                        .add(PickStartAddress(address));
-                                  }),
-                            Column(
-                              children: [
-                                const SizedBox(height: 64),
-                                searchButton(context),
-                              ],
-                            ),
-                            Column(
-                              children: [
+                                        .add(EndAddressInputChanged(value));
+                                  },
+                                  _endInputValid,
+                                ),
                                 if (state is RetrievingEndAddress)
                                   const SizedBox(
-                                    width: textInputWidth,
-                                    child: LinearProgressIndicator(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                if (state is! EndAddressRetrieved) emptyAddressPicker(textInputWidth),
+                                      width: textInputWidth,
+                                      child: LinearProgressIndicator(
+                                        color: Colors.white,
+                                      )),
+                                if (state is EndAddressRetrieved)
+                                  AddressPickerList(
+                                      width: textInputWidth,
+                                      listAddresses: state.listAddresses,
+                                      addressInputController: _controllerEndLocation,
+                                      onAddressSelectedCallback: (address) {
+                                        BlocProvider.of<AddressPickerBloc>(context)
+                                            .add(PickEndAddress(address));
+                                      }),
                               ],
-                            ),
-                            if (state is EndAddressRetrieved)
-                              AddressPickerList(
-                                  width: textInputWidth,
-                                  listAddresses: state.listAddresses,
-                                  addressInputController: _controllerEndLocation,
-                                  onAddressSelectedCallback: (address) {
-                                    BlocProvider.of<AddressPickerBloc>(context).add(PickEndAddress(address));
-                                  }),
-                          ],
-                        );
-                      },
-                    )
-                  ],
-                ),
-              ),
+                            );
+                          },
+                        )
+                      ],
+                    ),
+                  )),
             ],
           ),
         ),
@@ -154,7 +149,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
         if (_startInputValid && _endInputValid) {
           context.goNamed(
-            'result-screen',
+            ResultScreen.routeName,
             queryParameters: {
               'startInput': _controllerStartLocation.text,
               'endInput': _controllerEndLocation.text,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/McubeLogo.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/search_screen/SearchScreen.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key, required this.navigationShell});
@@ -17,37 +18,26 @@ class MainScreen extends StatelessWidget {
 
   TextStyle? _getTextStyle(BuildContext context, int index) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
-    TextStyle? buttonTextStyle = Theme.of(context)
-        .textTheme
-        .headlineSmall
-        ?.copyWith(color: colorScheme.onPrimary);
+    TextStyle? buttonTextStyle =
+        Theme.of(context).textTheme.headlineSmall?.copyWith(color: colorScheme.onPrimary);
 
-    TextStyle? buttonTextStyleSelected = Theme.of(context)
-        .textTheme
-        .headlineSmall
-        ?.copyWith(
-            color: colorScheme.onPrimary,
-            decoration: TextDecoration.underline,
-            decorationColor: Colors.white,
-            decorationThickness: 2);
+    TextStyle? buttonTextStyleSelected = Theme.of(context).textTheme.headlineSmall?.copyWith(
+        color: colorScheme.onPrimary,
+        decoration: TextDecoration.underline,
+        decorationColor: Colors.white,
+        decorationThickness: 2);
 
-    return navigationShell.currentIndex == index
-        ? buttonTextStyleSelected
-        : buttonTextStyle;
+    return navigationShell.currentIndex == index ? buttonTextStyleSelected : buttonTextStyle;
   }
 
   Color _getBackgroundColor(BuildContext context) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
-    return navigationShell.currentIndex == 0
-        ? colorScheme.primary
-        : colorScheme.background;
+    return navigationShell.currentIndex == 0 ? colorScheme.primary : colorScheme.background;
   }
 
   Color _getAppBarColor(BuildContext context) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
-    return navigationShell.currentIndex == 0
-        ? Colors.transparent
-        : colorScheme.primary;
+    return navigationShell.currentIndex == 0 ? Colors.transparent : colorScheme.primary;
   }
 
   @override
@@ -70,7 +60,7 @@ class MainScreen extends StatelessWidget {
       TextButton(
           //style: _getButtonStyle(context, 0),
           onPressed: () {
-            context.goNamed('search-screen');
+            context.goNamed(SearchScreen.routeName);
           },
           child: Text('Rechner', style: _getTextStyle(context, 0))),
       TextButton(

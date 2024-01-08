@@ -18,8 +18,7 @@ class AddressPickerList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double height =
-        (listAddresses.length >= 5) ? 300 : listAddresses.length * 60.0;
+    double height = (listAddresses.length >= 5) ? 300 : listAddresses.length * 60;
 
     return Container(
       color: Colors.white,
@@ -28,6 +27,7 @@ class AddressPickerList extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView.builder(
+          padding: EdgeInsets.zero,
           shrinkWrap: true,
           itemCount: listAddresses.length,
           itemBuilder: (BuildContext context, int index) {
@@ -58,7 +58,6 @@ class AddressPickerList extends StatelessWidget {
                   });
             } else {
               return Column(
-                mainAxisSize: MainAxisSize.min,
                 children: [
                   AddressItem(
                     name: name,
