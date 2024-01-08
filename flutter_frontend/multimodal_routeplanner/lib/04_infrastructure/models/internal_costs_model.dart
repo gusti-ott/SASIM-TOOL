@@ -1,4 +1,4 @@
-import '../../03_domain/entities/Costs/InternalCosts.dart';
+import '../../03_domain/entities/costs/InternalCosts.dart';
 
 class InternalCostsModel extends InternalCosts {
   InternalCostsModel({required double internalCosts})

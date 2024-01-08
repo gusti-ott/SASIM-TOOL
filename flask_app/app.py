@@ -1,3 +1,5 @@
+from typing import List
+
 from flask import Flask, request, redirect
 from flask import render_template
 from flask import send_from_directory
@@ -10,9 +12,10 @@ from controllers.geocoding.GeocodingController import GeocodingController
 from controllers.trip.TripController import TripController
 from helpers.ApiHelper import ApiHelper
 from model.entities.location.Location import Location
+from model.entities.segment.Segment import Segment
 
 config = {
-    "DEBUG": True,          # some Flask specific configs
+    "DEBUG": True,  # some Flask specific configs
     "CACHE_TYPE": "SimpleCache",  # Flask-Caching related configs
     "CACHE_DEFAULT_TIMEOUT": 300
 }
@@ -25,13 +28,16 @@ CORS(server)
 
 FLUTTER_WEB_APP = 'templates'
 
+
 @server.route('/web/')
 def render_page_web():
     return render_template('index.html')
 
+
 @server.route('/')
 def redirect_internally_to_page_web():
     return redirect('/web/', code=302)
+
 
 @server.route('/web/<path:name>')
 def return_flutter_doc(name):
@@ -44,9 +50,11 @@ def return_flutter_doc(name):
 
     return send_from_directory(DIR_NAME, datalist[-1])
 
+
 @server.route('/', methods=['GET'])
 def home_page():
     return render_page_web()
+
 
 @server.route('/plattform', methods=['GET'])
 def return_trip():
@@ -87,7 +95,7 @@ def return_trip():
     if (type(segments) == list):
         for j in range(len(trip.segments)):
 
-            new_segment = trip.segments[j]
+            new_segment: Segment = trip.segments[j]
             segment_waypoints = []
             for k in range(len(new_segment.waypoints)):
                 lat = new_segment.waypoints[k].lat

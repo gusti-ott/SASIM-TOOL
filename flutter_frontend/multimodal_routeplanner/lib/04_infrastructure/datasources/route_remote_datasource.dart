@@ -1,11 +1,10 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-
-import '../../03_domain/entities/MobilityMode.dart';
-import '../../03_domain/entities/Trip.dart';
-import '../../03_domain/enums/MobilityModeEnum.dart';
-import '../models/trip_model.dart';
+import 'package:multimodal_routeplanner/03_domain/entities/MobilityMode.dart';
+import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
+import 'package:multimodal_routeplanner/03_domain/enums/MobilityModeEnum.dart';
+import 'package:multimodal_routeplanner/04_infrastructure/models/trip_model.dart';
 
 /// requests a trip from Route Planner REST-Api
 /// throws a server-exception if respond code is not 200
@@ -25,9 +24,10 @@ class RouteRemoteDatasourceImpl implements RouteRemoteDatasource {
     String modeString = mapMode(mode: mode);
 
     // url for local server
-    // var url =
-    //     "http://127.0.0.1:5000/plattform?inputStartAddress=$startInput&inputEndAddress=$endInput&tripMode=$modeString";
+    /*var url =
+        "http://127.0.0.1:5000/plattform?inputStartAddress=$startInput&inputEndAddress=$endInput&tripMode=$modeString";*/
 
+    // url for ftm server
     var url =
         "http://www.sasim.mcube-cluster.de/plattform?inputStartAddress=$startInput&inputEndAddress=$endInput&tripMode=$modeString";
 

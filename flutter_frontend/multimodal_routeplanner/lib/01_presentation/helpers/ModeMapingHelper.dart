@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/MobilityMode.dart';
-import '../../03_domain/enums/MobilityModeEnum.dart';
+import 'package:multimodal_routeplanner/03_domain/enums/MobilityModeEnum.dart';
 
 class ModeMappingHelper {
   MobilityModeEnum mapModeStringToMode(String mode) {
@@ -53,7 +52,7 @@ class ModeMappingHelper {
     }
   }
 
-  String mapModeToStringMode(MobilityMode mode){
+  String mapModeToStringMode(MobilityMode mode) {
     switch (mode.mode) {
       case MobilityModeEnum.walk:
         return 'WALK';
@@ -173,6 +172,55 @@ class ModeMappingHelper {
     }
   }
 
+  IconData mapModeStringToIconData(String mode) {
+    switch (mode) {
+      case 'WALK':
+        return Icons.directions_walk;
+
+      case 'CAR':
+        return Icons.directions_car;
+
+      case 'BICYCLE':
+        return Icons.directions_bike;
+
+      case 'MOPED':
+        return Icons.moped;
+
+      case 'ECAR':
+        return Icons.electric_car;
+
+      case 'EBICYCLE':
+        return Icons.electric_bike;
+
+      case 'EMOPED':
+        return Icons.electric_moped;
+
+      case 'CAB':
+        return Icons.directions_car;
+
+      case 'EMMY':
+        return Icons.directions_car;
+
+      case 'TIER':
+        return Icons.directions_car;
+
+      case 'FLINKSTER':
+        return Icons.directions_car;
+
+      case 'SHARENOW':
+        return Icons.directions_car;
+
+      case 'PT':
+        return Icons.directions_bus;
+
+      case 'INTERMODAL_PT_BIKE':
+        return Icons.directions_bus;
+
+      default:
+        return Icons.directions_car;
+    }
+  }
+
   mapModeStringToBigIcon(String mode) {
     switch (mode) {
       case 'WALK':
@@ -244,7 +292,7 @@ class ModeMappingHelper {
     }
   }
 
-  String mapModeStringToToolTip(String mode) {
+  String mapModeStringToGermanString(String mode) {
     switch (mode) {
       case 'WALK':
         return 'zu Fuß';
@@ -285,11 +333,72 @@ class ModeMappingHelper {
       case 'PT':
         return 'ÖPNV';
 
+      case 'METRO':
+        return 'U-Bahn';
+
+      case 'TRAM':
+        return 'Tram';
+
+      case 'BUS':
+        return 'Bus';
+
+      case 'EBUS':
+        return 'E-Bus';
+
       case 'INTERMODAL_PT_BIKE':
         return 'ÖPNV + Fahrrad';
 
       default:
         return 'nicht vorhanden';
+    }
+  }
+
+  String mapGermanStringToModeString(String germanMode) {
+    switch (germanMode) {
+      case 'zu Fuß':
+        return 'WALK';
+
+      case 'Pkw':
+        return 'CAR';
+
+      case 'Fahrrad':
+        return 'BICYCLE';
+
+      case 'Moped':
+        return 'MOPED';
+
+      case 'E-Pkw':
+        return 'ECAR';
+
+      case 'E-Fahrrad':
+        return 'EBICYCLE';
+
+      case 'E-Moped':
+        return 'EMOPED';
+
+      case 'Call a Bike':
+        return 'CAB';
+
+      case 'Emmy':
+        return 'EMMY';
+
+      case 'Tier':
+        return 'TIER';
+
+      case 'Flinkster':
+        return 'FLINKSTER';
+
+      case 'Sharenow':
+        return 'SHARENOW';
+
+      case 'ÖPNV':
+        return 'PT';
+
+      case 'ÖPNV + Fahrrad':
+        return 'INTERMODAL_PT_BIKE';
+
+      default:
+        return 'BICYCLE';
     }
   }
 

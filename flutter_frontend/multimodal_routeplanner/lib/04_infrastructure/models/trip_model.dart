@@ -1,7 +1,7 @@
 import 'package:multimodal_routeplanner/04_infrastructure/models/costs_model.dart';
 import 'package:multimodal_routeplanner/04_infrastructure/models/segment_model.dart';
 
-import '../../03_domain/entities/Costs/Costs.dart';
+import '../../03_domain/entities/costs/Costs.dart';
 import '../../03_domain/entities/Segment.dart';
 import '../../03_domain/entities/Trip.dart';
 
