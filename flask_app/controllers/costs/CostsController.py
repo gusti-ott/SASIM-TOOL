@@ -29,7 +29,7 @@ class CostsController:
             elif (mode == SharingMode.SHARENOW or mode == SharingMode.FLINKSTER):
                 mode = SharingMode.CAR_SHARING
             else:
-                print("ERROR: sharing mode cannot be converted to simplified sharing mode ")
+                print("ERROR: mode cannot be converted to simplified sharing mode ")
                 return None
 
         distance = distance / 1000
