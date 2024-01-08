@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from enum import Enum, auto
 from typing import List
+import logging
 
 import pandas as pd
 from model.entities.location.Location import Location
@@ -36,7 +37,6 @@ class EfaTripData:
 
 
 class EfaMvvHelper:
-
     def get_mode(self, mode_name: str) -> PublicTransportMode or IndividualMode:
         if (mode_name == 'U-Bahn'):
             mode = PublicTransportMode.METRO
@@ -44,7 +44,7 @@ class EfaMvvHelper:
         elif (mode_name == 'Tram'):
             mode = PublicTransportMode.TRAM
 
-        elif (mode_name == 'Bus'):
+        elif (mode_name == 'Bus' or mode_name == 'MetroBus'):
             mode = PublicTransportMode.BUS
 
         elif (mode_name == 'S-Bahn' or mode_name == 'Bahn'):

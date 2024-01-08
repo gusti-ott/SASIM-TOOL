@@ -89,7 +89,7 @@ class TripController:
             # trip = self._get_trip_type_3_4(start_location=start_location, end_location=end_location,
             #                                trip_type=TripType.TYPE_4, trip_mode=trip_mode)
             trip = self._get_trip_type_3_4_efa(start_location=start_location, end_location=end_location,
-                                               trip_type=TripType.TYPE_3, trip_mode=trip_mode, start_id=start_id,
+                                               trip_type=TripType.TYPE_4, trip_mode=trip_mode, start_id=start_id,
                                                end_id=end_id)
 
         else:
@@ -261,7 +261,7 @@ class TripController:
                     end_location=end_location_bike,
                     mode=TripMode.BICYCLE)
 
-                mode = IndividualMode.WALK
+                mode = IndividualMode.BICYCLE
                 duration = self._routing_controller.get_duration(router_response)
                 distance = self._routing_controller.get_distance(router_response)
                 waypoints = self._routing_controller.get_waypoints(router_response)

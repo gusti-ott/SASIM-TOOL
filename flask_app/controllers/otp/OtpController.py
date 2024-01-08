@@ -90,22 +90,25 @@ class OtpController:
         start = t.time()
 
         # local IP for testing
+        response = requests.get(
+            "http://127.0.0.1:8080/otp/routers/default/plan?fromPlace=" + start_location + "&toPlace=" +
+            end_location + "&time=" + str(input_time.hour) + ":" + str(input_time.minute) + "&date=" +
+            str(input_time.month) + "-" + str(input_time.day) + "-" + str(input_time.year) + "&mode=" +
+            mode + "&maxWalkDistance=50000&arriveBy=false")
+
+        # IP of locally running otp server
         # response = requests.get(
-        #     "http://127.0.0.1:8080/otp/routers/default/plan?fromPlace=" + start_location + "&toPlace=" +
+        #     "OTP_BASE_URL/otp/routers/default/plan?fromPlace=" + start_location + "&toPlace=" +
         #     end_location + "&time=" + str(input_time.hour) + ":" + str(input_time.minute) + "&date=" +
         #     str(input_time.month) + "-" + str(input_time.day) + "-" + str(input_time.year) + "&mode=" +
         #     mode + "&maxWalkDistance=50000&arriveBy=false")
 
-        # IP of locally running otp server
-        response = requests.get(
-            "OTP_BASE_URL/otp/routers/default/plan?fromPlace=" + start_location + "&toPlace=" +
-            end_location + "&time=" + str(input_time.hour) + ":" + str(input_time.minute) + "&date=" +
-            str(input_time.month) + "-" + str(input_time.day) + "-" + str(input_time.year) + "&mode=" +
-            mode + "&maxWalkDistance=50000&arriveBy=false")
         print(response.url)
         print("otp response: " + str(response))
 
         resp = json.loads(response.content)
+        print("otp response body: ")
+        print(resp)
 
         if 'error' in resp:
             print("Error in otp request")
