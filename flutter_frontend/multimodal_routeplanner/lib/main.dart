@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/color_schemes.g.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/address_picker/address_picker_bloc.dart';
+import 'package:multimodal_routeplanner/02_application/bloc/app_cubit.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/cost_details/cost_details_bloc.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/diagram_type/diagram_type_bloc.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/route_info/info_dropdown_costs_cubit.dart';
@@ -26,8 +29,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  late Locale _currentLocale;
+
   @override
   void initState() {
+    _currentLocale = const Locale('de');
     super.initState();
   }
 
@@ -63,15 +69,34 @@ class _MyAppState extends State<MyApp> {
             create: (BuildContext context) => AddressPickerBloc(),
           ),
           BlocProvider(create: (BuildContext context) => TripsCubit()),
+          BlocProvider(create: (BuildContext context) => AppCubit())
         ],
-        child: MaterialApp.router(
-          title: 'Route Planner',
-          theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
-          darkTheme:
-              ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
-          themeMode: ThemeMode.light,
-          debugShowCheckedModeBanner: false,
-          routerConfig: vmrpRouter,
+        child: BlocBuilder<AppCubit, AppState>(
+          builder: (context, state) {
+            if (state is LocaleChanged) {
+              _currentLocale = state.locale;
+            }
+
+            return MaterialApp.router(
+              title: 'Route Planner',
+              theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
+              darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
+              themeMode: ThemeMode.light,
+              debugShowCheckedModeBanner: false,
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: const [
+                Locale('de'), // German
+                Locale('en'), // English
+              ],
+              locale: _currentLocale,
+              routerConfig: vmrpRouter,
+            );
+          },
         ));
   }
 }

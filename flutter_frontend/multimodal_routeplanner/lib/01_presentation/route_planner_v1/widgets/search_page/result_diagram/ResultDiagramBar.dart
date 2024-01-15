@@ -1,3 +1,4 @@
+/*
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
@@ -32,3 +33,4 @@ class ResultDiagramBarWidget extends StatelessWidget {
     );
   }
 }
+*/

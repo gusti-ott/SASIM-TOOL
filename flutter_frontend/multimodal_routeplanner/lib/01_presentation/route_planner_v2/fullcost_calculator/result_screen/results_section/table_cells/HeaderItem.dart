@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/helpers/ModeMapingHelper.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 
 class HeaderItem extends StatelessWidget {
-  const HeaderItem({super.key, required this.listTrips, required this.onChanged, required this.selectedTrip});
+  const HeaderItem(
+      {super.key, required this.listTrips, required this.onChanged, required this.selectedTrip});
 
   final List<Trip> listTrips;
   final void Function(Trip) onChanged;
@@ -11,7 +13,7 @@ class HeaderItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ModeMappingHelper modeMappingHelper = ModeMappingHelper();
+    ModeMappingHelper modeMappingHelper = ModeMappingHelper(AppLocalizations.of(context)!);
     List<String> listModes = listTrips.map((trip) => trip.mode).toList();
 
     return TableCell(

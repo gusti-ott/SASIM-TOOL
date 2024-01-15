@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:logger/logger.dart';
 import 'package:multimodal_routeplanner/01_presentation/helpers/ModeMapingHelper.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
@@ -10,7 +11,10 @@ import 'package:multimodal_routeplanner/logger.dart';
 
 class TripInfoItem extends StatelessWidget {
   const TripInfoItem(
-      {super.key, required this.selectedTrip, required this.animationController, required this.animation});
+      {super.key,
+      required this.selectedTrip,
+      required this.animationController,
+      required this.animation});
 
   final Trip selectedTrip;
   final AnimationController animationController;
@@ -20,8 +24,9 @@ class TripInfoItem extends StatelessWidget {
   Widget build(BuildContext context) {
     Color contentColor = Theme.of(context).colorScheme.onPrimary;
     TextTheme textTheme = Theme.of(context).textTheme;
+    AppLocalizations lang = AppLocalizations.of(context)!;
 
-    ModeMappingHelper modeMappingHelper = ModeMappingHelper();
+    ModeMappingHelper modeMappingHelper = ModeMappingHelper(AppLocalizations.of(context)!);
     IconData iconData = modeMappingHelper.mapModeStringToIconData(selectedTrip.mode);
 
     return CustomAnimatedTableCell(
@@ -93,7 +98,7 @@ class TripInfoItem extends StatelessWidget {
                   children: [
                     Icon(Icons.map_outlined, color: contentColor),
                     Text(
-                      'Route anzeigen',
+                      lang.show_route,
                       style: textTheme.titleMedium!.copyWith(
                           color: contentColor,
                           decoration: TextDecoration.underline,
@@ -136,7 +141,8 @@ class TripInfoItem extends StatelessWidget {
                   Text(modeMappingHelper.mapModeStringToGermanString(segment.mode),
                       style: textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold)),
                   Text('${segment.distance.toStringAsFixed(1)} km', style: textTheme.bodyMedium),
-                  Text('${segment.duration.toStringAsFixed(0)} Minuten', style: textTheme.bodyMedium),
+                  Text('${segment.duration.toStringAsFixed(0)} Minuten',
+                      style: textTheme.bodyMedium),
                 ],
               ),
             ),

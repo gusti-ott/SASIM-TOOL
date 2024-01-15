@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/helpers/ModeMapingHelper.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/results_section/table_cells/CustomAnimatedTableCell.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
@@ -18,7 +19,7 @@ class MobiScoreItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ModeMappingHelper stringMappingHelper = ModeMappingHelper();
+    ModeMappingHelper stringMappingHelper = ModeMappingHelper(AppLocalizations.of(context)!);
     ColorScheme colorScheme = Theme.of(context).colorScheme;
 
     return CustomAnimatedTableCell(

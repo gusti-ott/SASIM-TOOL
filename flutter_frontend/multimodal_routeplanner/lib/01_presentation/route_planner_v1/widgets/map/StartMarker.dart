@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/helpers/ModeMapingHelper.dart';
 
 class StartMarker extends StatelessWidget {
@@ -8,7 +9,7 @@ class StartMarker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ModeMappingHelper modeMappingHelper = ModeMappingHelper();
+    ModeMappingHelper modeMappingHelper = ModeMappingHelper(AppLocalizations.of(context)!);
 
     return Container(
         decoration: BoxDecoration(
