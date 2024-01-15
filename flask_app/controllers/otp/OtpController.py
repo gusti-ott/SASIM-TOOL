@@ -107,18 +107,16 @@ class OtpController:
         print("otp response: " + str(response))
 
         resp = json.loads(response.content)
-        print("otp response body: ")
-        print(resp)
 
         if 'error' in resp:
             print("Error in otp request")
 
-        if (resp["plan"].get("itineraries") == []):
+        if resp["plan"].get("itineraries") == []:
             print("Keine OTP Strecke für diesen Start- und End-Standort und den Modus " + str(
                 mode) + " gefunden.\nVersuchen Sie es nochmal")
 
         end = t.time()
-        print("otp request: " + str(end - start))
+        print("otp time: " + str(end - start))
 
         return resp
 
