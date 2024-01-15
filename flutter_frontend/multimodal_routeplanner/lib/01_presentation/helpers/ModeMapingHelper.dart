@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/MobilityMode.dart';
 import 'package:multimodal_routeplanner/03_domain/enums/MobilityModeEnum.dart';
+import 'package:multimodal_routeplanner/logger.dart';
 
 class ModeMappingHelper {
   MobilityModeEnum mapModeStringToMode(String mode) {
@@ -199,13 +201,13 @@ class ModeMappingHelper {
         return Icons.directions_car;
 
       case 'EMMY':
-        return Icons.directions_car;
+        return Icons.electric_moped;
 
       case 'TIER':
         return Icons.directions_car;
 
       case 'FLINKSTER':
-        return Icons.directions_car;
+        return Icons.directions_bike;
 
       case 'SHARENOW':
         return Icons.directions_car;
@@ -293,11 +295,15 @@ class ModeMappingHelper {
   }
 
   String mapModeStringToGermanString(String mode) {
+    Logger logger = getLogger();
     switch (mode) {
       case 'WALK':
         return 'zu Fuß';
 
       case 'CAR':
+        return 'Pkw';
+
+      case 'CAR_GASOLINE':
         return 'Pkw';
 
       case 'BICYCLE':
@@ -307,6 +313,9 @@ class ModeMappingHelper {
         return 'Moped';
 
       case 'ECAR':
+        return 'E-Pkw';
+
+      case 'CAR_BEV':
         return 'E-Pkw';
 
       case 'EBICYCLE':
@@ -349,6 +358,7 @@ class ModeMappingHelper {
         return 'ÖPNV + Fahrrad';
 
       default:
+        logger.w('mode $mode not found in mapModeStringToGermanString()', 'ModeMappingHelper');
         return 'nicht vorhanden';
     }
   }
