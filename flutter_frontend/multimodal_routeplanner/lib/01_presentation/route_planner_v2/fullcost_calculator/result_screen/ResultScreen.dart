@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/headers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/results_section/ResultSection.dart';
@@ -16,16 +17,17 @@ class ResultScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<TripsCubit>().loadTrips(startAddress, endAddress);
+    AppLocalizations lang = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const TitleImage(
+            TitleImage(
                 imagePath: 'assets/title_image/titelbild_ubahn.png',
-                titleText: 'Was sind die wahren Kosten deiner Mobilität?'),
-            fromToHeader(context),
+                titleText: lang.that_are_the_true_costs_header),
+            fromToHeader(context, lang),
             BlocBuilder<TripsCubit, TripsState>(
               builder: (context, state) {
                 if (state is TripsLoading) {
@@ -50,7 +52,7 @@ class ResultScreen extends StatelessWidget {
     );
   }
 
-  Widget fromToHeader(BuildContext context) {
+  Widget fromToHeader(BuildContext context, AppLocalizations lang) {
     double iconSpace = 32;
     double newRouteButtonWidth = 100;
     ColorScheme colorScheme = Theme.of(context).colorScheme;
@@ -62,7 +64,7 @@ class ResultScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(width: newRouteButtonWidth + iconSpace),
-          addressInfo(context, 'VON', startAddress, contentColor),
+          addressInfo(context, lang.from, startAddress, contentColor),
           SizedBox(width: iconSpace),
           Icon(
             Icons.double_arrow,
@@ -70,7 +72,7 @@ class ResultScreen extends StatelessWidget {
             size: 48,
           ),
           SizedBox(width: iconSpace),
-          addressInfo(context, 'NACH', endAddress, contentColor),
+          addressInfo(context, lang.to, endAddress, contentColor),
           SizedBox(width: iconSpace),
           InkWell(
             onTap: () {
@@ -81,7 +83,7 @@ class ResultScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: colorScheme.primaryContainer,
               ),
-              child: Text('neue Route',
+              child: Text(lang.new_route,
                   textAlign: TextAlign.center,
                   style: Theme.of(context)
                       .textTheme

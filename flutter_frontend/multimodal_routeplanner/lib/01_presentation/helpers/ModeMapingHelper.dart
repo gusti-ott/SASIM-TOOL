@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:logger/logger.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/MobilityMode.dart';
 import 'package:multimodal_routeplanner/03_domain/enums/MobilityModeEnum.dart';
 import 'package:multimodal_routeplanner/logger.dart';
 
 class ModeMappingHelper {
+  final AppLocalizations lang;
+
+  ModeMappingHelper(this.lang);
+
   MobilityModeEnum mapModeStringToMode(String mode) {
     switch (mode) {
       case 'WALK':
@@ -298,68 +303,68 @@ class ModeMappingHelper {
     Logger logger = getLogger();
     switch (mode) {
       case 'WALK':
-        return 'zu Fuß';
+        return lang.walk;
 
       case 'CAR':
-        return 'Pkw';
+        return lang.car;
 
       case 'CAR_GASOLINE':
-        return 'Pkw';
+        return lang.car;
 
       case 'BICYCLE':
-        return 'Fahrrad';
+        return lang.bike;
 
       case 'MOPED':
-        return 'Moped';
+        return lang.moped;
 
       case 'ECAR':
-        return 'E-Pkw';
+        return lang.ecar;
 
       case 'CAR_BEV':
-        return 'E-Pkw';
+        return lang.ecar;
 
       case 'EBICYCLE':
-        return 'E-Fahrrad';
+        return lang.ebike;
 
       case 'EMOPED':
-        return 'E-Moped';
+        return lang.e_moped;
 
       case 'CAB':
-        return 'Call a Bike';
+        return lang.cab;
 
       case 'EMMY':
-        return 'Emmy';
+        return lang.emmy;
 
       case 'TIER':
-        return 'Tier';
+        return lang.tier;
 
       case 'FLINKSTER':
-        return 'Flinkster';
+        return lang.flinkster;
 
       case 'SHARENOW':
-        return 'Sharenow';
+        return lang.sharenow;
 
       case 'PT':
-        return 'ÖPNV';
+        return lang.pt;
 
       case 'METRO':
-        return 'U-Bahn';
+        return lang.metro;
 
       case 'TRAM':
-        return 'Tram';
+        return lang.tram;
 
       case 'BUS':
-        return 'Bus';
+        return lang.bus;
 
       case 'EBUS':
-        return 'E-Bus';
+        return lang.e_bus;
 
       case 'INTERMODAL_PT_BIKE':
-        return 'ÖPNV + Fahrrad';
+        return lang.pt_and_bike;
 
       default:
         logger.w('mode $mode not found in mapModeStringToGermanString()', 'ModeMappingHelper');
-        return 'nicht vorhanden';
+        return lang.not_available;
     }
   }
 

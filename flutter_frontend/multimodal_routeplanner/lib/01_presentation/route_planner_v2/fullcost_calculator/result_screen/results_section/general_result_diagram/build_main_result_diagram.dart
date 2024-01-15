@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/helpers/ModeMapingHelper.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/results_section/general_result_diagram/ExternalCostsDiagram.dart';
@@ -50,7 +51,7 @@ Container buildDiagramContainer(
                             showTitles: true,
                             reservedSize: 64,
                             getTitlesWidget: (value, meta) {
-                              return bottomTitles(value, meta, trip1, trip2, trip3);
+                              return bottomTitles(value, meta, trip1, trip2, trip3, context);
                             }),
                       ),
                       leftTitles: AxisTitles(
@@ -58,7 +59,8 @@ Container buildDiagramContainer(
                             //set "showTitles" to true, if left die titles are needed
                             showTitles: false,
                             reservedSize: 64,
-                            interval: calculateInterval(currentDiagramDataType, trip1, trip2, trip3),
+                            interval:
+                                calculateInterval(currentDiagramDataType, trip1, trip2, trip3),
                             getTitlesWidget: (value, meta) {
                               return leftTitles(value, meta);
                             }),
@@ -75,7 +77,8 @@ Container buildDiagramContainer(
                       show: false,
                     ),
                     groupsSpace: barsSpace,
-                    barGroups: getData(barsWidth, barsSpace, currentDiagramDataType, trip1, trip2, trip3),
+                    barGroups:
+                        getData(barsWidth, barsSpace, currentDiagramDataType, trip1, trip2, trip3),
                   ),
                 );
               },
@@ -84,22 +87,22 @@ Container buildDiagramContainer(
         ),
         if (currentDiagramDataType == DiagramDataType.fullcosts ||
             currentDiagramDataType == DiagramDataType.externalCosts)
-          legendColumn(currentDiagramDataType)
+          legendColumn(context, currentDiagramDataType)
       ],
     ),
   );
 }
 
-SizedBox legendColumn(DiagramDataType currentDiagramDataType) {
+SizedBox legendColumn(BuildContext context, DiagramDataType currentDiagramDataType) {
   if (currentDiagramDataType == DiagramDataType.fullcosts) {
     return SizedBox(
       width: 200,
       child: Column(
         children: [
           largeVerticalSpacer,
-          legendItem(DiagramDataType.internalCosts),
+          legendItem(context, DiagramDataType.internalCosts),
           smallVerticalSpacer,
-          legendItem(DiagramDataType.externalCosts),
+          legendItem(context, DiagramDataType.externalCosts),
         ],
       ),
     );
@@ -109,19 +112,19 @@ SizedBox legendColumn(DiagramDataType currentDiagramDataType) {
       child: Column(
         children: [
           largeVerticalSpacer,
-          legendItem(DiagramDataType.space),
+          legendItem(context, DiagramDataType.space),
           smallVerticalSpacer,
-          legendItem(DiagramDataType.noise),
+          legendItem(context, DiagramDataType.noise),
           smallVerticalSpacer,
-          legendItem(DiagramDataType.congestion),
+          legendItem(context, DiagramDataType.congestion),
           smallVerticalSpacer,
-          legendItem(DiagramDataType.climate),
+          legendItem(context, DiagramDataType.climate),
           smallVerticalSpacer,
-          legendItem(DiagramDataType.barrier),
+          legendItem(context, DiagramDataType.barrier),
           smallVerticalSpacer,
-          legendItem(DiagramDataType.air),
+          legendItem(context, DiagramDataType.air),
           smallVerticalSpacer,
-          legendItem(DiagramDataType.accidents),
+          legendItem(context, DiagramDataType.accidents),
         ],
       ),
     );
@@ -129,8 +132,9 @@ SizedBox legendColumn(DiagramDataType currentDiagramDataType) {
   return const SizedBox();
 }
 
-Widget legendItem(DiagramDataType diagramDataType) {
-  String legendText = titleFromDiagramDataType(diagramDataType);
+Widget legendItem(BuildContext context, DiagramDataType diagramDataType) {
+  AppLocalizations lang = AppLocalizations.of(context)!;
+  String legendText = titleFromDiagramDataType(lang, diagramDataType);
   Color legendColor = diagramDataTypeToColor(diagramDataType);
 
   return Row(
@@ -146,8 +150,10 @@ Widget legendItem(DiagramDataType diagramDataType) {
   );
 }
 
-Widget bottomTitles(double value, TitleMeta meta, Trip trip1, Trip trip2, Trip trip3) {
-  ModeMappingHelper modeMappingHelper = ModeMappingHelper();
+Widget bottomTitles(
+    double value, TitleMeta meta, Trip trip1, Trip trip2, Trip trip3, BuildContext context) {
+  final lang = AppLocalizations.of(context)!;
+  ModeMappingHelper modeMappingHelper = ModeMappingHelper(lang);
   const style = TextStyle(fontSize: 24);
   String text = 'kein Titel';
   switch (value.toInt()) {
@@ -183,8 +189,8 @@ Widget leftTitles(double value, TitleMeta meta) {
   );
 }
 
-List<BarChartGroupData> getData(
-    double barsWidth, double barsSpace, DiagramDataType diagramDataType, Trip trip1, Trip trip2, Trip trip3) {
+List<BarChartGroupData> getData(double barsWidth, double barsSpace, DiagramDataType diagramDataType,
+    Trip trip1, Trip trip2, Trip trip3) {
   return [
     BarChartGroupData(
       x: 0,
@@ -213,8 +219,12 @@ List<BarChartGroupData> getData(
   ];
 }
 
-BarTouchData barTouchData(BuildContext context, DiagramDataType currentDiagramDataType, int touchedBar,
-    int touchedStack, Function(FlTouchEvent event, BarTouchResponse? barTouchResponse) touchCallback) {
+BarTouchData barTouchData(
+    BuildContext context,
+    DiagramDataType currentDiagramDataType,
+    int touchedBar,
+    int touchedStack,
+    Function(FlTouchEvent event, BarTouchResponse? barTouchResponse) touchCallback) {
   ColorScheme colorScheme = Theme.of(context).colorScheme;
   TextTheme textTheme = Theme.of(context).textTheme;
 
@@ -232,8 +242,8 @@ BarTouchData barTouchData(BuildContext context, DiagramDataType currentDiagramDa
           int rodIndex,
         ) {
           String barToolTipValue = roundNumber(rod.toY);
-          String? barToolTipSubtitle =
-              getSubvalue(currentDiagramDataType, touchedBar, touchedStack, groupIndex, roundNumber, rod);
+          String? barToolTipSubtitle = getSubvalue(context, currentDiagramDataType, touchedBar,
+              touchedStack, groupIndex, roundNumber, rod);
 
           return BarTooltipItem('$barToolTipValue €', textTheme.bodyLarge!, children: [
             TextSpan(
@@ -247,17 +257,24 @@ BarTouchData barTouchData(BuildContext context, DiagramDataType currentDiagramDa
       });
 }
 
-String? getSubvalue(DiagramDataType diagramDataType, int touchedBar, int touchedStack, int groupIndex,
-    String Function(double value) roundNumber, BarChartRodData rod) {
+String? getSubvalue(
+    BuildContext context,
+    DiagramDataType diagramDataType,
+    int touchedBar,
+    int touchedStack,
+    int groupIndex,
+    String Function(double value) roundNumber,
+    BarChartRodData rod) {
   String? subvalue;
+  AppLocalizations lang = AppLocalizations.of(context)!;
 
   if (diagramDataType == DiagramDataType.fullcosts) {
     subvalue = getSubvalueWhenStackTouched(touchedBar, touchedStack, groupIndex, subvalue, rod);
 
     if (subvalue != null) {
       String leadingString = touchedStack == 0
-          ? titleFromDiagramDataType(DiagramDataType.externalCosts)
-          : titleFromDiagramDataType(DiagramDataType.internalCosts);
+          ? titleFromDiagramDataType(lang, DiagramDataType.externalCosts)
+          : titleFromDiagramDataType(lang, DiagramDataType.internalCosts);
 
       subvalue = '$leadingString: $subvalue €';
     }
@@ -265,29 +282,30 @@ String? getSubvalue(DiagramDataType diagramDataType, int touchedBar, int touched
     subvalue = getSubvalueWhenStackTouched(touchedBar, touchedStack, groupIndex, subvalue, rod);
 
     if (subvalue != null) {
-      String leadingString = getLeadingStringExternalCosts(touchedStack);
+      String leadingString = getLeadingStringExternalCosts(context, touchedStack);
       subvalue = '$leadingString: $subvalue €';
     }
   }
   return subvalue;
 }
 
-String getLeadingStringExternalCosts(int touchedStack) {
+String getLeadingStringExternalCosts(BuildContext context, int touchedStack) {
+  AppLocalizations lang = AppLocalizations.of(context)!;
   switch (touchedStack) {
     case 0:
-      return titleFromDiagramDataType(DiagramDataType.accidents);
+      return titleFromDiagramDataType(lang, DiagramDataType.accidents);
     case 1:
-      return titleFromDiagramDataType(DiagramDataType.air);
+      return titleFromDiagramDataType(lang, DiagramDataType.air);
     case 2:
-      return titleFromDiagramDataType(DiagramDataType.barrier);
+      return titleFromDiagramDataType(lang, DiagramDataType.barrier);
     case 3:
-      return titleFromDiagramDataType(DiagramDataType.climate);
+      return titleFromDiagramDataType(lang, DiagramDataType.climate);
     case 4:
-      return titleFromDiagramDataType(DiagramDataType.congestion);
+      return titleFromDiagramDataType(lang, DiagramDataType.congestion);
     case 5:
-      return titleFromDiagramDataType(DiagramDataType.noise);
+      return titleFromDiagramDataType(lang, DiagramDataType.noise);
     case 6:
-      return titleFromDiagramDataType(DiagramDataType.space);
+      return titleFromDiagramDataType(lang, DiagramDataType.space);
     default:
       return 'Kategorie unbekannt';
   }
@@ -296,7 +314,8 @@ String getLeadingStringExternalCosts(int touchedStack) {
 String? getSubvalueWhenStackTouched(
     int touchedBar, int touchedStack, int groupIndex, String? subvalue, BarChartRodData rod) {
   if (touchedBar != -1 && touchedStack != -1 && touchedBar == groupIndex) {
-    subvalue = roundNumber(rod.rodStackItems[touchedStack].toY - rod.rodStackItems[touchedStack].fromY);
+    subvalue =
+        roundNumber(rod.rodStackItems[touchedStack].toY - rod.rodStackItems[touchedStack].fromY);
   }
   return subvalue;
 }
@@ -401,14 +420,16 @@ List<BarChartRodStackItem> rodStackFullcosts(Costs costs) {
 
   return [
     BarChartRodStackItem(0, externalCosts.all, externalCostsColor),
-    BarChartRodStackItem(externalCosts.all, externalCosts.all + internalCosts.all, internalCostsColor)
+    BarChartRodStackItem(
+        externalCosts.all, externalCosts.all + internalCosts.all, internalCostsColor)
   ];
 }
 
 List<BarChartRodStackItem> rodStackExternalCosts(ExternalCosts externalCosts) {
   return [
     BarChartRodStackItem(0, externalCosts.accidents, accidentsColor),
-    BarChartRodStackItem(externalCosts.accidents, externalCosts.accidents + externalCosts.air, airColor),
+    BarChartRodStackItem(
+        externalCosts.accidents, externalCosts.accidents + externalCosts.air, airColor),
     BarChartRodStackItem(externalCosts.accidents + externalCosts.air,
         externalCosts.accidents + externalCosts.air + externalCosts.barrier, barrierColor),
     BarChartRodStackItem(
@@ -466,11 +487,17 @@ double calculateInterval(DiagramDataType diagramDataType, Trip trip1, Trip trip2
       trip3.costs.externalCosts.all + trip3.costs.internalCosts.all
     ].reduce(max);
   } else if (diagramDataType == DiagramDataType.externalCosts) {
-    maxValue = [trip1.costs.externalCosts.all, trip2.costs.externalCosts.all, trip3.costs.externalCosts.all]
-        .reduce(max);
+    maxValue = [
+      trip1.costs.externalCosts.all,
+      trip2.costs.externalCosts.all,
+      trip3.costs.externalCosts.all
+    ].reduce(max);
   } else if (diagramDataType == DiagramDataType.internalCosts) {
-    maxValue = [trip1.costs.internalCosts.all, trip2.costs.internalCosts.all, trip3.costs.internalCosts.all]
-        .reduce(max);
+    maxValue = [
+      trip1.costs.internalCosts.all,
+      trip2.costs.internalCosts.all,
+      trip3.costs.internalCosts.all
+    ].reduce(max);
   } else if (diagramDataType == DiagramDataType.space) {
     maxValue = [
       trip1.costs.externalCosts.space,
@@ -508,8 +535,11 @@ double calculateInterval(DiagramDataType diagramDataType, Trip trip1, Trip trip2
       trip3.costs.externalCosts.barrier
     ].reduce(max);
   } else if (diagramDataType == DiagramDataType.air) {
-    maxValue = [trip1.costs.externalCosts.air, trip2.costs.externalCosts.air, trip3.costs.externalCosts.air]
-        .reduce(max);
+    maxValue = [
+      trip1.costs.externalCosts.air,
+      trip2.costs.externalCosts.air,
+      trip3.costs.externalCosts.air
+    ].reduce(max);
   }
   if (maxValue > 0.02) {
     interval = maxValue / segments;

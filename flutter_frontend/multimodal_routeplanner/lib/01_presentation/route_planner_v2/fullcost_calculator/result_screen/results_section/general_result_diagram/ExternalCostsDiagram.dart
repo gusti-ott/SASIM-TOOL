@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:logger/logger.dart';
 import 'package:multimodal_routeplanner/01_presentation/dimensions.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
@@ -10,7 +11,8 @@ import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 import 'package:multimodal_routeplanner/logger.dart';
 
 class ExternalCostsDiagram extends StatefulWidget {
-  const ExternalCostsDiagram({super.key, required this.trip1, required this.trip2, required this.trip3});
+  const ExternalCostsDiagram(
+      {super.key, required this.trip1, required this.trip2, required this.trip3});
 
   final Trip trip1;
   final Trip trip2;
@@ -91,8 +93,8 @@ class _ExternalCostsDiagramState extends State<ExternalCostsDiagram> {
     );
   }
 
-  Column mainDiagramButtonsColumn(
-      BuildContext context, TextTheme textTheme, ColorScheme colorScheme, double resultDiagramHeight) {
+  Column mainDiagramButtonsColumn(BuildContext context, TextTheme textTheme,
+      ColorScheme colorScheme, double resultDiagramHeight) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -157,9 +159,12 @@ class _ExternalCostsDiagramState extends State<ExternalCostsDiagram> {
     );
   }
 
-  void triggerStackTouchResonse(FlTouchEvent event, BarTouchResponse? barTouchResponse, Logger logger) {
+  void triggerStackTouchResonse(
+      FlTouchEvent event, BarTouchResponse? barTouchResponse, Logger logger) {
     setState(() {
-      if (!event.isInterestedForInteractions || barTouchResponse == null || barTouchResponse.spot == null) {
+      if (!event.isInterestedForInteractions ||
+          barTouchResponse == null ||
+          barTouchResponse.spot == null) {
         touchedBar = -1;
         touchedStack = -1;
         return;
@@ -175,6 +180,7 @@ class _ExternalCostsDiagramState extends State<ExternalCostsDiagram> {
 
   Container diagramDescriptionBox() {
     TextTheme textTheme = Theme.of(context).textTheme;
+    AppLocalizations lang = AppLocalizations.of(context)!;
 
     return Container(
       decoration: const BoxDecoration(
@@ -186,12 +192,12 @@ class _ExternalCostsDiagramState extends State<ExternalCostsDiagram> {
           child: Column(
             children: [
               Text(
-                titleFromDiagramDataType(currentDiagramDataType),
+                titleFromDiagramDataType(lang, currentDiagramDataType),
                 style: textTheme.titleLarge,
               ),
               mediumVerticalSpacer,
               Text(
-                descriptionTextFromDiagramDataType(currentDiagramDataType),
+                descriptionTextFromDiagramDataType(lang, currentDiagramDataType),
                 style: textTheme.bodyLarge,
               ),
             ],
@@ -210,6 +216,7 @@ class _ExternalCostsDiagramState extends State<ExternalCostsDiagram> {
   }
 
   Widget legendItemButton(BuildContext context, DiagramDataType diagramDataType) {
+    AppLocalizations lang = AppLocalizations.of(context)!;
     return InkWell(
       onTap: () {
         changeDiagramType(diagramDataType);
@@ -231,7 +238,7 @@ class _ExternalCostsDiagramState extends State<ExternalCostsDiagram> {
             Expanded(
               child: Center(
                 child: Text(
-                  titleFromDiagramDataType(diagramDataType),
+                  titleFromDiagramDataType(lang, diagramDataType),
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ),

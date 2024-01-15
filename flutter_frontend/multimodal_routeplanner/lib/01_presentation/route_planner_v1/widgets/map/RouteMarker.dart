@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../../../../03_domain/entities/Trip.dart';
 import '../../../../03_domain/enums/RouteMarkerTypeEnum.dart';
 import '../../../helpers/ModeMapingHelper.dart';
@@ -8,12 +9,11 @@ class RouteMarker extends StatelessWidget {
   final Trip trip;
   final RouteMarkerType routeMarkerType;
 
-  const RouteMarker(
-      {super.key, required this.trip, required this.routeMarkerType});
+  const RouteMarker({super.key, required this.trip, required this.routeMarkerType});
 
   @override
   Widget build(BuildContext context) {
-    ModeMappingHelper stringMappingHelper = ModeMappingHelper();
+    ModeMappingHelper stringMappingHelper = ModeMappingHelper(AppLocalizations.of(context)!);
     return Padding(
       padding: routeMarkerType == RouteMarkerType.fastest
           ? const EdgeInsets.fromLTRB(2, 0, 0, 72)
@@ -37,21 +37,14 @@ class RouteMarker extends StatelessWidget {
           children: [
             Center(
               child: Padding(
-                padding: stringMappingHelper
-                            .mapModeStringToIcon(trip.mode)
-                            .runtimeType ==
-                        Icon
+                padding: stringMappingHelper.mapModeStringToIcon(trip.mode).runtimeType == Icon
                     ? const EdgeInsets.fromLTRB(8, 2.5, 4, 2.5)
                     : const EdgeInsets.fromLTRB(0, 2.5, 4, 2.5),
                 child: Container(
-                  child: stringMappingHelper
-                              .mapModeStringToIcon(trip.mode)
-                              .runtimeType ==
-                          Icon
+                  child: stringMappingHelper.mapModeStringToIcon(trip.mode).runtimeType == Icon
                       ? stringMappingHelper.mapModeStringToIcon(trip.mode)
                       : Container(
-                          child: stringMappingHelper
-                              .mapModeStringToIcon(trip.mode),
+                          child: stringMappingHelper.mapModeStringToIcon(trip.mode),
                         ),
                 ),
               ),
