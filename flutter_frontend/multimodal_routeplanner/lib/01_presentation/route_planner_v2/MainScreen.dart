@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/McubeLogo.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/search_screen/SearchScreen.dart';
+import 'package:multimodal_routeplanner/02_application/bloc/app_cubit.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key, required this.navigationShell});
@@ -56,13 +59,15 @@ class MainScreen extends StatelessWidget {
   }
 
   Widget navigationRow(BuildContext context) {
+    final lang = AppLocalizations.of(context)!;
+
     return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
       TextButton(
           //style: _getButtonStyle(context, 0),
           onPressed: () {
             context.goNamed(SearchScreen.routeName);
           },
-          child: Text('Rechner', style: _getTextStyle(context, 0))),
+          child: Text(lang.calculator, style: _getTextStyle(context, 0))),
       TextButton(
           //style: _getButtonStyle(context, 1),
           onPressed: () {
@@ -71,7 +76,9 @@ class MainScreen extends StatelessWidget {
           child: Text('Informationen', style: _getTextStyle(context, 1))),
       TextButton(
           //style: _getButtonStyle(context, 2),
-          onPressed: () {},
+          onPressed: () {
+            context.read<AppCubit>().changeLocale(Locale('en'));
+          },
           child: Text('Über Uns', style: _getTextStyle(context, 2))),
       mcubeLogo(),
     ]);

@@ -12,22 +12,17 @@ class RoutePlannerUsecases {
   Logger logger = getLogger();
 
   Future<Trip> getTrip(
-      {required String startInput,
-      required String endInput,
-      required MobilityMode mode}) async {
-    return routeRepository.getTripFromApi(
-        startInput: startInput, endInput: endInput, mode: mode);
+      {required String startInput, required String endInput, required MobilityMode mode}) async {
+    return routeRepository.getTripFromApi(startInput: startInput, endInput: endInput, mode: mode);
   }
 
-  Map<String, Trip> getListAddedTrips(
-      {required Map<String, Trip> trips, required Trip trip}) {
+  Map<String, Trip> getListAddedTrips({required Map<String, Trip> trips, required Trip trip}) {
     Map<String, Trip> newTrips = trips;
     newTrips[trip.mode] = trip;
 
     List<Trip> sortedTrips = [];
     newTrips.values.toList().forEach((element) => sortedTrips.add(element));
-    sortedTrips.sort(((a, b) =>
-        a.costs.externalCosts.all.compareTo(b.costs.externalCosts.all)));
+    sortedTrips.sort(((a, b) => a.costs.externalCosts.all.compareTo(b.costs.externalCosts.all)));
 
     Map<String, Trip> mapSortedTrips = {};
     for (var element in sortedTrips) {
@@ -36,14 +31,12 @@ class RoutePlannerUsecases {
     return mapSortedTrips;
   }
 
-  Map<String, Trip> getListRemovedTrips(
-      {required Map<String, Trip> trips, required String mode}) {
+  Map<String, Trip> getListRemovedTrips({required Map<String, Trip> trips, required String mode}) {
     trips.remove(mode);
 
     List<Trip> sortedTrips = [];
     trips.values.toList().forEach((element) => sortedTrips.add(element));
-    sortedTrips.sort(((a, b) =>
-        a.costs.externalCosts.all.compareTo(b.costs.externalCosts.all)));
+    sortedTrips.sort(((a, b) => a.costs.externalCosts.all.compareTo(b.costs.externalCosts.all)));
 
     Map<String, Trip> mapSortedTrips = {};
     for (var element in sortedTrips) {
@@ -52,61 +45,137 @@ class RoutePlannerUsecases {
     return mapSortedTrips;
   }
 
-  Future<List<Trip>> getAllTrips(
-      {required String startInput, required String endInput}) async {
+  Future<List<Trip>> getAllTrips({required String startInput, required String endInput}) async {
     List<Trip> listTrips = [];
 
     // get car trip
     try {
-      Trip carTrip = await routeRepository.getTripFromApi(
+      Trip trip = await routeRepository.getTripFromApi(
           startInput: startInput,
           endInput: endInput,
           mode: MobilityMode(mode: MobilityModeEnum.car));
-      listTrips.add(carTrip);
+      listTrips.add(trip);
     } catch (e) {
       logger.e('could not fetch CAR trip: ${e.toString()}');
     }
 
+    // get e-car trip
+    try {
+      Trip trip = await routeRepository.getTripFromApi(
+          startInput: startInput,
+          endInput: endInput,
+          mode: MobilityMode(mode: MobilityModeEnum.ecar));
+      listTrips.add(trip);
+    } catch (e) {
+      logger.e('could not fetch E-CAR trip: ${e.toString()}');
+    }
+
     // get bike trip
     try {
-      Trip bikeTrip = await routeRepository.getTripFromApi(
+      Trip trip = await routeRepository.getTripFromApi(
           startInput: startInput,
           endInput: endInput,
           mode: MobilityMode(mode: MobilityModeEnum.bike));
-      listTrips.add(bikeTrip);
+      listTrips.add(trip);
     } catch (e) {
       logger.e('could not fetch BIKE trip: ${e.toString()}');
     }
 
+    // get e-bike trip
+    try {
+      Trip trip = await routeRepository.getTripFromApi(
+          startInput: startInput,
+          endInput: endInput,
+          mode: MobilityMode(mode: MobilityModeEnum.ebike));
+      listTrips.add(trip);
+    } catch (e) {
+      logger.e('could not fetch E-BIKE trip: ${e.toString()}');
+    }
+
+    // get moped trip
+    try {
+      Trip trip = await routeRepository.getTripFromApi(
+          startInput: startInput,
+          endInput: endInput,
+          mode: MobilityMode(mode: MobilityModeEnum.moped));
+      listTrips.add(trip);
+    } catch (e) {
+      logger.e('could not fetch Moped trip: ${e.toString()}');
+    }
+
+    // get e-moped trip
+    try {
+      Trip trip = await routeRepository.getTripFromApi(
+          startInput: startInput,
+          endInput: endInput,
+          mode: MobilityMode(mode: MobilityModeEnum.emoped));
+      listTrips.add(trip);
+    } catch (e) {
+      logger.e('could not fetch E-Moped trip: ${e.toString()}');
+    }
+
+    // get emmy trip
+    try {
+      Trip trip = await routeRepository.getTripFromApi(
+          startInput: startInput,
+          endInput: endInput,
+          mode: MobilityMode(mode: MobilityModeEnum.emmy));
+      listTrips.add(trip);
+    } catch (e) {
+      logger.e('could not fetch Emmy trip: ${e.toString()}');
+    }
+
+    // get tier trip
+    try {
+      Trip trip = await routeRepository.getTripFromApi(
+          startInput: startInput,
+          endInput: endInput,
+          mode: MobilityMode(mode: MobilityModeEnum.tier));
+      listTrips.add(trip);
+    } catch (e) {
+      logger.e('could not fetch TIER trip: ${e.toString()}');
+    }
+
+    // get sharenow trip
+    try {
+      Trip trip = await routeRepository.getTripFromApi(
+          startInput: startInput,
+          endInput: endInput,
+          mode: MobilityMode(mode: MobilityModeEnum.sharenow));
+      listTrips.add(trip);
+    } catch (e) {
+      logger.e('could not fetch Sharenow trip: ${e.toString()}');
+    }
+
     // get walk trip
     try {
-      Trip walkTrip = await routeRepository.getTripFromApi(
+      Trip trip = await routeRepository.getTripFromApi(
           startInput: startInput,
           endInput: endInput,
           mode: MobilityMode(mode: MobilityModeEnum.walk));
-      listTrips.add(walkTrip);
+      listTrips.add(trip);
     } catch (e) {
       logger.e('could not fetch WALK trip: ${e.toString()}');
     }
 
     // get pt trip
     try {
-      Trip ptTrip = await routeRepository.getTripFromApi(
+      Trip trip = await routeRepository.getTripFromApi(
           startInput: startInput,
           endInput: endInput,
           mode: MobilityMode(mode: MobilityModeEnum.mvg));
-      listTrips.add(ptTrip);
+      listTrips.add(trip);
     } catch (e) {
       logger.e('could not fetch PT trip: ${e.toString()}');
     }
 
     // get intermodal trip
     try {
-      Trip intermodalTrip = await routeRepository.getTripFromApi(
+      Trip trip = await routeRepository.getTripFromApi(
           startInput: startInput,
           endInput: endInput,
           mode: MobilityMode(mode: MobilityModeEnum.intermodal));
-      listTrips.add(intermodalTrip);
+      listTrips.add(trip);
     } catch (e) {
       logger.e('could not fetch INTERMODAL trip: ${e.toString()}');
     }

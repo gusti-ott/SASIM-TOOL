@@ -1,21 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:multimodal_routeplanner/02_application/bloc/diagram_type/diagram_type_bloc.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
-import 'package:multimodal_routeplanner/03_domain/enums/DiagramTypeEnum.dart';
-
-
-import 'ResultDiagramBar.dart';
-import 'TitleDropdown.dart';
 
 class ResultDiagramCard extends StatelessWidget {
   final List<Trip> trips;
+
   const ResultDiagramCard({super.key, required this.trips});
 
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    return Padding(
+    return SizedBox(
+      height: 200,
+      width: double.infinity,
+      child: Center(
+        child: Text(
+          'wähle eine Kategorie im Dropdown-Menü um deine Routen zu vergleichen',
+          textAlign: TextAlign.center,
+          style:
+              themeData.textTheme.headlineSmall?.copyWith(color: themeData.colorScheme.onPrimary),
+        ),
+      ),
+    );
+
+    /*return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: SizedBox(
         width: double.infinity,
@@ -52,7 +59,7 @@ class ResultDiagramCard extends StatelessWidget {
                   },
                 ),
               ),
-              /*BlocBuilder<CostDetailsBloc, CostDetailsState>(
+              BlocBuilder<CostDetailsBloc, CostDetailsState>(
                 builder: (context, state) {
                   if (state is CostDetailsLoadedState) {
                     return CostDetails(costs: state.costs);
@@ -62,11 +69,11 @@ class ResultDiagramCard extends StatelessWidget {
                     return const CostDetailsText();
                   }
                 },
-              ),*/
+              ),
             ],
           ),
         ),
       ),
-    );
+    );*/
   }
 }
