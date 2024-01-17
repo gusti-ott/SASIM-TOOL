@@ -1,8 +1,13 @@
 {
   "that_are_the_true_costs_header": "Das sind die wahren Kosten deiner Mobilität",
+  "these_are_external_costs": "Das sind die externen Kosten deiner Route",
+  "what_is_mobi_score": "Was ist der Mobi-Score?",
   "calculator": "Rechner",
   "information": "Informationen",
   "about_us": "Über uns",
+  "start_address": "Startadresse",
+  "end_address": "Zieladresse",
+  "please_insert_address": "Bitte gib eine Adresse an",
   "from": "VON",
   "to": "NACH",
   "new_route": "Neue Route",
@@ -45,6 +50,12 @@
   "space_use": "Flächenverbrauch",
   "congestion": "Stau",
   "barrier_effects": "Barrieren",
-  "environmental_damages": "Umweltschäden"
-
+  "environmental_damages": "Umweltschäden",
+  "mobi_score": "Mobi-Score",
+  "header_external_costs": "externe\nKosten",
+  "header_internal_costs": "interne\nKosten",
+  "header_fullcosts": "Voll\nkosten",
+  "header_mobi_score": "Mobi-\nScore",
+  "something_went_wrong": "...irgendwas ist schiefgegangen, versuche eine neue Route",
+  "try_again": "Versuche es erneut"
 }

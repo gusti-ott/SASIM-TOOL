@@ -196,7 +196,7 @@ class _ExternalCostsDiagramState extends State<ExternalCostsDiagram> {
                 style: textTheme.titleLarge,
               ),
               mediumVerticalSpacer,
-              Text(
+              SelectableText(
                 descriptionTextFromDiagramDataType(lang, currentDiagramDataType),
                 style: textTheme.bodyLarge,
               ),
