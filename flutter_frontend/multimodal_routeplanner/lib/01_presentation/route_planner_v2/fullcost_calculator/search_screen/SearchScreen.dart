@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/headers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/ResultScreen.dart';
@@ -26,6 +27,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations lang = AppLocalizations.of(context)!;
+
     const double searchAreaWidth = 800;
     const double textInputWidth = (searchAreaWidth - 100) / 2;
 
@@ -34,9 +37,9 @@ class _SearchScreenState extends State<SearchScreen> {
         Center(
           child: Column(
             children: [
-              const TitleImage(
+              TitleImage(
                   imagePath: 'assets/title_image/titelbild_ubahn.png',
-                  titleText: 'Was sind die wahren Kosten deiner Mobilität?'),
+                  titleText: lang.that_are_the_true_costs_header),
               const SizedBox(height: 96),
               SizedBox(
                   width: searchAreaWidth,
@@ -52,7 +55,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               children: [
                                 addressInputField(
                                   textInputWidth,
-                                  'Startadresse',
+                                  lang.start_address,
                                   _controllerStartLocation,
                                   (value) {
                                     BlocProvider.of<AddressPickerBloc>(context)
@@ -99,7 +102,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               children: [
                                 addressInputField(
                                   textInputWidth,
-                                  'Zieladresse',
+                                  lang.end_address,
                                   _controllerEndLocation,
                                   (value) {
                                     BlocProvider.of<AddressPickerBloc>(context)
@@ -198,7 +201,7 @@ class _SearchScreenState extends State<SearchScreen> {
             child: Text(labelText),
           ),
           labelStyle: const TextStyle(color: Colors.black),
-          error: isValid ? null : errorWidget(labelText),
+          error: isValid ? null : errorWidget(context),
           // errorText: isValide ? null : 'Bitte gib eine $labelText an',
         ),
         onChanged: (value) {
@@ -210,12 +213,13 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 }
 
-Widget errorWidget(String labelText) {
+Widget errorWidget(BuildContext context) {
+  AppLocalizations lang = AppLocalizations.of(context)!;
   return Container(
     color: Colors.red,
     child: Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Text('Bitte gib eine $labelText an'),
+      child: Text(lang.please_insert_address),
     ),
   );
 }

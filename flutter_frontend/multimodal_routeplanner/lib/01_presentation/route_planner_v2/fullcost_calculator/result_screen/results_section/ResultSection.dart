@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/headers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/results_section/ResultTable.dart';
@@ -54,6 +55,7 @@ class _ResultSectionState extends State<ResultSection> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations lang = AppLocalizations.of(context)!;
     TextTheme textTheme = Theme.of(context).textTheme;
 
     var externalCostsKey = GlobalKey();
@@ -80,7 +82,7 @@ class _ResultSectionState extends State<ResultSection> {
           TitleImage(
               key: externalCostsKey,
               imagePath: 'assets/title_image/titelbild_ubahn.png',
-              titleText: 'Das sind die externen Kosten deiner Route',
+              titleText: lang.these_are_external_costs,
               height: 200),
           extraLargeVerticalSpacer,
           ExternalCostsDiagram(
@@ -92,20 +94,18 @@ class _ResultSectionState extends State<ResultSection> {
           TitleImage(
               key: mobiScoreKey,
               imagePath: 'assets/title_image/titelbild_ubahn.png',
-              titleText: 'Was ist der Mobi-Score?',
+              titleText: lang.what_is_mobi_score,
               height: 200),
           extraLargeVerticalSpacer,
         ] else
           //TODO: implement nice error widget
           ...[
-          Center(
-              child: Text('...irgendwas ist schiefgegangen, versuche eine neue Route',
-                  style: textTheme.headlineLarge)),
+          Center(child: Text(lang.something_went_wrong, style: textTheme.headlineLarge)),
           TextButton(
               onPressed: () {
                 widget.realoadCallback();
               },
-              child: Text('nochmal versuchen')),
+              child: Text(lang.try_again)),
         ]
       ],
     );

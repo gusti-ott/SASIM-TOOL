@@ -12,17 +12,23 @@ class TripsCubit extends Cubit<TripsState> {
 
   final RoutePlannerUsecases _routePlannerUsecases = RoutePlannerUsecases();
   final Logger logger = getLogger();
+  List<Trip> chachedListTrips = [];
+  String cachedStartInput = '';
+  String cachedEndInput = '';
 
   Future<void> loadTrips(String startInput, String endInput) async {
-    emit(TripsLoading());
-
-    try {
-      List<Trip> listTrips = await _routePlannerUsecases.getAllTrips(
-          startInput: startInput, endInput: endInput);
-      emit(TripsLoaded(listTrips));
-    } catch (e) {
-      logger.e(e.toString());
-      emit(TripsError(e.toString()));
+    if (cachedStartInput != startInput || cachedEndInput != endInput) {
+      emit(TripsLoading());
+      cachedStartInput = startInput;
+      cachedEndInput = endInput;
+      try {
+        List<Trip> listTrips =
+            await _routePlannerUsecases.getAllTrips(startInput: startInput, endInput: endInput);
+        emit(TripsLoaded(listTrips));
+      } catch (e) {
+        logger.e(e.toString());
+        emit(TripsError(e.toString()));
+      }
     }
   }
 }

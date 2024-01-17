@@ -18,6 +18,7 @@ class RouteInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
+    AppLocalizations lang = AppLocalizations.of(context)!;
     ModeMappingHelper stringMappingHelper = ModeMappingHelper(AppLocalizations.of(context)!);
 
     return Visibility(
@@ -87,7 +88,7 @@ class RouteInfo extends StatelessWidget {
                                   title: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      const Text('Mobi-Score'),
+                                      Text(lang.mobi_score),
                                       SizedBox(
                                         width: 100,
                                         height: 50,
@@ -110,9 +111,9 @@ class RouteInfo extends StatelessWidget {
                                           textAlign: TextAlign.right,
                                         )
                                       : null,
-                                  children: [
+                                  children: const [
                                     Column(
-                                      children: const [
+                                      children: [
                                         SizedBox(height: 8),
                                         Text(
                                           'Der Mobi-Score ist eine Kenngröße, die die Nachhaltigkeit einer Route im urbanen Verkehr beschreibt. Diese wird aus den externen Kosten und der Routendistanz berechnet.',

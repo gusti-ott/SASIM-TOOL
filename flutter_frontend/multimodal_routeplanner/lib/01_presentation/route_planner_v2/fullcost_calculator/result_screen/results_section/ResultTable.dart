@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/dimensions.dart';
 import 'package:multimodal_routeplanner/01_presentation/helpers/CustomScrollbar.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/results_section/table_cells/CostsItem.dart';
@@ -229,9 +230,13 @@ class _ResultDataTableState extends State<ResultDataTable> with TickerProviderSt
     return TableRow(children: [
       const SizedBox(),
       TripInfoItem(
-          selectedTrip: selectedTrip1, animation: _animation1, animationController: _animationController1),
+          selectedTrip: selectedTrip1,
+          animation: _animation1,
+          animationController: _animationController1),
       TripInfoItem(
-          selectedTrip: selectedTrip2, animation: _animation2, animationController: _animationController2),
+          selectedTrip: selectedTrip2,
+          animation: _animation2,
+          animationController: _animationController2),
       TripInfoItem(
         selectedTrip: selectedTrip3,
         animation: _animation3,
@@ -241,10 +246,12 @@ class _ResultDataTableState extends State<ResultDataTable> with TickerProviderSt
   }
 
   TableRow fullcostsRow() {
+    AppLocalizations lang = AppLocalizations.of(context)!;
+
     return TableRow(
       decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
       children: [
-        const RowHeaderItem(text: 'Voll-\nkosten'),
+        RowHeaderItem(text: lang.header_fullcosts),
         CostsItem(
             selectedTrip: selectedTrip1,
             costsValue: selectedTrip1.costs.getFullcosts(),
@@ -265,10 +272,12 @@ class _ResultDataTableState extends State<ResultDataTable> with TickerProviderSt
   }
 
   TableRow internalCostsRow() {
+    AppLocalizations lang = AppLocalizations.of(context)!;
+
     return TableRow(
       decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
       children: [
-        const RowHeaderItem(text: 'interne\nKosten'),
+        RowHeaderItem(text: lang.header_internal_costs),
         CostsItem(
             selectedTrip: selectedTrip1,
             costsValue: selectedTrip1.costs.internalCosts.all,
@@ -289,8 +298,10 @@ class _ResultDataTableState extends State<ResultDataTable> with TickerProviderSt
   }
 
   TableRow externalCostsRow() {
+    AppLocalizations lang = AppLocalizations.of(context)!;
+
     return TableRow(decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)), children: [
-      const RowHeaderItem(text: 'externe\nKosten'),
+      RowHeaderItem(text: lang.header_external_costs),
       CostsItem(
           selectedTrip: selectedTrip1,
           costsValue: selectedTrip1.costs.externalCosts.all,
@@ -313,10 +324,12 @@ class _ResultDataTableState extends State<ResultDataTable> with TickerProviderSt
   }
 
   TableRow mobiScoreRow() {
+    AppLocalizations lang = AppLocalizations.of(context)!;
+
     return TableRow(
       decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
       children: [
-        const RowHeaderItem(text: 'Mobi-\nScore'),
+        RowHeaderItem(text: lang.header_mobi_score),
         MobiScoreItem(
           selectedTrip: selectedTrip1,
           animation: _animation1,
