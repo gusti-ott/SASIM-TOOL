@@ -347,6 +347,7 @@ class TripController:
 
         segments = []
         total_distance = 0
+        total_duration = 0
         total_internal_costs = InternalCosts()
         total_external_costs = ExternalCosts()
 
@@ -360,7 +361,7 @@ class TripController:
                     end_location=end_location_bike,
                     mode=TripMode.BICYCLE)
 
-                mode = IndividualMode.WALK
+                mode = IndividualMode.BICYCLE
                 duration = self._routing_controller.get_duration(router_response)
                 distance = self._routing_controller.get_distance(router_response)
                 waypoints = self._routing_controller.get_waypoints(router_response)
@@ -406,10 +407,11 @@ class TripController:
                 ))
 
             total_distance += distance
+            total_duration += duration
             total_internal_costs += internal_costs
             total_external_costs += external_costs
 
-        total_duration = efa_trip.total_duration
+        # total_duration = efa_trip.total_duration
 
         direct_distance = self._geo_helper.get_distance(start_location=start_location, end_location=end_location)
         mobi_score = self._mobi_score_controller.get_mobi_score(
@@ -419,7 +421,7 @@ class TripController:
 
         internal_trip_costs = InternalCosts(internal_costs=efa_trip.ticket_price)
         total_costs = Costs(
-            internal_costs=internal_trip_costs,
+            internal_costs=internal_trip_costs + total_internal_costs,
             external_costs=total_external_costs
         )
 
@@ -462,7 +464,7 @@ class TripController:
     def _fetch_sharing_vehicles_efa(self, start_location: Location):
 
         response = self._efa_coords_controller.get_response(start_location, radius=1000)
-        df_all_vehicles = self._efa_coords_controller.get_closest_vehicles_each(response, location)
+        df_all_vehicles = self._efa_coords_controller.get_closest_vehicles_each(response, start_location)
 
         return df_all_vehicles
 
