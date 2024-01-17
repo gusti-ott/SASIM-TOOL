@@ -17,7 +17,7 @@ class OtpHelper:
 
         elif (mode == TripMode.BICYCLE or mode == TripMode.EBICYCLE or
               mode == TripMode.CAB or mode == TripMode.TIER):
-            otp_mode = TripMode.BICYCLE
+            otp_mode = OtpMode.BICYCLE
 
         elif (mode == TripMode.WALK):
             otp_mode = OtpMode.WALK
