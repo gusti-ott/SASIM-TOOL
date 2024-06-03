@@ -11,98 +11,65 @@ final _shellNavigatorCalculatorKey = GlobalKey<NavigatorState>(debugLabel: 'shel
 final _shellNavigatorInfoKey = GlobalKey<NavigatorState>(debugLabel: 'shellInfo');
 
 final GoRouter vmrpRouter = GoRouter(
-  initialLocation: '/search',
+  initialLocation: '/v2/search',
   routes: [
-    StatefulShellRoute.indexedStack(
-        builder: (context, state, navigationShell) {
-          return MainScreen(
-            navigationShell: navigationShell,
-          );
-        },
-        branches: [
-          StatefulShellBranch(navigatorKey: _shellNavigatorCalculatorKey, routes: [
-            GoRoute(
-                name: SearchScreen.routeName,
-                path: '/search',
-                builder: (context, state) {
-                  return const SearchScreen();
-                }),
-            GoRoute(
-                name: ResultScreen.routeName,
-                path: '/result',
-                builder: (context, state) {
-                  final String? startInput = state.uri.queryParameters['startInput'];
-                  final String? endInput = state.uri.queryParameters['endInput'];
+    GoRoute(
+      path: '/v2',
+      redirect: (context, state) => '/v2/search',
+      routes: [
+        StatefulShellRoute.indexedStack(
+            builder: (context, state, navigationShell) {
+              return MainScreen(
+                navigationShell: navigationShell,
+              );
+            },
+            branches: [
+              StatefulShellBranch(navigatorKey: _shellNavigatorCalculatorKey, routes: [
+                GoRoute(
+                    name: SearchScreen.routeName,
+                    path: 'search',
+                    builder: (context, state) {
+                      return const SearchScreen();
+                    }),
+                GoRoute(
+                    name: ResultScreen.routeName,
+                    path: 'result',
+                    builder: (context, state) {
+                      final String? startInput = state.uri.queryParameters['startInput'];
+                      final String? endInput = state.uri.queryParameters['endInput'];
 
-                  if (startInput != null || endInput != null) {
-                    return ResultScreen(startAddress: startInput!, endAddress: endInput!);
-
-                    /* AdvancedRoutePlannerBloc routeBlocProvider =
-                BlocProvider.of<AdvancedRoutePlannerBloc>(context);
-
-            routeBlocProvider.add(RouteFirstTripEvent(startInput!, endInput!,
-                MobilityMode(mode: MobilityModeEnum.mvg)));
-
-            return const RoutePlannerScreen();*/
-                  } else {
-                    //TODO: add error screen or sth
-                    return const SearchScreen();
-                  }
-                  // 22TODO: check for format - if not right show error screen
-                }),
-          ]),
-          StatefulShellBranch(navigatorKey: _shellNavigatorInfoKey, routes: [
-            GoRoute(
-                name: 'faq-screen',
-                path: '/faq',
-                builder: (context, state) {
-                  return const FaqScreen();
-                }),
-          ]),
-        ]),
+                      if (startInput != null || endInput != null) {
+                        return ResultScreen(startAddress: startInput!, endAddress: endInput!);
+                      } else {
+                        //TODO: add error screen or sth
+                        return const SearchScreen();
+                      }
+                      // 22TODO: check for format - if not right show error screen
+                    }),
+              ]),
+              StatefulShellBranch(navigatorKey: _shellNavigatorInfoKey, routes: [
+                GoRoute(
+                    name: 'faq-screen',
+                    path: 'faq',
+                    builder: (context, state) {
+                      return const FaqScreen();
+                    }),
+              ]),
+            ]),
+      ],
+    ),
     GoRoute(
         name: 'result-old',
         path: '/result_old',
         builder: (context, state) {
           return const RoutePlannerScreen();
         }),
-    /*GoRoute(
-        name: 'search-screen',
-        path: '/search',
-        builder: (context, state) {
-          return const SearchScreen();
-        }),
-    GoRoute(
-        name: 'result-screen',
-        path: '/result',
-        builder: (context, state) {
-          final String? startInput = state.uri.queryParameters['startInput'];
-          final String? endInput = state.uri.queryParameters['endInput'];
-
-          //TODO: check for format
-
-          if (startInput != null || endInput != null) {
-            return ResultScreen(
-                startAddress: startInput!, endAddress: endInput!);
-
-            */ /* AdvancedRoutePlannerBloc routeBlocProvider =
-                BlocProvider.of<AdvancedRoutePlannerBloc>(context);
-
-            routeBlocProvider.add(RouteFirstTripEvent(startInput!, endInput!,
-                MobilityMode(mode: MobilityModeEnum.mvg)));
-
-            return const RoutePlannerScreen();*/ /*
-          } else {
-            //TODO: add error screen or sth
-            return const SearchScreen();
-          }
-          //TODO: check for format - if not right show error screen
-        }),*/
     GoRoute(
         name: 'route-planner-screen',
-        path: '/routeplanner',
+        path: '/v1',
         builder: (context, state) {
           return const RoutePlannerScreen();
-        })
+        }),
+    GoRoute(path: '/v3', redirect: (context, state) => '/v3/search', routes: [])
   ],
 );
