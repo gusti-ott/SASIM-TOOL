@@ -14,49 +14,39 @@ class SearchContent extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    if (isMobile) {
-      return mobileContent();
-    } else {
-      return desktopContent(context, screenHeight: screenHeight, screenWidth: screenWidth);
-    }
-  }
-
-  Widget mobileContent() {
-    return const Center(
-      child: Text('Mobile'),
-    );
+    return SingleChildScrollView(child: desktopContent(context, screenHeight: screenHeight, screenWidth: screenWidth));
   }
 
   Widget desktopContent(BuildContext context, {required double screenHeight, required double screenWidth}) {
     TextTheme textTheme = Theme.of(context).textTheme;
 
-    return SingleChildScrollView(
-      controller: scrollController,
-      child: SizedBox(
-        width: screenWidth,
-        child: Column(
-          children: [
-            SizedBox(
-                width: double.infinity,
-                child: Image.asset(
-                  'assets/title_image/mobiscore_header_1.png',
-                  fit: BoxFit.fitWidth,
-                )),
-            smallVerticalSpacer,
-            SizedBox(
-              width: 1000,
+    return SizedBox(
+      width: screenWidth,
+      child: Column(
+        children: [
+          SizedBox(
+              width: double.infinity,
+              child: Image.asset(
+                'assets/title_image/mobiscore_header_1.png',
+                fit: BoxFit.fitWidth,
+              )),
+          smallVerticalSpacer,
+          SizedBox(
+            width: 1000,
+            child: Padding(
+              padding: EdgeInsets.all((isMobile) ? mediumPadding : 0.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Learn about the real costs of mobility',
                       style: textTheme.displayMedium!.copyWith(color: primaryColorV3)),
                   mediumVerticalSpacer,
-                  SearchInputContainer()
+                  SearchInputContent(isMobile: isMobile),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

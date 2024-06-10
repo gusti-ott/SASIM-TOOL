@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/search_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/search_cubit.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
@@ -27,6 +28,8 @@ class _SearchScreenV3State extends State<SearchScreenV3> {
 
   @override
   Widget build(BuildContext context) {
+    GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
     TextTheme textTheme = Theme.of(context).textTheme;
 
     SearchCubit cubit = sl<SearchCubit>();
@@ -50,7 +53,24 @@ class _SearchScreenV3State extends State<SearchScreenV3> {
         bloc: cubit,
         builder: (context, state) {
           return Scaffold(
-              floatingActionButton: !started
+              key: _scaffoldKey,
+              appBar: isMobile
+                  ? AppBar(
+                      leading: Padding(
+                          padding: EdgeInsets.all(smallPadding),
+                          child: Image.asset('assets/mobiscore_logos/logo_with_text_primary.png')),
+                      actions: [
+                        IconButton(
+                          icon: const Icon(Icons.menu),
+                          onPressed: () {
+                            _scaffoldKey.currentState!.openDrawer();
+                          },
+                        ),
+                      ],
+                    )
+                  : null,
+              drawer: buildDrawer(context),
+              floatingActionButton: !started && !isMobile
                   ? FloatingActionButton.extended(
                       label: Text(
                         'Get Started',
@@ -73,5 +93,51 @@ class _SearchScreenV3State extends State<SearchScreenV3> {
               backgroundColor: backgroundSearchPage,
               body: SearchContent(isMobile: isMobile, scrollController: _scrollController));
         });
+  }
+
+  Widget buildDrawer(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          const DrawerHeader(
+            decoration: BoxDecoration(
+              color: Colors.blue,
+            ),
+            child: Text(
+              'Drawer Header',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+              ),
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.home),
+            title: const Text('Home'),
+            onTap: () {
+              // Handle the navigation to the Home page
+              Navigator.pop(context); // Close the drawer
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.settings),
+            title: const Text('Settings'),
+            onTap: () {
+              // Handle the navigation to the Settings page
+              Navigator.pop(context); // Close the drawer
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.contacts),
+            title: const Text('Contact Us'),
+            onTap: () {
+              // Handle the navigation to the Contact Us page
+              Navigator.pop(context); // Close the drawer
+            },
+          ),
+        ],
+      ),
+    );
   }
 }

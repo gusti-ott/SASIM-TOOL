@@ -4,14 +4,16 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/decorations.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 
-class SearchInputContainer extends StatefulWidget {
-  const SearchInputContainer({super.key});
+class SearchInputContent extends StatefulWidget {
+  const SearchInputContent({super.key, required this.isMobile});
+
+  final bool isMobile;
 
   @override
-  State<SearchInputContainer> createState() => _SearchInputContainerState();
+  State<SearchInputContent> createState() => _SearchInputContentState();
 }
 
-class _SearchInputContainerState extends State<SearchInputContainer> {
+class _SearchInputContentState extends State<SearchInputContent> {
   TextEditingController startController = TextEditingController();
   TextEditingController endController = TextEditingController();
 
@@ -28,13 +30,31 @@ class _SearchInputContainerState extends State<SearchInputContainer> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      extraLargeVerticalSpacer,
-      modeSelectionRow(context),
-      largeVerticalSpacer,
-      addressInputRow(context),
-      extraLargeVerticalSpacer
-    ]);
+    return (widget.isMobile) ? buildMobileContent(context) : buildDesktopContent(context);
+  }
+
+  Widget buildDesktopContent(BuildContext context) {
+    return Column(
+      children: [
+        extraLargeVerticalSpacer,
+        modeSelectionRow(context),
+        largeVerticalSpacer,
+        addressInputRow(context, isMobile: false),
+        extraLargeVerticalSpacer
+      ],
+    );
+  }
+
+  Widget buildMobileContent(BuildContext context) {
+    return Column(
+      children: [
+        mediumVerticalSpacer,
+        mobileModeSelectionContainer(context),
+        largeVerticalSpacer,
+        addressInputRow(context, isMobile: true),
+        extraLargeVerticalSpacer
+      ],
+    );
   }
 
   Widget modeSelectionRow(BuildContext context) {
@@ -46,6 +66,22 @@ class _SearchInputContainerState extends State<SearchInputContainer> {
         children: [
           modeSelectionPart(),
           sharedSelectionPart(context),
+          electricSelectionPart(context),
+        ],
+      ),
+    );
+  }
+
+  Widget mobileModeSelectionContainer(BuildContext context) {
+    return Container(
+      decoration: boxDecorationWithShadow(),
+      padding: EdgeInsets.all(mediumPadding),
+      child: Column(
+        children: [
+          modeSelectionPart(),
+          smallVerticalSpacer,
+          sharedSelectionPart(context),
+          smallVerticalSpacer,
           electricSelectionPart(context),
         ],
       ),
@@ -184,50 +220,100 @@ class _SearchInputContainerState extends State<SearchInputContainer> {
     );
   }
 
-  Widget addressInputRow(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: textInputField(
-            context,
-            controller: startController,
-            hintText: 'From',
-            onChanged: (value) {
-              setState(() {
-                startAddress = value;
-              });
-            },
-          ),
-        ),
-        const SizedBox(width: 8),
-        IconButton(
-          icon: const Icon(Icons.swap_horiz, color: Colors.grey),
-          onPressed: () {
-            swapInputs();
-          },
-        ),
-        const SizedBox(width: 8),
-        Expanded(
-          child: textInputField(
-            context,
-            controller: endController,
-            hintText: 'To',
-            onChanged: (value) {
-              setState(() {
-                endAddress = value;
-              });
-            },
-          ),
-        ),
-        const SizedBox(width: 8),
-        customButton(
-          label: 'Calculate',
-          onTap: () {
-            // Perform search action
-          },
-        ),
-      ],
-    );
+  Widget addressInputRow(BuildContext context, {required bool isMobile}) {
+    return (!isMobile)
+        ? Row(
+            children: [
+              Expanded(
+                child: textInputField(
+                  context,
+                  controller: startController,
+                  hintText: 'From',
+                  onChanged: (value) {
+                    setState(() {
+                      startAddress = value;
+                    });
+                  },
+                ),
+              ),
+              const SizedBox(width: 8),
+              IconButton(
+                icon: const Icon(Icons.swap_horiz, color: Colors.grey),
+                onPressed: () {
+                  swapInputs();
+                },
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: textInputField(
+                  context,
+                  controller: endController,
+                  hintText: 'To',
+                  onChanged: (value) {
+                    setState(() {
+                      endAddress = value;
+                    });
+                  },
+                ),
+              ),
+              const SizedBox(width: 8),
+              customButton(
+                label: 'Calculate',
+                onTap: () {
+                  // Perform search action
+                },
+              ),
+            ],
+          )
+        : Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: textInputField(
+                      context,
+                      controller: startController,
+                      hintText: 'From',
+                      onChanged: (value) {
+                        setState(() {
+                          startAddress = value;
+                        });
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    width: 50,
+                    child: IconButton(
+                      icon: const Icon(Icons.swap_horiz, color: Colors.grey),
+                      onPressed: () {
+                        swapInputs();
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              smallVerticalSpacer,
+              textInputField(
+                context,
+                controller: endController,
+                hintText: 'To',
+                onChanged: (value) {
+                  setState(() {
+                    endAddress = value;
+                  });
+                },
+              ),
+              largeVerticalSpacer,
+              IntrinsicWidth(
+                child: customButton(
+                  label: 'Calculate',
+                  onTap: () {
+                    // Perform search action
+                  },
+                ),
+              ),
+            ],
+          );
   }
 
   Widget textInputField(
