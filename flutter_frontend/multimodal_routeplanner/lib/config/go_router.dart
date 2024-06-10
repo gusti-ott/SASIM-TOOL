@@ -5,6 +5,7 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/MainScr
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/faq_section/FaqScreen.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/ResultScreen.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/search_screen/SearchScreen.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/search_screen.dart';
 
 // final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorCalculatorKey = GlobalKey<NavigatorState>(debugLabel: 'shellCalculator');
@@ -44,7 +45,7 @@ final GoRouter vmrpRouter = GoRouter(
                         //TODO: add error screen or sth
                         return const SearchScreen();
                       }
-                      // 22TODO: check for format - if not right show error screen
+                      // TODO: check for format - if not right show error screen
                     }),
               ]),
               StatefulShellBranch(navigatorKey: _shellNavigatorInfoKey, routes: [
@@ -70,6 +71,14 @@ final GoRouter vmrpRouter = GoRouter(
         builder: (context, state) {
           return const RoutePlannerScreen();
         }),
-    GoRoute(path: '/v3', redirect: (context, state) => '/v3/search', routes: [])
+    GoRoute(path: '/v3', redirect: (context, state) => '/v3/search', routes: [
+      GoRoute(
+        name: SearchScreenV3.routeName,
+        path: SearchScreenV3.path,
+        builder: (context, state) {
+          return const SearchScreenV3();
+        },
+      )
+    ])
   ],
 );

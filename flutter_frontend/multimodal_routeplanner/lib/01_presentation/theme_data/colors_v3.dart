@@ -11,8 +11,15 @@ Color lightColorD = Color.alphaBlend(blend, colorD);
 Color colorE = const Color(0xFFFE470B);
 Color lightColorE = Color.alphaBlend(blend, colorE);
 
+Color primaryColorV3 = colorA;
+Color onPrimaryColorV3 = Colors.white;
+Color secondaryColorV3 = colorC;
+Color tertiaryColorV3 = colorE;
+
 Color customDarkGrey = const Color(0xFF282828);
 Color customOffWhite = const Color(0xFFEBEBEB);
 Color customWhite100 = const Color(0xFFFFFFFF);
+
+Color backgroundSearchPage = const Color(0xFFF0F0E4);
 
 Color blend = Colors.white.withOpacity(0.25);

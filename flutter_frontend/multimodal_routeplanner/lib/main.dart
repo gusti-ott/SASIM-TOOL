@@ -14,22 +14,24 @@ import 'package:multimodal_routeplanner/02_application/bloc/route_planner/advanc
 import 'package:multimodal_routeplanner/02_application/bloc/route_planner_bloc.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/sasim_2/trips_cubit.dart';
 import 'package:multimodal_routeplanner/config/go_router.dart';
+import 'package:multimodal_routeplanner/config/setup_dependencies.dart';
 
 import '02_application/bloc/route_info/route_info_bloc.dart';
 import '02_application/bloc/visualization/visualization_bloc.dart';
 
 void main() {
-  runApp(const MyApp());
+  setupDependencies();
+  runApp(const VmrpApp());
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+class VmrpApp extends StatefulWidget {
+  const VmrpApp({Key? key}) : super(key: key);
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<VmrpApp> createState() => _VmrpAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _VmrpAppState extends State<VmrpApp> {
   late Locale _currentLocale;
 
   @override
