@@ -99,7 +99,7 @@ class _SearchScreenV3State extends State<SearchScreenV3> {
                   : null,
               floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
               backgroundColor: backgroundSearchPage,
-              body: SearchContent(isMobile: isMobile, scrollController: _scrollController));
+              body: SearchContent(state, isMobile: isMobile, scrollController: _scrollController));
         });
   }
 

@@ -13,3 +13,4 @@ double extraSmallPadding = 4;
 double smallPadding = 8;
 double mediumPadding = 16;
 double largePadding = 32;
+double extraLargePadding = 64;

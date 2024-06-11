@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/buttons.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/decorations.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/progress_indicators.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/search_cubit.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
+import 'package:multimodal_routeplanner/config/setup_dependencies.dart';
 
 class SearchInputContent extends StatefulWidget {
-  const SearchInputContent({super.key, required this.isMobile});
+  const SearchInputContent(this.state, {super.key, required this.isMobile});
 
   final bool isMobile;
+  final SearchState state;
 
   @override
   State<SearchInputContent> createState() => _SearchInputContentState();
@@ -30,28 +34,29 @@ class _SearchInputContentState extends State<SearchInputContent> {
 
   @override
   Widget build(BuildContext context) {
-    return (widget.isMobile) ? buildMobileContent(context) : buildDesktopContent(context);
+    return (widget.isMobile) ? buildMobileContent(context, widget.state) : buildDesktopContent(context, widget.state);
   }
 
-  Widget buildDesktopContent(BuildContext context) {
+  Widget buildDesktopContent(BuildContext context, SearchState state) {
     return Column(
       children: [
         extraLargeVerticalSpacer,
         modeSelectionRow(context),
         largeVerticalSpacer,
-        addressInputRow(context, isMobile: false),
-        extraLargeVerticalSpacer
+        addressInputRow(context, state, isMobile: false),
+        routeErrorWidget(state),
+        extraLargeVerticalSpacer,
       ],
     );
   }
 
-  Widget buildMobileContent(BuildContext context) {
+  Widget buildMobileContent(BuildContext context, SearchState state) {
     return Column(
       children: [
         mediumVerticalSpacer,
         mobileModeSelectionContainer(context),
         largeVerticalSpacer,
-        addressInputRow(context, isMobile: true),
+        addressInputRow(context, state, isMobile: true),
         extraLargeVerticalSpacer
       ],
     );
@@ -220,100 +225,114 @@ class _SearchInputContentState extends State<SearchInputContent> {
     );
   }
 
-  Widget addressInputRow(BuildContext context, {required bool isMobile}) {
+  Widget addressInputRow(BuildContext context, SearchState state, {required bool isMobile}) {
+    SearchCubit cubit = sl<SearchCubit>();
+
     return (!isMobile)
-        ? Row(
-            children: [
-              Expanded(
-                child: textInputField(
-                  context,
-                  controller: startController,
-                  hintText: 'From',
-                  onChanged: (value) {
-                    setState(() {
-                      startAddress = value;
-                    });
-                  },
-                ),
+        ? desktopAddressInputRow(context, state, cubit)
+        // TODO: add state logic here
+        : mobileAddressInputContainer(context, state, cubit);
+  }
+
+  Column mobileAddressInputContainer(BuildContext context, SearchState state, SearchCubit cubit) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: textInputField(
+                context,
+                controller: startController,
+                hintText: 'From',
+                onChanged: (value) {
+                  setState(() {
+                    startAddress = value;
+                  });
+                },
               ),
-              const SizedBox(width: 8),
-              IconButton(
+            ),
+            SizedBox(
+              width: 50,
+              child: IconButton(
                 icon: const Icon(Icons.swap_horiz, color: Colors.grey),
                 onPressed: () {
                   swapInputs();
                 },
               ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: textInputField(
-                  context,
-                  controller: endController,
-                  hintText: 'To',
-                  onChanged: (value) {
-                    setState(() {
-                      endAddress = value;
-                    });
-                  },
-                ),
-              ),
-              const SizedBox(width: 8),
-              customButton(
-                label: 'Calculate',
-                onTap: () {
-                  // Perform search action
-                },
-              ),
-            ],
-          )
-        : Column(
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: textInputField(
-                      context,
-                      controller: startController,
-                      hintText: 'From',
-                      onChanged: (value) {
-                        setState(() {
-                          startAddress = value;
-                        });
-                      },
-                    ),
-                  ),
-                  SizedBox(
-                    width: 50,
-                    child: IconButton(
-                      icon: const Icon(Icons.swap_horiz, color: Colors.grey),
-                      onPressed: () {
-                        swapInputs();
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              smallVerticalSpacer,
-              textInputField(
-                context,
-                controller: endController,
-                hintText: 'To',
-                onChanged: (value) {
-                  setState(() {
-                    endAddress = value;
-                  });
-                },
-              ),
-              largeVerticalSpacer,
-              IntrinsicWidth(
-                child: customButton(
-                  label: 'Calculate',
-                  onTap: () {
-                    // Perform search action
-                  },
-                ),
-              ),
-            ],
-          );
+            ),
+          ],
+        ),
+        smallVerticalSpacer,
+        textInputField(
+          context,
+          controller: endController,
+          hintText: 'To',
+          onChanged: (value) {
+            setState(() {
+              endAddress = value;
+            });
+          },
+        ),
+        largeVerticalSpacer,
+        statefulCalculateButton(state, cubit)
+      ],
+    );
+  }
+
+  Row desktopAddressInputRow(BuildContext context, SearchState state, SearchCubit cubit) {
+    return Row(
+      children: [
+        Expanded(
+          child: textInputField(
+            context,
+            controller: startController,
+            hintText: 'From',
+            onChanged: (value) {
+              setState(() {
+                startAddress = value;
+              });
+            },
+          ),
+        ),
+        const SizedBox(width: 8),
+        IconButton(
+          icon: const Icon(Icons.swap_horiz, color: Colors.grey),
+          onPressed: () {
+            swapInputs();
+          },
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: textInputField(
+            context,
+            controller: endController,
+            hintText: 'To',
+            onChanged: (value) {
+              setState(() {
+                endAddress = value;
+              });
+            },
+          ),
+        ),
+        smallHorizontalSpacer,
+        statefulCalculateButton(state, cubit),
+      ],
+    );
+  }
+
+  Widget statefulCalculateButton(SearchState state, SearchCubit cubit) {
+    if (state is SearchLoading) {
+      return circularProgressIndicatorWithPadding();
+    } else {
+      return IntrinsicWidth(
+        child: customButton(
+          label: 'Calculate',
+          onTap: () {
+            cubit.loadTrips(startAddress, endAddress);
+          },
+        ),
+      );
+    }
   }
 
   Widget textInputField(
@@ -358,6 +377,26 @@ class _SearchInputContentState extends State<SearchInputContent> {
       startController.text = endController.text;
       endController.text = temp;
     });
+  }
+
+  Widget routeErrorWidget(SearchState state) {
+    return Column(
+      children: [
+        if (state is SearchError) ...[
+          smallVerticalSpacer,
+          Text(
+            'Error: ${state.message}',
+            style: const TextStyle(color: Colors.red),
+          )
+        ] else if (state is SearchLoaded) ...[
+          smallVerticalSpacer,
+          Text(
+            'Successfully loaded ${state.trips.length} trips',
+            style: const TextStyle(color: Colors.green),
+          )
+        ],
+      ],
+    );
   }
 }
 

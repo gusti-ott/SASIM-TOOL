@@ -57,5 +57,6 @@
   "header_fullcosts": "Full\nCosts",
   "header_mobi_score": "Mobi-\nScore",
   "something_went_wrong": "Something went wrong, try another route",
-  "try_again": "Try again"
+  "try_again": "Try again",
+  "research": "Research"
 }

@@ -10,7 +10,7 @@ class SearchCubit extends Cubit<SearchState> {
 
   final RoutePlannerUsecases _routePlannerUsecases;
   final Logger logger = getLogger();
-  List<Trip> chachedListTrips = [];
+  List<Trip> cachedListTrips = [];
   String cachedStartInput = '';
   String cachedEndInput = '';
 
