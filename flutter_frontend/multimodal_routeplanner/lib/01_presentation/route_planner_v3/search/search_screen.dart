@@ -19,35 +19,43 @@ class SearchScreenV3 extends StatefulWidget {
 class _SearchScreenV3State extends State<SearchScreenV3> {
   bool started = false;
   late ScrollController _scrollController;
+  late GlobalKey<ScaffoldState> _scaffoldKey;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    _scrollController.addListener(_scrollListener);
+    _scaffoldKey = GlobalKey<ScaffoldState>();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollListener() {
+    if (_scrollController.offset <= 300) {
+      setState(() {
+        started = false;
+      });
+    } else {
+      setState(() {
+        started = true;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
     TextTheme textTheme = Theme.of(context).textTheme;
 
     SearchCubit cubit = sl<SearchCubit>();
 
     double screenWidth = MediaQuery.of(context).size.width;
     bool isMobile = screenWidth < 600;
-
-    _scrollController.addListener(() {
-      if (_scrollController.offset <= 300) {
-        setState(() {
-          started = false;
-        });
-      } else {
-        setState(() {
-          started = true;
-        });
-      }
-    });
 
     return BlocBuilder<SearchCubit, SearchState>(
         bloc: cubit,
