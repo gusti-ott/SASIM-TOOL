@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/search_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/search_cubit.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/custom_switch.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 import 'package:multimodal_routeplanner/config/setup_dependencies.dart';
 
@@ -68,13 +70,16 @@ class _SearchScreenV3State extends State<SearchScreenV3> {
                           padding: EdgeInsets.all(smallPadding),
                           child: Image.asset('assets/mobiscore_logos/logo_with_text_primary.png')),
                       actions: [
+                        const CustomSwitch(),
                         IconButton(
-                          icon: const Icon(Icons.menu),
+                          icon: Icon(Icons.menu, color: primaryColorV3),
                           onPressed: () {
                             _scaffoldKey.currentState!.openDrawer();
                           },
                         ),
                       ],
+                      backgroundColor: Colors.white,
+                      foregroundColor: Colors.white,
                     )
                   : null,
               drawer: buildDrawer(context),
@@ -98,49 +103,35 @@ class _SearchScreenV3State extends State<SearchScreenV3> {
                     )
                   : null,
               floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-              backgroundColor: backgroundSearchPage,
+              backgroundColor: backgroundColorV3,
               body: SearchContent(state, isMobile: isMobile, scrollController: _scrollController));
         });
   }
 
   Widget buildDrawer(BuildContext context) {
+    AppLocalizations lang = AppLocalizations.of(context)!;
+    TextTheme textTheme = Theme.of(context).textTheme;
     return Drawer(
+      backgroundColor: backgroundColorV3,
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          const DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.blue,
-            ),
-            child: Text(
-              'Drawer Header',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-              ),
-            ),
+          DrawerHeader(
+            child: Align(
+                alignment: Alignment.centerLeft,
+                child: Image.asset('assets/mobiscore_logos/logo_with_text_primary.png', width: 70)),
           ),
           ListTile(
-            leading: const Icon(Icons.home),
-            title: const Text('Home'),
+            title: Text(lang.research, style: textTheme.headlineLarge!.copyWith(color: primaryColorV3)),
             onTap: () {
               // Handle the navigation to the Home page
               Navigator.pop(context); // Close the drawer
             },
           ),
           ListTile(
-            leading: const Icon(Icons.settings),
-            title: const Text('Settings'),
+            title: Text(lang.about_us, style: textTheme.headlineLarge!.copyWith(color: primaryColorV3)),
             onTap: () {
               // Handle the navigation to the Settings page
-              Navigator.pop(context); // Close the drawer
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.contacts),
-            title: const Text('Contact Us'),
-            onTap: () {
-              // Handle the navigation to the Contact Us page
               Navigator.pop(context); // Close the drawer
             },
           ),

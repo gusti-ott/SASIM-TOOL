@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:multimodal_routeplanner/01_presentation/commons/mcube_logo.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/logos.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/search_cubit.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/custom_switch.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/search_input_container.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 
-class SearchContent extends StatelessWidget {
+class SearchContent extends StatefulWidget {
   const SearchContent(this.state, {super.key, required this.isMobile, required this.scrollController});
 
   final bool isMobile;
@@ -15,15 +15,22 @@ class SearchContent extends StatelessWidget {
   final SearchState state;
 
   @override
+  State<SearchContent> createState() => _SearchContentState();
+}
+
+class _SearchContentState extends State<SearchContent> {
+  final GlobalKey _searchInputContentKey = GlobalKey();
+
+  @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
     return SingleChildScrollView(
-        controller: scrollController,
+        controller: widget.scrollController,
         child: searchContent(
           context,
-          state,
+          widget.state,
           screenHeight: screenHeight,
           screenWidth: screenWidth,
         ));
@@ -35,19 +42,22 @@ class SearchContent extends StatelessWidget {
 
     return Column(
       children: [
-        screenHeader(context, isMobile: isMobile),
+        screenHeader(context, isMobile: widget.isMobile),
         smallVerticalSpacer,
         SizedBox(
           width: 1000,
           child: Padding(
-            padding: EdgeInsets.all((isMobile) ? mediumPadding : 0.0),
+            padding: EdgeInsets.all((widget.isMobile) ? mediumPadding : 0.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('Learn about the real costs of mobility',
                     style: textTheme.displayMedium!.copyWith(color: primaryColorV3)),
                 mediumVerticalSpacer,
-                SearchInputContent(state, isMobile: isMobile),
+                SearchInputContent(state, key: _searchInputContentKey, isMobile: widget.isMobile),
+                SizedBox(
+                  height: extraLargePadding * 2,
+                )
               ],
             ),
           ),
@@ -71,15 +81,7 @@ class SearchContent extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    Image.asset('assets/mobiscore_logos/logo_with_text_primary.png', width: 70),
-                    smallHorizontalSpacer,
-                    Text('by', style: textTheme.labelLarge!.copyWith(color: primaryColorV3)),
-                    smallHorizontalSpacer,
-                    mcubeLogo(),
-                  ],
-                ),
+                mobiScoreWithMcubeLogo(context),
                 Row(
                   children: [
                     headerButton(context, label: lang.research, onPressed: () {}),

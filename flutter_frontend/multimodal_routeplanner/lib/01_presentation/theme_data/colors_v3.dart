@@ -20,6 +20,6 @@ Color customDarkGrey = const Color(0xFF282828);
 Color customOffWhite = const Color(0xFFEBEBEB);
 Color customWhite100 = const Color(0xFFFFFFFF);
 
-Color backgroundSearchPage = const Color(0xFFF0F0E4);
+Color backgroundColorV3 = const Color(0xFFF0F0E4);
 
 Color blend = Colors.white.withOpacity(0.25);

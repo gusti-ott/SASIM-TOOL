@@ -19,8 +19,7 @@ Widget mcubeLogo() {
           launchMcubeUrl();
         },
         hoverColor: Colors.transparent,
-        child: const Image(
-            height: 64, image: AssetImage('assets/logos/mcube_logo.png')),
+        child: const Image(height: 64, image: AssetImage('assets/logos/mcube_logo.png')),
       ),
     ),
   );

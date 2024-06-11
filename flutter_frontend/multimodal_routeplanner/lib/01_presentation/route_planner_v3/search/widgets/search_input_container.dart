@@ -45,7 +45,6 @@ class _SearchInputContentState extends State<SearchInputContent> {
         largeVerticalSpacer,
         addressInputRow(context, state, isMobile: false),
         routeErrorWidget(state),
-        extraLargeVerticalSpacer,
       ],
     );
   }
@@ -57,7 +56,6 @@ class _SearchInputContentState extends State<SearchInputContent> {
         mobileModeSelectionContainer(context),
         largeVerticalSpacer,
         addressInputRow(context, state, isMobile: true),
-        extraLargeVerticalSpacer
       ],
     );
   }
