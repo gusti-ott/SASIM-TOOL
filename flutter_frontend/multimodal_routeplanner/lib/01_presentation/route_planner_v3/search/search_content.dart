@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:multimodal_routeplanner/01_presentation/commons/mcube_logo.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/search_cubit.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/custom_switch.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/search_input_container.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
-import 'package:multimodal_routeplanner/02_application/bloc/app_cubit.dart';
 
 class SearchContent extends StatelessWidget {
   const SearchContent(this.state, {super.key, required this.isMobile, required this.scrollController});
@@ -58,8 +57,8 @@ class SearchContent extends StatelessWidget {
   }
 
   Widget screenHeader(BuildContext context, {required bool isMobile}) {
-    AppCubit appCubit = context.read<AppCubit>();
     AppLocalizations lang = AppLocalizations.of(context)!;
+    TextTheme textTheme = Theme.of(context).textTheme;
 
     if (isMobile) {
       return headerImage();
@@ -75,6 +74,10 @@ class SearchContent extends StatelessWidget {
                 Row(
                   children: [
                     Image.asset('assets/mobiscore_logos/logo_with_text_primary.png', width: 70),
+                    smallHorizontalSpacer,
+                    Text('by', style: textTheme.labelLarge!.copyWith(color: primaryColorV3)),
+                    smallHorizontalSpacer,
+                    mcubeLogo(),
                   ],
                 ),
                 Row(
