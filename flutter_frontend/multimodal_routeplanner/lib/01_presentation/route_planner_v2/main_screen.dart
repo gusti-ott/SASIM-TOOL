@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/McubeLogo.dart';
+import 'package:multimodal_routeplanner/01_presentation/commons/mcube_logo.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/search_screen/SearchScreen.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/app_cubit.dart';
@@ -22,8 +22,7 @@ class MainScreen extends StatelessWidget {
 
   TextStyle? _getTextStyle(BuildContext context, int index) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
-    TextStyle? buttonTextStyle =
-        Theme.of(context).textTheme.headlineSmall?.copyWith(color: colorScheme.onPrimary);
+    TextStyle? buttonTextStyle = Theme.of(context).textTheme.headlineSmall?.copyWith(color: colorScheme.onPrimary);
 
     TextStyle? buttonTextStyleSelected = Theme.of(context).textTheme.headlineSmall?.copyWith(
         color: colorScheme.onPrimary,
@@ -89,8 +88,7 @@ class MainScreen extends StatelessWidget {
             InkWell(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(4),
-                child: Image.asset('assets/flags/flag_de.png',
-                    height: 30, width: 40, fit: BoxFit.fill),
+                child: Image.asset('assets/flags/flag_de.png', height: 30, width: 40, fit: BoxFit.fill),
               ),
               onTap: () {
                 context.read<AppCubit>().changeLocale(const Locale('de'));
@@ -100,8 +98,7 @@ class MainScreen extends StatelessWidget {
             InkWell(
               child: ClipRRect(
                   borderRadius: BorderRadius.circular(4),
-                  child: Image.asset('assets/flags/flag_us.png',
-                      height: 30, width: 40, fit: BoxFit.fill)),
+                  child: Image.asset('assets/flags/flag_us.png', height: 30, width: 40, fit: BoxFit.fill)),
               onTap: () {
                 context.read<AppCubit>().changeLocale(const Locale('en'));
               },
