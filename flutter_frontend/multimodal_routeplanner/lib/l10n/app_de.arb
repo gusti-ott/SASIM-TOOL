@@ -58,5 +58,13 @@
   "header_mobi_score": "Mobi-\nScore",
   "something_went_wrong": "...irgendwas ist schiefgegangen, versuche eine neue Route",
   "try_again": "Versuche es erneut",
-  "research": "Forschung"
+  "research": "Forschung",
+  "by": "von",
+  "de": "de",
+  "en": "en",
+  "electric": "Elektrisch",
+  "calculate": "Berechnen",
+  "error": "Error"
+
+
 }

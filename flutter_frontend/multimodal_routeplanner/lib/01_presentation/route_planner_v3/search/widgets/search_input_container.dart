@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/buttons.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/decorations.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/progress_indicators.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/search_cubit.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/address_input_components.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/electric_selection_components.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/mode_selection_components.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/shared_selection_components.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
-import 'package:multimodal_routeplanner/config/setup_dependencies.dart';
 
 class SearchInputContent extends StatefulWidget {
-  const SearchInputContent(this.state, {super.key, required this.isMobile});
+  const SearchInputContent(
+    this.state, {
+    super.key,
+    required this.isMobile,
+  });
 
   final bool isMobile;
   final SearchState state;
@@ -34,48 +40,148 @@ class _SearchInputContentState extends State<SearchInputContent> {
 
   @override
   Widget build(BuildContext context) {
-    return (widget.isMobile) ? buildMobileContent(context, widget.state) : buildDesktopContent(context, widget.state);
+    return (widget.isMobile)
+        ? buildMobileContent(context, widget.state,
+            isElectric: isElectric,
+            onElectricChanged: (value) {
+              setState(() {
+                isElectric = !isElectric;
+              });
+            },
+            isShared: isShared,
+            onSharedChanged: (value) {
+              setState(() {
+                isShared = value;
+              });
+            },
+            startController: startController,
+            endController: endController,
+            onStartChanged: (value) {
+              setState(() {
+                startAddress = value;
+              });
+            },
+            onEndChanged: (value) {
+              setState(() {
+                endAddress = value;
+              });
+            },
+            swapInputs: swapInputs)
+        : buildDesktopContent(context, widget.state,
+            isElectric: isElectric,
+            onElectricChanged: (value) {
+              setState(() {
+                isElectric = !isElectric;
+              });
+            },
+            selectionMode: selectionMode,
+            onSelectionModeChanged: (mode) {
+              setState(() {
+                selectionMode = mode;
+              });
+            },
+            isShared: isShared,
+            onSharedChanged: (value) {
+              setState(() {
+                isShared = value;
+              });
+            },
+            startController: startController,
+            endController: endController,
+            onStartChanged: (value) {
+              setState(() {
+                startAddress = value;
+              });
+            },
+            onEndChanged: (value) {
+              setState(() {
+                endAddress = value;
+              });
+            },
+            swapInputs: swapInputs);
   }
 
-  Widget buildDesktopContent(BuildContext context, SearchState state) {
+  Widget buildDesktopContent(
+    BuildContext context,
+    SearchState state, {
+    required bool isElectric,
+    required Function(bool) onElectricChanged,
+    required SelectionMode selectionMode,
+    required Function(SelectionMode) onSelectionModeChanged,
+    required bool isShared,
+    required Function(bool) onSharedChanged,
+    required TextEditingController startController,
+    required TextEditingController endController,
+    required Function onStartChanged,
+    required Function onEndChanged,
+    required Function swapInputs,
+  }) {
     return Column(
       children: [
         extraLargeVerticalSpacer,
-        modeSelectionRow(context),
+        modeSelectionRow(
+          context,
+          isElectric: isElectric,
+          onElectricChanged: onElectricChanged,
+          selectionMode: selectionMode,
+          onSelectionModeChanged: onSelectionModeChanged,
+          isShared: isShared,
+          onSharedChanged: onSharedChanged,
+        ),
         largeVerticalSpacer,
-        addressInputRow(context, state, isMobile: false),
+        addressInputRow(
+          context,
+          state,
+          isMobile: false,
+          startController: startController,
+          endController: endController,
+          onStartChanged: onStartChanged,
+          onEndChanged: onEndChanged,
+          swapInputs: swapInputs,
+        ),
         routeErrorWidget(state),
       ],
     );
   }
 
-  Widget buildMobileContent(BuildContext context, SearchState state) {
+  Widget buildMobileContent(
+    BuildContext context,
+    SearchState state, {
+    required bool isElectric,
+    required Function(bool) onElectricChanged,
+    required bool isShared,
+    required Function(bool) onSharedChanged,
+    required TextEditingController startController,
+    required TextEditingController endController,
+    required Function onStartChanged,
+    required Function onEndChanged,
+    required Function swapInputs,
+  }) {
     return Column(
       children: [
         mediumVerticalSpacer,
-        mobileModeSelectionContainer(context),
+        mobileModeSelectionContainer(context,
+            isElectric: isElectric,
+            onElectricChanged: onElectricChanged,
+            isShared: isShared,
+            onSharedChanged: onSharedChanged),
         largeVerticalSpacer,
-        addressInputRow(context, state, isMobile: true),
+        addressInputRow(context, state,
+            isMobile: true,
+            startController: startController,
+            endController: endController,
+            onStartChanged: onStartChanged,
+            onEndChanged: onEndChanged,
+            swapInputs: swapInputs),
       ],
     );
   }
 
-  Widget modeSelectionRow(BuildContext context) {
-    return Container(
-      decoration: boxDecorationWithShadow(),
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          modeSelectionPart(),
-          sharedSelectionPart(context),
-          electricSelectionPart(context),
-        ],
-      ),
-    );
-  }
-
-  Widget mobileModeSelectionContainer(BuildContext context) {
+  Widget mobileModeSelectionContainer(BuildContext context,
+      {required bool isElectric,
+      required Function(bool) onElectricChanged,
+      required bool isShared,
+      required Function(bool) onSharedChanged}) {
     return Container(
       decoration: boxDecorationWithShadow(),
       padding: EdgeInsets.all(mediumPadding),
@@ -83,9 +189,9 @@ class _SearchInputContentState extends State<SearchInputContent> {
         children: [
           modeSelectionPart(),
           smallVerticalSpacer,
-          sharedSelectionPart(context),
+          sharedSelectionPart(context, isShared: isShared, onSharedChanged: onSharedChanged),
           smallVerticalSpacer,
-          electricSelectionPart(context),
+          electricSelectionPart(context, isElectric: isElectric, onElectricChanged: onElectricChanged),
         ],
       ),
     );
@@ -146,229 +252,6 @@ class _SearchInputContentState extends State<SearchInputContent> {
     );
   }
 
-  Widget sharedSelectionPart(BuildContext context) {
-    return Row(
-      children: [
-        sharedChip(
-          context,
-          label: 'Private',
-          icon: Icons.person,
-          isSelected: !isShared,
-          onSelected: () {
-            setState(() {
-              isShared = false;
-            });
-          },
-        ),
-        SizedBox(width: smallPadding),
-        sharedChip(
-          context,
-          label: 'Shared',
-          icon: Icons.supervised_user_circle,
-          isSelected: isShared,
-          onSelected: () {
-            setState(() {
-              isShared = true;
-            });
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget sharedChip(
-    BuildContext context, {
-    required String label,
-    required IconData icon,
-    required bool isSelected,
-    required VoidCallback onSelected,
-  }) {
-    TextTheme textTheme = Theme.of(context).textTheme;
-    return ChoiceChip(
-      avatar: Icon(icon, color: isSelected ? Colors.black : Colors.grey),
-      label: Text(label, style: textTheme.titleSmall!.copyWith(color: isSelected ? Colors.black : Colors.grey)),
-      showCheckmark: false,
-      selected: isSelected,
-      onSelected: (selected) {
-        onSelected();
-      },
-      selectedColor: secondaryColorV3,
-      backgroundColor: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(30),
-        side: BorderSide(color: isSelected ? secondaryColorV3 : Colors.grey),
-      ),
-      labelStyle: textTheme.labelMedium!.copyWith(
-        color: isSelected ? Colors.black : Colors.grey,
-      ),
-    );
-  }
-
-  Widget electricSelectionPart(BuildContext context) {
-    TextTheme textTheme = Theme.of(context).textTheme;
-    return Row(
-      children: [
-        Text('Electric', style: textTheme.titleSmall!.copyWith(color: Colors.black)),
-        Switch(
-          value: isElectric,
-          onChanged: (value) {
-            setState(() {
-              isElectric = value;
-            });
-          },
-          activeColor: secondaryColorV3,
-          inactiveThumbColor: Colors.grey,
-        ),
-      ],
-    );
-  }
-
-  Widget addressInputRow(BuildContext context, SearchState state, {required bool isMobile}) {
-    SearchCubit cubit = sl<SearchCubit>();
-
-    return (!isMobile)
-        ? desktopAddressInputRow(context, state, cubit)
-        // TODO: add state logic here
-        : mobileAddressInputContainer(context, state, cubit);
-  }
-
-  Column mobileAddressInputContainer(BuildContext context, SearchState state, SearchCubit cubit) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: textInputField(
-                context,
-                controller: startController,
-                hintText: 'From',
-                onChanged: (value) {
-                  setState(() {
-                    startAddress = value;
-                  });
-                },
-              ),
-            ),
-            SizedBox(
-              width: 50,
-              child: IconButton(
-                icon: const Icon(Icons.swap_horiz, color: Colors.grey),
-                onPressed: () {
-                  swapInputs();
-                },
-              ),
-            ),
-          ],
-        ),
-        smallVerticalSpacer,
-        textInputField(
-          context,
-          controller: endController,
-          hintText: 'To',
-          onChanged: (value) {
-            setState(() {
-              endAddress = value;
-            });
-          },
-        ),
-        largeVerticalSpacer,
-        statefulCalculateButton(state, cubit)
-      ],
-    );
-  }
-
-  Row desktopAddressInputRow(BuildContext context, SearchState state, SearchCubit cubit) {
-    return Row(
-      children: [
-        Expanded(
-          child: textInputField(
-            context,
-            controller: startController,
-            hintText: 'From',
-            onChanged: (value) {
-              setState(() {
-                startAddress = value;
-              });
-            },
-          ),
-        ),
-        const SizedBox(width: 8),
-        IconButton(
-          icon: const Icon(Icons.swap_horiz, color: Colors.grey),
-          onPressed: () {
-            swapInputs();
-          },
-        ),
-        const SizedBox(width: 8),
-        Expanded(
-          child: textInputField(
-            context,
-            controller: endController,
-            hintText: 'To',
-            onChanged: (value) {
-              setState(() {
-                endAddress = value;
-              });
-            },
-          ),
-        ),
-        smallHorizontalSpacer,
-        statefulCalculateButton(state, cubit),
-      ],
-    );
-  }
-
-  Widget statefulCalculateButton(SearchState state, SearchCubit cubit) {
-    if (state is SearchLoading) {
-      return circularProgressIndicatorWithPadding();
-    } else {
-      return IntrinsicWidth(
-        child: customButton(
-          label: 'Calculate',
-          onTap: () {
-            cubit.loadTrips(startAddress, endAddress);
-          },
-        ),
-      );
-    }
-  }
-
-  Widget textInputField(
-    BuildContext context, {
-    required TextEditingController controller,
-    required String hintText,
-    required ValueChanged<String> onChanged,
-  }) {
-    TextTheme textTheme = Theme.of(context).textTheme;
-    return Container(
-      decoration: boxDecorationWithShadow(),
-      child: TextField(
-        controller: controller,
-        decoration: InputDecoration(
-          fillColor: Colors.white,
-          filled: true,
-          prefixIcon: const Icon(Icons.search, color: Colors.black),
-          suffixIcon: Icon(Icons.location_on, color: tertiaryColorV3),
-          hintText: hintText,
-          hintStyle: textTheme.labelMedium!.copyWith(color: Colors.grey),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30),
-            borderSide: BorderSide.none, // No visible border
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30),
-            borderSide: const BorderSide(color: Colors.transparent), // Transparent border
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30),
-            borderSide: BorderSide(color: secondaryColorV3), // Border when the TextField is focused
-          ),
-        ),
-        onChanged: onChanged,
-      ),
-    );
-  }
-
   void swapInputs() {
     setState(() {
       String temp = startController.text;
@@ -378,12 +261,13 @@ class _SearchInputContentState extends State<SearchInputContent> {
   }
 
   Widget routeErrorWidget(SearchState state) {
+    AppLocalizations lang = AppLocalizations.of(context)!;
     return Column(
       children: [
         if (state is SearchError) ...[
           smallVerticalSpacer,
           Text(
-            'Error: ${state.message}',
+            '${lang.error}: ${state.message}',
             style: const TextStyle(color: Colors.red),
           )
         ] else if (state is SearchLoaded) ...[
