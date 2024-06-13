@@ -54,9 +54,7 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
       trip = trips!.firstWhereOrNull((trip) => trip.mode == tripMode);
       if (trip != null) {
         setState(() {
-          logger.i('previous trip: ${selectedTrip!.mode}');
           selectedTrip = trip;
-          logger.i('current trip: ${selectedTrip!.mode}');
         });
       } else {
         logger.e('trip not found');
