@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/helpers/ModeMapingHelper.dart';
-import 'package:multimodal_routeplanner/01_presentation/helpers/StringFormattingHelper.dart';
+import 'package:multimodal_routeplanner/01_presentation/helpers/string_formatting_helper.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v1/widgets/search_page/result_list/result_list_item/RouteIndicator.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/route_info/route_info_bloc.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/visualization/visualization_bloc.dart';
@@ -13,8 +13,7 @@ class ResultListItem3 extends StatelessWidget {
   final Trip trip;
   final int index;
 
-  const ResultListItem3({Key? key, required this.trips, required this.trip, required this.index})
-      : super(key: key);
+  const ResultListItem3({Key? key, required this.trips, required this.trip, required this.index}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -59,15 +58,11 @@ class ResultListItem3 extends StatelessWidget {
                             text: TextSpan(
                               text: StringFormattingHelper()
                                   .convertSecondsToMinutesAndSeconds(totalMinutes: trip.duration),
-                              style: const TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
                               children: const [
                                 TextSpan(
                                   text: " Min",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.normal,
-                                      color: Colors.black),
+                                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Colors.black),
                                 )
                               ],
                             ),
@@ -75,17 +70,12 @@ class ResultListItem3 extends StatelessWidget {
                           RichText(
                             textAlign: TextAlign.left,
                             text: TextSpan(
-                              text: (trip.costs.externalCosts.all + trip.costs.internalCosts.all)
-                                  .toStringAsFixed(2),
-                              style: const TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+                              text: (trip.costs.externalCosts.all + trip.costs.internalCosts.all).toStringAsFixed(2),
+                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
                               children: const [
                                 TextSpan(
                                   text: " €",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.normal,
-                                      color: Colors.black),
+                                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Colors.black),
                                 )
                               ],
                             ),
@@ -107,8 +97,7 @@ class ResultListItem3 extends StatelessWidget {
                       flex: 1,
                       child: IconButton(
                         onPressed: () {
-                          BlocProvider.of<RouteInfoBloc>(context)
-                              .add(ShowRouteInfoEvent(trip: trip));
+                          BlocProvider.of<RouteInfoBloc>(context).add(ShowRouteInfoEvent(trip: trip));
                         },
                         icon: const Icon(Icons.info, color: Colors.grey),
                         hoverColor: Colors.transparent,

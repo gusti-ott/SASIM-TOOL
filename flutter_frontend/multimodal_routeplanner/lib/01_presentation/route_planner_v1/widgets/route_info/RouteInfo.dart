@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/helpers/ModeMapingHelper.dart';
-import 'package:multimodal_routeplanner/01_presentation/helpers/StringFormattingHelper.dart';
+import 'package:multimodal_routeplanner/01_presentation/helpers/string_formatting_helper.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v1/widgets/route_info/ExternalCostsDetailRow.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/route_info/info_dropdown_costs_cubit.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/route_info/info_dropdown_mobiscore_cubit.dart';
@@ -47,13 +47,11 @@ class RouteInfo extends StatelessWidget {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child:
-                                      stringMappingHelper.mapModeStringToIcon(trip.mode.toString()),
+                                  child: stringMappingHelper.mapModeStringToIcon(trip.mode.toString()),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                      stringMappingHelper.mapModeStringToGermanString(trip.mode),
+                                  child: Text(stringMappingHelper.mapModeStringToGermanString(trip.mode),
                                       style: const TextStyle(fontWeight: FontWeight.bold)),
                                 ),
                               ],
@@ -74,10 +72,7 @@ class RouteInfo extends StatelessWidget {
                               ),
                               Column(children: [
                                 Row(
-                                  children: [
-                                    const Icon(Icons.route),
-                                    Text('${trip.distance.toStringAsFixed(2)} km')
-                                  ],
+                                  children: [const Icon(Icons.route), Text('${trip.distance.toStringAsFixed(2)} km')],
                                 ),
                               ]),
                             ]),
@@ -93,16 +88,13 @@ class RouteInfo extends StatelessWidget {
                                         width: 100,
                                         height: 50,
                                         child: Image(
-                                          image: stringMappingHelper
-                                              .mapMobiScoreStringToPath(trip.mobiScore),
+                                          image: stringMappingHelper.mapMobiScoreStringToPath(trip.mobiScore),
                                         ),
                                       ),
                                     ],
                                   ),
                                   onExpansionChanged: (value) {
-                                    context
-                                        .read<InfoDropdownMobiscoreCubit>()
-                                        .openOrCloseDropdown(value);
+                                    context.read<InfoDropdownMobiscoreCubit>().openOrCloseDropdown(value);
                                   },
                                   subtitle: (state is InfoDropdownMobiscoreClosed)
                                       ? const Text(
@@ -138,18 +130,14 @@ class RouteInfo extends StatelessWidget {
                                       const Text('Kosten'),
                                       Column(
                                         children: [
-                                          Text(
-                                              'intern: ${trip.costs.internalCosts.all.toStringAsFixed(2)} €'),
-                                          Text(
-                                              'extern: ${trip.costs.externalCosts.all.toStringAsFixed(2)} €')
+                                          Text('intern: ${trip.costs.internalCosts.all.toStringAsFixed(2)} €'),
+                                          Text('extern: ${trip.costs.externalCosts.all.toStringAsFixed(2)} €')
                                         ],
                                       )
                                     ],
                                   ),
                                   onExpansionChanged: (value) {
-                                    context
-                                        .read<InfoDropdownCostsCubit>()
-                                        .openOrCloseDropdown(value);
+                                    context.read<InfoDropdownCostsCubit>().openOrCloseDropdown(value);
                                   },
                                   subtitle: (state is InfoDropdownCostsClosed)
                                       ? const Text(
@@ -211,8 +199,7 @@ class RouteInfo extends StatelessWidget {
                             alignment: Alignment.topRight,
                             child: IconButton(
                                 onPressed: () {
-                                  BlocProvider.of<RouteInfoBloc>(context)
-                                      .add(HideRouteInfoEvent(trip: trip));
+                                  BlocProvider.of<RouteInfoBloc>(context).add(HideRouteInfoEvent(trip: trip));
                                 },
                                 icon: const Icon(Icons.close))),
                       ],

@@ -5,7 +5,9 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/faq_sec
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/ResultScreen.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/search_screen/SearchScreen.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/main_screen.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/search_screen.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/result_screen_v3.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/search_screen_v3.dart';
 
 // final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorCalculatorKey = GlobalKey<NavigatorState>(debugLabel: 'shellCalculator');
@@ -16,7 +18,12 @@ final GoRouter vmrpRouter = GoRouter(
   routes: [
     GoRoute(
       path: '/v2',
-      redirect: (context, state) => '/v2/search',
+      redirect: (context, state) {
+        if (state.fullPath == '/v2') {
+          return '/v2/search';
+        }
+        return null;
+      },
       routes: [
         StatefulShellRoute.indexedStack(
             builder: (context, state, navigationShell) {
@@ -71,14 +78,44 @@ final GoRouter vmrpRouter = GoRouter(
         builder: (context, state) {
           return const RoutePlannerScreen();
         }),
-    GoRoute(path: '/v3', redirect: (context, state) => '/v3/search', routes: [
-      GoRoute(
-        name: SearchScreenV3.routeName,
-        path: SearchScreenV3.path,
-        builder: (context, state) {
-          return const SearchScreenV3();
+    GoRoute(
+        path: '/v3',
+        redirect: (context, state) {
+          return null;
         },
-      )
-    ])
+        routes: [
+          GoRoute(
+            name: SearchScreenV3.routeName,
+            path: SearchScreenV3.path,
+            builder: (context, state) {
+              return const SearchScreenV3();
+            },
+          ),
+          GoRoute(
+            name: ResultScreenV3.routeName,
+            path: ResultScreenV3.path,
+            builder: (context, state) {
+              final String? startInput = state.uri.queryParameters['startAddress'];
+              final String? endInput = state.uri.queryParameters['endAddress'];
+              final String? selectedMode = state.uri.queryParameters['selectedMode'];
+              final String? isElectric = state.uri.queryParameters['isElectric'];
+              final String? isShared = state.uri.queryParameters['isShared'];
+
+              if (startInput != null && endInput != null) {
+                return ResultScreenV3(
+                    startAddress: startInput,
+                    endAddress: endInput,
+                    selectedMode: parseStringToSelectionMode(selectedMode),
+                    isElectric: isElectric == 'true',
+                    isShared: isShared == 'true');
+              } else {
+                return const Scaffold(
+                    body: Center(
+                  child: Text('Error: parameters in url missing'),
+                ));
+              }
+            },
+          )
+        ])
   ],
 );

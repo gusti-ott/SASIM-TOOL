@@ -22,4 +22,4 @@ Color customWhite100 = const Color(0xFFFFFFFF);
 
 Color backgroundColorV3 = const Color(0xFFF0F0E4);
 
-Color blend = Colors.white.withOpacity(0.25);
+Color blend = Colors.white.withOpacity(0.75);

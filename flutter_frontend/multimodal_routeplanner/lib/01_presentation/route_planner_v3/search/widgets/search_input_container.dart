@@ -2,22 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/decorations.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/search_cubit.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/result_cubit.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/address_input_components.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/electric_selection_components.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/mode_selection_components.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/shared_selection_components.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
+import 'package:multimodal_routeplanner/config/setup_dependencies.dart';
 
 class SearchInputContent extends StatefulWidget {
-  const SearchInputContent(
-    this.state, {
+  const SearchInputContent({
     super.key,
     required this.isMobile,
   });
 
   final bool isMobile;
-  final SearchState state;
 
   @override
   State<SearchInputContent> createState() => _SearchInputContentState();
@@ -33,6 +33,8 @@ class _SearchInputContentState extends State<SearchInputContent> {
   bool isElectric = false;
   bool isShared = false;
 
+  ResultCubit cubit = sl<ResultCubit>();
+
   @override
   void initState() {
     super.initState();
@@ -41,7 +43,7 @@ class _SearchInputContentState extends State<SearchInputContent> {
   @override
   Widget build(BuildContext context) {
     return (widget.isMobile)
-        ? buildMobileContent(context, widget.state,
+        ? buildMobileContent(context,
             isElectric: isElectric,
             onElectricChanged: (value) {
               setState(() {
@@ -67,7 +69,7 @@ class _SearchInputContentState extends State<SearchInputContent> {
               });
             },
             swapInputs: swapInputs)
-        : buildDesktopContent(context, widget.state,
+        : buildDesktopContent(context,
             isElectric: isElectric,
             onElectricChanged: (value) {
               setState(() {
@@ -102,8 +104,7 @@ class _SearchInputContentState extends State<SearchInputContent> {
   }
 
   Widget buildDesktopContent(
-    BuildContext context,
-    SearchState state, {
+    BuildContext context, {
     required bool isElectric,
     required Function(bool) onElectricChanged,
     required SelectionMode selectionMode,
@@ -131,22 +132,22 @@ class _SearchInputContentState extends State<SearchInputContent> {
         largeVerticalSpacer,
         addressInputRow(
           context,
-          state,
           isMobile: false,
           startController: startController,
           endController: endController,
           onStartChanged: onStartChanged,
           onEndChanged: onEndChanged,
           swapInputs: swapInputs,
+          selectedMode: selectionMode,
+          isElectric: isElectric,
+          isShared: isShared,
         ),
-        routeErrorWidget(state),
       ],
     );
   }
 
   Widget buildMobileContent(
-    BuildContext context,
-    SearchState state, {
+    BuildContext context, {
     required bool isElectric,
     required Function(bool) onElectricChanged,
     required bool isShared,
@@ -166,13 +167,16 @@ class _SearchInputContentState extends State<SearchInputContent> {
             isShared: isShared,
             onSharedChanged: onSharedChanged),
         largeVerticalSpacer,
-        addressInputRow(context, state,
+        addressInputRow(context,
             isMobile: true,
             startController: startController,
             endController: endController,
             onStartChanged: onStartChanged,
             onEndChanged: onEndChanged,
-            swapInputs: swapInputs),
+            swapInputs: swapInputs,
+            selectedMode: selectionMode,
+            isElectric: isElectric,
+            isShared: isShared),
       ],
     );
   }
@@ -260,17 +264,17 @@ class _SearchInputContentState extends State<SearchInputContent> {
     });
   }
 
-  Widget routeErrorWidget(SearchState state) {
+  Widget routeErrorWidget(ResultState state) {
     AppLocalizations lang = AppLocalizations.of(context)!;
     return Column(
       children: [
-        if (state is SearchError) ...[
+        if (state is ResultError) ...[
           smallVerticalSpacer,
           Text(
             '${lang.error}: ${state.message}',
             style: const TextStyle(color: Colors.red),
           )
-        ] else if (state is SearchLoaded) ...[
+        ] else if (state is ResultLoaded) ...[
           smallVerticalSpacer,
           Text(
             'Successfully loaded ${state.trips.length} trips',
@@ -281,5 +285,3 @@ class _SearchInputContentState extends State<SearchInputContent> {
     );
   }
 }
-
-enum SelectionMode { bicycle, car, publicTransport }
