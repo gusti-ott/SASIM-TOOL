@@ -1,101 +1,156 @@
 import 'package:flutter/material.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mobiscore_to_color.dart';
+import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 
 enum ShapeDirection { left, right, top, bottom }
 
-class CustomShapeWidget extends StatelessWidget {
-  final Color color;
-  final Color borderColor;
-  final ShapeDirection direction;
-  final Size size;
+double rotationAngle = 45 * 3.1415926535897932 / 180;
 
-  const CustomShapeWidget({
-    super.key,
-    required this.color,
-    required this.borderColor,
-    required this.direction,
-    required this.size,
-  });
+Widget positionedScoreContainer({
+  required double widthInfoSection,
+  required double widthScoreColumn,
+  required double heightScoreColumn,
+  required double borderWidthScoreColumn,
+  required double screenHeight,
+  required Trip selectedTrip,
+  required Trip thisTrip,
+}) {
+  Color mobiScoreColor = getColorFromMobiScore(thisTrip.mobiScore);
+  Color backgroundColor = Colors.white;
+  Color borderColor = mobiScoreColor;
 
-  @override
-  Widget build(BuildContext context) {
-    return CustomPaint(
-      size: size,
-      painter: MyShapePainter(color: color, borderColor: borderColor, direction: direction),
-    );
+  bool isLargeScoreContainer = false;
+  ShapeDirection direction = ShapeDirection.right;
+  int index = getIndexFromMobiScore(thisTrip.mobiScore);
+  IconData iconData = getIconDataFromTripMode(thisTrip.mode);
+
+  if (selectedTrip.mode == thisTrip.mode) {
+    backgroundColor = mobiScoreColor;
+    isLargeScoreContainer = true;
+    direction = ShapeDirection.left;
+  }
+
+  return Positioned(
+    right: getRightPositionScoreContainer(
+        widthInfoSection, widthScoreColumn, borderWidthScoreColumn, direction, isLargeScoreContainer),
+    top: getTopPositionScoreContainer(
+        screenHeight, heightScoreColumn, borderWidthScoreColumn, isLargeScoreContainer, index),
+    child: scoreContainer(
+        borderColor: borderColor,
+        backgroundColor: backgroundColor,
+        direction: direction,
+        iconData: iconData,
+        isLarge: isLargeScoreContainer),
+  );
+}
+
+Widget scoreContainer(
+    {required ShapeDirection direction,
+    required Color backgroundColor,
+    Color? borderColor,
+    bool isLarge = false,
+    IconData? iconData}) {
+  return Transform.rotate(
+    angle: rotationAngle,
+    child: Container(
+      width: isLarge ? 60 : 40,
+      height: isLarge ? 60 : 40,
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        border: borderColor != null ? Border.all(color: borderColor, width: 4) : null,
+        borderRadius: getBorderRadius(direction),
+      ),
+      child: Center(
+        child: Transform.rotate(angle: -rotationAngle, child: Icon(iconData, size: isLarge ? 30 : 20)),
+      ),
+    ),
+  );
+}
+
+BorderRadius getBorderRadius(ShapeDirection direction) {
+  if (direction == ShapeDirection.top) {
+    return const BorderRadius.only(
+        topRight: Radius.circular(30), bottomLeft: Radius.circular(30), bottomRight: Radius.circular(30));
+  } else if (direction == ShapeDirection.bottom) {
+    return const BorderRadius.only(
+        topRight: Radius.circular(30), bottomLeft: Radius.circular(30), topLeft: Radius.circular(30));
+  } else if (direction == ShapeDirection.left) {
+    return const BorderRadius.only(
+        topRight: Radius.circular(30), bottomRight: Radius.circular(30), topLeft: Radius.circular(30));
+  } else {
+    return const BorderRadius.only(
+        topLeft: Radius.circular(30), bottomLeft: Radius.circular(30), bottomRight: Radius.circular(30));
   }
 }
 
-class MyShapePainter extends CustomPainter {
-  final Color color;
-  final Color borderColor;
-  final ShapeDirection direction;
+double getTopPositionScoreContainer(double screenHeight, double heightScoreColumn, double borderWidthScoreColumn,
+    bool isLargeScoreContainer, int index) {
+  //TODO: replace by attributes
+  double borderWidthScoreContainer = 4;
+  double scoreContainerHeight = (isLargeScoreContainer ? 60 : 40) + borderWidthScoreContainer;
 
-  MyShapePainter({required this.color, required this.borderColor, required this.direction});
+  double partHeight = (heightScoreColumn - 2 * borderWidthScoreColumn) / 5;
 
-  @override
-  void paint(Canvas canvas, Size size) {
-    final borderPaint = Paint()
-      ..color = borderColor
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 10.0; // Adjust the border width as needed
+  return (screenHeight - heightScoreColumn) / 2 -
+      scoreContainerHeight / 2 +
+      borderWidthScoreColumn +
+      index * partHeight -
+      partHeight / 2;
+}
 
-    final fillPaint = Paint()
-      ..color = color
-      ..style = PaintingStyle.fill;
+double getRightPositionScoreContainer(double widthInfoSection, double widthScoreColumn, double borderWidthScoreColumn,
+    ShapeDirection shapeDirection, bool isLargeScoreContainer) {
+  double scoreContainerWidth = isLargeScoreContainer ? 60 : 40;
 
-    final path = Path();
-    switch (direction) {
-      case ShapeDirection.left:
-        path.moveTo(size.width * 0.5, 0);
-        path.arcToPoint(
-          Offset(size.width * 0.5, size.height),
-          radius: Radius.circular(size.width * 0.5),
-          clockwise: false,
-        );
-        path.lineTo(0, size.height);
-        path.lineTo(0, 0);
-        break;
-      case ShapeDirection.right:
-        path.moveTo(size.width * 0.5, 0);
-        path.arcToPoint(
-          Offset(size.width * 0.5, size.height),
-          radius: Radius.circular(size.width * 0.5),
-          clockwise: true,
-        );
-        path.lineTo(size.width, size.height);
-        path.lineTo(size.width, 0);
-        break;
-      case ShapeDirection.top:
-        path.moveTo(0, size.height * 0.5);
-        path.arcToPoint(
-          Offset(size.width, size.height * 0.5),
-          radius: Radius.circular(size.height * 0.5),
-          clockwise: true,
-        );
-        path.lineTo(size.width, 0);
-        path.lineTo(0, 0);
-        break;
-      case ShapeDirection.bottom:
-        path.moveTo(0, size.height * 0.5);
-        path.arcToPoint(
-          Offset(size.width, size.height * 0.5),
-          radius: Radius.circular(size.height * 0.5),
-          clockwise: false,
-        );
-        path.lineTo(size.width, size.height);
-        path.lineTo(0, size.height);
-        break;
-    }
-    path.close();
-
-    // Draw the border first
-    canvas.drawPath(path, borderPaint);
-    // Draw the filled shape
-    canvas.drawPath(path, fillPaint);
+  // add offset because of overlay due to rotation
+  double offset = 3;
+  if (isLargeScoreContainer) {
+    offset = 8;
   }
 
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
+  double partWidth = (widthScoreColumn) / 2;
+
+  if (shapeDirection == ShapeDirection.left) {
+    return widthInfoSection - (partWidth + scoreContainerWidth + offset);
+  } else if (shapeDirection == ShapeDirection.right) {
+    return widthInfoSection + partWidth + offset;
+  } else {
+    return widthInfoSection;
+  }
+}
+
+int getIndexFromMobiScore(String mobiScore) {
+  if (mobiScore == 'A') {
+    return 1;
+  } else if (mobiScore == 'B') {
+    return 2;
+  } else if (mobiScore == 'C') {
+    return 3;
+  } else if (mobiScore == 'D') {
+    return 4;
+  } else if (mobiScore == 'E') {
+    return 5;
+  } else {
+    return 0;
+  }
+}
+
+IconData getIconDataFromTripMode(String mode) {
+  if (mode == 'PT') {
+    return Icons.directions_bus;
+  } else if (mode == 'CAR') {
+    return Icons.directions_car;
+  } else if (mode == 'ECAR') {
+    return Icons.directions_car;
+  } else if (mode == 'SHARENOW') {
+    return Icons.directions_car;
+  } else if (mode == 'BICYCLE') {
+    return Icons.directions_bike;
+  } else if (mode == 'EBICYCLE') {
+    return Icons.directions_bike;
+  } else if (mode == 'CAB') {
+    return Icons.directions_bike;
+  } else {
+    return Icons.directions_walk;
   }
 }

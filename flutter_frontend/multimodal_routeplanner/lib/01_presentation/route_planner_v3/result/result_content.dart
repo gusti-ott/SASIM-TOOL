@@ -1,10 +1,14 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mobiscore_to_color.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/input_to_trip.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/costs_percentage_bar.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/costs_result_row.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/question_icons.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/score_container.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/mode_selection_components.dart';
+import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/costs/Costs.dart';
 
@@ -34,112 +38,215 @@ class ResultContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
     TextTheme textTheme = Theme.of(context).textTheme;
-    double externalCostsRate = selectedTrip.costs.externalCosts.all / selectedTrip.costs.getFullcosts();
-    int externalCostsPercent = (externalCostsRate * 100).toInt();
-    int internalCostsPercent = 100 - externalCostsPercent;
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Align(
-            alignment: Alignment.topCenter,
-            child: SizedBox(
-              width: 1000,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  extraLargeVerticalSpacer,
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: mediumPadding),
-                    child: modeSelectionRow(context,
-                        isElectric: isElectric,
-                        onElectricChanged: onElectricChanged,
-                        selectionMode: selectionMode,
-                        onSelectionModeChanged: onSelectionModeChanged,
-                        isShared: isShared,
-                        onSharedChanged: onSharedChanged),
-                  ),
-                  extraLargeVerticalSpacer,
-                  largeVerticalSpacer,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    // TODO: change text to custom text
-                    children: [
-                      SizedBox(
-                          width: 500,
-                          child: Text('These are the real costs of mobility with a private car',
-                              style: textTheme.displayMedium)),
-                      SizedBox(
-                        width: 200,
+    double widthInfoSection = 350;
+    double widthScoreColumn = 40;
+    double heightScoreColumn = 400;
+    double borderWidthScoreColumn = 6;
+
+    String currentCarTripMode = getCarTripMode(isElectric: isElectric, isShared: isShared);
+    Trip? currentCarTrip = trips.firstWhereOrNull((trip) => trip.mode == currentCarTripMode);
+    String currentBicycleTripMode = getBicycleTripMode(isElectric: isElectric, isShared: isShared);
+    Trip? currentBicycleTrip = trips.firstWhereOrNull((trip) => trip.mode == currentBicycleTripMode);
+    String currentPublicTransportTripMode = getPublicTransportTripMode();
+    Trip? currentPublicTransportTrip = trips.firstWhereOrNull((trip) => trip.mode == currentPublicTransportTripMode);
+
+    return Stack(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 1000),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text(
-                              selectedTrip.costs.getFullcosts().currencyString,
-                              style: textTheme.displayLarge,
+                            extraLargeVerticalSpacer,
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: mediumPadding),
+                              child: modeSelectionRow(context,
+                                  isElectric: isElectric,
+                                  onElectricChanged: onElectricChanged,
+                                  selectionMode: selectionMode,
+                                  onSelectionModeChanged: onSelectionModeChanged,
+                                  isShared: isShared,
+                                  onSharedChanged: onSharedChanged),
                             ),
+                            extraLargeVerticalSpacer,
+                            largeVerticalSpacer,
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              // TODO: change text to custom text
                               children: [
-                                Text('Full costs of the trip', style: textTheme.labelLarge),
-                                smallHorizontalSpacer,
-                                customQuestionIcon()
+                                SizedBox(
+                                    width: 500,
+                                    child: Text('These are the real costs of mobility with a private car',
+                                        style: textTheme.displayMedium)),
+                                SizedBox(
+                                  width: 200,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        selectedTrip.costs.getFullcosts().currencyString,
+                                        style: textTheme.displayLarge,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          Text('Full costs of the trip', style: textTheme.labelLarge),
+                                          smallHorizontalSpacer,
+                                          customQuestionIcon()
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                )
                               ],
-                            )
+                            ),
+                            extraLargeVerticalSpacer,
+                            costsPercentageBar(context, selectedTrip: selectedTrip),
+                            extraLargeVerticalSpacer,
+                            costResultRow(context, trip: selectedTrip),
+                            extraLargeVerticalSpacer,
                           ],
                         ),
-                      )
-                    ],
-                  ),
-                  extraLargeVerticalSpacer,
-                  Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
+                      ),
                     ),
-                    height: 20,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: externalCostsPercent,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.only(
-                                topRight: Radius.circular(30),
-                                bottomRight: Radius.circular(30),
-                              ),
-                              color: getColorFromMobiScore(selectedTrip.mobiScore),
-                            ),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: EdgeInsets.only(left: smallPadding),
-                                child: Text('${externalCostsPercent.toString()} %', style: textTheme.labelMedium),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                            flex: internalCostsPercent,
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Padding(
-                                padding: EdgeInsets.only(right: smallPadding),
-                                child: Text('${internalCostsPercent.toString()} %', style: textTheme.labelMedium),
-                              ),
-                            ))
-                      ],
-                    ),
-                  ),
-                  extraLargeVerticalSpacer,
-                  costResultRow(context, trip: selectedTrip),
-                  extraLargeVerticalSpacer,
-                ],
+                  ],
+                ),
               ),
             ),
+            Container(
+              decoration: BoxDecoration(
+                color: backgroundColorV3,
+              ),
+              width: 350,
+              height: double.infinity,
+              child: const SingleChildScrollView(
+                child: Column(children: []),
+              ),
+            )
+          ],
+        ),
+        Positioned(
+          //TODO: make variables for the values
+          right: widthInfoSection - (widthScoreColumn / 2),
+          bottom: (screenHeight - heightScoreColumn) / 2,
+          child: Container(
+            decoration: BoxDecoration(
+              color: backgroundColorV3,
+              borderRadius: BorderRadius.circular(30),
+              border: Border.all(color: Colors.white, width: borderWidthScoreColumn),
+            ),
+            width: widthScoreColumn,
+            height: heightScoreColumn,
+            child: Column(
+              children: [
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30),
+                      ),
+                      color: (selectedTrip.mobiScore == 'A') ? colorA : backgroundColorV3,
+                    ),
+                    child: Center(
+                      child: Text(
+                        'A',
+                        style: textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                    child: Container(
+                        color: (selectedTrip.mobiScore == 'B') ? colorB : backgroundColorV3,
+                        child: Center(
+                          child: Text(
+                            'B',
+                            style: textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                        ))),
+                Expanded(
+                    child: Container(
+                        color: (selectedTrip.mobiScore == 'C') ? colorC : backgroundColorV3,
+                        child: Center(
+                          child: Text(
+                            'C',
+                            style: textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                        ))),
+                Expanded(
+                    child: Container(
+                        color: (selectedTrip.mobiScore == 'D') ? colorD : backgroundColorV3,
+                        child: Center(
+                          child: Text(
+                            'D',
+                            style: textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                        ))),
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(30),
+                        bottomRight: Radius.circular(30),
+                      ),
+                      color: (selectedTrip.mobiScore == 'E') ? colorE : backgroundColorV3,
+                    ),
+                    child: Center(
+                      child: Text(
+                        'E',
+                        style: textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ],
-      ),
+        ),
+        if (currentCarTrip != null)
+          positionedScoreContainer(
+            widthInfoSection: widthInfoSection,
+            widthScoreColumn: widthScoreColumn,
+            heightScoreColumn: heightScoreColumn,
+            borderWidthScoreColumn: borderWidthScoreColumn,
+            screenHeight: screenHeight,
+            selectedTrip: selectedTrip,
+            thisTrip: currentCarTrip,
+          ),
+        if (currentPublicTransportTrip != null)
+          positionedScoreContainer(
+            widthInfoSection: widthInfoSection,
+            widthScoreColumn: widthScoreColumn,
+            heightScoreColumn: heightScoreColumn,
+            borderWidthScoreColumn: borderWidthScoreColumn,
+            screenHeight: screenHeight,
+            selectedTrip: selectedTrip,
+            thisTrip: currentPublicTransportTrip,
+          ),
+        if (currentBicycleTrip != null)
+          positionedScoreContainer(
+            widthInfoSection: widthInfoSection,
+            widthScoreColumn: widthScoreColumn,
+            heightScoreColumn: heightScoreColumn,
+            borderWidthScoreColumn: borderWidthScoreColumn,
+            screenHeight: screenHeight,
+            selectedTrip: selectedTrip,
+            thisTrip: currentBicycleTrip,
+          ),
+      ],
     );
   }
 }

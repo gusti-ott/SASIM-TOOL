@@ -73,3 +73,31 @@ SelectionMode getSelectionModeFromTripMode(String mode) {
   }
   return SelectionMode.bicycle;
 }
+
+String getBicycleTripMode({required bool isElectric, required bool isShared}) {
+  if (isShared) {
+    return 'CAB';
+  } else {
+    if (isElectric) {
+      return 'EBICYCLE';
+    } else {
+      return 'BICYCLE';
+    }
+  }
+}
+
+String getCarTripMode({required bool isElectric, required bool isShared}) {
+  if (isShared) {
+    return 'SHARENOW';
+  } else {
+    if (isElectric) {
+      return 'ECAR';
+    } else {
+      return 'CAR';
+    }
+  }
+}
+
+String getPublicTransportTripMode() {
+  return 'PT';
+}
