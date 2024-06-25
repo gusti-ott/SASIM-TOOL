@@ -5,6 +5,7 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/input_to_trip.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/costs_percentage_bar.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/costs_result_row.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/detail_route_info/detail_route_info_section.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/question_icons.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/score_container.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/mode_selection_components.dart';
@@ -128,16 +129,11 @@ class ResultContent extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              decoration: BoxDecoration(
-                color: backgroundColorV3,
-              ),
-              width: 350,
-              height: double.infinity,
-              child: const SingleChildScrollView(
-                child: Column(children: []),
-              ),
-            )
+            DetailRouteInfoSection(
+              currentCarTrip: currentCarTrip,
+              currentBicycleTrip: currentBicycleTrip,
+              currentPublicTransportTrip: currentPublicTransportTrip,
+            ),
           ],
         ),
         Positioned(

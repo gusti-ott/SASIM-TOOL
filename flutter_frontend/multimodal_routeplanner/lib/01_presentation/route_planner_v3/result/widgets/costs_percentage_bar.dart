@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/costs_rates.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mobiscore_to_color.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 
 Widget costsPercentageBar(BuildContext context, {required Trip selectedTrip}) {
   TextTheme textTheme = Theme.of(context).textTheme;
 
-  double externalCostsRate = selectedTrip.costs.externalCosts.all / selectedTrip.costs.getFullcosts();
-  int externalCostsPercent = (externalCostsRate * 100).toInt();
-  int internalCostsPercent = 100 - externalCostsPercent;
+  int externalCostsPercentage = calculateExternalCostsPercantage(selectedTrip);
+  int internalCostsPercentage = 100 - externalCostsPercentage;
 
   return Container(
     decoration: const BoxDecoration(
@@ -18,7 +18,7 @@ Widget costsPercentageBar(BuildContext context, {required Trip selectedTrip}) {
     child: Row(
       children: [
         Expanded(
-          flex: externalCostsPercent,
+          flex: externalCostsPercentage,
           child: Container(
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.only(
@@ -31,19 +31,19 @@ Widget costsPercentageBar(BuildContext context, {required Trip selectedTrip}) {
               alignment: Alignment.centerLeft,
               child: Padding(
                 padding: EdgeInsets.only(left: smallPadding),
-                child: Text('${externalCostsPercent.toString()} %',
+                child: Text('${externalCostsPercentage.toString()} %',
                     style: textTheme.labelMedium!.copyWith(color: Colors.white)),
               ),
             ),
           ),
         ),
         Expanded(
-            flex: internalCostsPercent,
+            flex: internalCostsPercentage,
             child: Align(
               alignment: Alignment.centerRight,
               child: Padding(
                 padding: EdgeInsets.only(right: smallPadding),
-                child: Text('${internalCostsPercent.toString()} %', style: textTheme.labelMedium),
+                child: Text('${internalCostsPercentage.toString()} %', style: textTheme.labelMedium),
               ),
             ))
       ],
