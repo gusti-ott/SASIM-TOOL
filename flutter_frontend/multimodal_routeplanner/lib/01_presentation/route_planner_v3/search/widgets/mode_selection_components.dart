@@ -32,7 +32,7 @@ Widget modeSelectionPart(
   return Row(
     children: [
       modeIconButton(
-        icon: Icons.directions_bike_outlined,
+        icon: Icons.pedal_bike_outlined,
         isSelected: selectionMode == SelectionMode.bicycle,
         onPressed: () {
           onSelectionModeChanged(SelectionMode.bicycle);

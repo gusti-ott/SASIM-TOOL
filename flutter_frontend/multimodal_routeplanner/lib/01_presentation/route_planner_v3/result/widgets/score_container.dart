@@ -53,11 +53,11 @@ Widget scoreContainer(
   return Transform.rotate(
     angle: rotationAngle,
     child: Container(
-      width: isLarge ? 60 : 40,
-      height: isLarge ? 60 : 40,
+      width: isLarge ? largeScoreContainerWidth : smallScoreContainerWidth,
+      height: isLarge ? largeScoreContainerWidth : smallScoreContainerWidth,
       decoration: BoxDecoration(
         color: backgroundColor,
-        border: borderColor != null ? Border.all(color: borderColor, width: 4) : null,
+        border: borderColor != null ? Border.all(color: borderColor, width: borderWidthScoreContainer) : null,
         borderRadius: getBorderRadius(direction),
       ),
       child: Center(
@@ -85,9 +85,8 @@ BorderRadius getBorderRadius(ShapeDirection direction) {
 
 double getTopPositionScoreContainer(double screenHeight, double heightScoreColumn, double borderWidthScoreColumn,
     bool isLargeScoreContainer, int index) {
-  //TODO: replace by attributes
-  double borderWidthScoreContainer = 4;
-  double scoreContainerHeight = (isLargeScoreContainer ? 60 : 40) + borderWidthScoreContainer;
+  double scoreContainerHeight =
+      (isLargeScoreContainer ? largeScoreContainerWidth : smallScoreContainerWidth) + borderWidthScoreContainer;
 
   double partHeight = (heightScoreColumn - 2 * borderWidthScoreColumn) / 5;
 
@@ -100,7 +99,7 @@ double getTopPositionScoreContainer(double screenHeight, double heightScoreColum
 
 double getRightPositionScoreContainer(double widthInfoSection, double widthScoreColumn, double borderWidthScoreColumn,
     ShapeDirection shapeDirection, bool isLargeScoreContainer) {
-  double scoreContainerWidth = isLargeScoreContainer ? 60 : 40;
+  double scoreContainerWidth = isLargeScoreContainer ? largeScoreContainerWidth : smallScoreContainerWidth;
 
   // add offset because of overlay due to rotation
   double offset = 3;
@@ -141,16 +140,20 @@ IconData getIconDataFromTripMode(String mode) {
   } else if (mode == 'CAR') {
     return Icons.directions_car;
   } else if (mode == 'ECAR') {
-    return Icons.directions_car;
+    return Icons.electric_car;
   } else if (mode == 'SHARENOW') {
     return Icons.directions_car;
   } else if (mode == 'BICYCLE') {
-    return Icons.directions_bike;
+    return Icons.pedal_bike;
   } else if (mode == 'EBICYCLE') {
-    return Icons.directions_bike;
+    return Icons.electric_bike;
   } else if (mode == 'CAB') {
-    return Icons.directions_bike;
+    return Icons.pedal_bike;
   } else {
     return Icons.directions_walk;
   }
 }
+
+double smallScoreContainerWidth = 40;
+double largeScoreContainerWidth = 60;
+double borderWidthScoreContainer = 4;

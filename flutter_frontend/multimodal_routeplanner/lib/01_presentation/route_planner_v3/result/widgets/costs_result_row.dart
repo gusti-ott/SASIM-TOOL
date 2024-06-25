@@ -10,8 +10,9 @@ Widget costResultRow(
 }) {
   double diameter = 200;
   double width = 400;
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  return Wrap(
+    alignment: WrapAlignment.spaceBetween,
+    runSpacing: largePadding,
     children: [
       socialCostsCard(context, width: width, height: diameter, trip: trip),
       personalCostsCard(context, width: width, height: diameter, trip: trip)

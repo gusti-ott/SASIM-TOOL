@@ -59,69 +59,72 @@ class ResultContent extends StatelessWidget {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Align(
-                      alignment: Alignment.topCenter,
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 1000),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            extraLargeVerticalSpacer,
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: mediumPadding),
-                              child: modeSelectionRow(context,
-                                  isElectric: isElectric,
-                                  onElectricChanged: onElectricChanged,
-                                  selectionMode: selectionMode,
-                                  onSelectionModeChanged: onSelectionModeChanged,
-                                  isShared: isShared,
-                                  onSharedChanged: onSharedChanged),
-                            ),
-                            extraLargeVerticalSpacer,
-                            largeVerticalSpacer,
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              // TODO: change text to custom text
-                              children: [
-                                SizedBox(
-                                    width: 500,
-                                    child: Text('These are the real costs of mobility with a private car',
-                                        style: textTheme.displayMedium)),
-                                SizedBox(
-                                  width: 200,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        selectedTrip.costs.getFullcosts().currencyString,
-                                        style: textTheme.displayLarge,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                          Text('Full costs of the trip', style: textTheme.labelLarge),
-                                          smallHorizontalSpacer,
-                                          customQuestionIcon()
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                            extraLargeVerticalSpacer,
-                            costsPercentageBar(context, selectedTrip: selectedTrip),
-                            extraLargeVerticalSpacer,
-                            costResultRow(context, trip: selectedTrip),
-                            extraLargeVerticalSpacer,
-                          ],
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: extraLargePadding),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 1000),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              extraLargeVerticalSpacer,
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: mediumPadding),
+                                child: modeSelectionRow(context,
+                                    isElectric: isElectric,
+                                    onElectricChanged: onElectricChanged,
+                                    selectionMode: selectionMode,
+                                    onSelectionModeChanged: onSelectionModeChanged,
+                                    isShared: isShared,
+                                    onSharedChanged: onSharedChanged),
+                              ),
+                              extraLargeVerticalSpacer,
+                              largeVerticalSpacer,
+                              Wrap(
+                                alignment: WrapAlignment.spaceBetween,
+                                // TODO: change text to custom text
+                                children: [
+                                  SizedBox(
+                                      width: 500,
+                                      child: Text('These are the real costs of mobility with a private car',
+                                          style: textTheme.displayMedium)),
+                                  SizedBox(
+                                    width: 200,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          selectedTrip.costs.getFullcosts().currencyString,
+                                          style: textTheme.displayLarge,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: [
+                                            Text('Full costs of the trip', style: textTheme.labelLarge),
+                                            smallHorizontalSpacer,
+                                            customQuestionIcon()
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                              extraLargeVerticalSpacer,
+                              costsPercentageBar(context, selectedTrip: selectedTrip),
+                              extraLargeVerticalSpacer,
+                              costResultRow(context, trip: selectedTrip),
+                              extraLargeVerticalSpacer,
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -138,7 +141,6 @@ class ResultContent extends StatelessWidget {
           ],
         ),
         Positioned(
-          //TODO: make variables for the values
           right: widthInfoSection - (widthScoreColumn / 2),
           bottom: (screenHeight - heightScoreColumn) / 2,
           child: Container(
