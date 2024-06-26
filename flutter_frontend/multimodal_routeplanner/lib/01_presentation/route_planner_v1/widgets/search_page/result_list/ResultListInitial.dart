@@ -9,8 +9,7 @@ class ResultListInitial extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Text("wähle eine Option aus, um eine Route zu planen",
-          style: themeData.textTheme.bodyText1),
+      child: Text("wähle eine Option aus, um eine Route zu planen", style: themeData.textTheme.bodyMedium),
     );
   }
 }

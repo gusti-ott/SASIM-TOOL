@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:logger/logger.dart';
-import 'package:multimodal_routeplanner/01_presentation/helpers/ModeMapingHelper.dart';
+import 'package:multimodal_routeplanner/01_presentation/helpers/mode_mapping_helper.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/map/RouteMap.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/results_section/table_cells/CustomAnimatedTableCell.dart';
@@ -11,10 +11,7 @@ import 'package:multimodal_routeplanner/logger.dart';
 
 class TripInfoItem extends StatelessWidget {
   const TripInfoItem(
-      {super.key,
-      required this.selectedTrip,
-      required this.animationController,
-      required this.animation});
+      {super.key, required this.selectedTrip, required this.animationController, required this.animation});
 
   final Trip selectedTrip;
   final AnimationController animationController;
@@ -78,8 +75,7 @@ class TripInfoItem extends StatelessWidget {
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           ...selectedTrip.segments
-                                              .map((segment) =>
-                                                  segmentInfo(context, segment, modeMappingHelper))
+                                              .map((segment) => segmentInfo(context, segment, modeMappingHelper))
                                               .toList()
                                         ],
                                       ),
@@ -87,9 +83,7 @@ class TripInfoItem extends StatelessWidget {
                                   ],
                                 )),
                             actions: [
-                              TextButton(
-                                  onPressed: () => Navigator.of(context).pop(),
-                                  child: const Text('schließen'))
+                              TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('schließen'))
                             ],
                           ));
                 },
@@ -100,9 +94,7 @@ class TripInfoItem extends StatelessWidget {
                     Text(
                       lang.show_route,
                       style: textTheme.titleMedium!.copyWith(
-                          color: contentColor,
-                          decoration: TextDecoration.underline,
-                          decorationColor: contentColor),
+                          color: contentColor, decoration: TextDecoration.underline, decorationColor: contentColor),
                     ),
                   ],
                 ),
@@ -141,8 +133,7 @@ class TripInfoItem extends StatelessWidget {
                   Text(modeMappingHelper.mapModeStringToGermanString(segment.mode),
                       style: textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold)),
                   Text('${segment.distance.toStringAsFixed(1)} km', style: textTheme.bodyMedium),
-                  Text('${segment.duration.toStringAsFixed(0)} Minuten',
-                      style: textTheme.bodyMedium),
+                  Text('${segment.duration.toStringAsFixed(0)} Minuten', style: textTheme.bodyMedium),
                 ],
               ),
             ),

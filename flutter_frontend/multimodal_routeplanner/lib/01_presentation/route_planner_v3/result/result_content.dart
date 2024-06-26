@@ -130,10 +130,10 @@ class ResultContent extends StatelessWidget {
               ),
             ),
             DetailRouteInfoSection(
-              currentCarTrip: currentCarTrip,
-              currentBicycleTrip: currentBicycleTrip,
-              currentPublicTransportTrip: currentPublicTransportTrip,
-            ),
+                currentCarTrip: currentCarTrip,
+                currentBicycleTrip: currentBicycleTrip,
+                currentPublicTransportTrip: currentPublicTransportTrip,
+                selectedTrip: selectedTrip),
           ],
         ),
         Positioned(

@@ -8,7 +8,6 @@ import 'package:multimodal_routeplanner/03_domain/entities/Waypoint.dart';
 
 LatLngBounds fitTripBounds(Trip selectedTrip) {
   List<Waypoint> allWaypoints = selectedTrip.segments.expand((segment) => segment.waypoints).toList();
-
   double maxLat = allWaypoints.map((latLng) => latLng.lat).reduce(max);
   double maxLon = allWaypoints.map((latLng) => latLng.lon).reduce(max);
   double minLat = allWaypoints.map((latLng) => latLng.lat).reduce(min);
@@ -21,10 +20,10 @@ LatLngBounds fitTripBounds(Trip selectedTrip) {
   return bounds;
 }
 
-mapSegmentModeToColor(String segmentType) {
+mapSegmentModeToColor(String segmentMode) {
   final ModeColors values = ModeColors();
 
-  switch (segmentType) {
+  switch (segmentMode) {
     case 'CAR':
       return values.carColor;
 

@@ -65,7 +65,7 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
   }
 
   // states for the loading animation here
-  late AnimationController _controller;
+  late AnimationController _animiationController;
   late Animation<Color?> _animation;
 
   final List<Color> _animationColors = [
@@ -92,7 +92,7 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
 
   @override
   void dispose() {
-    _controller.dispose();
+    _animiationController.dispose();
     super.dispose();
   }
 
@@ -100,7 +100,7 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
     // Define the duration of the entire animation cycle (forward and backward)
     const duration = Duration(seconds: 10);
 
-    _controller = AnimationController(
+    _animiationController = AnimationController(
       duration: duration,
       vsync: this,
     )..repeat(reverse: true);
@@ -140,7 +140,7 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
           tween: ColorTween(begin: _animationColors[1], end: _animationColors[0]),
         ),
       ],
-    ).animate(_controller);
+    ).animate(_animiationController);
 
     _animation.addListener(() {
       setState(() {
@@ -148,7 +148,7 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
       });
     });
 
-    _controller.forward();
+    _animiationController.forward();
   }
 
   @override

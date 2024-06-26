@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:multimodal_routeplanner/01_presentation/helpers/ModeMapingHelper.dart';
+import 'package:multimodal_routeplanner/01_presentation/helpers/mode_mapping_helper.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 
 class HeaderItem extends StatelessWidget {
-  const HeaderItem(
-      {super.key, required this.listTrips, required this.onChanged, required this.selectedTrip});
+  const HeaderItem({super.key, required this.listTrips, required this.onChanged, required this.selectedTrip});
 
   final List<Trip> listTrips;
   final void Function(Trip) onChanged;
@@ -22,10 +21,7 @@ class HeaderItem extends StatelessWidget {
           alignment: Alignment.center,
           dropdownColor: Theme.of(context).colorScheme.secondary,
           value: selectedTrip.mode,
-          style: Theme.of(context)
-              .textTheme
-              .headlineSmall!
-              .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+          style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Theme.of(context).colorScheme.onPrimary),
           onChanged: (value) {
             onChanged(listTrips.firstWhere((trip) => trip.mode == value));
           },

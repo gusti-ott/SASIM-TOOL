@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/detail_route_info/detail_route_info_diagram.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/detail_route_info/detail_route_info_map.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/detail_route_info/diagram_type_selection.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
@@ -11,11 +12,13 @@ class DetailRouteInfoSection extends StatefulWidget {
     this.currentCarTrip,
     this.currentBicycleTrip,
     this.currentPublicTransportTrip,
+    this.selectedTrip,
   });
 
   final Trip? currentCarTrip;
   final Trip? currentBicycleTrip;
   final Trip? currentPublicTransportTrip;
+  final Trip? selectedTrip;
 
   @override
   State<DetailRouteInfoSection> createState() => _DetailRouteInfoSectionState();
@@ -49,47 +52,51 @@ class _DetailRouteInfoSectionState extends State<DetailRouteInfoSection> {
       ),
       width: 350,
       height: double.infinity,
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(largePadding),
-          child: Column(children: [
-            Align(
-              alignment: Alignment.centerRight,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text('Diagramm', style: textTheme.titleSmall!.copyWith(color: Colors.black)),
-                  Switch(
-                    value: (infoViewType == InfoViewType.diagram),
-                    onChanged: (value) {
-                      changeInfoViewType();
-                    },
-                    activeColor: secondaryColorV3,
-                    inactiveThumbColor: Colors.grey,
-                  ),
-                ],
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          if (infoViewType == InfoViewType.map) DetailRouteInfoMap(trip: widget.selectedTrip),
+          Padding(
+            padding: EdgeInsets.all(largePadding),
+            child: Column(children: [
+              Align(
+                alignment: Alignment.centerRight,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text('Diagramm', style: textTheme.titleSmall!.copyWith(color: Colors.black)),
+                    Switch(
+                      value: (infoViewType == InfoViewType.diagram),
+                      onChanged: (value) {
+                        changeInfoViewType();
+                      },
+                      activeColor: secondaryColorV3,
+                      inactiveThumbColor: Colors.grey,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            extraLargeVerticalSpacer,
-            if (infoViewType == InfoViewType.diagram)
-              DiagramTypeSelection(
-                height: diagramTypeSelectionHeight,
-                setDiagramType: (value) {
-                  setState(() {
-                    selectedDiagramType = value;
-                  });
-                },
-                selectedDiagramType: selectedDiagramType,
-              ),
-            extraLargeVerticalSpacer,
-            if (infoViewType == InfoViewType.diagram)
-              DetailRouteInfoDiagram(
-                  currentCarTrip: widget.currentCarTrip,
-                  currentBicycleTrip: widget.currentBicycleTrip,
-                  currentPublicTransportTrip: widget.currentPublicTransportTrip,
-                  selectedDiagramType: selectedDiagramType)
-          ]),
-        ),
+              extraLargeVerticalSpacer,
+              if (infoViewType == InfoViewType.diagram) ...[
+                DiagramTypeSelection(
+                  height: diagramTypeSelectionHeight,
+                  setDiagramType: (value) {
+                    setState(() {
+                      selectedDiagramType = value;
+                    });
+                  },
+                  selectedDiagramType: selectedDiagramType,
+                ),
+                extraLargeVerticalSpacer,
+                DetailRouteInfoDiagram(
+                    currentCarTrip: widget.currentCarTrip,
+                    currentBicycleTrip: widget.currentBicycleTrip,
+                    currentPublicTransportTrip: widget.currentPublicTransportTrip,
+                    selectedDiagramType: selectedDiagramType)
+              ]
+            ]),
+          ),
+        ],
       ),
     );
   }
