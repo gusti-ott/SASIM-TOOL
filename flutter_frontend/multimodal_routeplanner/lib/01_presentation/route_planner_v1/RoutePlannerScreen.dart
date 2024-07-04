@@ -26,9 +26,6 @@ class RoutePlannerScreen extends StatelessWidget {
     String endAddress = "Schleißheimerstr. 318, München";
 
     AdvancedRoutePlannerBloc routeBlocProvider = BlocProvider.of<AdvancedRoutePlannerBloc>(context);
-    /*RouteInfoBloc routeInfoBloc = BlocProvider.of<RouteInfoBloc>(context);
-    VisualizationBloc visualizationBloc =
-        BlocProvider.of<VisualizationBloc>(context);*/
 
     Map<String, Trip> selectedTrips = {};
     List<Trip> listSelectedTrips = [];
@@ -60,8 +57,7 @@ class RoutePlannerScreen extends StatelessWidget {
 
                             routeBlocProvider.add(AddTripToListEvent(state.trip, selectedTrips));
                             BlocProvider.of<VisualizationBloc>(context).add(
-                              ChangeRouteVizualizationEvent(
-                                  selectedTrip: state.trip, trips: [state.trip]),
+                              ChangeRouteVizualizationEvent(selectedTrip: state.trip, trips: [state.trip]),
                             );
                           } else if (state is TripLoaded) {
                             String mode = state.trip.mode;
@@ -85,8 +81,7 @@ class RoutePlannerScreen extends StatelessWidget {
                                 AdvancedSearchInput(routeBlocProvider: routeBlocProvider),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: CircularProgressIndicator(
-                                      color: themeData.colorScheme.secondary),
+                                  child: CircularProgressIndicator(color: themeData.colorScheme.secondary),
                                 )
                               ],
                             );
@@ -144,8 +139,7 @@ class RoutePlannerScreen extends StatelessWidget {
                                     selectedTrips: selectedTrips),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: CircularProgressIndicator(
-                                      color: themeData.colorScheme.secondary),
+                                  child: CircularProgressIndicator(color: themeData.colorScheme.secondary),
                                 ),
                                 ResultList(trips: listSelectedTrips),
                               ],

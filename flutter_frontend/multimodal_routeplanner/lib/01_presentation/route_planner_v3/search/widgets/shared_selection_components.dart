@@ -4,6 +4,7 @@ import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dar
 
 Widget sharedSelectionPart(BuildContext context, {required bool isShared, required Function(bool) onSharedChanged}) {
   return Row(
+    mainAxisAlignment: MainAxisAlignment.center,
     children: [
       sharedChip(
         context,

@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/decorations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/result_cubit.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/address_input_components.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/electric_selection_components.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/mode_selection_components.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/shared_selection_components.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 import 'package:multimodal_routeplanner/config/setup_dependencies.dart';
 
@@ -42,92 +39,33 @@ class _SearchInputContentState extends State<SearchInputContent> {
 
   @override
   Widget build(BuildContext context) {
-    return (widget.isMobile)
-        ? buildMobileContent(context,
-            isElectric: isElectric,
-            onElectricChanged: (value) {
-              setState(() {
-                isElectric = !isElectric;
-              });
-            },
-            isShared: isShared,
-            onSharedChanged: (value) {
-              setState(() {
-                isShared = value;
-              });
-            },
-            startController: startController,
-            endController: endController,
-            onStartChanged: (value) {
-              setState(() {
-                startAddress = value;
-              });
-            },
-            onEndChanged: (value) {
-              setState(() {
-                endAddress = value;
-              });
-            },
-            swapInputs: swapInputs)
-        : buildDesktopContent(context,
-            isElectric: isElectric,
-            onElectricChanged: (value) {
-              setState(() {
-                isElectric = !isElectric;
-              });
-            },
-            selectionMode: selectionMode,
-            onSelectionModeChanged: (mode) {
-              setState(() {
-                selectionMode = mode;
-              });
-            },
-            isShared: isShared,
-            onSharedChanged: (value) {
-              setState(() {
-                isShared = value;
-              });
-            },
-            startController: startController,
-            endController: endController,
-            onStartChanged: (value) {
-              setState(() {
-                startAddress = value;
-              });
-            },
-            onEndChanged: (value) {
-              setState(() {
-                endAddress = value;
-              });
-            },
-            swapInputs: swapInputs);
+    return (widget.isMobile) ? buildMobileContent() : buildDesktopContent();
   }
 
-  Widget buildDesktopContent(
-    BuildContext context, {
-    required bool isElectric,
-    required Function(bool) onElectricChanged,
-    required SelectionMode selectionMode,
-    required Function(SelectionMode) onSelectionModeChanged,
-    required bool isShared,
-    required Function(bool) onSharedChanged,
-    required TextEditingController startController,
-    required TextEditingController endController,
-    required Function onStartChanged,
-    required Function onEndChanged,
-    required Function swapInputs,
-  }) {
+  Widget buildDesktopContent() {
     return Column(
       children: [
         extraLargeVerticalSpacer,
         modeSelectionRow(
           context,
           isElectric: isElectric,
-          onElectricChanged: onElectricChanged,
+          onElectricChanged: (value) {
+            setState(() {
+              isElectric = value;
+            });
+          },
           selectionMode: selectionMode,
-          onSelectionModeChanged: onSelectionModeChanged,
+          onSelectionModeChanged: (value) {
+            setState(() {
+              selectionMode = value;
+            });
+          },
           isShared: isShared,
-          onSharedChanged: onSharedChanged,
+          onSharedChanged: (value) {
+            setState(() {
+              isShared = value;
+            });
+          },
         ),
         largeVerticalSpacer,
         addressInputRow(
@@ -135,8 +73,16 @@ class _SearchInputContentState extends State<SearchInputContent> {
           isMobile: false,
           startController: startController,
           endController: endController,
-          onStartChanged: onStartChanged,
-          onEndChanged: onEndChanged,
+          onStartChanged: (value) {
+            setState(() {
+              startAddress = value;
+            });
+          },
+          onEndChanged: (value) {
+            setState(() {
+              endAddress = value;
+            });
+          },
           swapInputs: swapInputs,
           selectedMode: selectionMode,
           isElectric: isElectric,
@@ -146,91 +92,40 @@ class _SearchInputContentState extends State<SearchInputContent> {
     );
   }
 
-  Widget buildMobileContent(
-    BuildContext context, {
-    required bool isElectric,
-    required Function(bool) onElectricChanged,
-    required bool isShared,
-    required Function(bool) onSharedChanged,
-    required TextEditingController startController,
-    required TextEditingController endController,
-    required Function onStartChanged,
-    required Function onEndChanged,
-    required Function swapInputs,
-  }) {
+  Widget buildMobileContent() {
     return Column(
       children: [
         mediumVerticalSpacer,
         mobileModeSelectionContainer(context,
-            isElectric: isElectric,
-            onElectricChanged: onElectricChanged,
-            isShared: isShared,
-            onSharedChanged: onSharedChanged),
-        largeVerticalSpacer,
-        addressInputRow(context,
-            isMobile: true,
-            startController: startController,
-            endController: endController,
-            onStartChanged: onStartChanged,
-            onEndChanged: onEndChanged,
-            swapInputs: swapInputs,
             selectedMode: selectionMode,
+            onSelectionModeChanged: (value) {
+              setState(() {
+                selectionMode = value;
+              });
+            },
             isElectric: isElectric,
-            isShared: isShared),
-      ],
-    );
-  }
-
-  Widget mobileModeSelectionContainer(BuildContext context,
-      {required bool isElectric,
-      required Function(bool) onElectricChanged,
-      required bool isShared,
-      required Function(bool) onSharedChanged}) {
-    return Container(
-      decoration: boxDecorationWithShadow(),
-      padding: EdgeInsets.all(mediumPadding),
-      child: Column(
-        children: [
-          modeSelectionPart(),
-          smallVerticalSpacer,
-          sharedSelectionPart(context, isShared: isShared, onSharedChanged: onSharedChanged),
-          smallVerticalSpacer,
-          electricSelectionPart(context, isElectric: isElectric, onElectricChanged: onElectricChanged),
-        ],
-      ),
-    );
-  }
-
-  Widget modeSelectionPart() {
-    return Row(
-      children: [
-        modeIconButton(
-          icon: Icons.directions_bike_outlined,
-          isSelected: selectionMode == SelectionMode.bicycle,
-          onPressed: () {
-            setState(() {
-              selectionMode = SelectionMode.bicycle;
-            });
-          },
-        ),
-        modeIconButton(
-          icon: Icons.directions_car_outlined,
-          isSelected: selectionMode == SelectionMode.car,
-          onPressed: () {
-            setState(() {
-              selectionMode = SelectionMode.car;
-            });
-          },
-        ),
-        modeIconButton(
-          icon: Icons.directions_bus_outlined,
-          isSelected: selectionMode == SelectionMode.publicTransport,
-          onPressed: () {
-            setState(() {
-              selectionMode = SelectionMode.publicTransport;
-            });
-          },
-        ),
+            onElectricChanged: (value) {
+              setState(() {
+                isElectric = value;
+              });
+            },
+            isShared: isShared,
+            onSharedChanged: (value) {
+              setState(() {
+                isShared = value;
+              });
+            }),
+        largeVerticalSpacer,
+        addressInputRow(context, isMobile: true, startController: startController, endController: endController,
+            onStartChanged: (value) {
+          setState(() {
+            startAddress = value;
+          });
+        }, onEndChanged: (value) {
+          setState(() {
+            endAddress = value;
+          });
+        }, swapInputs: swapInputs, selectedMode: selectionMode, isElectric: isElectric, isShared: isShared),
       ],
     );
   }

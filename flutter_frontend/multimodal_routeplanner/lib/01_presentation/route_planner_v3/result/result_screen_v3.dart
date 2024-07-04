@@ -2,13 +2,13 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/animations/background_loading_animation.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/progress_indicators.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/input_to_trip.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mobiscore_to_color.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/result_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/result_cubit.dart';
-import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 import 'package:multimodal_routeplanner/config/setup_dependencies.dart';
 import 'package:multimodal_routeplanner/logger.dart';
@@ -65,16 +65,8 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
   }
 
   // states for the loading animation here
-  late AnimationController _animiationController;
+  late AnimationController _animationController;
   late Animation<Color?> _animation;
-
-  final List<Color> _animationColors = [
-    lightColorA,
-    lightColorB,
-    lightColorC,
-    lightColorD,
-    lightColorE,
-  ];
 
   ResultCubit cubit = sl<ResultCubit>();
 
@@ -92,7 +84,7 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
 
   @override
   void dispose() {
-    _animiationController.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -100,47 +92,12 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
     // Define the duration of the entire animation cycle (forward and backward)
     const duration = Duration(seconds: 10);
 
-    _animiationController = AnimationController(
+    _animationController = AnimationController(
       duration: duration,
       vsync: this,
     )..repeat(reverse: true);
 
-    _animation = TweenSequence<Color?>(
-      [
-        TweenSequenceItem(
-          weight: 1.0,
-          tween: ColorTween(begin: _animationColors[0], end: _animationColors[1]),
-        ),
-        TweenSequenceItem(
-          weight: 1.0,
-          tween: ColorTween(begin: _animationColors[1], end: _animationColors[2]),
-        ),
-        TweenSequenceItem(
-          weight: 1.0,
-          tween: ColorTween(begin: _animationColors[2], end: _animationColors[3]),
-        ),
-        TweenSequenceItem(
-          weight: 1.0,
-          tween: ColorTween(begin: _animationColors[3], end: _animationColors[4]),
-        ),
-        TweenSequenceItem(
-          weight: 1.0,
-          tween: ColorTween(begin: _animationColors[4], end: _animationColors[3]),
-        ),
-        TweenSequenceItem(
-          weight: 1.0,
-          tween: ColorTween(begin: _animationColors[3], end: _animationColors[2]),
-        ),
-        TweenSequenceItem(
-          weight: 1.0,
-          tween: ColorTween(begin: _animationColors[2], end: _animationColors[1]),
-        ),
-        TweenSequenceItem(
-          weight: 1.0,
-          tween: ColorTween(begin: _animationColors[1], end: _animationColors[0]),
-        ),
-      ],
-    ).animate(_animiationController);
+    _animation = backgroundLoadingAnimation(_animationController);
 
     _animation.addListener(() {
       setState(() {
@@ -148,7 +105,7 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
       });
     });
 
-    _animiationController.forward();
+    _animationController.forward();
   }
 
   @override
@@ -211,7 +168,10 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
             }
           }
         }
-        return Scaffold(backgroundColor: backgroundColor, body: child);
+        return Scaffold(
+          backgroundColor: backgroundColor,
+          body: child,
+        );
       },
     );
   }

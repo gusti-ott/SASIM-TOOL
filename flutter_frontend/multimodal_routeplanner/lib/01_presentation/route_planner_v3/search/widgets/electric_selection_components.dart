@@ -7,6 +7,7 @@ Widget electricSelectionPart(BuildContext context,
   TextTheme textTheme = Theme.of(context).textTheme;
   AppLocalizations lang = AppLocalizations.of(context)!;
   return Row(
+    mainAxisAlignment: MainAxisAlignment.center,
     children: [
       Text(lang.electric, style: textTheme.titleSmall!.copyWith(color: Colors.black)),
       Switch(
