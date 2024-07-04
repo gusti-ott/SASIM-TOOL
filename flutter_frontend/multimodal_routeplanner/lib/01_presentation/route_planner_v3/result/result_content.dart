@@ -87,7 +87,6 @@ class ResultContent extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     if (!isMobile) ...[
-                                      extraLargeVerticalSpacer,
                                       Padding(
                                         padding: EdgeInsets.symmetric(horizontal: mediumPadding),
                                         child: modeSelectionRow(context,
@@ -99,8 +98,14 @@ class ResultContent extends StatelessWidget {
                                             onSharedChanged: onSharedChanged),
                                       ),
                                       extraLargeVerticalSpacer,
+                                    ] else ...[
+                                      mobiScoreScoreBoardWithPointers(context,
+                                          heightSection: 240,
+                                          selectedTrip: selectedTrip,
+                                          currentCarTrip: currentCarTrip,
+                                          currentBicycleTrip: currentBicycleTrip,
+                                          currentPublicTransportTrip: currentPublicTransportTrip),
                                     ],
-                                    largeVerticalSpacer,
                                     Wrap(
                                       alignment: WrapAlignment.spaceBetween,
                                       spacing: mediumPadding,
@@ -165,7 +170,7 @@ class ResultContent extends StatelessWidget {
               selectedTrip: selectedTrip,
               currentCarTrip: currentCarTrip,
               currentPublicTransportTrip: currentPublicTransportTrip,
-              currentBicycleTrip: currentBicycleTrip),
+              currentBicycleTrip: currentBicycleTrip)
       ],
     );
   }
@@ -198,6 +203,32 @@ class ResultContent extends StatelessWidget {
         bottom: (screenHeight - heightScoreColumn) / 2,
         child: mobiScoreScoreBoard(context, selectedTrip: selectedTrip),
       ),
+      ...positionedScorePointers(
+          widthInfoSection: widthInfoSection,
+          widthScoreColumn: widthScoreColumn,
+          heightScoreColumn: heightScoreColumn,
+          borderWidthScoreColumn: borderWidthScoreColumn,
+          screenHeight: screenHeight,
+          selectedTrip: selectedTrip,
+          currentCarTrip: currentCarTrip,
+          currentPublicTransportTrip: currentPublicTransportTrip,
+          currentBicycleTrip: currentBicycleTrip),
+    ];
+  }
+
+  List<Widget> positionedScorePointers(
+      {required double widthInfoSection,
+      required double widthScoreColumn,
+      required double heightScoreColumn,
+      required double borderWidthScoreColumn,
+      required double screenHeight,
+      required Trip selectedTrip,
+      required Trip? currentCarTrip,
+      required Trip? currentPublicTransportTrip,
+      required Trip? currentBicycleTrip,
+      bool isMobile = false,
+      double mobileTopPositionOffset = 0}) {
+    return [
       if (currentCarTrip != null)
         positionedScorePointer(
           widthInfoSection: widthInfoSection,
@@ -207,6 +238,7 @@ class ResultContent extends StatelessWidget {
           screenHeight: screenHeight,
           selectedTrip: selectedTrip,
           thisTrip: currentCarTrip,
+          isMobile: isMobile,
         ),
       if (currentPublicTransportTrip != null)
         positionedScorePointer(
@@ -217,6 +249,7 @@ class ResultContent extends StatelessWidget {
           screenHeight: screenHeight,
           selectedTrip: selectedTrip,
           thisTrip: currentPublicTransportTrip,
+          isMobile: isMobile,
         ),
       if (currentBicycleTrip != null)
         positionedScorePointer(
@@ -227,6 +260,7 @@ class ResultContent extends StatelessWidget {
           screenHeight: screenHeight,
           selectedTrip: selectedTrip,
           thisTrip: currentBicycleTrip,
+          isMobile: isMobile,
         ),
     ];
   }

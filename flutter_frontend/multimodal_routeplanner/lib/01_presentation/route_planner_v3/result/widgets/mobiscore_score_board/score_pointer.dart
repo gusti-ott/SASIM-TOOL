@@ -7,36 +7,52 @@ enum ShapeDirection { left, right, top, bottom }
 
 double rotationAngle = 45 * 3.1415926535897932 / 180;
 
-Widget positionedScorePointer({
-  required double widthInfoSection,
-  required double widthScoreColumn,
-  required double heightScoreColumn,
-  required double borderWidthScoreColumn,
-  required double screenHeight,
-  required Trip selectedTrip,
-  required Trip thisTrip,
-}) {
+Widget positionedScorePointer(
+    {double widthInfoSection = 0.0,
+    double heightSection = 0.0,
+    required double widthScoreColumn,
+    required double heightScoreColumn,
+    required double borderWidthScoreColumn,
+    double screenHeight = 0,
+    required Trip selectedTrip,
+    required Trip thisTrip,
+    bool isMobile = false}) {
   Color mobiScoreColor = getColorFromMobiScore(thisTrip.mobiScore);
   Color backgroundColor = Colors.white;
   Color borderColor = mobiScoreColor;
 
   bool isLargeScoreContainer = false;
-  ShapeDirection direction = ShapeDirection.right;
   int index = _getIndexFromMobiScore(thisTrip.mobiScore);
   IconData iconData = getIconDataFromMode(thisTrip.mode, isOutlined: false);
+  ShapeDirection direction = ShapeDirection.right;
+  if (isMobile) {
+    direction = ShapeDirection.top;
+  }
 
   if (selectedTrip.mode == thisTrip.mode) {
     backgroundColor = mobiScoreColor;
     isLargeScoreContainer = true;
-    direction = ShapeDirection.left;
+    if (!isMobile) {
+      direction = ShapeDirection.left;
+    } else {
+      direction = ShapeDirection.bottom;
+    }
   }
 
   return Positioned(
-    right: _getRightPositionScorePointer(
-        widthInfoSection, widthScoreColumn, borderWidthScoreColumn, direction, isLargeScoreContainer),
-    top: _getTopPositionScorePointer(
-        screenHeight, heightScoreColumn, borderWidthScoreColumn, isLargeScoreContainer, index),
-    child: scorePointer(
+    right: !isMobile
+        ? _getRightPositionScorePointerDesktop(
+            widthInfoSection, widthScoreColumn, borderWidthScoreColumn, direction, isLargeScoreContainer)
+        : null,
+    top: !isMobile
+        ? _getTopPositionScorePointerDesktop(
+            screenHeight, heightScoreColumn, borderWidthScoreColumn, isLargeScoreContainer, index)
+        : _getTopPositionScorePointerMobile(
+            heightSection, widthScoreColumn, borderWidthScoreColumn, isLargeScoreContainer),
+    left: isMobile
+        ? _getLeftPositionScorePointerMobile(heightScoreColumn, borderWidthScoreColumn, isLargeScoreContainer, index)
+        : null,
+    child: _scorePointer(
         borderColor: borderColor,
         backgroundColor: backgroundColor,
         direction: direction,
@@ -45,7 +61,7 @@ Widget positionedScorePointer({
   );
 }
 
-Widget scorePointer(
+Widget _scorePointer(
     {required ShapeDirection direction,
     required Color backgroundColor,
     Color? borderColor,
@@ -59,7 +75,7 @@ Widget scorePointer(
       decoration: BoxDecoration(
         color: backgroundColor,
         border: borderColor != null ? Border.all(color: borderColor, width: borderWidthScoreContainer) : null,
-        borderRadius: getBorderRadius(direction),
+        borderRadius: _getBorderRadius(direction),
       ),
       child: Center(
         child: Transform.rotate(angle: -rotationAngle, child: Icon(iconData, size: isLarge ? 30 : 20)),
@@ -68,7 +84,7 @@ Widget scorePointer(
   );
 }
 
-BorderRadius getBorderRadius(ShapeDirection direction) {
+BorderRadius _getBorderRadius(ShapeDirection direction) {
   if (direction == ShapeDirection.top) {
     return const BorderRadius.only(
         topRight: Radius.circular(30), bottomLeft: Radius.circular(30), bottomRight: Radius.circular(30));
@@ -84,7 +100,7 @@ BorderRadius getBorderRadius(ShapeDirection direction) {
   }
 }
 
-double _getTopPositionScorePointer(double screenHeight, double heightScoreColumn, double borderWidthScoreColumn,
+double _getTopPositionScorePointerDesktop(double screenHeight, double heightScoreColumn, double borderWidthScoreColumn,
     bool isLargeScoreContainer, int index) {
   double scoreContainerHeight =
       (isLargeScoreContainer ? largeScoreContainerWidth : smallScoreContainerWidth) + borderWidthScoreContainer;
@@ -98,8 +114,8 @@ double _getTopPositionScorePointer(double screenHeight, double heightScoreColumn
       partHeight / 2;
 }
 
-double _getRightPositionScorePointer(double widthInfoSection, double widthScoreColumn, double borderWidthScoreColumn,
-    ShapeDirection shapeDirection, bool isLargeScoreContainer) {
+double _getRightPositionScorePointerDesktop(double widthInfoSection, double widthScoreColumn,
+    double borderWidthScoreColumn, ShapeDirection shapeDirection, bool isLargeScoreContainer) {
   double scoreContainerWidth = isLargeScoreContainer ? largeScoreContainerWidth : smallScoreContainerWidth;
 
   // add offset because of overlay due to rotation
@@ -117,6 +133,31 @@ double _getRightPositionScorePointer(double widthInfoSection, double widthScoreC
   } else {
     return widthInfoSection;
   }
+}
+
+double _getTopPositionScorePointerMobile(
+    double sectionHeight, double widthScoreColumn, double borderWidthScoreColumn, bool isLargeScoreContainer) {
+  double position = 0.0;
+  if (isLargeScoreContainer) {
+    position =
+        sectionHeight / 2 - largeScoreContainerWidth - widthScoreColumn / 2 - borderWidthScoreColumn - largeOffset;
+  } else {
+    position = sectionHeight / 2 + widthScoreColumn / 2 + borderWidthScoreColumn + smallOffset;
+  }
+  return position;
+}
+
+double _getLeftPositionScorePointerMobile(
+    double heightScoreColumn, double borderWidthScoreColumn, bool isLargePointer, int index) {
+  double position = 0.0;
+  double partHeight = (heightScoreColumn - 2 * borderWidthScoreColumn) / 5;
+
+  if (isLargePointer) {
+    position = partHeight * index - largeScoreContainerWidth - borderWidthScoreColumn / 2;
+  } else {
+    position = partHeight * index - smallScoreContainerWidth - borderWidthScoreColumn * 2;
+  }
+  return position;
 }
 
 int _getIndexFromMobiScore(String mobiScore) {
@@ -138,3 +179,6 @@ int _getIndexFromMobiScore(String mobiScore) {
 double smallScoreContainerWidth = 40;
 double largeScoreContainerWidth = 60;
 double borderWidthScoreContainer = 4;
+
+double smallOffset = 3;
+double largeOffset = 8;

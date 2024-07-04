@@ -9,7 +9,7 @@ Widget costResultRow(
   required Trip trip,
 }) {
   double diameter = 200;
-  double width = 400;
+  double width = 350;
   return Wrap(
     alignment: WrapAlignment.spaceBetween,
     runSpacing: largePadding,
