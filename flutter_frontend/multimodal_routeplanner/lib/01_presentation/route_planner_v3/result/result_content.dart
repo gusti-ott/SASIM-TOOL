@@ -25,6 +25,10 @@ class ResultContent extends StatelessWidget {
     required this.onSelectionModeChanged,
     required this.onElectricChanged,
     required this.onSharedChanged,
+    required this.infoViewType,
+    required this.selectedDiagramType,
+    required this.setInfoViewType,
+    required this.setDiagramType,
   });
 
   final bool isMobile;
@@ -36,6 +40,10 @@ class ResultContent extends StatelessWidget {
   final Function(SelectionMode) onSelectionModeChanged;
   final Function(bool) onElectricChanged;
   final Function(bool) onSharedChanged;
+  final InfoViewType infoViewType;
+  final DiagramType selectedDiagramType;
+  final Function(InfoViewType) setInfoViewType;
+  final Function(DiagramType) setDiagramType;
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +138,10 @@ class ResultContent extends StatelessWidget {
                                                 children: [
                                                   Text('Full costs of the trip', style: textTheme.labelLarge),
                                                   smallHorizontalSpacer,
-                                                  customQuestionIcon()
+                                                  customQuestionIcon(onTap: () {
+                                                    setInfoViewType(InfoViewType.diagram);
+                                                    setDiagramType(DiagramType.total);
+                                                  })
                                                 ],
                                               )
                                             ],
@@ -141,7 +152,10 @@ class ResultContent extends StatelessWidget {
                                     extraLargeVerticalSpacer,
                                     costsPercentageBar(context, selectedTrip: selectedTrip),
                                     extraLargeVerticalSpacer,
-                                    costResultRow(context, trip: selectedTrip),
+                                    costResultRow(context, trip: selectedTrip, setDiagramType: (value) {
+                                      setInfoViewType(InfoViewType.diagram);
+                                      setDiagramType(value);
+                                    }),
                                     extraLargeVerticalSpacer,
                                   ],
                                 ),
@@ -157,7 +171,11 @@ class ResultContent extends StatelessWidget {
                         currentCarTrip: currentCarTrip,
                         currentBicycleTrip: currentBicycleTrip,
                         currentPublicTransportTrip: currentPublicTransportTrip,
-                        selectedTrip: selectedTrip),
+                        selectedTrip: selectedTrip,
+                        infoViewType: infoViewType,
+                        selectedDiagramType: selectedDiagramType,
+                        setInfoViewType: setInfoViewType,
+                        setDiagramType: setDiagramType),
                 ],
               ),
             ),

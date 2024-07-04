@@ -9,6 +9,7 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mobiscore_to_color.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/result_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/result_cubit.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/detail_route_info/detail_route_info_section.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 import 'package:multimodal_routeplanner/config/setup_dependencies.dart';
 import 'package:multimodal_routeplanner/logger.dart';
@@ -46,6 +47,9 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
   bool? isElectric;
   bool? isShared;
 
+  late InfoViewType infoViewType;
+  late DiagramType selectedDiagramType;
+
   void updateSelectedTrip() {
     logger.i('updating selected trip');
     String? tripMode = getTripModeFromInput(mode: selectionMode, isElectric: isElectric, isShared: isShared);
@@ -80,6 +84,9 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
 
     cubit.loadTrips(widget.startAddress, widget.endAddress);
     _startColorAnimation();
+
+    infoViewType = InfoViewType.map;
+    selectedDiagramType = DiagramType.total;
   }
 
   @override
@@ -160,6 +167,18 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
                       isShared = shared;
                     });
                     updateSelectedTrip();
+                  },
+                  infoViewType: infoViewType,
+                  selectedDiagramType: selectedDiagramType,
+                  setInfoViewType: (value) {
+                    setState(() {
+                      infoViewType = value;
+                    });
+                  },
+                  setDiagramType: (diagramType) {
+                    setState(() {
+                      selectedDiagramType = diagramType;
+                    });
                   },
                 );
               }

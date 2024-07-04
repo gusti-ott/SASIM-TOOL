@@ -6,35 +6,29 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 
-class DetailRouteInfoSection extends StatefulWidget {
+class DetailRouteInfoSection extends StatelessWidget {
   const DetailRouteInfoSection({
     super.key,
     this.currentCarTrip,
     this.currentBicycleTrip,
     this.currentPublicTransportTrip,
     this.selectedTrip,
+    required this.infoViewType,
+    required this.selectedDiagramType,
+    required this.setInfoViewType,
+    required this.setDiagramType,
   });
 
   final Trip? currentCarTrip;
   final Trip? currentBicycleTrip;
   final Trip? currentPublicTransportTrip;
   final Trip? selectedTrip;
-
-  @override
-  State<DetailRouteInfoSection> createState() => _DetailRouteInfoSectionState();
-}
-
-class _DetailRouteInfoSectionState extends State<DetailRouteInfoSection> {
-  InfoViewType infoViewType = InfoViewType.map;
-  DiagramType selectedDiagramType = DiagramType.total;
+  final InfoViewType infoViewType;
+  final DiagramType selectedDiagramType;
+  final Function(InfoViewType) setInfoViewType;
+  final Function(DiagramType) setDiagramType;
 
   void changeInfoViewType() {
-    void setInfoViewType(InfoViewType infoViewType) {
-      setState(() {
-        this.infoViewType = infoViewType;
-      });
-    }
-
     if (infoViewType == InfoViewType.diagram) {
       setInfoViewType(InfoViewType.map);
     } else {
@@ -55,7 +49,7 @@ class _DetailRouteInfoSectionState extends State<DetailRouteInfoSection> {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          if (infoViewType == InfoViewType.map) DetailRouteInfoMap(trip: widget.selectedTrip),
+          if (infoViewType == InfoViewType.map) DetailRouteInfoMap(trip: selectedTrip),
           Padding(
             padding: EdgeInsets.all(largePadding),
             child: Column(children: [
@@ -81,17 +75,15 @@ class _DetailRouteInfoSectionState extends State<DetailRouteInfoSection> {
                 DiagramTypeSelection(
                   height: diagramTypeSelectionHeight,
                   setDiagramType: (value) {
-                    setState(() {
-                      selectedDiagramType = value;
-                    });
+                    setDiagramType(value);
                   },
                   selectedDiagramType: selectedDiagramType,
                 ),
                 extraLargeVerticalSpacer,
                 DetailRouteInfoDiagram(
-                    currentCarTrip: widget.currentCarTrip,
-                    currentBicycleTrip: widget.currentBicycleTrip,
-                    currentPublicTransportTrip: widget.currentPublicTransportTrip,
+                    currentCarTrip: currentCarTrip,
+                    currentBicycleTrip: currentBicycleTrip,
+                    currentPublicTransportTrip: currentPublicTransportTrip,
                     selectedDiagramType: selectedDiagramType)
               ]
             ]),
