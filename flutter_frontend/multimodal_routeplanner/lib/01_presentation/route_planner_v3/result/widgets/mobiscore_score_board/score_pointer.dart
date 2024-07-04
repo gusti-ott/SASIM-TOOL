@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mobiscore_to_color.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mode_to_x.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 
 enum ShapeDirection { left, right, top, bottom }
 
 double rotationAngle = 45 * 3.1415926535897932 / 180;
 
-Widget positionedScoreContainer({
+Widget positionedScorePointer({
   required double widthInfoSection,
   required double widthScoreColumn,
   required double heightScoreColumn,
@@ -21,8 +22,8 @@ Widget positionedScoreContainer({
 
   bool isLargeScoreContainer = false;
   ShapeDirection direction = ShapeDirection.right;
-  int index = getIndexFromMobiScore(thisTrip.mobiScore);
-  IconData iconData = getIconDataFromTripMode(thisTrip.mode);
+  int index = _getIndexFromMobiScore(thisTrip.mobiScore);
+  IconData iconData = getIconDataFromMode(thisTrip.mode, isOutlined: false);
 
   if (selectedTrip.mode == thisTrip.mode) {
     backgroundColor = mobiScoreColor;
@@ -31,11 +32,11 @@ Widget positionedScoreContainer({
   }
 
   return Positioned(
-    right: getRightPositionScoreContainer(
+    right: _getRightPositionScorePointer(
         widthInfoSection, widthScoreColumn, borderWidthScoreColumn, direction, isLargeScoreContainer),
-    top: getTopPositionScoreContainer(
+    top: _getTopPositionScorePointer(
         screenHeight, heightScoreColumn, borderWidthScoreColumn, isLargeScoreContainer, index),
-    child: scoreContainer(
+    child: scorePointer(
         borderColor: borderColor,
         backgroundColor: backgroundColor,
         direction: direction,
@@ -44,7 +45,7 @@ Widget positionedScoreContainer({
   );
 }
 
-Widget scoreContainer(
+Widget scorePointer(
     {required ShapeDirection direction,
     required Color backgroundColor,
     Color? borderColor,
@@ -83,7 +84,7 @@ BorderRadius getBorderRadius(ShapeDirection direction) {
   }
 }
 
-double getTopPositionScoreContainer(double screenHeight, double heightScoreColumn, double borderWidthScoreColumn,
+double _getTopPositionScorePointer(double screenHeight, double heightScoreColumn, double borderWidthScoreColumn,
     bool isLargeScoreContainer, int index) {
   double scoreContainerHeight =
       (isLargeScoreContainer ? largeScoreContainerWidth : smallScoreContainerWidth) + borderWidthScoreContainer;
@@ -97,7 +98,7 @@ double getTopPositionScoreContainer(double screenHeight, double heightScoreColum
       partHeight / 2;
 }
 
-double getRightPositionScoreContainer(double widthInfoSection, double widthScoreColumn, double borderWidthScoreColumn,
+double _getRightPositionScorePointer(double widthInfoSection, double widthScoreColumn, double borderWidthScoreColumn,
     ShapeDirection shapeDirection, bool isLargeScoreContainer) {
   double scoreContainerWidth = isLargeScoreContainer ? largeScoreContainerWidth : smallScoreContainerWidth;
 
@@ -118,7 +119,7 @@ double getRightPositionScoreContainer(double widthInfoSection, double widthScore
   }
 }
 
-int getIndexFromMobiScore(String mobiScore) {
+int _getIndexFromMobiScore(String mobiScore) {
   if (mobiScore == 'A') {
     return 1;
   } else if (mobiScore == 'B') {
@@ -131,26 +132,6 @@ int getIndexFromMobiScore(String mobiScore) {
     return 5;
   } else {
     return 0;
-  }
-}
-
-IconData getIconDataFromTripMode(String mode) {
-  if (mode == 'PT') {
-    return Icons.directions_bus;
-  } else if (mode == 'CAR') {
-    return Icons.directions_car;
-  } else if (mode == 'ECAR') {
-    return Icons.electric_car;
-  } else if (mode == 'SHARENOW') {
-    return Icons.directions_car;
-  } else if (mode == 'BICYCLE') {
-    return Icons.pedal_bike;
-  } else if (mode == 'EBICYCLE') {
-    return Icons.electric_bike;
-  } else if (mode == 'CAB') {
-    return Icons.pedal_bike;
-  } else {
-    return Icons.directions_walk;
   }
 }
 
