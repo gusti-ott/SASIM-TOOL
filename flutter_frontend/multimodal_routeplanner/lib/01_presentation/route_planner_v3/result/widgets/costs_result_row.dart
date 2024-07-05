@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mobiscore_to_x.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/detail_route_info/detail_route_info_section.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/question_icons.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
@@ -71,7 +72,7 @@ Widget socialCostsCard(BuildContext context,
         ),
         Positioned(
           left: 0,
-          child: Image.asset('assets/icons/social_E.png'),
+          child: Image.asset(getAssetPathFromMobiScore(trip.mobiScore)),
         ),
       ],
     ),

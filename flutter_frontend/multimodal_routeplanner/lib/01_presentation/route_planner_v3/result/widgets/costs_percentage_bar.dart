@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/costs_rates.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mobiscore_to_color.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mobiscore_to_x.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 
 Widget costsPercentageBar(BuildContext context, {required Trip selectedTrip}) {

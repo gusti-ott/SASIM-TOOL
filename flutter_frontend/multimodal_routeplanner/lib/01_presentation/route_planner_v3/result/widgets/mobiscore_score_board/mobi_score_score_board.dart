@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/input_to_trip.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/mobiscore_score_board/score_pointer.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
@@ -31,7 +33,8 @@ Widget mobiScoreScoreBoardWithPointers(BuildContext context,
     required Trip selectedTrip,
     required Trip? currentCarTrip,
     required Trip? currentBicycleTrip,
-    required Trip? currentPublicTransportTrip}) {
+    required Trip? currentPublicTransportTrip,
+    required Function(SelectionMode) onSelectionModeChanged}) {
   return SizedBox(
     height: heightSection,
     child: Stack(
@@ -46,6 +49,10 @@ Widget mobiScoreScoreBoardWithPointers(BuildContext context,
             thisTrip: currentCarTrip,
             heightSection: heightSection,
             isMobile: true,
+            onTripSelected: (value) {
+              SelectionMode mode = getSelectionModeFromTripMode(value.mode);
+              onSelectionModeChanged(mode);
+            },
           ),
         if (currentBicycleTrip != null)
           positionedScorePointer(
@@ -56,6 +63,10 @@ Widget mobiScoreScoreBoardWithPointers(BuildContext context,
             thisTrip: currentBicycleTrip,
             heightSection: heightSection,
             isMobile: true,
+            onTripSelected: (value) {
+              SelectionMode mode = getSelectionModeFromTripMode(value.mode);
+              onSelectionModeChanged(mode);
+            },
           ),
         if (currentPublicTransportTrip != null)
           positionedScorePointer(
@@ -66,6 +77,10 @@ Widget mobiScoreScoreBoardWithPointers(BuildContext context,
             thisTrip: currentPublicTransportTrip,
             heightSection: heightSection,
             isMobile: true,
+            onTripSelected: (value) {
+              SelectionMode mode = getSelectionModeFromTripMode(value.mode);
+              onSelectionModeChanged(mode);
+            },
           ),
       ],
     ),

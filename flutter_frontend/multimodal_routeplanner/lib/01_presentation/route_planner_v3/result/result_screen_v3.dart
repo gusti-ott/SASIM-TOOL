@@ -6,7 +6,7 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/animati
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/progress_indicators.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/input_to_trip.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mobiscore_to_color.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mobiscore_to_x.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/result_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/result_cubit.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/detail_route_info/detail_route_info_section.dart';

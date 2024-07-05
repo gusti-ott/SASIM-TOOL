@@ -112,7 +112,8 @@ class ResultContent extends StatelessWidget {
                                           selectedTrip: selectedTrip,
                                           currentCarTrip: currentCarTrip,
                                           currentBicycleTrip: currentBicycleTrip,
-                                          currentPublicTransportTrip: currentPublicTransportTrip),
+                                          currentPublicTransportTrip: currentPublicTransportTrip,
+                                          onSelectionModeChanged: onSelectionModeChanged),
                                     ],
                                     Wrap(
                                       alignment: WrapAlignment.spaceBetween,
@@ -230,7 +231,8 @@ class ResultContent extends StatelessWidget {
           selectedTrip: selectedTrip,
           currentCarTrip: currentCarTrip,
           currentPublicTransportTrip: currentPublicTransportTrip,
-          currentBicycleTrip: currentBicycleTrip),
+          currentBicycleTrip: currentBicycleTrip,
+          onSelectionModeChanged: onSelectionModeChanged),
     ];
   }
 
@@ -245,7 +247,8 @@ class ResultContent extends StatelessWidget {
       required Trip? currentPublicTransportTrip,
       required Trip? currentBicycleTrip,
       bool isMobile = false,
-      double mobileTopPositionOffset = 0}) {
+      double mobileTopPositionOffset = 0,
+      required Function(SelectionMode) onSelectionModeChanged}) {
     return [
       if (currentCarTrip != null)
         positionedScorePointer(
@@ -257,6 +260,10 @@ class ResultContent extends StatelessWidget {
           selectedTrip: selectedTrip,
           thisTrip: currentCarTrip,
           isMobile: isMobile,
+          onTripSelected: (value) {
+            SelectionMode mode = getSelectionModeFromTripMode(value.mode);
+            onSelectionModeChanged(mode);
+          },
         ),
       if (currentPublicTransportTrip != null)
         positionedScorePointer(
@@ -268,6 +275,10 @@ class ResultContent extends StatelessWidget {
           selectedTrip: selectedTrip,
           thisTrip: currentPublicTransportTrip,
           isMobile: isMobile,
+          onTripSelected: (value) {
+            SelectionMode mode = getSelectionModeFromTripMode(value.mode);
+            onSelectionModeChanged(mode);
+          },
         ),
       if (currentBicycleTrip != null)
         positionedScorePointer(
@@ -279,6 +290,10 @@ class ResultContent extends StatelessWidget {
           selectedTrip: selectedTrip,
           thisTrip: currentBicycleTrip,
           isMobile: isMobile,
+          onTripSelected: (value) {
+            SelectionMode mode = getSelectionModeFromTripMode(value.mode);
+            onSelectionModeChanged(mode);
+          },
         ),
     ];
   }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mobiscore_to_color.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mobiscore_to_x.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mode_to_x.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 
@@ -16,7 +16,8 @@ Widget positionedScorePointer(
     double screenHeight = 0,
     required Trip selectedTrip,
     required Trip thisTrip,
-    bool isMobile = false}) {
+    bool isMobile = false,
+    required Function(Trip) onTripSelected}) {
   Color mobiScoreColor = getColorFromMobiScore(thisTrip.mobiScore);
   Color backgroundColor = Colors.white;
   Color borderColor = mobiScoreColor;
@@ -53,11 +54,15 @@ Widget positionedScorePointer(
         ? _getLeftPositionScorePointerMobile(heightScoreColumn, borderWidthScoreColumn, isLargeScoreContainer, index)
         : null,
     child: _scorePointer(
-        borderColor: borderColor,
-        backgroundColor: backgroundColor,
-        direction: direction,
-        iconData: iconData,
-        isLarge: isLargeScoreContainer),
+      borderColor: borderColor,
+      backgroundColor: backgroundColor,
+      direction: direction,
+      iconData: iconData,
+      isLarge: isLargeScoreContainer,
+      onTap: () {
+        onTripSelected(thisTrip);
+      },
+    ),
   );
 }
 
@@ -66,19 +71,25 @@ Widget _scorePointer(
     required Color backgroundColor,
     Color? borderColor,
     bool isLarge = false,
-    IconData? iconData}) {
+    IconData? iconData,
+    required Function() onTap}) {
   return Transform.rotate(
     angle: rotationAngle,
-    child: Container(
-      width: isLarge ? largeScoreContainerWidth : smallScoreContainerWidth,
-      height: isLarge ? largeScoreContainerWidth : smallScoreContainerWidth,
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        border: borderColor != null ? Border.all(color: borderColor, width: borderWidthScoreContainer) : null,
-        borderRadius: _getBorderRadius(direction),
-      ),
-      child: Center(
-        child: Transform.rotate(angle: -rotationAngle, child: Icon(iconData, size: isLarge ? 30 : 20)),
+    child: InkWell(
+      onTap: () {
+        onTap();
+      },
+      child: Container(
+        width: isLarge ? largeScoreContainerWidth : smallScoreContainerWidth,
+        height: isLarge ? largeScoreContainerWidth : smallScoreContainerWidth,
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          border: borderColor != null ? Border.all(color: borderColor, width: borderWidthScoreContainer) : null,
+          borderRadius: _getBorderRadius(direction),
+        ),
+        child: Center(
+          child: Transform.rotate(angle: -rotationAngle, child: Icon(iconData, size: isLarge ? 30 : 20)),
+        ),
       ),
     ),
   );
