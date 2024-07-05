@@ -10,16 +10,21 @@ Widget costResultRow(
   BuildContext context, {
   required Trip trip,
   required Function(DiagramType) setDiagramType,
+  isMobile = false,
 }) {
   double diameter = 200;
   double width = 350;
-  return Wrap(
-    alignment: WrapAlignment.spaceBetween,
-    runSpacing: largePadding,
-    children: [
-      socialCostsCard(context, width: width, height: diameter, trip: trip, setDiagramType: setDiagramType),
-      personalCostsCard(context, width: width, height: diameter, trip: trip, setDiagramType: setDiagramType)
-    ],
+  return SizedBox(
+    width: double.infinity,
+    child: Wrap(
+      alignment: isMobile ? WrapAlignment.center : WrapAlignment.spaceBetween,
+      spacing: largePadding,
+      runSpacing: largePadding,
+      children: [
+        socialCostsCard(context, width: width, height: diameter, trip: trip, setDiagramType: setDiagramType),
+        personalCostsCard(context, width: width, height: diameter, trip: trip, setDiagramType: setDiagramType)
+      ],
+    ),
   );
 }
 

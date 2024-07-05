@@ -16,8 +16,11 @@ Widget modeSelectionRow(BuildContext context,
   return Container(
     decoration: boxDecorationWithShadow(),
     padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    child: Wrap(
+      alignment: WrapAlignment.center,
+      runAlignment: WrapAlignment.center,
+      spacing: largePadding,
+      runSpacing: smallPadding,
       children: [
         modeSelectionPart(selectedMode: selectionMode, onSelectionModeChanged: onSelectionModeChanged),
         sharedSelectionPart(context, isShared: isShared, onSharedChanged: onSharedChanged),
@@ -29,31 +32,33 @@ Widget modeSelectionRow(BuildContext context,
 
 Widget modeSelectionPart(
     {required SelectionMode selectedMode, required Function(SelectionMode) onSelectionModeChanged}) {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      modeIconButton(
-        icon: Icons.pedal_bike_outlined,
-        isSelected: selectedMode == SelectionMode.bicycle,
-        onPressed: () {
-          onSelectionModeChanged(SelectionMode.bicycle);
-        },
-      ),
-      modeIconButton(
-        icon: Icons.directions_car_outlined,
-        isSelected: selectedMode == SelectionMode.car,
-        onPressed: () {
-          onSelectionModeChanged(SelectionMode.car);
-        },
-      ),
-      modeIconButton(
-        icon: Icons.directions_bus_outlined,
-        isSelected: selectedMode == SelectionMode.publicTransport,
-        onPressed: () {
-          onSelectionModeChanged(SelectionMode.publicTransport);
-        },
-      ),
-    ],
+  return IntrinsicWidth(
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        modeIconButton(
+          icon: Icons.pedal_bike_outlined,
+          isSelected: selectedMode == SelectionMode.bicycle,
+          onPressed: () {
+            onSelectionModeChanged(SelectionMode.bicycle);
+          },
+        ),
+        modeIconButton(
+          icon: Icons.directions_car_outlined,
+          isSelected: selectedMode == SelectionMode.car,
+          onPressed: () {
+            onSelectionModeChanged(SelectionMode.car);
+          },
+        ),
+        modeIconButton(
+          icon: Icons.directions_bus_outlined,
+          isSelected: selectedMode == SelectionMode.publicTransport,
+          onPressed: () {
+            onSelectionModeChanged(SelectionMode.publicTransport);
+          },
+        ),
+      ],
+    ),
   );
 }
 

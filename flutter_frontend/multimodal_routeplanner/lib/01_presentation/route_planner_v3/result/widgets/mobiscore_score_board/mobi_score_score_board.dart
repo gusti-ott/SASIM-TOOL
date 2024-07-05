@@ -39,7 +39,9 @@ Widget mobiScoreScoreBoardWithPointers(BuildContext context,
     height: heightSection,
     child: Stack(
       children: [
-        Center(child: mobiScoreScoreBoard(context, selectedTrip: selectedTrip, isMobile: true)),
+        Align(
+            alignment: Alignment.centerLeft,
+            child: mobiScoreScoreBoard(context, selectedTrip: selectedTrip, isMobile: true)),
         if (currentCarTrip != null)
           positionedScorePointer(
             widthScoreColumn: widthScoreColumn,

@@ -3,15 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/input_to_trip.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/costs_percentage_bar.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/costs_result_row.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/detail_route_info/detail_route_info_section.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/layer_1/layer_1_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/mobiscore_score_board/mobi_score_score_board.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/mobiscore_score_board/score_pointer.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/question_icons.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/mode_selection_components.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
-import 'package:multimodal_routeplanner/03_domain/entities/costs/Costs.dart';
 
 class ResultContent extends StatelessWidget {
   const ResultContent({
@@ -29,6 +26,7 @@ class ResultContent extends StatelessWidget {
     required this.selectedDiagramType,
     required this.setInfoViewType,
     required this.setDiagramType,
+    required this.changeLayer,
   });
 
   final bool isMobile;
@@ -44,6 +42,7 @@ class ResultContent extends StatelessWidget {
   final DiagramType selectedDiagramType;
   final Function(InfoViewType) setInfoViewType;
   final Function(DiagramType) setDiagramType;
+  final Function(int) changeLayer;
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +50,7 @@ class ResultContent extends StatelessWidget {
     TextTheme textTheme = Theme.of(context).textTheme;
 
     double widthInfoSection = 350;
+    double contentMaxWidth = 850;
 
     String currentCarTripMode = getCarTripMode(isElectric: isElectric, isShared: isShared);
     Trip? currentCarTrip = trips.firstWhereOrNull((trip) => trip.mode == currentCarTripMode);
@@ -83,7 +83,11 @@ class ResultContent extends StatelessWidget {
                   Expanded(
                     child: SingleChildScrollView(
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: extraLargePadding),
+                        padding: EdgeInsets.only(
+                            left: mediumPadding,
+                            top: mediumPadding,
+                            bottom: mediumPadding,
+                            right: isMobile ? mediumPadding : extraLargePadding + mediumPadding),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -115,49 +119,13 @@ class ResultContent extends StatelessWidget {
                                           currentPublicTransportTrip: currentPublicTransportTrip,
                                           onSelectionModeChanged: onSelectionModeChanged),
                                     ],
-                                    Wrap(
-                                      alignment: WrapAlignment.spaceBetween,
-                                      spacing: mediumPadding,
-                                      runSpacing: mediumPadding,
-                                      // TODO: change text to custom text
-                                      children: [
-                                        SizedBox(
-                                            width: 500,
-                                            child: Text('These are the real costs of mobility with a private car',
-                                                style: textTheme.displayMedium)),
-                                        SizedBox(
-                                          width: 200,
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                selectedTrip.costs.getFullcosts().currencyString,
-                                                style: textTheme.displayLarge,
-                                              ),
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                children: [
-                                                  Text('Full costs of the trip', style: textTheme.labelLarge),
-                                                  smallHorizontalSpacer,
-                                                  customQuestionIcon(onTap: () {
-                                                    setInfoViewType(InfoViewType.diagram);
-                                                    setDiagramType(DiagramType.total);
-                                                  })
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        )
-                                      ],
+                                    Layer1Content(
+                                      selectedTrip: selectedTrip,
+                                      setInfoViewType: setInfoViewType,
+                                      setDiagramType: setDiagramType,
+                                      isMobile: isMobile,
+                                      contentMaxWidth: contentMaxWidth,
                                     ),
-                                    extraLargeVerticalSpacer,
-                                    costsPercentageBar(context, selectedTrip: selectedTrip),
-                                    extraLargeVerticalSpacer,
-                                    costResultRow(context, trip: selectedTrip, setDiagramType: (value) {
-                                      setInfoViewType(InfoViewType.diagram);
-                                      setDiagramType(value);
-                                    }),
-                                    extraLargeVerticalSpacer,
                                   ],
                                 ),
                               ),

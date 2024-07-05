@@ -131,7 +131,7 @@ class _DetailRouteInfoMapState extends State<DetailRouteInfoMap> {
 
 mapSegmentModeToV3Color(String segmentMode) {
   if (segmentMode == 'WALK') {
-    return Colors.grey;
+    return Colors.lightBlue;
   } else {
     return colorC;
   }

@@ -50,6 +50,8 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
   late InfoViewType infoViewType;
   late DiagramType selectedDiagramType;
 
+  int layerNumber = 1;
+
   void updateSelectedTrip() {
     logger.i('updating selected trip');
     String? tripMode = getTripModeFromInput(mode: selectionMode, isElectric: isElectric, isShared: isShared);
@@ -118,7 +120,7 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    bool isMobile = screenWidth < 600;
+    bool isMobile = screenWidth < 1000;
 
     return BlocConsumer<ResultCubit, ResultState>(
       bloc: cubit,
@@ -178,6 +180,11 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
                   setDiagramType: (diagramType) {
                     setState(() {
                       selectedDiagramType = diagramType;
+                    });
+                  },
+                  changeLayer: (value) {
+                    setState(() {
+                      layerNumber = value;
                     });
                   },
                 );
