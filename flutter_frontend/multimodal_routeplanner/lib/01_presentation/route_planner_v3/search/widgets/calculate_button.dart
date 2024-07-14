@@ -15,21 +15,19 @@ Widget statefulCalculateButton(BuildContext context,
     required bool isShared}) {
   AppLocalizations lang = AppLocalizations.of(context)!;
 
-  return IntrinsicWidth(
-    child: customButton(
-      label: lang.calculate,
-      onTap: () {
-        context.goNamed(
-          ResultScreenV3.routeName,
-          queryParameters: {
-            'startAddress': startAddress,
-            'endAddress': endAddress,
-            'selectedMode': selectedMode.name,
-            'isElectric': isElectric.toString(),
-            'isShared': isShared.toString(),
-          },
-        );
-      },
-    ),
+  return customButton(
+    label: lang.calculate,
+    onTap: () {
+      context.goNamed(
+        ResultScreenV3.routeName,
+        queryParameters: {
+          'startAddress': startAddress,
+          'endAddress': endAddress,
+          'selectedMode': selectedMode.name,
+          'isElectric': isElectric.toString(),
+          'isShared': isShared.toString(),
+        },
+      );
+    },
   );
 }

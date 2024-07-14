@@ -50,7 +50,7 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
   late InfoViewType infoViewType;
   late DiagramType selectedDiagramType;
 
-  int layerNumber = 1;
+  ContentLayer contentLayer = ContentLayer.layer1;
 
   void updateSelectedTrip() {
     logger.i('updating selected trip');
@@ -172,19 +172,20 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
                   },
                   infoViewType: infoViewType,
                   selectedDiagramType: selectedDiagramType,
-                  setInfoViewType: (value) {
+                  setInfoViewTypeCallback: (value) {
                     setState(() {
                       infoViewType = value;
                     });
                   },
-                  setDiagramType: (diagramType) {
+                  setDiagramTypeCallback: (diagramType) {
                     setState(() {
                       selectedDiagramType = diagramType;
                     });
                   },
-                  changeLayer: (value) {
+                  contentLayer: contentLayer,
+                  changeLayerCallback: (value) {
                     setState(() {
-                      layerNumber = value;
+                      contentLayer = value;
                     });
                   },
                 );

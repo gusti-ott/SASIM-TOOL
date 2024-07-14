@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/buttons.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/result_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/costs_percentage_bar.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/costs_result_row.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/detail_route_info/detail_route_info_section.dart';
@@ -11,22 +13,24 @@ class Layer1Content extends StatelessWidget {
   const Layer1Content(
       {super.key,
       required this.selectedTrip,
-      required this.setInfoViewType,
-      required this.setDiagramType,
+      required this.setInfoViewTypeCallback,
+      required this.setDiagramTypeCallback,
       required this.isMobile,
-      required this.contentMaxWidth});
+      required this.contentMaxWidth,
+      required this.changeLayerCallback});
 
   final Trip selectedTrip;
-  final Function(InfoViewType) setInfoViewType;
-  final Function(DiagramType) setDiagramType;
+  final Function(InfoViewType) setInfoViewTypeCallback;
+  final Function(DiagramType) setDiagramTypeCallback;
   final bool isMobile;
   final double contentMaxWidth;
+  final Function(ContentLayer) changeLayerCallback;
 
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
     return SizedBox(
-      width: 850,
+      width: contentMaxWidth,
       child: Column(
         children: [
           layer1Header(textTheme),
@@ -34,9 +38,15 @@ class Layer1Content extends StatelessWidget {
           costsPercentageBar(context, selectedTrip: selectedTrip),
           extraLargeVerticalSpacer,
           costResultRow(context, trip: selectedTrip, setDiagramType: (value) {
-            setInfoViewType(InfoViewType.diagram);
-            setDiagramType(value);
+            setInfoViewTypeCallback(InfoViewType.diagram);
+            setDiagramTypeCallback(value);
           }, isMobile: isMobile),
+          extraLargeVerticalSpacer,
+          customButton(
+              label: 'Show detailed route information',
+              onTap: () {
+                changeLayerCallback(ContentLayer.layer2);
+              }),
           extraLargeVerticalSpacer,
         ],
       ),
@@ -70,8 +80,8 @@ class Layer1Content extends StatelessWidget {
                     Text('Full costs of the trip', style: textTheme.labelLarge),
                     smallHorizontalSpacer,
                     customQuestionIcon(onTap: () {
-                      setInfoViewType(InfoViewType.diagram);
-                      setDiagramType(DiagramType.total);
+                      setInfoViewTypeCallback(InfoViewType.diagram);
+                      setDiagramTypeCallback(DiagramType.total);
                     })
                   ],
                 )

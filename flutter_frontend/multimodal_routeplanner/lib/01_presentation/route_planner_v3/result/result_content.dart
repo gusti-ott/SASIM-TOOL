@@ -5,6 +5,7 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/input_to_trip.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/detail_route_info/detail_route_info_section.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/layer_1/layer_1_content.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/layer_2_detailed/layer_2_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/mobiscore_score_board/mobi_score_score_board.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/mobiscore_score_board/score_pointer.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/mode_selection_components.dart';
@@ -24,9 +25,10 @@ class ResultContent extends StatelessWidget {
     required this.onSharedChanged,
     required this.infoViewType,
     required this.selectedDiagramType,
-    required this.setInfoViewType,
-    required this.setDiagramType,
-    required this.changeLayer,
+    required this.setInfoViewTypeCallback,
+    required this.setDiagramTypeCallback,
+    required this.changeLayerCallback,
+    required this.contentLayer,
   });
 
   final bool isMobile;
@@ -40,14 +42,14 @@ class ResultContent extends StatelessWidget {
   final Function(bool) onSharedChanged;
   final InfoViewType infoViewType;
   final DiagramType selectedDiagramType;
-  final Function(InfoViewType) setInfoViewType;
-  final Function(DiagramType) setDiagramType;
-  final Function(int) changeLayer;
+  final Function(InfoViewType) setInfoViewTypeCallback;
+  final Function(DiagramType) setDiagramTypeCallback;
+  final ContentLayer contentLayer;
+  final Function(ContentLayer) changeLayerCallback;
 
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-    TextTheme textTheme = Theme.of(context).textTheme;
 
     double widthInfoSection = 350;
     double contentMaxWidth = 850;
@@ -62,6 +64,7 @@ class ResultContent extends StatelessWidget {
     return Stack(
       children: [
         Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             if (isMobile)
               Container(
@@ -119,13 +122,23 @@ class ResultContent extends StatelessWidget {
                                           currentPublicTransportTrip: currentPublicTransportTrip,
                                           onSelectionModeChanged: onSelectionModeChanged),
                                     ],
-                                    Layer1Content(
-                                      selectedTrip: selectedTrip,
-                                      setInfoViewType: setInfoViewType,
-                                      setDiagramType: setDiagramType,
-                                      isMobile: isMobile,
-                                      contentMaxWidth: contentMaxWidth,
-                                    ),
+                                    if (contentLayer == ContentLayer.layer1)
+                                      Layer1Content(
+                                        selectedTrip: selectedTrip,
+                                        setInfoViewTypeCallback: setInfoViewTypeCallback,
+                                        setDiagramTypeCallback: setDiagramTypeCallback,
+                                        isMobile: isMobile,
+                                        contentMaxWidth: contentMaxWidth,
+                                        changeLayerCallback: changeLayerCallback,
+                                      ),
+                                    if (contentLayer == ContentLayer.layer2)
+                                      Layer2Content(
+                                        selectedTrip: selectedTrip,
+                                        isMobile: isMobile,
+                                        setInfoViewTypeCallback: setInfoViewTypeCallback,
+                                        setDiagramTypeCallback: setDiagramTypeCallback,
+                                        contentMaxWidth: contentMaxWidth,
+                                      )
                                   ],
                                 ),
                               ),
@@ -143,8 +156,8 @@ class ResultContent extends StatelessWidget {
                         selectedTrip: selectedTrip,
                         infoViewType: infoViewType,
                         selectedDiagramType: selectedDiagramType,
-                        setInfoViewType: setInfoViewType,
-                        setDiagramType: setDiagramType),
+                        setInfoViewType: setInfoViewTypeCallback,
+                        setDiagramType: setDiagramTypeCallback),
                 ],
               ),
             ),
@@ -266,3 +279,5 @@ class ResultContent extends StatelessWidget {
     ];
   }
 }
+
+enum ContentLayer { layer1, layer2 }
