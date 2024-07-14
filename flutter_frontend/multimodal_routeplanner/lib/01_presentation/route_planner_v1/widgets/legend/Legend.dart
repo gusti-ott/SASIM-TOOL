@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v1/widgets/legend/LegendRow.dart';
 
-import '../../../../values.dart';
+import '../../../commons/mode_colors.dart';
 
 class Legend extends StatelessWidget {
   const Legend({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final values = Values();
+    final values = ModeColors();
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(

@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-class Values {
+class ModeColors {
   // mode colors for visualization
   final Color defaultColor = Color.fromARGB(255, 183, 184, 183);
 
@@ -21,5 +21,5 @@ class Values {
   final Color busColor = const Color.fromARGB(255, 17, 130, 156);
   final Color trainColor = const Color.fromARGB(255, 8, 112, 12);
 
-  Values();
+  ModeColors();
 }

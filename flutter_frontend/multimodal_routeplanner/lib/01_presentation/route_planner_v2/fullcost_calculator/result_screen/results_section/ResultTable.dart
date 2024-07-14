@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/dimensions.dart';
-import 'package:multimodal_routeplanner/01_presentation/helpers/CustomScrollbar.dart';
+import 'package:multimodal_routeplanner/01_presentation/helpers/custom_scrollbar.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/results_section/table_cells/CostsItem.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/results_section/table_cells/HeaderItem.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/results_section/table_cells/MobiScoreItem.dart';
@@ -229,14 +229,8 @@ class _ResultDataTableState extends State<ResultDataTable> with TickerProviderSt
   TableRow tripInfoRow(BuildContext context) {
     return TableRow(children: [
       const SizedBox(),
-      TripInfoItem(
-          selectedTrip: selectedTrip1,
-          animation: _animation1,
-          animationController: _animationController1),
-      TripInfoItem(
-          selectedTrip: selectedTrip2,
-          animation: _animation2,
-          animationController: _animationController2),
+      TripInfoItem(selectedTrip: selectedTrip1, animation: _animation1, animationController: _animationController1),
+      TripInfoItem(selectedTrip: selectedTrip2, animation: _animation2, animationController: _animationController2),
       TripInfoItem(
         selectedTrip: selectedTrip3,
         animation: _animation3,

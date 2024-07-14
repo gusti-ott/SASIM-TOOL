@@ -2,17 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/logos.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/search_cubit.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/custom_switch.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/search_input_container.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 
 class SearchContent extends StatefulWidget {
-  const SearchContent(this.state, {super.key, required this.isMobile, required this.scrollController});
+  const SearchContent({super.key, required this.isMobile, required this.scrollController});
 
   final bool isMobile;
   final ScrollController scrollController;
-  final SearchState state;
 
   @override
   State<SearchContent> createState() => _SearchContentState();
@@ -30,14 +28,12 @@ class _SearchContentState extends State<SearchContent> {
         controller: widget.scrollController,
         child: searchContent(
           context,
-          widget.state,
           screenHeight: screenHeight,
           screenWidth: screenWidth,
         ));
   }
 
-  Widget searchContent(BuildContext context, SearchState state,
-      {required double screenHeight, required double screenWidth}) {
+  Widget searchContent(BuildContext context, {required double screenHeight, required double screenWidth}) {
     TextTheme textTheme = Theme.of(context).textTheme;
 
     return Column(
@@ -54,7 +50,7 @@ class _SearchContentState extends State<SearchContent> {
                 Text('Learn about the real costs of mobility',
                     style: textTheme.displayMedium!.copyWith(color: primaryColorV3)),
                 mediumVerticalSpacer,
-                SearchInputContent(state, key: _searchInputContentKey, isMobile: widget.isMobile),
+                SearchInputContent(key: _searchInputContentKey, isMobile: widget.isMobile),
                 SizedBox(
                   height: extraLargePadding * 2,
                 )
@@ -68,7 +64,6 @@ class _SearchContentState extends State<SearchContent> {
 
   Widget screenHeader(BuildContext context, {required bool isMobile}) {
     AppLocalizations lang = AppLocalizations.of(context)!;
-    TextTheme textTheme = Theme.of(context).textTheme;
 
     if (isMobile) {
       return headerImage();

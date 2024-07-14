@@ -3,7 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../../03_domain/entities/Trip.dart';
 import '../../../../03_domain/enums/RouteMarkerTypeEnum.dart';
-import '../../../helpers/ModeMapingHelper.dart';
+import '../../../helpers/mode_mapping_helper.dart';
 
 class RouteMarker extends StatelessWidget {
   final Trip trip;

@@ -1,6 +1,6 @@
 /*
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:multimodal_routeplanner/01_presentation/helpers/ModeMapingHelper.dart';
+import 'package:multimodal_routeplanner/01_presentation/helpers/mode_mapping_helper.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 import 'package:multimodal_routeplanner/03_domain/enums/DiagramTypeEnum.dart';
 

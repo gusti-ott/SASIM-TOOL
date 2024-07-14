@@ -2,44 +2,57 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/decorations.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/search_cubit.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/result_cubit.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/calculate_button.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 import 'package:multimodal_routeplanner/config/setup_dependencies.dart';
 
-Widget addressInputRow(BuildContext context, SearchState state,
+Widget addressInputRow(BuildContext context,
     {required bool isMobile,
     required TextEditingController startController,
     required TextEditingController endController,
     required Function onStartChanged,
     required Function onEndChanged,
-    required Function swapInputs}) {
-  SearchCubit cubit = sl<SearchCubit>();
+    required Function swapInputs,
+    required SelectionMode selectedMode,
+    required bool isElectric,
+    required bool isShared}) {
+  ResultCubit cubit = sl<ResultCubit>();
 
   return (!isMobile)
-      ? desktopAddressInputRow(context, state,
+      ? desktopAddressInputRow(context,
           cubit: cubit,
           startController: startController,
           endController: endController,
           onStartChanged: onStartChanged,
           onEndChanged: onEndChanged,
-          swapInputs: swapInputs)
-      : mobileAddressInputContainer(context, state,
+          swapInputs: swapInputs,
+          selectedMode: selectedMode,
+          isElectric: isElectric,
+          isShared: isShared)
+      : mobileAddressInputContainer(context,
           cubit: cubit,
           startController: startController,
           endController: endController,
           onStartChanged: onStartChanged,
           onEndChanged: onEndChanged,
-          swapInputs: swapInputs);
+          swapInputs: swapInputs,
+          selectedMode: selectedMode,
+          isElectric: isElectric,
+          isShared: isShared);
 }
 
-Column mobileAddressInputContainer(BuildContext context, SearchState state,
-    {required SearchCubit cubit,
+Column mobileAddressInputContainer(BuildContext context,
+    {required ResultCubit cubit,
     required startController,
     required endController,
     required Function onStartChanged,
     required Function onEndChanged,
-    required Function swapInputs}) {
+    required Function swapInputs,
+    required SelectionMode selectedMode,
+    required bool isElectric,
+    required bool isShared}) {
   AppLocalizations lang = AppLocalizations.of(context)!;
   return Column(
     children: [
@@ -76,19 +89,27 @@ Column mobileAddressInputContainer(BuildContext context, SearchState state,
         },
       ),
       largeVerticalSpacer,
-      statefulCalculateButton(context, state,
-          cubit: cubit, startAddress: startController.text, endAddress: endController.text),
+      statefulCalculateButton(context,
+          cubit: cubit,
+          startAddress: startController.text,
+          endAddress: endController.text,
+          selectedMode: selectedMode,
+          isElectric: isElectric,
+          isShared: isShared),
     ],
   );
 }
 
-Row desktopAddressInputRow(BuildContext context, SearchState state,
-    {required SearchCubit cubit,
+Row desktopAddressInputRow(BuildContext context,
+    {required ResultCubit cubit,
     required startController,
     required endController,
     required Function onStartChanged,
     required Function onEndChanged,
-    required Function swapInputs}) {
+    required Function swapInputs,
+    required SelectionMode selectedMode,
+    required bool isElectric,
+    required bool isShared}) {
   AppLocalizations lang = AppLocalizations.of(context)!;
   return Row(
     children: [
@@ -121,8 +142,13 @@ Row desktopAddressInputRow(BuildContext context, SearchState state,
         ),
       ),
       smallHorizontalSpacer,
-      statefulCalculateButton(context, state,
-          cubit: cubit, startAddress: startController.text, endAddress: endController.text),
+      statefulCalculateButton(context,
+          cubit: cubit,
+          startAddress: startController.text,
+          endAddress: endController.text,
+          selectedMode: selectedMode,
+          isElectric: isElectric,
+          isShared: isShared),
     ],
   );
 }

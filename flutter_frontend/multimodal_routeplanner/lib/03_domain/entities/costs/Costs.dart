@@ -1,3 +1,4 @@
+import 'package:multimodal_routeplanner/01_presentation/helpers/currency_formatting_helpers.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/costs/ExternalCosts.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/costs/InternalCosts.dart';
 
@@ -10,4 +11,8 @@ class Costs {
   double getFullcosts() {
     return externalCosts.all + internalCosts.all;
   }
+}
+
+extension CostsExtension on double {
+  String get currencyString => formatCurrency(this);
 }

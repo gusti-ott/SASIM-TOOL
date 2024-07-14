@@ -5,12 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_tappable_polyline/flutter_map_tappable_polyline.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:multimodal_routeplanner/01_presentation/commons/mode_colors.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v1/widgets/map/StartMarker.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/visualization/visualization_bloc.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Waypoint.dart';
 import 'package:multimodal_routeplanner/config/munich_geo_values.dart';
-import 'package:multimodal_routeplanner/values.dart';
 
 import 'StopMarker.dart';
 
@@ -119,7 +119,7 @@ class _MapContentState extends State<MapContent> {
   }
 
   mapSegmentModeToColor(String segmentType) {
-    final Values values = Values();
+    final ModeColors values = ModeColors();
 
     switch (segmentType) {
       case 'CAR':

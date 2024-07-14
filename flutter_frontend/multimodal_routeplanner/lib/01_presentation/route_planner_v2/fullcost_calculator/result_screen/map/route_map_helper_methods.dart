@@ -2,9 +2,9 @@ import 'dart:math';
 
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:multimodal_routeplanner/01_presentation/commons/mode_colors.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Waypoint.dart';
-import 'package:multimodal_routeplanner/values.dart';
 
 LatLngBounds fitTripBounds(Trip selectedTrip) {
   List<Waypoint> allWaypoints = selectedTrip.segments.expand((segment) => segment.waypoints).toList();
@@ -22,7 +22,7 @@ LatLngBounds fitTripBounds(Trip selectedTrip) {
 }
 
 mapSegmentModeToColor(String segmentType) {
-  final Values values = Values();
+  final ModeColors values = ModeColors();
 
   switch (segmentType) {
     case 'CAR':

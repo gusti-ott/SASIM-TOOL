@@ -5,8 +5,8 @@ import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 import 'package:multimodal_routeplanner/03_domain/usecases/route_usecases.dart';
 import 'package:multimodal_routeplanner/logger.dart';
 
-class SearchCubit extends Cubit<SearchState> {
-  SearchCubit(this._routePlannerUsecases) : super(SearchInitial());
+class ResultCubit extends Cubit<ResultState> {
+  ResultCubit(this._routePlannerUsecases) : super(ResultInitial());
 
   final RoutePlannerUsecases _routePlannerUsecases;
   final Logger logger = getLogger();
@@ -16,35 +16,35 @@ class SearchCubit extends Cubit<SearchState> {
 
   Future<void> loadTrips(String startInput, String endInput) async {
     if (cachedStartInput != startInput || cachedEndInput != endInput) {
-      emit(SearchLoading());
+      emit(ResultLoading());
       cachedStartInput = startInput;
       cachedEndInput = endInput;
       try {
-        List<Trip> listTrips = await _routePlannerUsecases.getAllTrips(startInput: startInput, endInput: endInput);
-        emit(SearchLoaded(listTrips));
+        List<Trip> listTrips = await _routePlannerUsecases.getV3Trips(startInput: startInput, endInput: endInput);
+        emit(ResultLoaded(listTrips));
       } catch (e) {
         logger.e(e.toString());
-        emit(SearchError(e.toString()));
+        emit(ResultError(e.toString()));
       }
     }
   }
 }
 
 @immutable
-abstract class SearchState {}
+abstract class ResultState {}
 
-class SearchInitial extends SearchState {}
+class ResultInitial extends ResultState {}
 
-class SearchLoading extends SearchState {}
+class ResultLoading extends ResultState {}
 
-class SearchLoaded extends SearchState {
+class ResultLoaded extends ResultState {
   final List<Trip> trips;
 
-  SearchLoaded(this.trips);
+  ResultLoaded(this.trips);
 }
 
-class SearchError extends SearchState {
+class ResultError extends ResultState {
   final String message;
 
-  SearchError(this.message);
+  ResultError(this.message);
 }

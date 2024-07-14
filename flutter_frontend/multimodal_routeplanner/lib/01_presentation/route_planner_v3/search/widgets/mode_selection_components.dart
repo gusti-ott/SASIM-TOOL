@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/decorations.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/electric_selection_components.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/search_input_container.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/shared_selection_components.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 
@@ -16,10 +16,13 @@ Widget modeSelectionRow(BuildContext context,
   return Container(
     decoration: boxDecorationWithShadow(),
     padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    child: Wrap(
+      alignment: WrapAlignment.center,
+      runAlignment: WrapAlignment.center,
+      spacing: largePadding,
+      runSpacing: smallPadding,
       children: [
-        modeSelectionPart(selectionMode: selectionMode, onSelectionModeChanged: onSelectionModeChanged),
+        modeSelectionPart(selectedMode: selectionMode, onSelectionModeChanged: onSelectionModeChanged),
         sharedSelectionPart(context, isShared: isShared, onSharedChanged: onSharedChanged),
         electricSelectionPart(context, isElectric: isElectric, onElectricChanged: onElectricChanged),
       ],
@@ -28,31 +31,34 @@ Widget modeSelectionRow(BuildContext context,
 }
 
 Widget modeSelectionPart(
-    {required SelectionMode selectionMode, required Function(SelectionMode) onSelectionModeChanged}) {
-  return Row(
-    children: [
-      modeIconButton(
-        icon: Icons.directions_bike_outlined,
-        isSelected: selectionMode == SelectionMode.bicycle,
-        onPressed: () {
-          onSelectionModeChanged(SelectionMode.bicycle);
-        },
-      ),
-      modeIconButton(
-        icon: Icons.directions_car_outlined,
-        isSelected: selectionMode == SelectionMode.car,
-        onPressed: () {
-          onSelectionModeChanged(SelectionMode.car);
-        },
-      ),
-      modeIconButton(
-        icon: Icons.directions_bus_outlined,
-        isSelected: selectionMode == SelectionMode.publicTransport,
-        onPressed: () {
-          onSelectionModeChanged(SelectionMode.publicTransport);
-        },
-      ),
-    ],
+    {required SelectionMode selectedMode, required Function(SelectionMode) onSelectionModeChanged}) {
+  return IntrinsicWidth(
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        modeIconButton(
+          icon: Icons.pedal_bike_outlined,
+          isSelected: selectedMode == SelectionMode.bicycle,
+          onPressed: () {
+            onSelectionModeChanged(SelectionMode.bicycle);
+          },
+        ),
+        modeIconButton(
+          icon: Icons.directions_car_outlined,
+          isSelected: selectedMode == SelectionMode.car,
+          onPressed: () {
+            onSelectionModeChanged(SelectionMode.car);
+          },
+        ),
+        modeIconButton(
+          icon: Icons.directions_bus_outlined,
+          isSelected: selectedMode == SelectionMode.publicTransport,
+          onPressed: () {
+            onSelectionModeChanged(SelectionMode.publicTransport);
+          },
+        ),
+      ],
+    ),
   );
 }
 
@@ -73,6 +79,35 @@ Widget modeIconButton({
       icon: Icon(icon),
       color: isSelected ? Colors.black : Colors.grey,
       onPressed: onPressed,
+    ),
+  );
+}
+
+Widget mobileModeSelectionContainer(BuildContext context,
+    {required SelectionMode selectedMode,
+    required Function(SelectionMode) onSelectionModeChanged,
+    required bool isElectric,
+    required Function(bool) onElectricChanged,
+    required bool isShared,
+    required Function(bool) onSharedChanged,
+    bool disableBorder = false}) {
+  return Container(
+    decoration: (!disableBorder) ? boxDecorationWithShadow() : null,
+    padding: EdgeInsets.all(mediumPadding),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        modeSelectionPart(selectedMode: selectedMode, onSelectionModeChanged: onSelectionModeChanged),
+        smallVerticalSpacer,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            sharedSelectionPart(context, isShared: isShared, onSharedChanged: onSharedChanged),
+            mediumHorizontalSpacer,
+            electricSelectionPart(context, isElectric: isElectric, onElectricChanged: onElectricChanged),
+          ],
+        )
+      ],
     ),
   );
 }

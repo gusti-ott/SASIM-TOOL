@@ -17,9 +17,10 @@ Color secondaryColorV3 = colorC;
 Color tertiaryColorV3 = colorE;
 
 Color customDarkGrey = const Color(0xFF282828);
+Color customLightGrey = const Color(0xFFB3B3B3);
 Color customOffWhite = const Color(0xFFEBEBEB);
 Color customWhite100 = const Color(0xFFFFFFFF);
 
 Color backgroundColorV3 = const Color(0xFFF0F0E4);
 
-Color blend = Colors.white.withOpacity(0.25);
+Color blend = Colors.white.withOpacity(0.75);
