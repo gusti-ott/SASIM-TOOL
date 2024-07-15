@@ -42,13 +42,13 @@ jobs:
         run: |
           flutter build web
 
-          - name: Modify index.html
-            run: |
-              sed -i 's|<base href="/">|<base href="/web/">|' flutter_frontend/multimodal_routeplanner/build/web/index.html
+      - name: Modify index.html
+        run: |
+          sed -i 's|<base href="/">|<base href="/web/">|' flutter_frontend/multimodal_routeplanner/build/web/index.html
 
-          - name: Copy built files to Flask templates
-            run: |
-              cp -r flutter_frontend/multimodal_routeplanner/build/web/* flask_app/templates/
+      - name: Copy built files to Flask templates
+        run: |
+          cp -r flutter_frontend/multimodal_routeplanner/build/web/* flask_app/templates/
 
   deploy:
     needs: build
