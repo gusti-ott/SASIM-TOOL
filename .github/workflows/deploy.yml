@@ -19,7 +19,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.3.10' # Ensure this is a valid Flutter version
+          flutter-version: '3.22.2' # Ensure this is a valid Flutter version
 
       - run: flutter doctor
 
