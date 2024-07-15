@@ -10,7 +10,7 @@ on:
 
 jobs:
   build-flutter-frontend:
-    name: Build Flutter Frontend
+    name: build
     runs-on: ubuntu-latest
     defaults:
       run:
