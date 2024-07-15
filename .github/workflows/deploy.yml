@@ -9,8 +9,8 @@ on:
       - main  # Run build on PRs to main
 
 jobs:
-  build-flutter-frontend:
-    name: build
+  build:
+    name: Build Flutter Frontend
     runs-on: ubuntu-latest
     defaults:
       run:
