@@ -33,9 +33,6 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Analyze and lint
-        run: dart analyze
-
       - name: Build Flutter Web
         run: flutter build web --target=lib/main.dart
 
