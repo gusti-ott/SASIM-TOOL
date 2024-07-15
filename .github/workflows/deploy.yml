@@ -32,11 +32,16 @@ jobs:
         run: |
           cd flutter_frontend/multimodal_routeplanner
           flutter pub run build_runner build --delete-conflicting-outputs
-          flutter gen-l10n
+
+      - name: Analyze Dart Code
+        run: |
+          cd flutter_frontend/multimodal_routeplanner
+          dart analyze
 
       - name: Build Flutter Web
         run: |
           cd flutter_frontend/multimodal_routeplanner
+          flutter gen-l10n
           flutter build web
 
       - name: Modify index.html

@@ -7,8 +7,8 @@ class ResultListError extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 1),
       child: SizedBox(
         width: double.infinity,
         child: Card(
@@ -18,30 +18,29 @@ class ResultListError extends StatelessWidget {
               ExpansionTile(
                 iconColor: Colors.white,
                 collapsedIconColor: Colors.white,
-                title: const Center(
+                title: Center(
                   child: Padding(
                     padding: EdgeInsets.all(8),
                     child: Text(
                       "irgendwas hat nicht geklappt! Versuchs nochmal ...",
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
+                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
-                subtitle: const Text(
+                subtitle: Text(
                   'Woran hats gelegen?',
                   style: TextStyle(fontSize: 14, color: Colors.white),
                   textAlign: TextAlign.center,
                 ),
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: EdgeInsets.all(8.0),
                     child: SizedBox(
                       width: double.infinity,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
+                        children: [
                           Text(
                             '1. Überprüfe das Format deiner Adresseingabe. Deine Texteingabe muss "München" enthalten, damit der Routenplaner die richtige Adresse findet. \n\nFALSCH: Dachauerstr. 110\nRICHTIG: Dachauerstr. 110, München\n',
                             style: TextStyle(fontSize: 14, color: Colors.white),
