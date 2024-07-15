@@ -36,7 +36,7 @@ jobs:
       - name: Generate Localization Files
         run: |
           cd flutter_frontend/multimodal_routeplanner
-          flutter flutter gen-l10n
+          flutter gen-l10n
 
       - name: Analyze Dart Code
         run: |
