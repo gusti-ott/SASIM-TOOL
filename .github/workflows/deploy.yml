@@ -33,6 +33,11 @@ jobs:
           cd flutter_frontend/multimodal_routeplanner
           flutter pub run build_runner build --delete-conflicting-outputs
 
+      - name: Generate Localization Files
+        run: |
+          cd flutter_frontend/multimodal_routeplanner
+          flutter flutter gen-l10n
+
       - name: Analyze Dart Code
         run: |
           cd flutter_frontend/multimodal_routeplanner
@@ -41,7 +46,6 @@ jobs:
       - name: Build Flutter Web
         run: |
           cd flutter_frontend/multimodal_routeplanner
-          flutter gen-l10n
           flutter build web
 
       - name: Modify index.html
