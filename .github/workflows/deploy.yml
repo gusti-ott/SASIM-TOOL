@@ -9,61 +9,46 @@ on:
       - main  # Run build on PRs to main
 
 jobs:
-  build:
+  build-flutter-frontend:
+    name: Build Flutter Frontend
+    needs: changes
+    if: ${{ needs.changes.outputs.frontend == 'true' }}
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./flutter_frontend/multimodal_routeplanner
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
 
-      - name: Set up Flutter
+      - name: Git checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
+
+      - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.22.2' # Ensure this is a valid Flutter version
+          flutter-version: '3.22.2'
 
       - run: flutter doctor
 
       - name: Install dependencies
-        run: |
-          cd flutter_frontend/multimodal_routeplanner
-          flutter pub get
+        run: flutter pub get
 
-      - name: Generate Files
-        run: |
-          cd flutter_frontend/multimodal_routeplanner
-          flutter pub run build_runner build --delete-conflicting-outputs
-
-      - name: Generate Localization Files
-        run: |
-          cd flutter_frontend/multimodal_routeplanner
-          flutter gen-l10n
-
-      - name: Analyze Dart Code
-        run: |
-          cd flutter_frontend/multimodal_routeplanner
-          dart analyze
+      - name: Analyze and lint
+        run: dart analyze
 
       - name: Build Flutter Web
         run: |
-          cd flutter_frontend/multimodal_routeplanner
           flutter build web
 
-      - name: Modify index.html
-        run: |
-          sed -i 's|<base href="/">|<base href="/web/">|' flutter_frontend/multimodal_routeplanner/build/web/index.html
+          - name: Modify index.html
+            run: |
+              sed -i 's|<base href="/">|<base href="/web/">|' flutter_frontend/multimodal_routeplanner/build/web/index.html
 
-      - name: Copy built files to Flask templates
-        run: |
-          cp -r flutter_frontend/multimodal_routeplanner/build/web/* flask_app/templates/
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-
-      - name: Build and Test Docker Compose
-        run: |
-          docker-compose -f docker-compose.yml build
-          docker-compose -f docker-compose.yml up -d
-          docker-compose -f docker-compose.yml down
+          - name: Copy built files to Flask templates
+            run: |
+              cp -r flutter_frontend/multimodal_routeplanner/build/web/* flask_app/templates/
 
   deploy:
     needs: build
