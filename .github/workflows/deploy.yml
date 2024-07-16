@@ -38,7 +38,7 @@ jobs:
           flutter gen-l10n
           flutter build web --target=lib/main.dart
           sed -i 's|<base href="/">|<base href="/web/">|' build/web/index.html
-          cp -r build/web/* flask_app/templates/
+          cp -r build/web/* ../../flask_app/templates/
 
   deploy:
     needs: build
