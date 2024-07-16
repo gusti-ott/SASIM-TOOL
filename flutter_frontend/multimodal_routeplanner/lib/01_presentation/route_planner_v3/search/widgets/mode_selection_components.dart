@@ -92,6 +92,7 @@ Widget mobileModeSelectionContainer(BuildContext context,
     required Function(bool) onSharedChanged,
     bool disableBorder = false}) {
   return Container(
+    width: double.infinity,
     decoration: (!disableBorder) ? boxDecorationWithShadow() : null,
     padding: EdgeInsets.all(mediumPadding),
     child: Column(
@@ -99,8 +100,8 @@ Widget mobileModeSelectionContainer(BuildContext context,
       children: [
         modeSelectionPart(selectedMode: selectedMode, onSelectionModeChanged: onSelectionModeChanged),
         smallVerticalSpacer,
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        Wrap(
+          alignment: WrapAlignment.center,
           children: [
             sharedSelectionPart(context, isShared: isShared, onSharedChanged: onSharedChanged),
             mediumHorizontalSpacer,

@@ -43,7 +43,7 @@ class _SearchContentState extends State<SearchContent> {
         SizedBox(
           width: 1000,
           child: Padding(
-            padding: EdgeInsets.all((widget.isMobile) ? mediumPadding : 0.0),
+            padding: EdgeInsets.all((widget.isMobile) ? mediumPadding : largePadding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

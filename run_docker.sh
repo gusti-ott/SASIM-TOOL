@@ -1,7 +1,10 @@
 #!/bin/bash
 
 echo "killing old docker processes"
-sudo docker compose rm -fs
+sudo docker-compose down
 
-echo "building docker containers"
-sudo docker compose up --build -d
+echo "pulling latest docker container"
+sudo docker pull gusott/sasim:latest
+
+echo "building docker containers and removing orphans"
+docker-compose up -d --remove-orphans
