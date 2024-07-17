@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/decorations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/electric_selection_components.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/shared_selection_components.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/electric_selection_components.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/shared_selection_components.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 
 Widget modeSelectionRow(BuildContext context,

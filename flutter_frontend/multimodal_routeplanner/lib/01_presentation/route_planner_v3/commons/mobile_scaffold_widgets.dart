@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/custom_switch.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/custom_switch.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 
 AppBar mobileAppBar(GlobalKey<ScaffoldState> scaffoldKey) {

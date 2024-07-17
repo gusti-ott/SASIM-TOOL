@@ -3,8 +3,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/buttons.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/result_cubit.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/result_screen_v3.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_cubit.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_screen_v3.dart';
 
 Widget statefulCalculateButton(BuildContext context,
     {required ResultCubit cubit,

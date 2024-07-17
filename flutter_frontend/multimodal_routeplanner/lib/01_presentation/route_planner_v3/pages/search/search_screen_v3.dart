@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/mobile_scaffold_widgets.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/search_content.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/search_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 
 class SearchScreenV3 extends StatefulWidget {

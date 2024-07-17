@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/logos.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/custom_switch.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/search_input_container.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/custom_switch.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/search_input_container.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 
 class SearchContent extends StatefulWidget {

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../../../../02_application/bloc/visualization/visualization_bloc.dart';
-import '../../../../../../03_domain/entities/Trip.dart';
+import 'package:multimodal_routeplanner/02_application/bloc/visualization/visualization_bloc.dart';
+import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 
 class RouteIndicatorWidget extends StatelessWidget {
   final Trip trip;
@@ -12,8 +11,7 @@ class RouteIndicatorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     bool isSelected = false;
-    return BlocBuilder<VisualizationBloc, VisualizationState>(
-        builder: (context, routePlannerState) {
+    return BlocBuilder<VisualizationBloc, VisualizationState>(builder: (context, routePlannerState) {
       if (routePlannerState is VisualizationChangedState) {
         if (routePlannerState.selectedTrip == trip) {
           isSelected = true;
@@ -23,8 +21,7 @@ class RouteIndicatorWidget extends StatelessWidget {
       }
       return VerticalDivider(
         thickness: 3,
-        color:
-            isSelected ? themeData.colorScheme.secondary : Colors.grey.shade300,
+        color: isSelected ? themeData.colorScheme.secondary : Colors.grey.shade300,
         indent: 0,
       );
     });

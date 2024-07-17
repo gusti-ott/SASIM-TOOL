@@ -7,9 +7,9 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/input_to_trip.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mobiscore_to_x.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/result_content.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/result_cubit.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/detail_route_info/detail_route_info_section.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_content.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_cubit.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/detail_route_info_section.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 import 'package:multimodal_routeplanner/config/setup_dependencies.dart';
 import 'package:multimodal_routeplanner/logger.dart';
@@ -172,12 +172,12 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
                   },
                   infoViewType: infoViewType,
                   selectedDiagramType: selectedDiagramType,
-                  setInfoViewTypeCallback: (value) {
+                  setInfoViewTypeCallback: (InfoViewType value) {
                     setState(() {
                       infoViewType = value;
                     });
                   },
-                  setDiagramTypeCallback: (diagramType) {
+                  setDiagramTypeCallback: (DiagramType diagramType) {
                     setState(() {
                       selectedDiagramType = diagramType;
                     });

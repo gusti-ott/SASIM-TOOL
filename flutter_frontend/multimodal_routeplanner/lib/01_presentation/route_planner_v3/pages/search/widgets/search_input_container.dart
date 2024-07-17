@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/result_cubit.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/address_input_components.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/mode_selection_components.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_cubit.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/address_input_components.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/mode_selection_components.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 import 'package:multimodal_routeplanner/config/setup_dependencies.dart';
 

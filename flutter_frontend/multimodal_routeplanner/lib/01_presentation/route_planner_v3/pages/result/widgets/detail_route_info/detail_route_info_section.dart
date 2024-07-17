@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/detail_route_info/detail_route_info_diagram.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/detail_route_info/detail_route_info_map.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/detail_route_info/diagram_type_selection.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/detail_route_info_diagram.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/detail_route_info_map.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/diagram_type_selection.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 
@@ -74,7 +74,7 @@ class DetailRouteInfoSection extends StatelessWidget {
               if (infoViewType == InfoViewType.diagram) ...[
                 DiagramTypeSelection(
                   height: diagramTypeSelectionHeight,
-                  setDiagramType: (value) {
+                  setDiagramType: (DiagramType value) {
                     setDiagramType(value);
                   },
                   selectedDiagramType: selectedDiagramType,

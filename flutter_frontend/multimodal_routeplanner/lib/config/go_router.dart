@@ -6,8 +6,8 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcos
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/search_screen/SearchScreen.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/main_screen.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/result_screen_v3.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/search_screen_v3.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_screen_v3.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/search_screen_v3.dart';
 
 // final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorCalculatorKey = GlobalKey<NavigatorState>(debugLabel: 'shellCalculator');

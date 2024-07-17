@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../../../02_application/bloc/cost_details/cost_details_bloc.dart';
-import '../../../../../03_domain/entities/costs/Costs.dart';
+import 'package:multimodal_routeplanner/02_application/bloc/cost_details/cost_details_bloc.dart';
+import 'package:multimodal_routeplanner/03_domain/entities/costs/Costs.dart';
 
 class CostDetails extends StatelessWidget {
   final Costs costs;
@@ -19,8 +18,7 @@ class CostDetails extends StatelessWidget {
         children: [
           IconButton(
               onPressed: () {
-                BlocProvider.of<CostDetailsBloc>(context)
-                    .add(HideCostDetailsEvent());
+                BlocProvider.of<CostDetailsBloc>(context).add(HideCostDetailsEvent());
               },
               icon: const Icon(Icons.close)),
           Column(

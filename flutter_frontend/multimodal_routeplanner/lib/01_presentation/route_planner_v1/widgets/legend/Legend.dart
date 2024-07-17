@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:multimodal_routeplanner/01_presentation/commons/mode_colors.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v1/widgets/legend/LegendRow.dart';
-
-import '../../../commons/mode_colors.dart';
 
 class Legend extends StatelessWidget {
   const Legend({super.key});
@@ -13,7 +12,7 @@ class Legend extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(5)),
+            borderRadius: const BorderRadius.all(Radius.circular(5)),
             color: Colors.grey.withOpacity(0.8),
           ),
           child: Wrap(

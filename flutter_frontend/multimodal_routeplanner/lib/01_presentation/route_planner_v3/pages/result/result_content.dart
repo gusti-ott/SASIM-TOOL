@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/input_to_trip.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/detail_route_info/detail_route_info_section.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/layer_1/layer_1_content.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/layer_2_detailed/layer_2_content.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/mobiscore_score_board/mobi_score_score_board.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/result/widgets/mobiscore_score_board/score_pointer.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/search/widgets/mode_selection_components.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/detail_route_info_section.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/layer_1/layer_1_content.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/layer_2_detailed/layer_2_content.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/mobiscore_score_board/mobi_score_score_board.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/mobiscore_score_board/score_pointer.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/mode_selection_components.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 
 class ResultContent extends StatelessWidget {

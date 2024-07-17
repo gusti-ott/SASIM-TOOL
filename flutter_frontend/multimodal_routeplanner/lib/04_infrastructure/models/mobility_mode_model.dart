@@ -1,5 +1,5 @@
-import '../../03_domain/entities/MobilityMode.dart';
-import '../../03_domain/enums/MobilityModeEnum.dart';
+import 'package:multimodal_routeplanner/03_domain/entities/MobilityMode.dart';
+import 'package:multimodal_routeplanner/03_domain/enums/MobilityModeEnum.dart';
 
 class MobilityModeModel extends MobilityMode {
   MobilityModeModel({required MobilityModeEnum mode}) : super(mode: mode);

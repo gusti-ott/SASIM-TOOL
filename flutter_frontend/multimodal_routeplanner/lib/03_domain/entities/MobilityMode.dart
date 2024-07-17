@@ -1,4 +1,4 @@
-import '../enums/MobilityModeEnum.dart';
+import 'package:multimodal_routeplanner/03_domain/enums/MobilityModeEnum.dart';
 
 class MobilityMode {
   final MobilityModeEnum mode;
