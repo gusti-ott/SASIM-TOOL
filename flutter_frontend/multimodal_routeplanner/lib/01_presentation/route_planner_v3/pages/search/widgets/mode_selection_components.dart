@@ -14,10 +14,11 @@ Widget modeSelectionRow(BuildContext context,
     required bool isShared,
     required Function(bool) onSharedChanged}) {
   return Container(
+    width: double.infinity,
     decoration: boxDecorationWithShadow(),
     padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
     child: Wrap(
-      alignment: WrapAlignment.center,
+      alignment: WrapAlignment.spaceBetween,
       runAlignment: WrapAlignment.center,
       spacing: largePadding,
       runSpacing: smallPadding,

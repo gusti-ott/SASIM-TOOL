@@ -53,6 +53,7 @@ class ResultContent extends StatelessWidget {
 
     double widthInfoSection = 350;
     double contentMaxWidth = 850;
+    double horizontalPadding = mediumPadding;
 
     String currentCarTripMode = getCarTripMode(isElectric: isElectric, isShared: isShared);
     Trip? currentCarTrip = trips.firstWhereOrNull((trip) => trip.mode == currentCarTripMode);
@@ -82,65 +83,65 @@ class ResultContent extends StatelessWidget {
               ),
             Expanded(
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: SingleChildScrollView(
                       child: Padding(
                         padding: EdgeInsets.only(
-                            left: mediumPadding,
+                            left: horizontalPadding,
                             top: mediumPadding,
                             bottom: mediumPadding,
-                            right: isMobile ? mediumPadding : extraLargePadding + mediumPadding),
+                            right: isMobile ? horizontalPadding : extraLargePadding + mediumPadding),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Align(
-                              alignment: Alignment.topCenter,
-                              child: ConstrainedBox(
-                                constraints: const BoxConstraints(maxWidth: 1000),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    if (!isMobile) ...[
-                                      Padding(
-                                        padding: EdgeInsets.symmetric(horizontal: mediumPadding),
-                                        child: modeSelectionRow(context,
-                                            isElectric: isElectric,
-                                            onElectricChanged: onElectricChanged,
-                                            selectionMode: selectionMode,
-                                            onSelectionModeChanged: onSelectionModeChanged,
-                                            isShared: isShared,
-                                            onSharedChanged: onSharedChanged),
-                                      ),
-                                      extraLargeVerticalSpacer,
-                                    ] else ...[
-                                      mobiScoreScoreBoardWithPointers(context,
-                                          heightSection: 240,
-                                          selectedTrip: selectedTrip,
-                                          currentCarTrip: currentCarTrip,
-                                          currentBicycleTrip: currentBicycleTrip,
-                                          currentPublicTransportTrip: currentPublicTransportTrip,
-                                          onSelectionModeChanged: onSelectionModeChanged),
-                                    ],
-                                    if (contentLayer == ContentLayer.layer1)
-                                      Layer1Content(
+                            ConstrainedBox(
+                              constraints: const BoxConstraints(maxWidth: 1000),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  if (!isMobile) ...[
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: mediumPadding, vertical: extraLargePadding),
+                                      child: modeSelectionRow(context,
+                                          isElectric: isElectric,
+                                          onElectricChanged: onElectricChanged,
+                                          selectionMode: selectionMode,
+                                          onSelectionModeChanged: onSelectionModeChanged,
+                                          isShared: isShared,
+                                          onSharedChanged: onSharedChanged),
+                                    ),
+                                  ] else ...[
+                                    mobiScoreScoreBoardWithPointers(context,
+                                        heightSection: 240,
                                         selectedTrip: selectedTrip,
-                                        setInfoViewTypeCallback: setInfoViewTypeCallback,
-                                        setDiagramTypeCallback: setDiagramTypeCallback,
-                                        isMobile: isMobile,
-                                        contentMaxWidth: contentMaxWidth,
-                                        changeLayerCallback: changeLayerCallback,
-                                      ),
-                                    if (contentLayer == ContentLayer.layer2)
-                                      Layer2Content(
-                                        selectedTrip: selectedTrip,
-                                        isMobile: isMobile,
-                                        setInfoViewTypeCallback: setInfoViewTypeCallback,
-                                        setDiagramTypeCallback: setDiagramTypeCallback,
-                                        contentMaxWidth: contentMaxWidth,
-                                      )
+                                        currentCarTrip: currentCarTrip,
+                                        currentBicycleTrip: currentBicycleTrip,
+                                        currentPublicTransportTrip: currentPublicTransportTrip,
+                                        onSelectionModeChanged: onSelectionModeChanged,
+                                        horizontalPadding: horizontalPadding),
                                   ],
-                                ),
+                                  if (contentLayer == ContentLayer.layer1)
+                                    Layer1Content(
+                                      selectedTrip: selectedTrip,
+                                      setInfoViewTypeCallback: setInfoViewTypeCallback,
+                                      setDiagramTypeCallback: setDiagramTypeCallback,
+                                      isMobile: isMobile,
+                                      contentMaxWidth: contentMaxWidth,
+                                      changeLayerCallback: changeLayerCallback,
+                                    ),
+                                  if (contentLayer == ContentLayer.layer2)
+                                    Layer2Content(
+                                      selectedTrip: selectedTrip,
+                                      isMobile: isMobile,
+                                      changeLayerCallback: changeLayerCallback,
+                                      setInfoViewTypeCallback: setInfoViewTypeCallback,
+                                      setDiagramTypeCallback: setDiagramTypeCallback,
+                                      contentMaxWidth: contentMaxWidth,
+                                    )
+                                ],
                               ),
                             ),
                           ],

@@ -14,6 +14,8 @@ Widget positionedScorePointer(
     required double heightScoreColumn,
     required double borderWidthScoreColumn,
     double screenHeight = 0,
+    double screenWidth = 0,
+    double horizontalPadding = 0,
     required Trip selectedTrip,
     required Trip thisTrip,
     bool isMobile = false,
@@ -51,7 +53,8 @@ Widget positionedScorePointer(
         : _getTopPositionScorePointerMobile(
             heightSection, widthScoreColumn, borderWidthScoreColumn, isLargeScoreContainer),
     left: isMobile
-        ? _getLeftPositionScorePointerMobile(heightScoreColumn, borderWidthScoreColumn, isLargeScoreContainer, index)
+        ? _getLeftPositionScorePointerMobile(
+            screenWidth, horizontalPadding, borderWidthScoreColumn, isLargeScoreContainer, index)
         : null,
     child: _scorePointer(
       borderColor: borderColor,
@@ -159,14 +162,14 @@ double _getTopPositionScorePointerMobile(
 }
 
 double _getLeftPositionScorePointerMobile(
-    double heightScoreColumn, double borderWidthScoreColumn, bool isLargePointer, int index) {
+    double screenWidth, double horizontalPadding, double borderWidthScoreColumn, bool isLargePointer, int index) {
   double position = 0.0;
-  double partHeight = (heightScoreColumn - 2 * borderWidthScoreColumn) / 5;
+  double partHeight = (screenWidth - 2 * horizontalPadding - 2 * borderWidthScoreColumn) / 5;
 
   if (isLargePointer) {
-    position = partHeight * index - largeScoreContainerWidth - borderWidthScoreColumn / 2;
+    position = partHeight * index - largeScoreContainerWidth / 2 - partHeight / 2 + borderWidthScoreColumn;
   } else {
-    position = partHeight * index - smallScoreContainerWidth - borderWidthScoreColumn * 2;
+    position = partHeight * index - smallScoreContainerWidth / 2 - partHeight / 2 + borderWidthScoreColumn;
   }
   return position;
 }

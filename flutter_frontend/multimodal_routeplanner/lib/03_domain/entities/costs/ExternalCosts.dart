@@ -18,3 +18,11 @@ class ExternalCosts {
       required this.congestion,
       required this.all});
 }
+
+extension ExternalCostsExtension on ExternalCosts {
+  double get timeCosts => congestion + barrier;
+
+  double get healthCosts => noise + accidents + air;
+
+  double get environmentCosts => climate + space;
+}

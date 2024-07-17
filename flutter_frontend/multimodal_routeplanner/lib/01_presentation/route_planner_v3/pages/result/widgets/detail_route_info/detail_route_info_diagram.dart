@@ -125,7 +125,7 @@ int getPercentageForDiagramType(Trip trip, DiagramType type) {
   if (type == DiagramType.total) {
     return 100;
   } else {
-    int percantageExternalCosts = calculateExternalCostsPercantage(trip);
+    int percantageExternalCosts = getSocialCostsPercentage(trip);
 
     if (type == DiagramType.personal) {
       return 100 - percantageExternalCosts;

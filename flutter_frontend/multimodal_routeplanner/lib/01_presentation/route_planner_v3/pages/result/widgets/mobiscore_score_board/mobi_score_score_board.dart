@@ -16,7 +16,7 @@ Widget mobiScoreScoreBoard(BuildContext context, {required Trip selectedTrip, bo
       borderRadius: BorderRadius.circular(30),
       border: Border.all(color: Colors.white, width: borderWidthScoreColumn),
     ),
-    width: !isMobile ? widthScoreColumn : heightScoreColumn,
+    width: !isMobile ? widthScoreColumn : double.infinity,
     height: !isMobile ? heightScoreColumn : widthScoreColumn,
     child: !isMobile
         ? Column(
@@ -34,7 +34,11 @@ Widget mobiScoreScoreBoardWithPointers(BuildContext context,
     required Trip? currentCarTrip,
     required Trip? currentBicycleTrip,
     required Trip? currentPublicTransportTrip,
-    required Function(SelectionMode) onSelectionModeChanged}) {
+    required Function(SelectionMode) onSelectionModeChanged,
+    double horizontalPadding = 0}) {
+  // get screen width
+  double screenWidth = MediaQuery.of(context).size.width;
+
   return SizedBox(
     height: heightSection,
     child: Stack(
@@ -50,6 +54,8 @@ Widget mobiScoreScoreBoardWithPointers(BuildContext context,
             selectedTrip: selectedTrip,
             thisTrip: currentCarTrip,
             heightSection: heightSection,
+            screenWidth: screenWidth,
+            horizontalPadding: horizontalPadding,
             isMobile: true,
             onTripSelected: (value) {
               SelectionMode mode = getSelectionModeFromTripMode(value.mode);
@@ -64,6 +70,8 @@ Widget mobiScoreScoreBoardWithPointers(BuildContext context,
             selectedTrip: selectedTrip,
             thisTrip: currentBicycleTrip,
             heightSection: heightSection,
+            screenWidth: screenWidth,
+            horizontalPadding: horizontalPadding,
             isMobile: true,
             onTripSelected: (value) {
               SelectionMode mode = getSelectionModeFromTripMode(value.mode);
@@ -78,6 +86,8 @@ Widget mobiScoreScoreBoardWithPointers(BuildContext context,
             selectedTrip: selectedTrip,
             thisTrip: currentPublicTransportTrip,
             heightSection: heightSection,
+            screenWidth: screenWidth,
+            horizontalPadding: horizontalPadding,
             isMobile: true,
             onTripSelected: (value) {
               SelectionMode mode = getSelectionModeFromTripMode(value.mode);

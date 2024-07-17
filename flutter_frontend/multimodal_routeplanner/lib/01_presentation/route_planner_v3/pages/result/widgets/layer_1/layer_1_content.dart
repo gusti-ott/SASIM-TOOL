@@ -33,16 +33,17 @@ class Layer1Content extends StatelessWidget {
       width: contentMaxWidth,
       child: Column(
         children: [
+          largeVerticalSpacer,
           layer1Header(textTheme),
           extraLargeVerticalSpacer,
-          costsPercentageBar(context, selectedTrip: selectedTrip),
+          costsPercentageBar(context, selectedTrip: selectedTrip, barType: CostsPercentageBarType.total),
           extraLargeVerticalSpacer,
           costResultRow(context, trip: selectedTrip, setDiagramType: (value) {
             setInfoViewTypeCallback(InfoViewType.diagram);
             setDiagramTypeCallback(value);
           }, isMobile: isMobile),
           extraLargeVerticalSpacer,
-          customButton(
+          v3CustomButton(
               label: 'Show detailed route information',
               onTap: () {
                 changeLayerCallback(ContentLayer.layer2);

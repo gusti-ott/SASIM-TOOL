@@ -15,7 +15,7 @@ Widget statefulCalculateButton(BuildContext context,
     required bool isShared}) {
   AppLocalizations lang = AppLocalizations.of(context)!;
 
-  return customButton(
+  return v3CustomButton(
     label: lang.calculate,
     onTap: () {
       context.goNamed(

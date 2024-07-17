@@ -21,14 +21,14 @@ Widget costResultRow(
       spacing: largePadding,
       runSpacing: largePadding,
       children: [
-        socialCostsCard(context, width: width, height: diameter, trip: trip, setDiagramType: setDiagramType),
-        personalCostsCard(context, width: width, height: diameter, trip: trip, setDiagramType: setDiagramType)
+        socialCostsCardLayer1(context, width: width, height: diameter, trip: trip, setDiagramType: setDiagramType),
+        personalCostsCardLayer1(context, width: width, height: diameter, trip: trip, setDiagramType: setDiagramType)
       ],
     ),
   );
 }
 
-Widget socialCostsCard(BuildContext context,
+Widget socialCostsCardLayer1(BuildContext context,
     {required double width,
     required double height,
     required Trip trip,
@@ -84,7 +84,7 @@ Widget socialCostsCard(BuildContext context,
   );
 }
 
-Widget personalCostsCard(BuildContext context,
+Widget personalCostsCardLayer1(BuildContext context,
     {required double width,
     required double height,
     required Trip trip,
