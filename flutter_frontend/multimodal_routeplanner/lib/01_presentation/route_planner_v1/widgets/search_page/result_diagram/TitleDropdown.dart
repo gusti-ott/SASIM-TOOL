@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/diagram_type/diagram_type_bloc.dart';
-
-import '../../../../../03_domain/enums/DiagramTypeEnum.dart';
+import 'package:multimodal_routeplanner/03_domain/enums/DiagramTypeEnum.dart';
 
 class TitleDropdown extends StatelessWidget {
   const TitleDropdown({super.key});
@@ -21,8 +20,7 @@ class TitleDropdown extends StatelessWidget {
             style: TextStyle(color: themeData.colorScheme.onPrimaryContainer),
             onChanged: (DiagramTypeEnum? newValue) {
               if (newValue != null) {
-                BlocProvider.of<DiagramTypeBloc>(context)
-                    .add(DiagramTypeChangedEvent(diagramType: newValue));
+                BlocProvider.of<DiagramTypeBloc>(context).add(DiagramTypeChangedEvent(diagramType: newValue));
               }
             },
             items: <DiagramTypeEnum>[
@@ -43,8 +41,7 @@ class TitleDropdown extends StatelessWidget {
                 value: value,
                 child: Text(
                   MapDiagramTypeToString(value),
-                  style: themeData.textTheme.titleMedium!.copyWith(
-                      color: themeData.colorScheme.onPrimaryContainer),
+                  style: themeData.textTheme.titleMedium!.copyWith(color: themeData.colorScheme.onPrimaryContainer),
                 ),
               );
             }).toList(),
@@ -57,8 +54,7 @@ class TitleDropdown extends StatelessWidget {
             style: TextStyle(color: themeData.colorScheme.onSecondary),
             onChanged: (DiagramTypeEnum? newValue) {
               if (newValue != null) {
-                BlocProvider.of<DiagramTypeBloc>(context)
-                    .add(DiagramTypeChangedEvent(diagramType: newValue));
+                BlocProvider.of<DiagramTypeBloc>(context).add(DiagramTypeChangedEvent(diagramType: newValue));
               }
             },
             items: <DiagramTypeEnum>[
@@ -78,8 +74,7 @@ class TitleDropdown extends StatelessWidget {
               return DropdownMenuItem<DiagramTypeEnum>(
                 value: value,
                 child: Text(MapDiagramTypeToString(value),
-                    style: themeData.textTheme.titleMedium!.copyWith(
-                        color: themeData.colorScheme.onPrimaryContainer)),
+                    style: themeData.textTheme.titleMedium!.copyWith(color: themeData.colorScheme.onPrimaryContainer)),
               );
             }).toList(),
           );

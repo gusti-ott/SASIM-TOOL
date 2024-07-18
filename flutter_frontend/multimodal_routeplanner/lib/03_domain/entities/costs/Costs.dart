@@ -16,3 +16,6 @@ class Costs {
 extension CostsExtension on double {
   String get currencyString => formatCurrency(this);
 }
+
+// there was a renaming of external --> social and internal --> personal
+enum CostsType { personal, social }

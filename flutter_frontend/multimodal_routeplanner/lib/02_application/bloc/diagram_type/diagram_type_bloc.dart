@@ -1,7 +1,6 @@
-import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
-
-import '../../../03_domain/enums/DiagramTypeEnum.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:multimodal_routeplanner/03_domain/enums/DiagramTypeEnum.dart';
 
 part 'diagram_type_event.dart';
 part 'diagram_type_state.dart';
