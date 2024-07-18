@@ -83,7 +83,7 @@ Widget textRowCostsBar(BuildContext context,
             int index = entry.key;
             return Expanded(
               // if 1% then flex 2, because 1% is too small for whole text
-              flex: percentages[index] == 1 ? 2 : percentages[index],
+              flex: percentages[index] < 7 ? 7 : percentages[index],
               child: positions[index] == position
                   ? Text(
                       '${percentages[index].toString()} %',
