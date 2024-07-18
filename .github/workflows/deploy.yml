@@ -17,28 +17,33 @@ jobs:
         working-directory: ./flutter_frontend/multimodal_routeplanner
 
     steps:
-
-      - name: Git checkout
+      - name: Checkout Git Repository
         uses: actions/checkout@v4
         with:
           fetch-depth: '0'
+
+      - name: Print Commit SHA
+        run: echo "Checked out commit $(git rev-parse HEAD)"
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.22.2'
 
-      - run: flutter doctor
+      - name: Clean previous Builds
+        run: flutter clean
 
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Build Flutter Web and Copy to Flask
+      - name: Build Flutter Web
         run: |
           flutter gen-l10n
-          flutter build web --target=lib/main.dart
+          flutter build web
           sed -i 's|<base href="/">|<base href="/web/">|' build/web/index.html
-          cp -r build/web/* ../../flask_app/templates/
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: flutter-web-build
+          path: ./flutter_frontend/multimodal_routeplanner/build/web
 
   deploy:
     needs: build
@@ -46,14 +51,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - name: Checkout Git Repository
+        uses: actions/checkout@v4
+
+      - name: Print Commit SHA
+        run: echo "Checked out commit $(git rev-parse HEAD)"
+
+      - name: Ensure templates directory is empty
+        run: |
+          rm -rf ./flask_app/templates/*
+          mkdir -p ./flask_app/templates
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: flutter-web-build
+          path: ./flask_app/templates/
 
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Build and push Docker image
+        env:
+          GITHUB_SHA: ${{ github.sha }}
         run: |
-          docker build -t gusott/sasim:latest ./flask_app
+          docker build --no-cache -t gusott/sasim:${GITHUB_SHA} ./flask_app
+          docker tag gusott/sasim:${GITHUB_SHA} gusott/sasim:latest
+          docker push gusott/sasim:${GITHUB_SHA}
           docker push gusott/sasim:latest
-
