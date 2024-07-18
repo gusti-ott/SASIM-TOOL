@@ -9,30 +9,34 @@ import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 class DetailRouteInfoSection extends StatelessWidget {
   const DetailRouteInfoSection({
     super.key,
+    this.isMobile = false,
     this.currentCarTrip,
     this.currentBicycleTrip,
     this.currentPublicTransportTrip,
     this.selectedTrip,
     required this.infoViewType,
     required this.selectedDiagramType,
-    required this.setInfoViewType,
-    required this.setDiagramType,
+    required this.setInfoViewTypeCallback,
+    required this.setDiagramTypeCallback,
+    this.closeCallback,
   });
 
+  final bool isMobile;
   final Trip? currentCarTrip;
   final Trip? currentBicycleTrip;
   final Trip? currentPublicTransportTrip;
   final Trip? selectedTrip;
   final InfoViewType infoViewType;
   final DiagramType selectedDiagramType;
-  final Function(InfoViewType) setInfoViewType;
-  final Function(DiagramType) setDiagramType;
+  final Function(InfoViewType) setInfoViewTypeCallback;
+  final Function(DiagramType) setDiagramTypeCallback;
+  final Function()? closeCallback;
 
   void changeInfoViewType() {
     if (infoViewType == InfoViewType.diagram) {
-      setInfoViewType(InfoViewType.map);
+      setInfoViewTypeCallback(InfoViewType.map);
     } else {
-      setInfoViewType(InfoViewType.diagram);
+      setInfoViewTypeCallback(InfoViewType.diagram);
     }
   }
 
@@ -44,7 +48,7 @@ class DetailRouteInfoSection extends StatelessWidget {
       decoration: BoxDecoration(
         color: backgroundColorV3,
       ),
-      width: 350,
+      width: isMobile ? double.infinity : 350,
       height: double.infinity,
       child: Stack(
         fit: StackFit.expand,
@@ -56,17 +60,33 @@ class DetailRouteInfoSection extends StatelessWidget {
               Align(
                 alignment: Alignment.centerRight,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Diagramm', style: textTheme.titleSmall!.copyWith(color: Colors.black)),
-                    Switch(
-                      value: (infoViewType == InfoViewType.diagram),
-                      onChanged: (value) {
-                        changeInfoViewType();
-                      },
-                      activeColor: secondaryColorV3,
-                      inactiveThumbColor: Colors.grey,
-                    ),
+                    if (isMobile == true)
+                      CircleAvatar(
+                        backgroundColor: Colors.white,
+                        child: IconButton(
+                          icon: Icon(Icons.close, color: colorE),
+                          onPressed: () {
+                            if (closeCallback != null) {
+                              closeCallback!();
+                            }
+                          },
+                        ),
+                      )
+                    else
+                      const SizedBox(),
+                    Row(children: [
+                      Text('Diagramm', style: textTheme.titleSmall!.copyWith(color: Colors.black)),
+                      Switch(
+                        value: (infoViewType == InfoViewType.diagram),
+                        onChanged: (value) {
+                          changeInfoViewType();
+                        },
+                        activeColor: secondaryColorV3,
+                        inactiveThumbColor: Colors.grey,
+                      ),
+                    ])
                   ],
                 ),
               ),
@@ -75,7 +95,7 @@ class DetailRouteInfoSection extends StatelessWidget {
                 DiagramTypeSelection(
                   height: diagramTypeSelectionHeight,
                   setDiagramType: (DiagramType value) {
-                    setDiagramType(value);
+                    setDiagramTypeCallback(value);
                   },
                   selectedDiagramType: selectedDiagramType,
                 ),

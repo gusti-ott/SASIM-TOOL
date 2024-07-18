@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 
-Widget v3CustomButton({required String label, required Function onTap, Color? color, Color? textColor}) {
+Widget v3CustomButton(
+    {required String label, required Function onTap, Color? color, Color? textColor, IconData? leadingIcon}) {
   return IntrinsicWidth(
     child: InkWell(
       onTap: () {
@@ -16,9 +17,17 @@ Widget v3CustomButton({required String label, required Function onTap, Color? co
         child: Center(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: mediumPadding, vertical: smallPadding),
-            child: Text(
-              label,
-              style: TextStyle(color: textColor ?? Colors.white),
+            child: Row(
+              children: [
+                if (leadingIcon != null) ...[
+                  Icon(leadingIcon, color: textColor ?? Colors.white),
+                  smallHorizontalSpacer
+                ],
+                Text(
+                  label,
+                  style: TextStyle(color: textColor ?? Colors.white),
+                ),
+              ],
             ),
           ),
         ),

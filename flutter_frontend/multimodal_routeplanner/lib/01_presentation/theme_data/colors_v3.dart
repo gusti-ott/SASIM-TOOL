@@ -17,7 +17,7 @@ Color secondaryColorV3 = colorC;
 Color tertiaryColorV3 = colorE;
 
 Color customDarkGrey = const Color(0xFF282828);
-Color customLightGrey = const Color(0xFFB3B3B3);
+Color customLightGrey = const Color(0xFFACA59D);
 Color customOffWhite = const Color(0xFFEBEBEB);
 Color customWhite100 = const Color(0xFFFFFFFF);
 

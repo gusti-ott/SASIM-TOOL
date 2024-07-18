@@ -15,6 +15,7 @@ class ResultContent extends StatelessWidget {
   const ResultContent({
     super.key,
     this.isMobile = false,
+    this.showAdditionalMobileInfo = false,
     required this.selectionMode,
     required this.isElectric,
     required this.isShared,
@@ -29,9 +30,11 @@ class ResultContent extends StatelessWidget {
     required this.setDiagramTypeCallback,
     required this.changeLayerCallback,
     required this.contentLayer,
+    required this.hideAdditionalInfoCallback,
   });
 
   final bool isMobile;
+  final bool showAdditionalMobileInfo;
   final SelectionMode selectionMode;
   final bool isElectric;
   final bool isShared;
@@ -46,6 +49,7 @@ class ResultContent extends StatelessWidget {
   final Function(DiagramType) setDiagramTypeCallback;
   final ContentLayer contentLayer;
   final Function(ContentLayer) changeLayerCallback;
+  final Function() hideAdditionalInfoCallback;
 
   @override
   Widget build(BuildContext context) {
@@ -157,8 +161,8 @@ class ResultContent extends StatelessWidget {
                         selectedTrip: selectedTrip,
                         infoViewType: infoViewType,
                         selectedDiagramType: selectedDiagramType,
-                        setInfoViewType: setInfoViewTypeCallback,
-                        setDiagramType: setDiagramTypeCallback),
+                        setInfoViewTypeCallback: setInfoViewTypeCallback,
+                        setDiagramTypeCallback: setDiagramTypeCallback),
                 ],
               ),
             ),
@@ -171,7 +175,19 @@ class ResultContent extends StatelessWidget {
               selectedTrip: selectedTrip,
               currentCarTrip: currentCarTrip,
               currentPublicTransportTrip: currentPublicTransportTrip,
-              currentBicycleTrip: currentBicycleTrip)
+              currentBicycleTrip: currentBicycleTrip),
+        if (isMobile && showAdditionalMobileInfo)
+          DetailRouteInfoSection(
+              isMobile: isMobile,
+              closeCallback: hideAdditionalInfoCallback,
+              currentCarTrip: currentCarTrip,
+              currentBicycleTrip: currentBicycleTrip,
+              currentPublicTransportTrip: currentPublicTransportTrip,
+              selectedTrip: selectedTrip,
+              infoViewType: infoViewType,
+              selectedDiagramType: selectedDiagramType,
+              setInfoViewTypeCallback: setInfoViewTypeCallback,
+              setDiagramTypeCallback: setDiagramTypeCallback),
       ],
     );
   }

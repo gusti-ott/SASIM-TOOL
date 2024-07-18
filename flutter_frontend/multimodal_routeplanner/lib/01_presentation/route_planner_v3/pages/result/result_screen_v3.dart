@@ -10,6 +10,7 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_cubit.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/detail_route_info_section.dart';
+import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 import 'package:multimodal_routeplanner/config/setup_dependencies.dart';
 import 'package:multimodal_routeplanner/logger.dart';
@@ -49,6 +50,7 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
 
   late InfoViewType infoViewType;
   late DiagramType selectedDiagramType;
+  bool showAdditionalMobileInfo = false;
 
   ContentLayer contentLayer = ContentLayer.layer1;
 
@@ -188,6 +190,12 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
                       contentLayer = value;
                     });
                   },
+                  showAdditionalMobileInfo: showAdditionalMobileInfo,
+                  hideAdditionalInfoCallback: () {
+                    setState(() {
+                      showAdditionalMobileInfo = false;
+                    });
+                  },
                 );
               }
             } else {
@@ -196,9 +204,23 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
           }
         }
         return Scaffold(
-          backgroundColor: backgroundColor,
-          body: child,
-        );
+            backgroundColor: backgroundColor,
+            body: child,
+            floatingActionButton: isMobile && !showAdditionalMobileInfo
+                ? FloatingActionButton(
+                    backgroundColor: Colors.white,
+                    onPressed: () {
+                      setState(() {
+                        showAdditionalMobileInfo = !showAdditionalMobileInfo;
+                      });
+                    },
+                    child: Icon(
+                      Icons.map,
+                      color: colorE,
+                      size: 30,
+                    ),
+                  )
+                : null);
       },
     );
   }

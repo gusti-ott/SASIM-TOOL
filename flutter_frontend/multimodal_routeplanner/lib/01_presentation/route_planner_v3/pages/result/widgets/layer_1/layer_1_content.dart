@@ -44,7 +44,8 @@ class Layer1Content extends StatelessWidget {
           }, isMobile: isMobile),
           extraLargeVerticalSpacer,
           v3CustomButton(
-              label: 'Show detailed route information',
+              label: 'Show Detailed Route Information',
+              leadingIcon: Icons.bar_chart,
               onTap: () {
                 changeLayerCallback(ContentLayer.layer2);
               }),

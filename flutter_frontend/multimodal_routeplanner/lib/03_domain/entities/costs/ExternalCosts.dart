@@ -26,3 +26,5 @@ extension ExternalCostsExtension on ExternalCosts {
 
   double get environmentCosts => climate + space;
 }
+
+enum SocialCostsCategory { time, health, environment }
