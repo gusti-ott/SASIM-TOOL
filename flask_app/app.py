@@ -1,6 +1,6 @@
 from typing import List
 
-from flask import Flask, request, redirect
+from flask import Flask, request, redirect, jsonify
 from flask import render_template
 from flask import send_from_directory
 from flask_caching import Cache
@@ -58,6 +58,14 @@ def home_page():
 
 @server.route('/plattform', methods=['GET'])
 def return_trip():
+    if request.method == 'OPTIONS':
+        # CORS preflight request handler
+        response = jsonify({'status': 'CORS preflight successful'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Methods', 'GET, OPTIONS')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type, referrer-policy')
+        return response
+
     api_helper = ApiHelper()
 
     input_start_address = str(request.args['inputStartAddress'])
@@ -194,7 +202,9 @@ def return_trip():
 
     }
 
-    return dict_new_result
+    response = jsonify(dict_new_result)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 
 @cache.memoize(300)

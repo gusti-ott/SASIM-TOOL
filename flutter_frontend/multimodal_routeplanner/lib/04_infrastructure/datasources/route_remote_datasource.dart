@@ -29,7 +29,7 @@ class RouteRemoteDatasourceImpl implements RouteRemoteDatasource {
     String modeString = mapMode(mode: mode);
 
     // TODO: set to false, when in production
-    bool isMocked = true;
+    bool isMocked = false;
 
     // url for local server
     /*var url =
@@ -37,16 +37,12 @@ class RouteRemoteDatasourceImpl implements RouteRemoteDatasource {
 
     // url for ftm server
     var url =
-        "https://www.sasim.mcube-cluster.de/plattform?inputStartAddress=$startInput&inputEndAddress=$endInput&tripMode=$modeString";
+        "http://127.0.0.1:5000/plattform?inputStartAddress=$startInput&inputEndAddress=$endInput&tripMode=$modeString";
 
     // var url =
     //     "https://vmrp-web-app.herokuapp.com/plattform?inputStartAddress=$startInput&inputEndAddress=$endInput&tripMode=$modeString";
 
-    var headers = {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Headers": "Content-Type",
-      "Referrer-Policy": "no-referrer-when-downgrade"
-    };
+    var headers = {"Referrer-Policy": "no-referrer-when-downgrade"};
 
     Map<String, dynamic> responseBody = {};
 
