@@ -6,59 +6,54 @@ import 'package:multimodal_routeplanner/03_domain/entities/costs/Costs.dart';
 
 Widget costsCardLayer2(BuildContext context,
     {required CostsType costsType,
-    required double width,
     required double height,
     required heightImage,
-    required Trip trip}) {
-  double personalImageOffset = -10;
-  double socialImageOffset = 20;
+    required Trip trip,
+    required isMobile}) {
+  double personalImageOffset = 0;
+  double socialImageOffset = 10;
+  double thisSizeImage = isMobile ? heightImage - 20 : heightImage;
   TextTheme textTheme = Theme.of(context).textTheme;
+
   return SizedBox(
-    width: width,
-    height: height + heightImage / 2,
+    height: height + thisSizeImage / 2,
     child: Stack(
       children: [
-        Positioned(
-          top: heightImage / 2,
+        Positioned.fill(
+          top: thisSizeImage / 2,
           left: 0,
           child: Container(
-            width: width,
             height: height,
             padding: EdgeInsets.all(mediumPadding),
             decoration: BoxDecoration(
               color: Colors.white.withOpacity(0.45),
               borderRadius: BorderRadius.circular(smallPadding),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IntrinsicWidth(
-                  child: SizedBox(
-                    width: 120,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          costsType == CostsType.social ? 'SOCIAL COSTS' : 'PERSONAL COSTS',
-                          style: textTheme.labelLarge,
-                        ),
-                        const Divider(
-                          thickness: 1,
-                          color: Colors.black,
-                        ),
-                        Text(
-                          costsType == CostsType.social
-                              ? trip.costs.externalCosts.all.currencyString
-                              : trip.costs.internalCosts.all.currencyString,
-                          style: textTheme.headlineMedium,
-                        ),
-                      ],
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: SizedBox(
+                width: 120,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      costsType == CostsType.social ? 'SOCIAL COSTS' : 'PERSONAL COSTS',
+                      style: textTheme.labelLarge,
                     ),
-                  ),
+                    const Divider(
+                      thickness: 1,
+                      color: Colors.black,
+                    ),
+                    Text(
+                      costsType == CostsType.social
+                          ? trip.costs.externalCosts.all.currencyString
+                          : trip.costs.internalCosts.all.currencyString,
+                      style: textTheme.headlineMedium,
+                    ),
+                  ],
                 ),
-                mediumHorizontalSpacer,
-              ],
+              ),
             ),
           ),
         ),
@@ -68,10 +63,11 @@ Widget costsCardLayer2(BuildContext context,
           child: costsType == CostsType.social
               ? Image.asset(
                   getAssetPathFromMobiScore(trip.mobiScore),
-                  height: heightImage,
-                  width: heightImage,
+                  height: thisSizeImage,
+                  width: thisSizeImage,
                 )
-              : SizedBox(height: heightImage, width: heightImage, child: Image.asset('assets/icons/personal_null.png')),
+              : SizedBox(
+                  height: thisSizeImage, width: thisSizeImage, child: Image.asset('assets/icons/personal_null.png')),
         ),
       ],
     ),

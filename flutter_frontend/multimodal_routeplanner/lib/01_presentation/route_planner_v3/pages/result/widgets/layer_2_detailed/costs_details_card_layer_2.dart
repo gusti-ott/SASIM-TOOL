@@ -7,10 +7,9 @@ import 'package:multimodal_routeplanner/03_domain/entities/costs/ExternalCosts.d
 import 'package:multimodal_routeplanner/03_domain/entities/costs/InternalCosts.dart';
 
 Widget costsDetailsCardLayer2(BuildContext context,
-    {required Trip selectedTrip, required double width, required CostsType costsType}) {
+    {required Trip selectedTrip, required CostsType costsType, required bool isMobile}) {
   String mobiScore = selectedTrip.mobiScore;
   return Container(
-      width: width,
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.45),
         borderRadius: BorderRadius.circular(smallPadding),
@@ -25,29 +24,34 @@ Widget costsDetailsCardLayer2(BuildContext context,
                   trip: selectedTrip,
                   costsType: costsType,
                   socialCostsCategory: SocialCostsCategory.time,
-                  mobiScore: mobiScore),
+                  mobiScore: mobiScore,
+                  isMobile: isMobile),
               costsDetailColumn(context,
                   trip: selectedTrip,
                   costsType: costsType,
                   socialCostsCategory: SocialCostsCategory.health,
-                  mobiScore: mobiScore),
+                  mobiScore: mobiScore,
+                  isMobile: isMobile),
               costsDetailColumn(context,
                   trip: selectedTrip,
                   costsType: costsType,
                   socialCostsCategory: SocialCostsCategory.environment,
-                  mobiScore: mobiScore),
+                  mobiScore: mobiScore,
+                  isMobile: isMobile),
             ] else if (costsType == CostsType.personal) ...[
               costsDetailColumn(context,
                   trip: selectedTrip,
                   costsType: costsType,
                   personalCostsCategory: PersonalCostsCategory.fixed,
-                  mobiScore: mobiScore),
+                  mobiScore: mobiScore,
+                  isMobile: isMobile),
               costsDetailColumn(
                 context,
                 trip: selectedTrip,
                 costsType: costsType,
                 personalCostsCategory: PersonalCostsCategory.variable,
                 mobiScore: mobiScore,
+                isMobile: isMobile,
               ),
             ]
           ],
@@ -60,7 +64,8 @@ Widget costsDetailColumn(BuildContext context,
     required CostsType costsType,
     required String mobiScore,
     SocialCostsCategory? socialCostsCategory,
-    PersonalCostsCategory? personalCostsCategory}) {
+    PersonalCostsCategory? personalCostsCategory,
+    required bool isMobile}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
@@ -70,8 +75,8 @@ Widget costsDetailColumn(BuildContext context,
             mobiScore: mobiScore,
             socialCostsCategory: socialCostsCategory,
             personalCostsCategory: personalCostsCategory),
-        height: 100,
-        width: 100,
+        height: isMobile ? 80 : 100,
+        width: isMobile ? 80 : 100,
         errorBuilder: (context, error, stackTrace) {
           return const Center(child: Icon(Icons.error));
         },

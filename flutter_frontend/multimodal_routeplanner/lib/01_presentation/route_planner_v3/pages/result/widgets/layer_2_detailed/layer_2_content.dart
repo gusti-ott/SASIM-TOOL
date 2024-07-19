@@ -28,9 +28,8 @@ class Layer2Content extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double heightImage = 240;
+    double heightImage = isMobile ? 200 : 240;
     double height = 150;
-    double width = 400;
     return SizedBox(
       width: contentMaxWidth,
       child: Column(
@@ -50,18 +49,18 @@ class Layer2Content extends StatelessWidget {
             children: [
               resultColumnLayer2(context,
                   costsType: CostsType.social,
-                  width: width,
                   height: height,
                   heightImage: heightImage,
                   trip: selectedTrip,
-                  barType: CostsPercentageBarType.social),
+                  barType: CostsPercentageBarType.social,
+                  isMobile: isMobile),
               resultColumnLayer2(context,
                   costsType: CostsType.personal,
-                  width: width,
                   height: height,
                   heightImage: heightImage,
                   trip: selectedTrip,
-                  barType: CostsPercentageBarType.personal),
+                  barType: CostsPercentageBarType.personal,
+                  isMobile: isMobile),
             ],
           ),
           extraLargeVerticalSpacer,
@@ -75,19 +74,22 @@ class Layer2Content extends StatelessWidget {
 
 Widget resultColumnLayer2(BuildContext context,
     {required CostsType costsType,
-    required double width,
     required double height,
     required heightImage,
     required Trip trip,
-    required CostsPercentageBarType barType}) {
-  return Column(
-    children: [
-      costsCardLayer2(context,
-          costsType: costsType, width: width, height: height, heightImage: heightImage, trip: trip),
-      mediumVerticalSpacer,
-      costsPercentageBar(context, selectedTrip: trip, barType: barType, width: width),
-      mediumVerticalSpacer,
-      costsDetailsCardLayer2(context, selectedTrip: trip, width: width, costsType: costsType),
-    ],
+    required CostsPercentageBarType barType,
+    required bool isMobile}) {
+  return SizedBox(
+    width: 400,
+    child: Column(
+      children: [
+        costsCardLayer2(context,
+            costsType: costsType, height: height, heightImage: heightImage, trip: trip, isMobile: isMobile),
+        mediumVerticalSpacer,
+        costsPercentageBar(context, selectedTrip: trip, barType: barType),
+        mediumVerticalSpacer,
+        costsDetailsCardLayer2(context, selectedTrip: trip, costsType: costsType, isMobile: isMobile),
+      ],
+    ),
   );
 }
