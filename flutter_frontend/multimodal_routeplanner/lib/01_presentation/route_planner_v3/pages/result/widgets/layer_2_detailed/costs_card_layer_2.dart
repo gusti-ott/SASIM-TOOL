@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mobiscore_to_x.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
@@ -14,6 +15,7 @@ Widget costsCardLayer2(BuildContext context,
   double socialImageOffset = 10;
   double thisSizeImage = isMobile ? heightImage - 20 : heightImage;
   TextTheme textTheme = Theme.of(context).textTheme;
+  AppLocalizations lang = AppLocalizations.of(context)!;
 
   return SizedBox(
     height: height + thisSizeImage / 2,
@@ -38,7 +40,9 @@ Widget costsCardLayer2(BuildContext context,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      costsType == CostsType.social ? 'SOCIAL COSTS' : 'PERSONAL COSTS',
+                      costsType == CostsType.social
+                          ? lang.social_costs.toUpperCase()
+                          : lang.personal_costs.toUpperCase(),
                       style: textTheme.labelLarge,
                     ),
                     const Divider(

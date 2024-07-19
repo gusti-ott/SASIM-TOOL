@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/buttons.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_content.dart';
@@ -28,6 +29,7 @@ class Layer2Content extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations lang = AppLocalizations.of(context)!;
     double heightImage = isMobile ? 200 : 240;
     double height = 150;
     return SizedBox(
@@ -36,7 +38,7 @@ class Layer2Content extends StatelessWidget {
         children: [
           mediumVerticalSpacer,
           v3CustomButton(
-              label: 'Back to Route Results',
+              label: lang.back_to_results,
               leadingIcon: Icons.arrow_back,
               onTap: () {
                 changeLayerCallback(ContentLayer.layer1);
@@ -64,7 +66,7 @@ class Layer2Content extends StatelessWidget {
             ],
           ),
           extraLargeVerticalSpacer,
-          v3CustomButton(label: 'Share or Leave a Feedback', leadingIcon: Icons.share, onTap: () {}),
+          v3CustomButton(label: lang.share, leadingIcon: Icons.share, onTap: () {}),
           extraLargeVerticalSpacer
         ],
       ),

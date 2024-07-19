@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/costs_category_to_image.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
@@ -141,21 +142,23 @@ String getPrivateCostsCurrencyValue(
 }
 
 String getSocialCostsLabel(BuildContext context, {required SocialCostsCategory socialCostsCategory}) {
+  AppLocalizations lang = AppLocalizations.of(context)!;
   switch (socialCostsCategory) {
     case SocialCostsCategory.time:
-      return 'TIME';
+      return lang.time.toUpperCase();
     case SocialCostsCategory.health:
-      return 'HEALTH';
+      return lang.health.toUpperCase();
     case SocialCostsCategory.environment:
-      return 'ENVIRONMENT';
+      return lang.environment.toUpperCase();
   }
 }
 
 String getPersonalCostsLabel(BuildContext context, {required PersonalCostsCategory personalCostsCategory}) {
+  AppLocalizations lang = AppLocalizations.of(context)!;
   switch (personalCostsCategory) {
     case PersonalCostsCategory.fixed:
-      return 'FIXED';
+      return lang.fixed;
     case PersonalCostsCategory.variable:
-      return 'VARIABLE';
+      return lang.variable;
   }
 }
