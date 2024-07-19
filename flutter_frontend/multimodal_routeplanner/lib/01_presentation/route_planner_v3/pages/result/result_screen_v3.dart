@@ -1,7 +1,9 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:logger/logger.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/animations/background_loading_animation.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/progress_indicators.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
@@ -121,6 +123,9 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations lang = AppLocalizations.of(context)!;
+    TextTheme textTheme = Theme.of(context).textTheme;
+
     double screenWidth = MediaQuery.of(context).size.width;
     bool isMobile = screenWidth < 1000;
 
@@ -131,7 +136,17 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
         Widget child = const SizedBox();
         if (state is ResultLoading) {
           // The background color will animate when in SearchLoading state
-          child = circularProgressIndicatorWithPadding();
+          child = Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              circularProgressIndicatorWithPadding(),
+              largeVerticalSpacer,
+              Text(
+                lang.route_is_loading,
+                style: textTheme.headlineMedium,
+              )
+            ],
+          );
         } else if (state is ResultLoaded) {
           trips = state.trips;
           if (trips != null) {

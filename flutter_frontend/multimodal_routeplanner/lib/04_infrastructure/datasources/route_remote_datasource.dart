@@ -37,7 +37,7 @@ class RouteRemoteDatasourceImpl implements RouteRemoteDatasource {
 
     // url for ftm server
     var url =
-        "http://www.sasim.mcube-cluster.de/plattform?inputStartAddress=$startInput&inputEndAddress=$endInput&tripMode=$modeString";
+        "https://www.sasim.mcube-cluster.de/plattform?inputStartAddress=$startInput&inputEndAddress=$endInput&tripMode=$modeString";
 
     // var url =
     //     "https://vmrp-web-app.herokuapp.com/plattform?inputStartAddress=$startInput&inputEndAddress=$endInput&tripMode=$modeString";
