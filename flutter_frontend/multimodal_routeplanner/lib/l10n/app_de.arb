@@ -64,7 +64,26 @@
   "en": "en",
   "electric": "Elektrisch",
   "calculate": "Berechnen",
-  "error": "Error"
-
+  "error": "Error",
+  "show_detailed_info": "Detailierte Routeninformation Anzeigen",
+  "these_are_the_costs_of_your_journey_with": "Das sind die wahren Kosten deiner Fahrt mit",
+  "private_car": "einem privaten Auto",
+  "private_ecar": "einem privaten E-Auto",
+  "shared_car": "einem Auto von einem Car-Sharing Anbieter",
+  "private_bike": "einem privaten Fahrrad",
+  "private_ebike": "einem privaten E-Bike",
+  "shared_bike": "einem Farrad von einem Bike-Sharing Anbieter",
+  "public_transport": "den Öffis",
+  "unknown": "Unbekannt",
+  "fullcosts_of_trip": "Vollkosten der Fahrt",
+  "social_costs": "soziale\nKosten",
+  "personal_costs": "persönliche\nKosten",
+  "back_to_results": "Zurück zu den Ergebnissen",
+  "share": "Teilen oder gib uns etwas Feedback",
+  "time": "Zeit",
+  "health": "Gesundheit",
+  "environment": "Umwelt",
+  "fixed": "Fix",
+  "variable": "Variabel"
 
 }

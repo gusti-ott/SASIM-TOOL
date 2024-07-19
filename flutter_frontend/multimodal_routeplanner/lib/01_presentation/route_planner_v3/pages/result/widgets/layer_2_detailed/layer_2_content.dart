@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/buttons.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_content.dart';
@@ -28,16 +29,16 @@ class Layer2Content extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double heightImage = 240;
+    AppLocalizations lang = AppLocalizations.of(context)!;
+    double heightImage = isMobile ? 200 : 240;
     double height = 150;
-    double width = 400;
     return SizedBox(
       width: contentMaxWidth,
       child: Column(
         children: [
           mediumVerticalSpacer,
           v3CustomButton(
-              label: 'Back to Route Results',
+              label: lang.back_to_results,
               leadingIcon: Icons.arrow_back,
               onTap: () {
                 changeLayerCallback(ContentLayer.layer1);
@@ -50,22 +51,22 @@ class Layer2Content extends StatelessWidget {
             children: [
               resultColumnLayer2(context,
                   costsType: CostsType.social,
-                  width: width,
                   height: height,
                   heightImage: heightImage,
                   trip: selectedTrip,
-                  barType: CostsPercentageBarType.social),
+                  barType: CostsPercentageBarType.social,
+                  isMobile: isMobile),
               resultColumnLayer2(context,
                   costsType: CostsType.personal,
-                  width: width,
                   height: height,
                   heightImage: heightImage,
                   trip: selectedTrip,
-                  barType: CostsPercentageBarType.personal),
+                  barType: CostsPercentageBarType.personal,
+                  isMobile: isMobile),
             ],
           ),
           extraLargeVerticalSpacer,
-          v3CustomButton(label: 'Share or Leave a Feedback', leadingIcon: Icons.share, onTap: () {}),
+          v3CustomButton(label: lang.share, leadingIcon: Icons.share, onTap: () {}),
           extraLargeVerticalSpacer
         ],
       ),
@@ -75,19 +76,22 @@ class Layer2Content extends StatelessWidget {
 
 Widget resultColumnLayer2(BuildContext context,
     {required CostsType costsType,
-    required double width,
     required double height,
     required heightImage,
     required Trip trip,
-    required CostsPercentageBarType barType}) {
-  return Column(
-    children: [
-      costsCardLayer2(context,
-          costsType: costsType, width: width, height: height, heightImage: heightImage, trip: trip),
-      mediumVerticalSpacer,
-      costsPercentageBar(context, selectedTrip: trip, barType: barType, width: width),
-      mediumVerticalSpacer,
-      costsDetailsCardLayer2(context, selectedTrip: trip, width: width, costsType: costsType),
-    ],
+    required CostsPercentageBarType barType,
+    required bool isMobile}) {
+  return SizedBox(
+    width: 400,
+    child: Column(
+      children: [
+        costsCardLayer2(context,
+            costsType: costsType, height: height, heightImage: heightImage, trip: trip, isMobile: isMobile),
+        mediumVerticalSpacer,
+        costsPercentageBar(context, selectedTrip: trip, barType: barType),
+        mediumVerticalSpacer,
+        costsDetailsCardLayer2(context, selectedTrip: trip, costsType: costsType, isMobile: isMobile),
+      ],
+    ),
   );
 }

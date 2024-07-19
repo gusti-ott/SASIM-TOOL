@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/buttons.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mode_to_x.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/costs_percentage_bar.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/costs_result_row.dart';
@@ -28,13 +30,13 @@ class Layer1Content extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextTheme textTheme = Theme.of(context).textTheme;
+    AppLocalizations lang = AppLocalizations.of(context)!;
     return SizedBox(
       width: contentMaxWidth,
       child: Column(
         children: [
           largeVerticalSpacer,
-          layer1Header(textTheme),
+          layer1Header(context, selectedTrip.mode),
           extraLargeVerticalSpacer,
           costsPercentageBar(context, selectedTrip: selectedTrip, barType: CostsPercentageBarType.total),
           extraLargeVerticalSpacer,
@@ -44,7 +46,7 @@ class Layer1Content extends StatelessWidget {
           }, isMobile: isMobile),
           extraLargeVerticalSpacer,
           v3CustomButton(
-              label: 'Show Detailed Route Information',
+              label: lang.show_detailed_info,
               leadingIcon: Icons.bar_chart,
               onTap: () {
                 changeLayerCallback(ContentLayer.layer2);
@@ -55,18 +57,20 @@ class Layer1Content extends StatelessWidget {
     );
   }
 
-  SizedBox layer1Header(TextTheme textTheme) {
+  SizedBox layer1Header(BuildContext context, String mode) {
+    TextTheme textTheme = Theme.of(context).textTheme;
+    AppLocalizations lang = AppLocalizations.of(context)!;
     return SizedBox(
       width: double.infinity,
       child: Wrap(
         alignment: WrapAlignment.spaceBetween,
         spacing: mediumPadding,
         runSpacing: mediumPadding,
-        // TODO: change text to custom text
         children: [
           SizedBox(
               width: 500,
-              child: Text('These are the real costs of mobility with a private car', style: textTheme.displayMedium)),
+              child: Text('${lang.these_are_the_costs_of_your_journey_with} ${getModeNameWithArticle(context, mode)}',
+                  style: textTheme.displayMedium)),
           SizedBox(
             width: 200,
             child: Column(
@@ -79,7 +83,7 @@ class Layer1Content extends StatelessWidget {
                 Row(
                   mainAxisAlignment: isMobile ? MainAxisAlignment.start : MainAxisAlignment.end,
                   children: [
-                    Text('Full costs of the trip', style: textTheme.labelLarge),
+                    Text(lang.fullcosts_of_trip, style: textTheme.labelLarge),
                     smallHorizontalSpacer,
                     customQuestionIcon(onTap: () {
                       setInfoViewTypeCallback(InfoViewType.diagram);

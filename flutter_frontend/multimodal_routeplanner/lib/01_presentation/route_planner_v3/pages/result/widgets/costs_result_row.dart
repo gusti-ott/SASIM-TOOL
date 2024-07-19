@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mobiscore_to_x.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/detail_route_info_section.dart';
@@ -33,6 +34,7 @@ Widget socialCostsCardLayer1(BuildContext context,
     required double height,
     required Trip trip,
     required Function(DiagramType) setDiagramType}) {
+  AppLocalizations lang = AppLocalizations.of(context)!;
   TextTheme textTheme = Theme.of(context).textTheme;
   return SizedBox(
     width: width,
@@ -59,7 +61,7 @@ Widget socialCostsCardLayer1(BuildContext context,
                       style: textTheme.headlineMedium,
                     ),
                     Text(
-                      'SOCIAL COSTS',
+                      lang.social_costs.toUpperCase(),
                       style: textTheme.labelLarge,
                     ),
                     smallVerticalSpacer,
@@ -89,6 +91,7 @@ Widget personalCostsCardLayer1(BuildContext context,
     required double height,
     required Trip trip,
     required Function(DiagramType) setDiagramType}) {
+  AppLocalizations lang = AppLocalizations.of(context)!;
   TextTheme textTheme = Theme.of(context).textTheme;
   return SizedBox(
     width: width,
@@ -115,7 +118,7 @@ Widget personalCostsCardLayer1(BuildContext context,
                       style: textTheme.headlineMedium,
                     ),
                     Text(
-                      'PERSONAL COSTS',
+                      lang.personal_costs.toUpperCase(),
                       style: textTheme.labelLarge,
                     ),
                     smallVerticalSpacer,

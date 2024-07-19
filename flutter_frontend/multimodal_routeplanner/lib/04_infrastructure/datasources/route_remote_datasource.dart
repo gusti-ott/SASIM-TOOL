@@ -64,7 +64,7 @@ class RouteRemoteDatasourceImpl implements RouteRemoteDatasource {
   Future<Map<String, dynamic>> getSingleRouteMockedResponse({required MobilityMode mode}) async {
     if (mode.mode == MobilityModeEnum.bike) {
       return mockTrip1;
-    } else if (mode.mode == MobilityModeEnum.ecar) {
+    } else if (mode.mode == MobilityModeEnum.ebike) {
       return mockTrip2;
     } else if (mode.mode == MobilityModeEnum.cab) {
       return mockTrip3;
