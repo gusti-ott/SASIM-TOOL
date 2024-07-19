@@ -84,5 +84,7 @@
   "health": "Health",
   "environment": "Environment",
   "fixed": "Fixed",
-  "variable": "Variable"
+  "variable": "Variable",
+  "route_is_loading": "...Routes are loading...",
+  "learn_about": "Learn about the real costs of mobility"
 }

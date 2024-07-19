@@ -35,6 +35,7 @@ class _SearchContentState extends State<SearchContent> {
 
   Widget searchContent(BuildContext context, {required double screenHeight, required double screenWidth}) {
     TextTheme textTheme = Theme.of(context).textTheme;
+    AppLocalizations lang = AppLocalizations.of(context)!;
 
     return Column(
       children: [
@@ -47,8 +48,7 @@ class _SearchContentState extends State<SearchContent> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Learn about the real costs of mobility',
-                    style: textTheme.displayMedium!.copyWith(color: primaryColorV3)),
+                Text(lang.learn_about, style: textTheme.displayMedium!.copyWith(color: primaryColorV3)),
                 mediumVerticalSpacer,
                 SearchInputContent(key: _searchInputContentKey, isMobile: widget.isMobile),
                 SizedBox(

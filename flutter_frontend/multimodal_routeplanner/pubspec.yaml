@@ -59,6 +59,12 @@ flutter:
 
   assets:
     - assets/icons/
+    - assets/icons/personal_fixed/
+    - assets/icons/personal_time/
+    - assets/icons/personal_variable/
+    - assets/icons/social_air/
+    - assets/icons/social_space/
+    - assets/icons/social_time/
     - assets/mobiscore/
     - assets/logos/
     - assets/title_image/
