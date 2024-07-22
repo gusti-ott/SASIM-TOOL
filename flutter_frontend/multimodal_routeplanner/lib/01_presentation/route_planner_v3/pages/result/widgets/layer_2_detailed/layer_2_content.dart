@@ -32,6 +32,16 @@ class Layer2Content extends StatelessWidget {
     AppLocalizations lang = AppLocalizations.of(context)!;
     double heightImage = isMobile ? 200 : 240;
     double height = 150;
+
+    void showInfoCallback(CostsType costsType) {
+      setInfoViewTypeCallback(InfoViewType.diagram);
+      if (costsType == CostsType.social) {
+        setDiagramTypeCallback(DiagramType.detailSocial);
+      } else {
+        setDiagramTypeCallback(DiagramType.detailPersonal);
+      }
+    }
+
     return SizedBox(
       width: contentMaxWidth,
       child: Column(
@@ -49,20 +59,30 @@ class Layer2Content extends StatelessWidget {
             spacing: largePadding,
             runSpacing: largePadding,
             children: [
-              resultColumnLayer2(context,
-                  costsType: CostsType.social,
-                  height: height,
-                  heightImage: heightImage,
-                  trip: selectedTrip,
-                  barType: CostsPercentageBarType.social,
-                  isMobile: isMobile),
-              resultColumnLayer2(context,
-                  costsType: CostsType.personal,
-                  height: height,
-                  heightImage: heightImage,
-                  trip: selectedTrip,
-                  barType: CostsPercentageBarType.personal,
-                  isMobile: isMobile),
+              resultColumnLayer2(
+                context,
+                costsType: CostsType.social,
+                height: height,
+                heightImage: heightImage,
+                trip: selectedTrip,
+                barType: CostsPercentageBarType.social,
+                isMobile: isMobile,
+                showInfoCallback: (value) {
+                  showInfoCallback(value);
+                },
+              ),
+              resultColumnLayer2(
+                context,
+                costsType: CostsType.personal,
+                height: height,
+                heightImage: heightImage,
+                trip: selectedTrip,
+                barType: CostsPercentageBarType.personal,
+                isMobile: isMobile,
+                showInfoCallback: (value) {
+                  showInfoCallback(value);
+                },
+              ),
             ],
           ),
           extraLargeVerticalSpacer,
@@ -80,13 +100,19 @@ Widget resultColumnLayer2(BuildContext context,
     required heightImage,
     required Trip trip,
     required CostsPercentageBarType barType,
-    required bool isMobile}) {
+    required bool isMobile,
+    required Function(CostsType) showInfoCallback}) {
   return SizedBox(
     width: 400,
     child: Column(
       children: [
         costsCardLayer2(context,
-            costsType: costsType, height: height, heightImage: heightImage, trip: trip, isMobile: isMobile),
+            costsType: costsType,
+            height: height,
+            heightImage: heightImage,
+            trip: trip,
+            isMobile: isMobile,
+            showInfoCallback: showInfoCallback),
         mediumVerticalSpacer,
         costsPercentageBar(context, selectedTrip: trip, barType: barType),
         mediumVerticalSpacer,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/detail_route_info_diagram.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/detail_route_info_section.dart';
 
 class DiagramTypeSelection extends StatelessWidget {
@@ -18,26 +19,58 @@ class DiagramTypeSelection extends StatelessWidget {
         width: 170,
         child: Column(
           children: [
-            diagramTypeSelectionButton(context,
-                label: 'TOTAL',
-                diagramType: DiagramType.total,
-                selectedDiagramType: selectedDiagramType, onPressed: (value) {
-              setDiagramType(value);
-            }),
-            smallVerticalSpacer,
-            diagramTypeSelectionButton(context,
-                label: 'SOCIAL',
-                diagramType: DiagramType.social,
-                selectedDiagramType: selectedDiagramType, onPressed: (value) {
-              setDiagramType(value);
-            }),
-            smallVerticalSpacer,
-            diagramTypeSelectionButton(context,
-                label: 'PERSONAL',
-                diagramType: DiagramType.personal,
-                selectedDiagramType: selectedDiagramType, onPressed: (value) {
-              setDiagramType(value);
-            }),
+            if (isGeneralView(selectedDiagramType)) ...[
+              diagramTypeSelectionButton(context,
+                  diagramType: DiagramType.total, selectedDiagramType: selectedDiagramType, onPressed: (value) {
+                setDiagramType(value);
+              }),
+              smallVerticalSpacer,
+              diagramTypeSelectionButton(context,
+                  diagramType: DiagramType.social, selectedDiagramType: selectedDiagramType, onPressed: (value) {
+                setDiagramType(value);
+              }),
+              smallVerticalSpacer,
+              diagramTypeSelectionButton(context,
+                  diagramType: DiagramType.personal, selectedDiagramType: selectedDiagramType, onPressed: (value) {
+                setDiagramType(value);
+              }),
+            ] else if (isSocialView(selectedDiagramType)) ...[
+              diagramTypeSelectionButton(context,
+                  diagramType: DiagramType.detailSocial, selectedDiagramType: selectedDiagramType, onPressed: (value) {
+                setDiagramType(value);
+              }),
+              diagramTypeSelectionButton(context,
+                  diagramType: DiagramType.detailSocialTime,
+                  selectedDiagramType: selectedDiagramType, onPressed: (value) {
+                setDiagramType(value);
+              }),
+              diagramTypeSelectionButton(context,
+                  diagramType: DiagramType.detailSocialHealth,
+                  selectedDiagramType: selectedDiagramType, onPressed: (value) {
+                setDiagramType(value);
+              }),
+              diagramTypeSelectionButton(context,
+                  diagramType: DiagramType.detailSocialEnvironment,
+                  selectedDiagramType: selectedDiagramType, onPressed: (value) {
+                setDiagramType(value);
+              }),
+            ] else if (isPersonalView(selectedDiagramType)) ...[
+              diagramTypeSelectionButton(context,
+                  diagramType: DiagramType.detailPersonal,
+                  selectedDiagramType: selectedDiagramType, onPressed: (value) {
+                setDiagramType(value);
+              }),
+              diagramTypeSelectionButton(context,
+                  diagramType: DiagramType.detailPersonalFixed,
+                  selectedDiagramType: selectedDiagramType, onPressed: (value) {
+                setDiagramType(value);
+              }),
+              diagramTypeSelectionButton(context,
+                  diagramType: DiagramType.detailPersonalVariable,
+                  selectedDiagramType: selectedDiagramType, onPressed: (value) {
+                setDiagramType(value);
+              }),
+            ]
           ],
         ),
       ),
@@ -46,11 +79,11 @@ class DiagramTypeSelection extends StatelessWidget {
 }
 
 Widget diagramTypeSelectionButton(BuildContext context,
-    {required String label,
-    required DiagramType diagramType,
+    {required DiagramType diagramType,
     required DiagramType selectedDiagramType,
     required Function(DiagramType) onPressed}) {
   TextTheme textTheme = Theme.of(context).textTheme;
+  String label = getDiagramTitle(diagramType);
   return InkWell(
     onTap: () {
       onPressed(diagramType);

@@ -116,4 +116,15 @@ class DetailRouteInfoSection extends StatelessWidget {
 
 enum InfoViewType { diagram, map }
 
-enum DiagramType { total, social, personal }
+enum DiagramType {
+  total,
+  social,
+  personal,
+  detailSocial,
+  detailSocialTime,
+  detailSocialHealth,
+  detailSocialEnvironment,
+  detailPersonal,
+  detailPersonalFixed,
+  detailPersonalVariable
+}

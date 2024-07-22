@@ -203,6 +203,11 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
                   changeLayerCallback: (value) {
                     setState(() {
                       contentLayer = value;
+                      if (contentLayer == ContentLayer.layer1) {
+                        selectedDiagramType = DiagramType.total;
+                      } else if (contentLayer == ContentLayer.layer2) {
+                        selectedDiagramType = DiagramType.detailSocial;
+                      }
                     });
                   },
                   showAdditionalMobileInfo: showAdditionalMobileInfo,

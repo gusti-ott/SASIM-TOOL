@@ -6,9 +6,12 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mobiscore_to_x.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mode_to_x.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/detail_route_info_section.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/stackedDiagramBar.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/costs/Costs.dart';
+import 'package:multimodal_routeplanner/03_domain/entities/costs/ExternalCosts.dart';
+import 'package:multimodal_routeplanner/03_domain/entities/costs/InternalCosts.dart';
 
 class DetailRouteInfoDiagram extends StatelessWidget {
   const DetailRouteInfoDiagram(
@@ -27,25 +30,31 @@ class DetailRouteInfoDiagram extends StatelessWidget {
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
 
-    double maxCosts = getMaxCostsValue(currentCarTrip, currentBicycleTrip, currentPublicTransportTrip);
+    double maxCosts = getMaxCostsValue(
+        currentCarTrip: currentCarTrip,
+        currentBicycleTrip: currentBicycleTrip,
+        currentPublicTransportTrip: currentPublicTransportTrip,
+        diagramType: selectedDiagramType);
 
     return SizedBox(
       height: 350,
       width: 160,
       child: Column(
         children: [
-          Container(
+          SizedBox(
             height: 270,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 if (currentCarTrip != null)
-                  diagramBar(context, trip: currentCarTrip!, diagramType: selectedDiagramType, maxCosts: maxCosts),
+                  stackedDiagramBar(context,
+                      trip: currentCarTrip!, diagramType: selectedDiagramType, maxValue: maxCosts),
                 if (currentBicycleTrip != null)
-                  diagramBar(context, trip: currentBicycleTrip!, diagramType: selectedDiagramType, maxCosts: maxCosts),
+                  stackedDiagramBar(context,
+                      trip: currentBicycleTrip!, diagramType: selectedDiagramType, maxValue: maxCosts),
                 if (currentPublicTransportTrip != null)
-                  diagramBar(context,
-                      trip: currentPublicTransportTrip!, diagramType: selectedDiagramType, maxCosts: maxCosts),
+                  stackedDiagramBar(context,
+                      trip: currentPublicTransportTrip!, diagramType: selectedDiagramType, maxValue: maxCosts),
               ],
             ),
           ),
@@ -58,15 +67,17 @@ class DetailRouteInfoDiagram extends StatelessWidget {
 }
 
 Widget diagramBar(BuildContext context,
-    {required Trip trip, required DiagramType diagramType, required double maxCosts}) {
+    {required Trip trip, required DiagramType diagramType, required double maxValue}) {
   TextTheme textTheme = Theme.of(context).textTheme;
   double width = 32;
 
   // indicates the height of the whole bar - highest is the fullcosts of the most expensive trip
-  final int globalPercentage = (trip.costs.getFullcosts() / maxCosts * 100).round();
+  final int globalPercentage = getGlobalPercentage(diagramType, trip, maxValue);
+  print('globalPercentage for ${trip.mode}: $globalPercentage');
 
   // indicates the height of the colored bar, the rest ist grey
-  final int internalPercentage = getPercentageForDiagramType(trip, diagramType);
+  final int internalPercentage = getInternalPercentage(trip, diagramType);
+  print('internalPercentage for ${trip.mode}: $internalPercentage');
 
   // costs value as string
   final String costsValue = getDiagramCostsValue(diagramType, trip.costs);
@@ -90,6 +101,7 @@ Widget diagramBar(BuildContext context,
             children: [
               Expanded(flex: 100 - internalPercentage, child: const SizedBox()),
               Container(
+                height: width,
                 decoration: BoxDecoration(
                   color: getColorFromMobiScore(trip.mobiScore),
                   borderRadius: const BorderRadius.only(
@@ -121,35 +133,118 @@ Widget diagramBar(BuildContext context,
   );
 }
 
-int getPercentageForDiagramType(Trip trip, DiagramType type) {
-  if (type == DiagramType.total) {
-    return 100;
-  } else {
-    int percantageExternalCosts = getSocialCostsPercentage(trip);
+int getGlobalPercentage(DiagramType type, Trip trip, double maxValue) {
+  int globalPercentage = 0;
+  if (isGeneralView(type)) {
+    globalPercentage = (trip.costs.getFullcosts() / maxValue * 100).round();
+  } else if (isSocialView(type)) {
+    globalPercentage = (trip.costs.externalCosts.all / maxValue * 100).round();
+  } else if (isPersonalView(type)) {
+    globalPercentage = (trip.costs.internalCosts.all / maxValue * 100).round();
+  }
+  return globalPercentage;
+}
 
-    if (type == DiagramType.personal) {
-      return 100 - percantageExternalCosts;
+int getInternalPercentage(Trip trip, DiagramType type) {
+  int percentage = 0;
+  if (isGeneralView(type)) {
+    if (type == DiagramType.total) {
+      percentage = 100;
     } else {
-      return percantageExternalCosts;
+      int socialCostsPercentage = getSocialCostsPercentage(trip);
+
+      if (type == DiagramType.personal) {
+        percentage = 100 - socialCostsPercentage;
+      } else {
+        percentage = socialCostsPercentage;
+      }
+    }
+  } else if (isSocialView(type)) {
+    if (type == DiagramType.detailSocial) {
+      percentage = 100;
+    } else if (type == DiagramType.detailSocialTime) {
+      percentage = getSocialTimeCostsPercentage(trip);
+    } else if (type == DiagramType.detailSocialEnvironment) {
+      percentage = getSocialEnvironmentalCostsPercentage(trip);
+    } else if (type == DiagramType.detailSocialHealth) {
+      percentage = getSocialHealthCostsPercentage(trip);
+    }
+  } else if (isPersonalView(type)) {
+    if (type == DiagramType.detailPersonal) {
+      percentage = 100;
+    } else if (type == DiagramType.detailPersonalFixed) {
+      percentage = getPrivateFixedCostsPercentage(trip);
+    } else if (type == DiagramType.detailPersonalVariable) {
+      percentage = getPrivateVariableCostsPercentage(trip);
     }
   }
+  return percentage;
 }
 
 String getDiagramCostsValue(DiagramType type, Costs costs) {
-  if (type == DiagramType.total) {
-    return costs.getFullcosts().currencyString;
-  } else if (type == DiagramType.social) {
-    return costs.externalCosts.all.currencyString;
-  } else {
-    return costs.internalCosts.all.currencyString;
+  double costsValue = 0;
+
+  switch (type) {
+    case DiagramType.total:
+      costsValue = costs.getFullcosts();
+      break;
+    case DiagramType.social:
+    case DiagramType.detailSocial:
+      costsValue = costs.externalCosts.all;
+      break;
+    case DiagramType.personal:
+    case DiagramType.detailPersonal:
+      costsValue = costs.internalCosts.all;
+      break;
+    case DiagramType.detailSocialTime:
+      costsValue = costs.externalCosts.timeCosts;
+      break;
+    case DiagramType.detailSocialEnvironment:
+      costsValue = costs.externalCosts.environmentCosts;
+      break;
+    case DiagramType.detailSocialHealth:
+      costsValue = costs.externalCosts.healthCosts;
+      break;
+    case DiagramType.detailPersonalFixed:
+      costsValue = costs.internalCosts.fixedCosts;
+      break;
+    case DiagramType.detailPersonalVariable:
+      costsValue = costs.internalCosts.variableCosts;
+      break;
+    default:
+      costsValue = 0.0;
   }
+
+  return costsValue.currencyString;
 }
 
-double getMaxCostsValue(Trip? currentCarTrip, Trip? currentBicycleTrip, Trip? currentPublicTransportTrip) {
+double getMaxCostsValue(
+    {Trip? currentCarTrip,
+    Trip? currentBicycleTrip,
+    Trip? currentPublicTransportTrip,
+    required DiagramType diagramType}) {
+  double? carValue;
+  double? bicycleValue;
+  double? publicTransportValue;
+
+  if (isGeneralView(diagramType)) {
+    carValue = currentCarTrip?.costs.getFullcosts();
+    bicycleValue = currentBicycleTrip?.costs.getFullcosts();
+    publicTransportValue = currentPublicTransportTrip?.costs.getFullcosts();
+  } else if (isSocialView(diagramType)) {
+    carValue = currentCarTrip?.costs.externalCosts.all;
+    bicycleValue = currentBicycleTrip?.costs.externalCosts.all;
+    publicTransportValue = currentPublicTransportTrip?.costs.externalCosts.all;
+  } else if (isPersonalView(diagramType)) {
+    carValue = currentCarTrip?.costs.internalCosts.all;
+    bicycleValue = currentBicycleTrip?.costs.internalCosts.all;
+    publicTransportValue = currentPublicTransportTrip?.costs.internalCosts.all;
+  }
+
   List costs = [
-    if (currentCarTrip != null) currentCarTrip.costs.getFullcosts(),
-    if (currentBicycleTrip != null) currentBicycleTrip.costs.getFullcosts(),
-    if (currentPublicTransportTrip != null) currentPublicTransportTrip.costs.getFullcosts(),
+    if (carValue != null) carValue,
+    if (bicycleValue != null) bicycleValue,
+    if (publicTransportValue != null) publicTransportValue,
   ];
 
   double maxValue = costs.reduce((value, element) => max(value as double, element as double));
@@ -157,13 +252,47 @@ double getMaxCostsValue(Trip? currentCarTrip, Trip? currentBicycleTrip, Trip? cu
   return maxValue;
 }
 
+// TODO: l10n
 String getDiagramTitle(DiagramType diagramType) {
   switch (diagramType) {
     case DiagramType.total:
+    case DiagramType.detailSocial:
+    case DiagramType.detailPersonal:
       return 'TOTAL';
     case DiagramType.social:
       return 'SOCIAL';
     case DiagramType.personal:
       return 'PERSONAL';
+    case DiagramType.detailSocialTime:
+      return 'TIME';
+    case DiagramType.detailSocialHealth:
+      return 'HEALTH';
+    case DiagramType.detailSocialEnvironment:
+      return 'ENVIRONMENT';
+    case DiagramType.detailPersonalFixed:
+      return 'FIXED';
+    case DiagramType.detailPersonalVariable:
+      return 'VARIABLE';
+    default:
+      return 'UNKNOWN';
   }
+}
+
+bool isGeneralView(DiagramType selectedDiagramType) {
+  return selectedDiagramType == DiagramType.total ||
+      selectedDiagramType == DiagramType.social ||
+      selectedDiagramType == DiagramType.personal;
+}
+
+bool isSocialView(DiagramType selectedDiagramType) {
+  return selectedDiagramType == DiagramType.detailSocial ||
+      selectedDiagramType == DiagramType.detailSocialTime ||
+      selectedDiagramType == DiagramType.detailSocialEnvironment ||
+      selectedDiagramType == DiagramType.detailSocialHealth;
+}
+
+bool isPersonalView(DiagramType selectedDiagramType) {
+  return selectedDiagramType == DiagramType.detailPersonal ||
+      selectedDiagramType == DiagramType.detailPersonalFixed ||
+      selectedDiagramType == DiagramType.detailPersonalVariable;
 }
