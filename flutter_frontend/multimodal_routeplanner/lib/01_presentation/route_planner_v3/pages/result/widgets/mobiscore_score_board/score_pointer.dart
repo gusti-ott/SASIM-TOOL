@@ -26,7 +26,6 @@ Widget positionedScorePointer(
 
   bool isLargeScoreContainer = false;
   int index = _getIndexFromMobiScore(thisTrip.mobiScore);
-  IconData iconData = getIconDataFromMode(thisTrip.mode, isOutlined: false);
   ShapeDirection direction = ShapeDirection.right;
   if (isMobile) {
     direction = ShapeDirection.top;
@@ -57,10 +56,10 @@ Widget positionedScorePointer(
             screenWidth, horizontalPadding, borderWidthScoreColumn, isLargeScoreContainer, index)
         : null,
     child: _scorePointer(
+      mode: thisTrip.mode,
       borderColor: borderColor,
       backgroundColor: backgroundColor,
       direction: direction,
-      iconData: iconData,
       isLarge: isLargeScoreContainer,
       onTap: () {
         onTripSelected(thisTrip);
@@ -70,11 +69,11 @@ Widget positionedScorePointer(
 }
 
 Widget _scorePointer(
-    {required ShapeDirection direction,
+    {required String mode,
+    required ShapeDirection direction,
     required Color backgroundColor,
     Color? borderColor,
     bool isLarge = false,
-    IconData? iconData,
     required Function() onTap}) {
   return Transform.rotate(
     angle: rotationAngle,
@@ -91,7 +90,7 @@ Widget _scorePointer(
           borderRadius: _getBorderRadius(direction),
         ),
         child: Center(
-          child: Transform.rotate(angle: -rotationAngle, child: Icon(iconData, size: isLarge ? 30 : 20)),
+          child: Transform.rotate(angle: -rotationAngle, child: getIconFromMode(mode, size: isLarge ? 30 : 20)),
         ),
       ),
     ),

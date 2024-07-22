@@ -157,8 +157,8 @@ String getPersonalCostsLabel(BuildContext context, {required PersonalCostsCatego
   AppLocalizations lang = AppLocalizations.of(context)!;
   switch (personalCostsCategory) {
     case PersonalCostsCategory.fixed:
-      return lang.fixed;
+      return lang.fixed.toUpperCase();
     case PersonalCostsCategory.variable:
-      return lang.variable;
+      return lang.variable.toUpperCase();
   }
 }

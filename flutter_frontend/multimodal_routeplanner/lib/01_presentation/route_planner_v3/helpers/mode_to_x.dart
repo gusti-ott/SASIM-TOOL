@@ -24,6 +24,33 @@ IconData getIconDataFromMode(String mode, {bool isOutlined = true}) {
   }
 }
 
+Widget getIconFromMode(String mode, {bool isOutlined = true, double? size}) {
+  switch (mode) {
+    case 'CAB':
+    case 'SHARENOW':
+      return Padding(
+        padding: EdgeInsets.all((size != null) ? size / 10 : 2.4),
+        child: Stack(
+          children: [
+            Align(
+                alignment: Alignment.topCenter,
+                child: Icon(getIconDataFromMode(mode, isOutlined: isOutlined), size: size)),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Icon(
+                Icons.sync_alt,
+                size: size != null ? size / 1.5 : 12,
+              ),
+            )
+          ],
+        ),
+      );
+
+    default:
+      return Icon(getIconDataFromMode(mode, isOutlined: isOutlined), size: size);
+  }
+}
+
 String getModeNameWithArticle(BuildContext context, String mode) {
   AppLocalizations lang = AppLocalizations.of(context)!;
   switch (mode) {

@@ -99,8 +99,8 @@ Widget diagramBar(BuildContext context,
                 ),
                 child: Align(
                   alignment: Alignment.topCenter,
-                  child: CircleAvatar(
-                      backgroundColor: Colors.white, radius: width / 2, child: Icon(getIconDataFromMode(trip.mode))),
+                  child:
+                      CircleAvatar(backgroundColor: Colors.white, radius: width / 2, child: getIconFromMode(trip.mode)),
                 ),
               ),
               Expanded(
