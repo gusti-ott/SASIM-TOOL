@@ -134,6 +134,7 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
       listener: (context, state) {},
       builder: (context, state) {
         Widget child = const SizedBox();
+        FloatingActionButton? fab;
         if (state is ResultLoading) {
           // The background color will animate when in SearchLoading state
           child = Column(
@@ -149,6 +150,21 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
           );
         } else if (state is ResultLoaded) {
           trips = state.trips;
+          fab = isMobile && !showAdditionalMobileInfo
+              ? FloatingActionButton(
+                  backgroundColor: Colors.white,
+                  onPressed: () {
+                    setState(() {
+                      showAdditionalMobileInfo = !showAdditionalMobileInfo;
+                    });
+                  },
+                  child: Icon(
+                    Icons.map,
+                    color: colorE,
+                    size: 30,
+                  ),
+                )
+              : null;
           if (trips != null) {
             if (trips!.isNotEmpty) {
               if (selectedTrip == null) {
@@ -223,24 +239,7 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
             }
           }
         }
-        return Scaffold(
-            backgroundColor: backgroundColor,
-            body: child,
-            floatingActionButton: isMobile && !showAdditionalMobileInfo
-                ? FloatingActionButton(
-                    backgroundColor: Colors.white,
-                    onPressed: () {
-                      setState(() {
-                        showAdditionalMobileInfo = !showAdditionalMobileInfo;
-                      });
-                    },
-                    child: Icon(
-                      Icons.map,
-                      color: colorE,
-                      size: 30,
-                    ),
-                  )
-                : null);
+        return Scaffold(backgroundColor: backgroundColor, body: child, floatingActionButton: fab);
       },
     );
   }

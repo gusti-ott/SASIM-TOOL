@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/input_to_trip.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/mobiscore_score_board/score_pointer.dart';
@@ -143,4 +144,109 @@ Expanded _scoreSection(BuildContext context,
       ),
     ),
   );
+}
+
+List<Widget> scoreBoardWithPointers(BuildContext context,
+    {required double widthInfoSection,
+    required double screenHeight,
+    required Trip selectedTrip,
+    required Trip? currentCarTrip,
+    required Trip? currentPublicTransportTrip,
+    required Trip? currentBicycleTrip,
+    required Function(SelectionMode) onSelectionModeChanged}) {
+  return [
+    Positioned(
+      right: widthInfoSection - (widthScoreColumn / 2),
+      top: (screenHeight - heightScoreColumn) / 2 - mediumPadding - widthScoreColumn,
+      child: CircleAvatar(
+        backgroundColor: Colors.white,
+        child: Padding(
+          padding: EdgeInsets.all(smallPadding),
+          child: Image.asset(
+            'assets/mobiscore_logos/logo_primary.png',
+            height: widthScoreColumn,
+            width: widthScoreColumn,
+          ),
+        ),
+      ),
+    ),
+    Positioned(
+      right: widthInfoSection - (widthScoreColumn / 2),
+      bottom: (screenHeight - heightScoreColumn) / 2,
+      child: mobiScoreScoreBoard(context, selectedTrip: selectedTrip),
+    ),
+    ...positionedScorePointers(
+        widthInfoSection: widthInfoSection,
+        widthScoreColumn: widthScoreColumn,
+        heightScoreColumn: heightScoreColumn,
+        borderWidthScoreColumn: borderWidthScoreColumn,
+        screenHeight: screenHeight,
+        selectedTrip: selectedTrip,
+        currentCarTrip: currentCarTrip,
+        currentPublicTransportTrip: currentPublicTransportTrip,
+        currentBicycleTrip: currentBicycleTrip,
+        onSelectionModeChanged: onSelectionModeChanged),
+  ];
+}
+
+List<Widget> positionedScorePointers(
+    {required double widthInfoSection,
+    required double widthScoreColumn,
+    required double heightScoreColumn,
+    required double borderWidthScoreColumn,
+    required double screenHeight,
+    required Trip selectedTrip,
+    required Trip? currentCarTrip,
+    required Trip? currentPublicTransportTrip,
+    required Trip? currentBicycleTrip,
+    bool isMobile = false,
+    double mobileTopPositionOffset = 0,
+    required Function(SelectionMode) onSelectionModeChanged}) {
+  return [
+    if (currentCarTrip != null)
+      positionedScorePointer(
+        widthInfoSection: widthInfoSection,
+        widthScoreColumn: widthScoreColumn,
+        heightScoreColumn: heightScoreColumn,
+        borderWidthScoreColumn: borderWidthScoreColumn,
+        screenHeight: screenHeight,
+        selectedTrip: selectedTrip,
+        thisTrip: currentCarTrip,
+        isMobile: isMobile,
+        onTripSelected: (value) {
+          SelectionMode mode = getSelectionModeFromTripMode(value.mode);
+          onSelectionModeChanged(mode);
+        },
+      ),
+    if (currentPublicTransportTrip != null)
+      positionedScorePointer(
+        widthInfoSection: widthInfoSection,
+        widthScoreColumn: widthScoreColumn,
+        heightScoreColumn: heightScoreColumn,
+        borderWidthScoreColumn: borderWidthScoreColumn,
+        screenHeight: screenHeight,
+        selectedTrip: selectedTrip,
+        thisTrip: currentPublicTransportTrip,
+        isMobile: isMobile,
+        onTripSelected: (value) {
+          SelectionMode mode = getSelectionModeFromTripMode(value.mode);
+          onSelectionModeChanged(mode);
+        },
+      ),
+    if (currentBicycleTrip != null)
+      positionedScorePointer(
+        widthInfoSection: widthInfoSection,
+        widthScoreColumn: widthScoreColumn,
+        heightScoreColumn: heightScoreColumn,
+        borderWidthScoreColumn: borderWidthScoreColumn,
+        screenHeight: screenHeight,
+        selectedTrip: selectedTrip,
+        thisTrip: currentBicycleTrip,
+        isMobile: isMobile,
+        onTripSelected: (value) {
+          SelectionMode mode = getSelectionModeFromTripMode(value.mode);
+          onSelectionModeChanged(mode);
+        },
+      ),
+  ];
 }

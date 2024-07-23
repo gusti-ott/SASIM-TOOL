@@ -78,6 +78,8 @@ Widget _scorePointer(
   return Transform.rotate(
     angle: rotationAngle,
     child: InkWell(
+      hoverColor: Colors.transparent, // Removes the grey hover background
+      splashColor: Colors.transparent, // Removes the splash effect
       onTap: () {
         onTap();
       },

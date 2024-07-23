@@ -18,7 +18,7 @@ Widget costsDetailsCardLayer2(BuildContext context,
       child: Padding(
         padding: EdgeInsets.all(largePadding),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             if (costsType == CostsType.social) ...[
               costsDetailColumn(context,

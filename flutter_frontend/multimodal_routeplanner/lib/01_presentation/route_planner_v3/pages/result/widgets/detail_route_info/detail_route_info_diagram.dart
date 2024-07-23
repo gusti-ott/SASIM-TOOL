@@ -43,6 +43,7 @@ class DetailRouteInfoDiagram extends StatelessWidget {
         children: [
           SizedBox(
             height: 270,
+            width: double.infinity,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -256,12 +257,12 @@ double getMaxCostsValue(
 String getDiagramTitle(DiagramType diagramType) {
   switch (diagramType) {
     case DiagramType.total:
-    case DiagramType.detailSocial:
-    case DiagramType.detailPersonal:
       return 'TOTAL';
     case DiagramType.social:
+    case DiagramType.detailSocial:
       return 'SOCIAL';
     case DiagramType.personal:
+    case DiagramType.detailPersonal:
       return 'PERSONAL';
     case DiagramType.detailSocialTime:
       return 'TIME';
