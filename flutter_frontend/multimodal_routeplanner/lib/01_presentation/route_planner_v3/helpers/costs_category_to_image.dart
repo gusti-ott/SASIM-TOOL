@@ -3,47 +3,47 @@ import 'package:multimodal_routeplanner/03_domain/entities/costs/InternalCosts.d
 
 Map<SocialCostsCategory, Map<String, String>> socialCostsAssetPaths = {
   SocialCostsCategory.time: {
-    'A': 'icons/social_time/social_time_A.png',
-    'B': 'icons/social_time/social_time_B.png',
-    'C': 'icons/social_time/social_time_C.png',
-    'D': 'icons/social_time/social_time_D.png',
-    'E': 'icons/social_time/social_time_E.png',
-    'null': 'icons/social_time/social_time_null.png'
+    'A': 'assets/icons/social_time/social_time_A.png',
+    'B': 'assets/icons/social_time/social_time_B.png',
+    'C': 'assets/icons/social_time/social_time_C.png',
+    'D': 'assets/icons/social_time/social_time_D.png',
+    'E': 'assets/icons/social_time/social_time_E.png',
+    'null': 'assets/icons/social_time/social_time_null.png'
   },
   SocialCostsCategory.health: {
-    'A': 'icons/social_air/social_air_A.png',
-    'B': 'icons/social_air/social_air_B.png',
-    'C': 'icons/social_air/social_air_C.png',
-    'D': 'icons/social_air/social_air_D.png',
-    'E': 'icons/social_air/social_air_E.png',
-    'null': 'icons/social_air/social_air_null.png'
+    'A': 'assets/icons/social_air/social_air_A.png',
+    'B': 'assets/icons/social_air/social_air_B.png',
+    'C': 'assets/icons/social_air/social_air_C.png',
+    'D': 'assets/icons/social_air/social_air_D.png',
+    'E': 'assets/icons/social_air/social_air_E.png',
+    'null': 'assets/icons/social_air/social_air_null.png'
   },
   SocialCostsCategory.environment: {
-    'A': 'icons/social_space/social_space_A.png',
-    'B': 'icons/social_space/social_space_B.png',
-    'C': 'icons/social_space/social_space_C.png',
-    'D': 'icons/social_space/social_space_D.png',
-    'E': 'icons/social_space/social_space_E.png',
-    'null': 'icons/social_space/social_space_null.png'
+    'A': 'assets/icons/social_space/social_space_A.png',
+    'B': 'assets/icons/social_space/social_space_B.png',
+    'C': 'assets/icons/social_space/social_space_C.png',
+    'D': 'assets/icons/social_space/social_space_D.png',
+    'E': 'assets/icons/social_space/social_space_E.png',
+    'null': 'assets/icons/social_space/social_space_null.png'
   },
 };
 
 Map<PersonalCostsCategory, Map<String, String>> personalCostsAssetPaths = {
   PersonalCostsCategory.fixed: {
-    'A': 'icons/personal_fixed/personal_fixed_A.png',
-    'B': 'icons/personal_fixed/personal_fixed_B.png',
-    'C': 'icons/personal_fixed/personal_fixed_C.png',
-    'D': 'icons/personal_fixed/personal_fixed_D.png',
-    'E': 'icons/personal_fixed/personal_fixed_E.png',
-    'null': 'icons/personal_fixed/personal_fixed_null.png'
+    'A': 'assets/icons/personal_fixed/personal_fixed_A.png',
+    'B': 'assets/icons/personal_fixed/personal_fixed_B.png',
+    'C': 'assets/icons/personal_fixed/personal_fixed_C.png',
+    'D': 'assets/icons/personal_fixed/personal_fixed_D.png',
+    'E': 'assets/icons/personal_fixed/personal_fixed_E.png',
+    'null': 'assets/icons/personal_fixed/personal_fixed_null.png'
   },
   PersonalCostsCategory.variable: {
-    'A': 'icons/personal_variable/personal_variable_A.png',
-    'B': 'icons/personal_variable/personal_variable_B.png',
-    'C': 'icons/personal_variable/personal_variable_C.png',
-    'D': 'icons/personal_variable/personal_variable_D.png',
-    'E': 'icons/personal_variable/personal_variable_E.png',
-    'null': 'icons/personal_variable/personal_variable_null.png'
+    'A': 'assets/icons/personal_variable/personal_variable_A.png',
+    'B': 'assets/icons/personal_variable/personal_variable_B.png',
+    'C': 'assets/icons/personal_variable/personal_variable_C.png',
+    'D': 'assets/icons/personal_variable/personal_variable_D.png',
+    'E': 'assets/icons/personal_variable/personal_variable_E.png',
+    'null': 'assets/icons/personal_variable/personal_variable_null.png'
   },
 };
 

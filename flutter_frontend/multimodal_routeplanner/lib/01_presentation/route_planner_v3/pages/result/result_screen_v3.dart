@@ -134,21 +134,38 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
       listener: (context, state) {},
       builder: (context, state) {
         Widget child = const SizedBox();
+        FloatingActionButton? fab;
         if (state is ResultLoading) {
-          // The background color will animate when in SearchLoading state
           child = Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              circularProgressIndicatorWithPadding(),
+              Image.asset('assets/mobiscore_logos/logo_with_text_primary.png', width: 100),
+              largeVerticalSpacer,
+              circularProgressIndicatorWithPadding(color: primaryColorV3),
               largeVerticalSpacer,
               Text(
-                lang.route_is_loading,
-                style: textTheme.headlineMedium,
-              )
+                '${lang.route_is_loading} ${state.loadedTrips}/${state.totalTrips}',
+                style: textTheme.headlineMedium!.copyWith(color: primaryColorV3),
+              ),
             ],
           );
         } else if (state is ResultLoaded) {
           trips = state.trips;
+          fab = isMobile && !showAdditionalMobileInfo
+              ? FloatingActionButton(
+                  backgroundColor: Colors.white,
+                  onPressed: () {
+                    setState(() {
+                      showAdditionalMobileInfo = !showAdditionalMobileInfo;
+                    });
+                  },
+                  child: Icon(
+                    Icons.map,
+                    color: colorE,
+                    size: 30,
+                  ),
+                )
+              : null;
           if (trips != null) {
             if (trips!.isNotEmpty) {
               if (selectedTrip == null) {
@@ -198,11 +215,21 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
                     setState(() {
                       selectedDiagramType = diagramType;
                     });
+                    if (!showAdditionalMobileInfo) {
+                      setState(() {
+                        showAdditionalMobileInfo = true;
+                      });
+                    }
                   },
                   contentLayer: contentLayer,
                   changeLayerCallback: (value) {
                     setState(() {
                       contentLayer = value;
+                      if (contentLayer == ContentLayer.layer1) {
+                        selectedDiagramType = DiagramType.total;
+                      } else if (contentLayer == ContentLayer.layer2) {
+                        selectedDiagramType = DiagramType.detailSocial;
+                      }
                     });
                   },
                   showAdditionalMobileInfo: showAdditionalMobileInfo,
@@ -218,24 +245,7 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
             }
           }
         }
-        return Scaffold(
-            backgroundColor: backgroundColor,
-            body: child,
-            floatingActionButton: isMobile && !showAdditionalMobileInfo
-                ? FloatingActionButton(
-                    backgroundColor: Colors.white,
-                    onPressed: () {
-                      setState(() {
-                        showAdditionalMobileInfo = !showAdditionalMobileInfo;
-                      });
-                    },
-                    child: Icon(
-                      Icons.map,
-                      color: colorE,
-                      size: 30,
-                    ),
-                  )
-                : null);
+        return Scaffold(backgroundColor: backgroundColorV3, body: child, floatingActionButton: fab);
       },
     );
   }

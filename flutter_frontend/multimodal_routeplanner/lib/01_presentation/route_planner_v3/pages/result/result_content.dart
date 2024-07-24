@@ -7,7 +7,6 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/r
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/layer_1/layer_1_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/layer_2_detailed/layer_2_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/mobiscore_score_board/mobi_score_score_board.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/mobiscore_score_board/score_pointer.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/mode_selection_components.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 
@@ -68,232 +67,186 @@ class ResultContent extends StatelessWidget {
 
     return Stack(
       children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            if (isMobile)
-              Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                ),
-                child: mobileModeSelectionContainer(context,
+        if (isMobile)
+          CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                pinned: true,
+                expandedHeight: 150.0,
+                flexibleSpace: FlexibleSpaceBar(
+                  background: mobileModeSelectionContainer(
+                    context,
                     isElectric: isElectric,
                     onElectricChanged: onElectricChanged,
                     selectedMode: selectionMode,
                     onSelectionModeChanged: onSelectionModeChanged,
                     isShared: isShared,
                     onSharedChanged: onSharedChanged,
-                    disableBorder: true),
+                    disableBorder: true,
+                  ),
+                ),
               ),
-            Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                            left: horizontalPadding,
-                            top: mediumPadding,
-                            bottom: mediumPadding,
-                            right: isMobile ? horizontalPadding : extraLargePadding + mediumPadding),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            ConstrainedBox(
-                              constraints: const BoxConstraints(maxWidth: 1000),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  if (!isMobile) ...[
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: horizontalPadding,
+                        top: mediumPadding,
+                        bottom: mediumPadding,
+                        right: isMobile ? horizontalPadding : extraLargePadding + mediumPadding,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 1000),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                mobiScoreScoreBoardWithPointers(
+                                  context,
+                                  heightSection: 240,
+                                  selectedTrip: selectedTrip,
+                                  currentCarTrip: currentCarTrip,
+                                  currentBicycleTrip: currentBicycleTrip,
+                                  currentPublicTransportTrip: currentPublicTransportTrip,
+                                  onSelectionModeChanged: onSelectionModeChanged,
+                                  horizontalPadding: horizontalPadding,
+                                ),
+                                if (contentLayer == ContentLayer.layer1)
+                                  Layer1Content(
+                                    selectedTrip: selectedTrip,
+                                    setInfoViewTypeCallback: setInfoViewTypeCallback,
+                                    setDiagramTypeCallback: setDiagramTypeCallback,
+                                    isMobile: isMobile,
+                                    contentMaxWidth: contentMaxWidth,
+                                    changeLayerCallback: changeLayerCallback,
+                                  ),
+                                if (contentLayer == ContentLayer.layer2)
+                                  Layer2Content(
+                                    selectedTrip: selectedTrip,
+                                    isMobile: isMobile,
+                                    changeLayerCallback: changeLayerCallback,
+                                    setInfoViewTypeCallback: setInfoViewTypeCallback,
+                                    setDiagramTypeCallback: setDiagramTypeCallback,
+                                    contentMaxWidth: contentMaxWidth,
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        if (!isMobile)
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              left: horizontalPadding,
+                              top: mediumPadding,
+                              bottom: mediumPadding,
+                              right: isMobile ? horizontalPadding : extraLargePadding + mediumPadding),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              ConstrainedBox(
+                                constraints: const BoxConstraints(maxWidth: 1000),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
                                     Padding(
                                       padding:
                                           EdgeInsets.symmetric(horizontal: mediumPadding, vertical: extraLargePadding),
-                                      child: modeSelectionRow(context,
-                                          isElectric: isElectric,
-                                          onElectricChanged: onElectricChanged,
-                                          selectionMode: selectionMode,
-                                          onSelectionModeChanged: onSelectionModeChanged,
-                                          isShared: isShared,
-                                          onSharedChanged: onSharedChanged),
-                                    ),
-                                  ] else ...[
-                                    mobiScoreScoreBoardWithPointers(context,
-                                        heightSection: 240,
-                                        selectedTrip: selectedTrip,
-                                        currentCarTrip: currentCarTrip,
-                                        currentBicycleTrip: currentBicycleTrip,
-                                        currentPublicTransportTrip: currentPublicTransportTrip,
+                                      child: modeSelectionRow(
+                                        context,
+                                        isElectric: isElectric,
+                                        onElectricChanged: onElectricChanged,
+                                        selectionMode: selectionMode,
                                         onSelectionModeChanged: onSelectionModeChanged,
-                                        horizontalPadding: horizontalPadding),
-                                  ],
-                                  if (contentLayer == ContentLayer.layer1)
-                                    Layer1Content(
-                                      selectedTrip: selectedTrip,
-                                      setInfoViewTypeCallback: setInfoViewTypeCallback,
-                                      setDiagramTypeCallback: setDiagramTypeCallback,
-                                      isMobile: isMobile,
-                                      contentMaxWidth: contentMaxWidth,
-                                      changeLayerCallback: changeLayerCallback,
+                                        isShared: isShared,
+                                        onSharedChanged: onSharedChanged,
+                                      ),
                                     ),
-                                  if (contentLayer == ContentLayer.layer2)
-                                    Layer2Content(
-                                      selectedTrip: selectedTrip,
-                                      isMobile: isMobile,
-                                      changeLayerCallback: changeLayerCallback,
-                                      setInfoViewTypeCallback: setInfoViewTypeCallback,
-                                      setDiagramTypeCallback: setDiagramTypeCallback,
-                                      contentMaxWidth: contentMaxWidth,
-                                    )
-                                ],
+                                    if (contentLayer == ContentLayer.layer1)
+                                      Layer1Content(
+                                        selectedTrip: selectedTrip,
+                                        setInfoViewTypeCallback: setInfoViewTypeCallback,
+                                        setDiagramTypeCallback: setDiagramTypeCallback,
+                                        isMobile: isMobile,
+                                        contentMaxWidth: contentMaxWidth,
+                                        changeLayerCallback: changeLayerCallback,
+                                      ),
+                                    if (contentLayer == ContentLayer.layer2)
+                                      Layer2Content(
+                                        selectedTrip: selectedTrip,
+                                        isMobile: isMobile,
+                                        changeLayerCallback: changeLayerCallback,
+                                        setInfoViewTypeCallback: setInfoViewTypeCallback,
+                                        setDiagramTypeCallback: setDiagramTypeCallback,
+                                        contentMaxWidth: contentMaxWidth,
+                                      )
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  if (!isMobile)
                     DetailRouteInfoSection(
-                        currentCarTrip: currentCarTrip,
-                        currentBicycleTrip: currentBicycleTrip,
-                        currentPublicTransportTrip: currentPublicTransportTrip,
-                        selectedTrip: selectedTrip,
-                        infoViewType: infoViewType,
-                        selectedDiagramType: selectedDiagramType,
-                        setInfoViewTypeCallback: setInfoViewTypeCallback,
-                        setDiagramTypeCallback: setDiagramTypeCallback),
-                ],
+                      currentCarTrip: currentCarTrip,
+                      currentBicycleTrip: currentBicycleTrip,
+                      currentPublicTransportTrip: currentPublicTransportTrip,
+                      selectedTrip: selectedTrip,
+                      infoViewType: infoViewType,
+                      selectedDiagramType: selectedDiagramType,
+                      setInfoViewTypeCallback: setInfoViewTypeCallback,
+                      setDiagramTypeCallback: setDiagramTypeCallback,
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
         if (!isMobile)
-          ...scoreBoardWithPointers(context,
-              widthInfoSection: widthInfoSection,
-              screenHeight: screenHeight,
-              selectedTrip: selectedTrip,
-              currentCarTrip: currentCarTrip,
-              currentPublicTransportTrip: currentPublicTransportTrip,
-              currentBicycleTrip: currentBicycleTrip),
+          ...scoreBoardWithPointers(
+            context,
+            widthInfoSection: widthInfoSection,
+            screenHeight: screenHeight,
+            selectedTrip: selectedTrip,
+            currentCarTrip: currentCarTrip,
+            currentPublicTransportTrip: currentPublicTransportTrip,
+            currentBicycleTrip: currentBicycleTrip,
+            onSelectionModeChanged: onSelectionModeChanged,
+          ),
         if (isMobile && showAdditionalMobileInfo)
           DetailRouteInfoSection(
-              isMobile: isMobile,
-              closeCallback: hideAdditionalInfoCallback,
-              currentCarTrip: currentCarTrip,
-              currentBicycleTrip: currentBicycleTrip,
-              currentPublicTransportTrip: currentPublicTransportTrip,
-              selectedTrip: selectedTrip,
-              infoViewType: infoViewType,
-              selectedDiagramType: selectedDiagramType,
-              setInfoViewTypeCallback: setInfoViewTypeCallback,
-              setDiagramTypeCallback: setDiagramTypeCallback),
+            isMobile: isMobile,
+            closeCallback: hideAdditionalInfoCallback,
+            currentCarTrip: currentCarTrip,
+            currentBicycleTrip: currentBicycleTrip,
+            currentPublicTransportTrip: currentPublicTransportTrip,
+            selectedTrip: selectedTrip,
+            infoViewType: infoViewType,
+            selectedDiagramType: selectedDiagramType,
+            setInfoViewTypeCallback: setInfoViewTypeCallback,
+            setDiagramTypeCallback: setDiagramTypeCallback,
+          ),
       ],
     );
-  }
-
-  List<Widget> scoreBoardWithPointers(BuildContext context,
-      {required double widthInfoSection,
-      required double screenHeight,
-      required Trip selectedTrip,
-      required Trip? currentCarTrip,
-      required Trip? currentPublicTransportTrip,
-      required Trip? currentBicycleTrip}) {
-    return [
-      Positioned(
-        right: widthInfoSection - (widthScoreColumn / 2),
-        top: (screenHeight - heightScoreColumn) / 2 - mediumPadding - widthScoreColumn,
-        child: CircleAvatar(
-          backgroundColor: Colors.white,
-          child: Padding(
-            padding: EdgeInsets.all(smallPadding),
-            child: Image.asset(
-              'assets/mobiscore_logos/logo_primary.png',
-              height: widthScoreColumn,
-              width: widthScoreColumn,
-            ),
-          ),
-        ),
-      ),
-      Positioned(
-        right: widthInfoSection - (widthScoreColumn / 2),
-        bottom: (screenHeight - heightScoreColumn) / 2,
-        child: mobiScoreScoreBoard(context, selectedTrip: selectedTrip),
-      ),
-      ...positionedScorePointers(
-          widthInfoSection: widthInfoSection,
-          widthScoreColumn: widthScoreColumn,
-          heightScoreColumn: heightScoreColumn,
-          borderWidthScoreColumn: borderWidthScoreColumn,
-          screenHeight: screenHeight,
-          selectedTrip: selectedTrip,
-          currentCarTrip: currentCarTrip,
-          currentPublicTransportTrip: currentPublicTransportTrip,
-          currentBicycleTrip: currentBicycleTrip,
-          onSelectionModeChanged: onSelectionModeChanged),
-    ];
-  }
-
-  List<Widget> positionedScorePointers(
-      {required double widthInfoSection,
-      required double widthScoreColumn,
-      required double heightScoreColumn,
-      required double borderWidthScoreColumn,
-      required double screenHeight,
-      required Trip selectedTrip,
-      required Trip? currentCarTrip,
-      required Trip? currentPublicTransportTrip,
-      required Trip? currentBicycleTrip,
-      bool isMobile = false,
-      double mobileTopPositionOffset = 0,
-      required Function(SelectionMode) onSelectionModeChanged}) {
-    return [
-      if (currentCarTrip != null)
-        positionedScorePointer(
-          widthInfoSection: widthInfoSection,
-          widthScoreColumn: widthScoreColumn,
-          heightScoreColumn: heightScoreColumn,
-          borderWidthScoreColumn: borderWidthScoreColumn,
-          screenHeight: screenHeight,
-          selectedTrip: selectedTrip,
-          thisTrip: currentCarTrip,
-          isMobile: isMobile,
-          onTripSelected: (value) {
-            SelectionMode mode = getSelectionModeFromTripMode(value.mode);
-            onSelectionModeChanged(mode);
-          },
-        ),
-      if (currentPublicTransportTrip != null)
-        positionedScorePointer(
-          widthInfoSection: widthInfoSection,
-          widthScoreColumn: widthScoreColumn,
-          heightScoreColumn: heightScoreColumn,
-          borderWidthScoreColumn: borderWidthScoreColumn,
-          screenHeight: screenHeight,
-          selectedTrip: selectedTrip,
-          thisTrip: currentPublicTransportTrip,
-          isMobile: isMobile,
-          onTripSelected: (value) {
-            SelectionMode mode = getSelectionModeFromTripMode(value.mode);
-            onSelectionModeChanged(mode);
-          },
-        ),
-      if (currentBicycleTrip != null)
-        positionedScorePointer(
-          widthInfoSection: widthInfoSection,
-          widthScoreColumn: widthScoreColumn,
-          heightScoreColumn: heightScoreColumn,
-          borderWidthScoreColumn: borderWidthScoreColumn,
-          screenHeight: screenHeight,
-          selectedTrip: selectedTrip,
-          thisTrip: currentBicycleTrip,
-          isMobile: isMobile,
-          onTripSelected: (value) {
-            SelectionMode mode = getSelectionModeFromTripMode(value.mode);
-            onSelectionModeChanged(mode);
-          },
-        ),
-    ];
   }
 }
 

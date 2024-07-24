@@ -49,11 +49,10 @@ class _SearchContentState extends State<SearchContent> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(lang.learn_about, style: textTheme.displayMedium!.copyWith(color: primaryColorV3)),
-                mediumVerticalSpacer,
+                smallVerticalSpacer,
+                Text(lang.input_instructions, style: textTheme.bodyLarge!.copyWith(color: primaryColorV3)),
+                smallVerticalSpacer,
                 SearchInputContent(key: _searchInputContentKey, isMobile: widget.isMobile),
-                SizedBox(
-                  height: extraLargePadding * 2,
-                )
               ],
             ),
           ),

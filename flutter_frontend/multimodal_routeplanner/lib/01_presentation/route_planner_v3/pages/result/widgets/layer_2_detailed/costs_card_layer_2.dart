@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mobiscore_to_x.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/question_icons.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/costs/Costs.dart';
 
@@ -10,7 +11,8 @@ Widget costsCardLayer2(BuildContext context,
     required double height,
     required heightImage,
     required Trip trip,
-    required isMobile}) {
+    required bool isMobile,
+    required Function(CostsType) showInfoCallback}) {
   double personalImageOffset = 0;
   double socialImageOffset = 10;
   double thisSizeImage = isMobile ? heightImage - 20 : heightImage;
@@ -41,19 +43,27 @@ Widget costsCardLayer2(BuildContext context,
                   children: [
                     Text(
                       costsType == CostsType.social
-                          ? lang.social_costs.toUpperCase()
-                          : lang.personal_costs.toUpperCase(),
+                          ? lang.social_costs_two_line.toUpperCase()
+                          : lang.personal_costs_two_line.toUpperCase(),
                       style: textTheme.labelLarge,
                     ),
                     const Divider(
                       thickness: 1,
                       color: Colors.black,
                     ),
-                    Text(
-                      costsType == CostsType.social
-                          ? trip.costs.externalCosts.all.currencyString
-                          : trip.costs.internalCosts.all.currencyString,
-                      style: textTheme.headlineMedium,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          costsType == CostsType.social
+                              ? trip.costs.externalCosts.all.currencyString
+                              : trip.costs.internalCosts.all.currencyString,
+                          style: textTheme.headlineMedium,
+                        ),
+                        customQuestionIcon(onTap: () {
+                          showInfoCallback(costsType);
+                        }),
+                      ],
                     ),
                   ],
                 ),

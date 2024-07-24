@@ -95,10 +95,11 @@ class _SearchScreenV3State extends State<SearchScreenV3> {
 
   FloatingActionButton _floatingStartButton(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
+    AppLocalizations lang = AppLocalizations.of(context)!;
 
     return FloatingActionButton.extended(
       label: Text(
-        'Get Started',
+        lang.get_started,
         style: textTheme.bodyMedium!.copyWith(color: onPrimaryColorV3),
       ),
       backgroundColor: primaryColorV3,
