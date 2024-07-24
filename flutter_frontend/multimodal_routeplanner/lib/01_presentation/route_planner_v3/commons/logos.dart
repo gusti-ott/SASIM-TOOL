@@ -8,6 +8,7 @@ Widget mobiScoreWithMcubeLogo(BuildContext context) {
   TextTheme textTheme = Theme.of(context).textTheme;
   AppLocalizations lang = AppLocalizations.of(context)!;
   return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
       Image.asset('assets/mobiscore_logos/logo_with_text_primary.png', width: 70),
       smallHorizontalSpacer,

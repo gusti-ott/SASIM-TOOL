@@ -87,7 +87,7 @@
   "environment": "Umwelt",
   "fixed": "Fix",
   "variable": "Variabel",
-  "route_is_loading": "...Routen werden geladen...",
+  "route_is_loading": "...von Routen werden geladen...",
   "learn_about": "Lerne über die wahren Kosten deiner Mobilität",
   "input_instructions": "Wählen Sie ein Verkehrsmittel aus und geben Sie Start und Ziel Ihres Weges ein, um die wahren Kosten zu berechnen.",
   "total_costs": "Vollkosten",
@@ -110,5 +110,6 @@
   "detail_social_environment_description": "Die Umweltdimension umfasst Kosten durch Klimaschäden und Flächenverbrauch.",
   "detail_personal_description": "Diese Kosten bestehen aus Fixkosten und variablen Kosten.",
   "detail_personal_fixed_description": "Zu den Fixkosten gehören Kosten wie der Wertverlust von Fahrzeugen.",
-  "detail_personal_variable_description": "Variable Kosten sind kilometerabhängige Kosten, wie z. B. Kraftstoffkosten."
+  "detail_personal_variable_description": "Variable Kosten sind kilometerabhängige Kosten, wie z. B. Kraftstoffkosten.",
+  "get_started": "Los geht's"
 }
