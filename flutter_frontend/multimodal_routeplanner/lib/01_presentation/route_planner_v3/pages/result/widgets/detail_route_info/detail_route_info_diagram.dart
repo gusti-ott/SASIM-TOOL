@@ -1,12 +1,13 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/costs_rates.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mobiscore_to_x.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mode_to_x.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/detail_route_info_section.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/stackedDiagramBar.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/stacked_diagram_bar.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/costs/Costs.dart';
@@ -29,6 +30,7 @@ class DetailRouteInfoDiagram extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
+    AppLocalizations lang = AppLocalizations.of(context)!;
 
     double maxCosts = getMaxCostsValue(
         currentCarTrip: currentCarTrip,
@@ -60,7 +62,8 @@ class DetailRouteInfoDiagram extends StatelessWidget {
             ),
           ),
           const Divider(),
-          Text('${getDiagramTitle(selectedDiagramType)} COSTS BY MODE', style: textTheme.labelLarge),
+          Text('${getDiagramTitle(context, selectedDiagramType)} ${lang.by_mode.toUpperCase()}',
+              style: textTheme.labelLarge, textAlign: TextAlign.center),
         ],
       ),
     );
@@ -253,29 +256,57 @@ double getMaxCostsValue(
   return maxValue;
 }
 
-// TODO: l10n
-String getDiagramTitle(DiagramType diagramType) {
+String getDiagramTitle(BuildContext context, DiagramType diagramType) {
+  AppLocalizations lang = AppLocalizations.of(context)!;
   switch (diagramType) {
     case DiagramType.total:
-      return 'TOTAL';
+      return lang.total_costs.toUpperCase();
     case DiagramType.social:
     case DiagramType.detailSocial:
-      return 'SOCIAL';
+      return lang.social_costs.toUpperCase();
     case DiagramType.personal:
     case DiagramType.detailPersonal:
-      return 'PERSONAL';
+      return lang.personal_costs.toUpperCase();
     case DiagramType.detailSocialTime:
-      return 'TIME';
+      return lang.time_costs.toUpperCase();
     case DiagramType.detailSocialHealth:
-      return 'HEALTH';
+      return lang.health_costs.toUpperCase();
     case DiagramType.detailSocialEnvironment:
-      return 'ENVIRONMENT';
+      return lang.environment_costs.toUpperCase();
     case DiagramType.detailPersonalFixed:
-      return 'FIXED';
+      return lang.fixed_costs.toUpperCase();
     case DiagramType.detailPersonalVariable:
-      return 'VARIABLE';
+      return lang.variable_costs.toUpperCase();
     default:
-      return 'UNKNOWN';
+      return lang.unknown.toUpperCase();
+  }
+}
+
+String getSelectionButtonLabel(BuildContext context, DiagramType diagramType) {
+  AppLocalizations lang = AppLocalizations.of(context)!;
+  switch (diagramType) {
+    case DiagramType.total:
+      return lang.total_costs.toUpperCase();
+    case DiagramType.social:
+      return lang.social.toUpperCase();
+    case DiagramType.detailSocial:
+      return lang.overall.toUpperCase();
+    case DiagramType.personal:
+      return lang.personal.toUpperCase();
+    case DiagramType.detailPersonal:
+      return lang.overall.toUpperCase();
+    case DiagramType.detailSocialTime:
+      return lang.time.toUpperCase();
+    case DiagramType.detailSocialHealth:
+      return lang.health.toUpperCase();
+    case DiagramType.detailSocialEnvironment:
+      return lang.environment.toUpperCase();
+    case DiagramType.detailPersonalFixed:
+      return lang.fixed.toUpperCase();
+    case DiagramType.detailPersonalVariable:
+      return lang.variable.toUpperCase();
+    default:
+      return lang.unknown.toUpperCase();
   }
 }
 

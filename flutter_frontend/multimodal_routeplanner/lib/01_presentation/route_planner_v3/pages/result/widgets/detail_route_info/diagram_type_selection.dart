@@ -15,8 +15,8 @@ class DiagramTypeSelection extends StatelessWidget {
     final height = this.height ?? 80;
     return Center(
       child: SizedBox(
-        height: height,
         width: 170,
+        height: height,
         child: Column(
           children: [
             if (isGeneralView(selectedDiagramType)) ...[
@@ -83,7 +83,7 @@ Widget diagramTypeSelectionButton(BuildContext context,
     required DiagramType selectedDiagramType,
     required Function(DiagramType) onPressed}) {
   TextTheme textTheme = Theme.of(context).textTheme;
-  String label = getDiagramTitle(diagramType);
+  String label = getSelectionButtonLabel(context, diagramType);
   return InkWell(
     onTap: () {
       onPressed(diagramType);

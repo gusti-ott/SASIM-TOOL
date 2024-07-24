@@ -43,8 +43,8 @@ Widget costsCardLayer2(BuildContext context,
                   children: [
                     Text(
                       costsType == CostsType.social
-                          ? lang.social_costs.toUpperCase()
-                          : lang.personal_costs.toUpperCase(),
+                          ? lang.social_costs_two_line.toUpperCase()
+                          : lang.personal_costs_two_line.toUpperCase(),
                       style: textTheme.labelLarge,
                     ),
                     const Divider(

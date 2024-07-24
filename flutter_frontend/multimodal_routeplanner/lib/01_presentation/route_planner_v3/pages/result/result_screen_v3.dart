@@ -214,6 +214,11 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
                     setState(() {
                       selectedDiagramType = diagramType;
                     });
+                    if (!showAdditionalMobileInfo) {
+                      setState(() {
+                        showAdditionalMobileInfo = true;
+                      });
+                    }
                   },
                   contentLayer: contentLayer,
                   changeLayerCallback: (value) {
