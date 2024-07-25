@@ -61,7 +61,14 @@ class DetailRouteInfoSection extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: largePadding),
                 child: Column(children: [
                   extraLargeVerticalSpacer,
-                  extraLargeVerticalSpacer,
+                  mediumVerticalSpacer,
+                  Text(
+                    getDiagramTitle(context, selectedDiagramType),
+                    style: textTheme.headlineMedium,
+                  ),
+                  mediumVerticalSpacer,
+                  detailRouteTextInfo(context, diagramType: selectedDiagramType),
+                  mediumVerticalSpacer,
                   DiagramTypeSelection(
                     height: diagramTypeSelectionHeight,
                     setDiagramType: (DiagramType value) {
@@ -75,8 +82,6 @@ class DetailRouteInfoSection extends StatelessWidget {
                       currentBicycleTrip: currentBicycleTrip,
                       currentPublicTransportTrip: currentPublicTransportTrip,
                       selectedDiagramType: selectedDiagramType),
-                  mediumVerticalSpacer,
-                  detailRouteTextInfo(context, diagramType: selectedDiagramType),
                   largeVerticalSpacer
                 ]),
               ),

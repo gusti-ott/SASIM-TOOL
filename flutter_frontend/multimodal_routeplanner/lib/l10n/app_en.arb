@@ -87,7 +87,7 @@
   "environment": "Environment",
   "fixed": "Fixed",
   "variable": "Variable",
-  "route_is_loading": "...or routes is loading...",
+  "route_is_loading": "...routes are loading...",
   "learn_about": "Learn about the real costs of mobility",
   "input_instructions": "Choose among the available travel modes and enter a start and end point to calculate the true costs of your trip.",
   "total_costs": "Total Costs",

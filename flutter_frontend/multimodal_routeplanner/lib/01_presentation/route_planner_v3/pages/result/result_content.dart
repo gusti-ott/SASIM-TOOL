@@ -72,7 +72,7 @@ class ResultContent extends StatelessWidget {
             slivers: [
               SliverAppBar(
                 pinned: true,
-                expandedHeight: 150.0,
+                expandedHeight: 110,
                 flexibleSpace: FlexibleSpaceBar(
                   background: mobileModeSelectionContainer(
                     context,

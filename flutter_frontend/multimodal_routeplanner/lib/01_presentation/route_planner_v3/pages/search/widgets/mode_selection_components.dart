@@ -15,7 +15,7 @@ Widget modeSelectionRow(BuildContext context,
     required Function(bool) onSharedChanged}) {
   return Container(
     width: double.infinity,
-    decoration: boxDecorationWithShadow(),
+    decoration: customBoxDecorationWithShadow(),
     padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
     child: Wrap(
       alignment: WrapAlignment.spaceBetween,
@@ -94,8 +94,8 @@ Widget mobileModeSelectionContainer(BuildContext context,
     bool disableBorder = false}) {
   return Container(
     width: double.infinity,
-    decoration: (!disableBorder) ? boxDecorationWithShadow() : null,
-    padding: EdgeInsets.all(mediumPadding),
+    decoration: (!disableBorder) ? customBoxDecorationWithShadow() : null,
+    padding: EdgeInsets.all(smallPadding),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -105,7 +105,7 @@ Widget mobileModeSelectionContainer(BuildContext context,
           alignment: WrapAlignment.center,
           children: [
             sharedSelectionPart(context, isShared: isShared, onSharedChanged: onSharedChanged),
-            mediumHorizontalSpacer,
+            smallHorizontalSpacer,
             electricSelectionPart(context, isElectric: isElectric, onElectricChanged: onElectricChanged),
           ],
         )

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-BoxDecoration boxDecorationWithShadow() {
+BoxDecoration customBoxDecorationWithShadow() {
   return BoxDecoration(
     color: Colors.white,
     borderRadius: BorderRadius.circular(30.0),
