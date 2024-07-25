@@ -29,7 +29,7 @@ class RouteRemoteDatasourceImpl implements RouteRemoteDatasource {
     String modeString = mapMode(mode: mode);
 
     // TODO: set to false, when in production
-    bool isMocked = true;
+    bool isMocked = false;
 
     // url for local server
     /*var url =

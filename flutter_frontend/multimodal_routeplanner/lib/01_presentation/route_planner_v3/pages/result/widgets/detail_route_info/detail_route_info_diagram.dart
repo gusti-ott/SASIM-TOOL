@@ -62,7 +62,7 @@ class DetailRouteInfoDiagram extends StatelessWidget {
             ),
           ),
           const Divider(),
-          Text('${getDiagramTitle(context, selectedDiagramType)} ${lang.by_mode.toUpperCase()}',
+          Text('${getDiagramDescription(context, selectedDiagramType)} ${lang.by_mode.toUpperCase()}',
               style: textTheme.labelLarge, textAlign: TextAlign.center),
         ],
       ),
@@ -257,6 +257,30 @@ double getMaxCostsValue(
 }
 
 String getDiagramTitle(BuildContext context, DiagramType diagramType) {
+  AppLocalizations lang = AppLocalizations.of(context)!;
+  switch (diagramType) {
+    case DiagramType.total:
+    case DiagramType.social:
+    case DiagramType.personal:
+      return lang.total_costs.toUpperCase();
+
+    case DiagramType.detailSocial:
+    case DiagramType.detailSocialTime:
+    case DiagramType.detailSocialHealth:
+    case DiagramType.detailSocialEnvironment:
+      return lang.social_costs.toUpperCase();
+
+    case DiagramType.detailPersonal:
+    case DiagramType.detailPersonalFixed:
+    case DiagramType.detailPersonalVariable:
+      return lang.personal_costs.toUpperCase();
+
+    default:
+      return lang.unknown.toUpperCase();
+  }
+}
+
+String getDiagramDescription(BuildContext context, DiagramType diagramType) {
   AppLocalizations lang = AppLocalizations.of(context)!;
   switch (diagramType) {
     case DiagramType.total:

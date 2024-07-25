@@ -40,6 +40,9 @@ Widget mobiScoreScoreBoardWithPointers(BuildContext context,
   // get screen width
   double screenWidth = MediaQuery.of(context).size.width;
 
+  //necessary, because often bicycle and pt have same mobiscore
+  bool bikePointerReversed = isBicycleReversed(currentBicycleTrip, currentPublicTransportTrip, selectedTrip);
+
   return SizedBox(
     height: heightSection,
     child: Stack(
@@ -74,6 +77,7 @@ Widget mobiScoreScoreBoardWithPointers(BuildContext context,
             screenWidth: screenWidth,
             horizontalPadding: horizontalPadding,
             isMobile: true,
+            isReversed: bikePointerReversed,
             onTripSelected: (value) {
               SelectionMode mode = getSelectionModeFromTripMode(value.mode);
               onSelectionModeChanged(mode);
@@ -202,6 +206,8 @@ List<Widget> positionedScorePointers(
     bool isMobile = false,
     double mobileTopPositionOffset = 0,
     required Function(SelectionMode) onSelectionModeChanged}) {
+  //necessary, because often bicycle and pt have same mobiscore
+  bool bikePointerReversed = isBicycleReversed(currentBicycleTrip, currentPublicTransportTrip, selectedTrip);
   return [
     if (currentCarTrip != null)
       positionedScorePointer(
@@ -243,10 +249,20 @@ List<Widget> positionedScorePointers(
         selectedTrip: selectedTrip,
         thisTrip: currentBicycleTrip,
         isMobile: isMobile,
+        isReversed: bikePointerReversed,
         onTripSelected: (value) {
           SelectionMode mode = getSelectionModeFromTripMode(value.mode);
           onSelectionModeChanged(mode);
         },
       ),
   ];
+}
+
+bool isBicycleReversed(Trip? currentBicycleTrip, Trip? currentPublicTransportTrip, Trip? selectedTrip) {
+  if (currentBicycleTrip != null && currentPublicTransportTrip != null && selectedTrip != null) {
+    if (currentBicycleTrip.mobiScore == currentPublicTransportTrip.mobiScore && selectedTrip.mode != 'PT') {
+      return true;
+    }
+  }
+  return false;
 }

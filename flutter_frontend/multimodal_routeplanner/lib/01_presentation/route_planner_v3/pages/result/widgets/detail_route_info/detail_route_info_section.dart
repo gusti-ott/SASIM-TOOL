@@ -62,11 +62,11 @@ class DetailRouteInfoSection extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: largePadding),
                 child: Column(children: [
-                  extraLargeVerticalSpacer,
-                  mediumVerticalSpacer,
+                  SizedBox(height: extraLargePadding + largePadding),
                   Text(
                     getDiagramTitle(context, selectedDiagramType),
                     style: textTheme.headlineMedium,
+                    textAlign: TextAlign.center,
                   ),
                   mediumVerticalSpacer,
                   detailRouteTextInfo(context, diagramType: selectedDiagramType),

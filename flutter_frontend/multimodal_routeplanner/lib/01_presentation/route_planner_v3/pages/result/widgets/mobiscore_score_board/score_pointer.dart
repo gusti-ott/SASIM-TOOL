@@ -19,6 +19,7 @@ Widget positionedScorePointer(
     required Trip selectedTrip,
     required Trip thisTrip,
     bool isMobile = false,
+    bool isReversed = false,
     required Function(Trip) onTripSelected}) {
   Color mobiScoreColor = getColorFromMobiScore(thisTrip.mobiScore);
   Color backgroundColor = Colors.white;
@@ -41,16 +42,24 @@ Widget positionedScorePointer(
     }
   }
 
+  if (isReversed) {
+    if (isMobile) {
+      direction = ShapeDirection.bottom;
+    } else {
+      direction = ShapeDirection.left;
+    }
+  }
+
   return Positioned(
     right: !isMobile
         ? _getRightPositionScorePointerDesktop(
-            widthInfoSection, widthScoreColumn, borderWidthScoreColumn, direction, isLargeScoreContainer)
+            widthInfoSection, widthScoreColumn, borderWidthScoreColumn, direction, isLargeScoreContainer, isReversed)
         : null,
     top: !isMobile
         ? _getTopPositionScorePointerDesktop(
             screenHeight, heightScoreColumn, borderWidthScoreColumn, isLargeScoreContainer, index)
         : _getTopPositionScorePointerMobile(
-            heightSection, widthScoreColumn, borderWidthScoreColumn, isLargeScoreContainer),
+            heightSection, widthScoreColumn, borderWidthScoreColumn, isLargeScoreContainer, isReversed),
     left: isMobile
         ? _getLeftPositionScorePointerMobile(
             screenWidth, horizontalPadding, borderWidthScoreColumn, isLargeScoreContainer, index)
@@ -130,7 +139,7 @@ double _getTopPositionScorePointerDesktop(double screenHeight, double heightScor
 }
 
 double _getRightPositionScorePointerDesktop(double widthInfoSection, double widthScoreColumn,
-    double borderWidthScoreColumn, ShapeDirection shapeDirection, bool isLargeScoreContainer) {
+    double borderWidthScoreColumn, ShapeDirection shapeDirection, bool isLargeScoreContainer, bool isReversed) {
   double scoreContainerWidth = isLargeScoreContainer ? largeScoreContainerWidth : smallScoreContainerWidth;
 
   // add offset because of overlay due to rotation
@@ -150,12 +159,15 @@ double _getRightPositionScorePointerDesktop(double widthInfoSection, double widt
   }
 }
 
-double _getTopPositionScorePointerMobile(
-    double sectionHeight, double widthScoreColumn, double borderWidthScoreColumn, bool isLargeScoreContainer) {
+double _getTopPositionScorePointerMobile(double sectionHeight, double widthScoreColumn, double borderWidthScoreColumn,
+    bool isLargeScoreContainer, bool isReversed) {
   double position = 0.0;
   if (isLargeScoreContainer) {
     position =
         sectionHeight / 2 - largeScoreContainerWidth - widthScoreColumn / 2 - borderWidthScoreColumn - largeOffset;
+  } else if (isReversed) {
+    position =
+        sectionHeight / 2 - smallScoreContainerWidth - widthScoreColumn / 2 - borderWidthScoreColumn - smallOffset;
   } else {
     position = sectionHeight / 2 + widthScoreColumn / 2 + borderWidthScoreColumn + smallOffset;
   }
