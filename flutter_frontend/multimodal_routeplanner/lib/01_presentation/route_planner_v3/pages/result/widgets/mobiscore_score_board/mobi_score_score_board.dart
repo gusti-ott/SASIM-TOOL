@@ -41,7 +41,7 @@ Widget mobiScoreScoreBoardWithPointers(BuildContext context,
   double screenWidth = MediaQuery.of(context).size.width;
 
   //necessary, because often bicycle and pt have same mobiscore
-  bool bikePointerReversed = isBicycleReversed(currentBicycleTrip, currentPublicTransportTrip, selectedTrip);
+  bool isBicyclePointerReversed = isBicycleReversed(currentBicycleTrip, currentPublicTransportTrip, selectedTrip);
 
   return SizedBox(
     height: heightSection,
@@ -77,7 +77,7 @@ Widget mobiScoreScoreBoardWithPointers(BuildContext context,
             screenWidth: screenWidth,
             horizontalPadding: horizontalPadding,
             isMobile: true,
-            isReversed: bikePointerReversed,
+            isReversed: isBicyclePointerReversed,
             onTripSelected: (value) {
               SelectionMode mode = getSelectionModeFromTripMode(value.mode);
               onSelectionModeChanged(mode);
