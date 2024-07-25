@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/detail_route_info_diagram.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/detail_route_info_map.dart';
@@ -45,6 +46,7 @@ class DetailRouteInfoSection extends StatelessWidget {
   Widget build(BuildContext context) {
     double diagramTypeSelectionHeight = 80;
     TextTheme textTheme = Theme.of(context).textTheme;
+    AppLocalizations lang = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
         color: backgroundColorV3,
@@ -60,8 +62,15 @@ class DetailRouteInfoSection extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: largePadding),
                 child: Column(children: [
-                  extraLargeVerticalSpacer,
-                  extraLargeVerticalSpacer,
+                  SizedBox(height: extraLargePadding + largePadding),
+                  Text(
+                    getDiagramTitle(context, selectedDiagramType),
+                    style: textTheme.headlineMedium,
+                    textAlign: TextAlign.center,
+                  ),
+                  mediumVerticalSpacer,
+                  detailRouteTextInfo(context, diagramType: selectedDiagramType),
+                  mediumVerticalSpacer,
                   DiagramTypeSelection(
                     height: diagramTypeSelectionHeight,
                     setDiagramType: (DiagramType value) {
@@ -75,8 +84,6 @@ class DetailRouteInfoSection extends StatelessWidget {
                       currentBicycleTrip: currentBicycleTrip,
                       currentPublicTransportTrip: currentPublicTransportTrip,
                       selectedDiagramType: selectedDiagramType),
-                  mediumVerticalSpacer,
-                  detailRouteTextInfo(context, diagramType: selectedDiagramType),
                   largeVerticalSpacer
                 ]),
               ),
@@ -85,37 +92,49 @@ class DetailRouteInfoSection extends StatelessWidget {
             top: 0,
             right: 0,
             left: 0,
-            child: Padding(
-              padding: EdgeInsets.all(largePadding),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  if (isMobile == true)
-                    CircleAvatar(
-                      backgroundColor: Colors.white,
-                      child: IconButton(
-                        icon: Icon(Icons.close, color: colorE),
-                        onPressed: () {
-                          if (closeCallback != null) {
-                            closeCallback!();
-                          }
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.black.withOpacity(0.6), // Darker color at the top
+                    Colors.black.withOpacity(0.0), // Fully transparent at the bottom
+                  ],
+                ),
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(mediumPadding),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    if (isMobile == true)
+                      CircleAvatar(
+                        backgroundColor: Colors.white,
+                        child: IconButton(
+                          icon: Icon(Icons.close, color: colorE),
+                          onPressed: () {
+                            if (closeCallback != null) {
+                              closeCallback!();
+                            }
+                          },
+                        ),
+                      )
+                    else
+                      const SizedBox(),
+                    Row(children: [
+                      Text(lang.diagram, style: textTheme.titleSmall!.copyWith(color: Colors.black)),
+                      Switch(
+                        value: (infoViewType == InfoViewType.diagram),
+                        onChanged: (value) {
+                          changeInfoViewType();
                         },
+                        activeColor: secondaryColorV3,
+                        inactiveThumbColor: Colors.grey,
                       ),
-                    )
-                  else
-                    const SizedBox(),
-                  Row(children: [
-                    Text('Diagramm', style: textTheme.titleSmall!.copyWith(color: Colors.black)),
-                    Switch(
-                      value: (infoViewType == InfoViewType.diagram),
-                      onChanged: (value) {
-                        changeInfoViewType();
-                      },
-                      activeColor: secondaryColorV3,
-                      inactiveThumbColor: Colors.grey,
-                    ),
-                  ])
-                ],
+                    ])
+                  ],
+                ),
               ),
             ),
           ),

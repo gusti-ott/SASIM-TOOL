@@ -87,7 +87,7 @@
   "environment": "Environment",
   "fixed": "Fixed",
   "variable": "Variable",
-  "route_is_loading": "...or routes is loading...",
+  "route_is_loading": "...routes are loading...",
   "learn_about": "Learn about the real costs of mobility",
   "input_instructions": "Choose among the available travel modes and enter a start and end point to calculate the true costs of your trip.",
   "total_costs": "Total Costs",
@@ -111,5 +111,10 @@
   "detail_personal_description": "These costs consist of fixed costs and variable costs.",
   "detail_personal_fixed_description": "Fixed costs include costs such as the depreciation of vehicles.",
   "detail_personal_variable_description": "Variable costs are kilometer-dependent costs, such as fuel costs.",
-  "get_started": "Get Started"
+  "get_started": "Get Started",
+  "diagram": "Diagram",
+  "about_us_title": "About Us",
+
+  "about_us_content": "We are an interdisciplinary team consisting of five chairs from TU Munich and several external partners.\n\nOur goal is to transparently present and communicate the true costs of urban traffic in Munich.\n\nWe want to raise awareness of the costs of air pollutants, climate damage, accidents, congestion, land consumption, and noise caused by our mobility.\n\nWith this, we aim to promote sustainable and fair mobility behavior.",
+  "research_content": "The following scientific works were used for the development of the full cost calculator:"
 }

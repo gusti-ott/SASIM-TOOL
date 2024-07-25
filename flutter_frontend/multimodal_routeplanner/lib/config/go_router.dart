@@ -6,6 +6,8 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcos
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/search_screen/SearchScreen.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/main_screen.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/about_us/about_us_screen.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/research/research_screen.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_screen_v3.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/search_screen_v3.dart';
 
@@ -14,7 +16,7 @@ final _shellNavigatorCalculatorKey = GlobalKey<NavigatorState>(debugLabel: 'shel
 final _shellNavigatorInfoKey = GlobalKey<NavigatorState>(debugLabel: 'shellInfo');
 
 final GoRouter vmrpRouter = GoRouter(
-  initialLocation: '/v2/search',
+  initialLocation: '/v3/search',
   routes: [
     GoRoute(
       path: '/v2',
@@ -114,6 +116,20 @@ final GoRouter vmrpRouter = GoRouter(
                   child: Text('Error: parameters in url missing'),
                 ));
               }
+            },
+          ),
+          GoRoute(
+            name: AboutUsScreen.routeName,
+            path: AboutUsScreen.path,
+            builder: (context, state) {
+              return const AboutUsScreen();
+            },
+          ),
+          GoRoute(
+            name: ResearchScreen.routeName,
+            path: ResearchScreen.path,
+            builder: (context, state) {
+              return const ResearchScreen();
             },
           )
         ])

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/decorations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_cubit.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/address_picker_list.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/calculate_button.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
+import 'package:multimodal_routeplanner/02_application/bloc/address_picker/address_picker_bloc.dart';
 import 'package:multimodal_routeplanner/config/setup_dependencies.dart';
 
 Widget addressInputRow(BuildContext context,
@@ -54,6 +57,7 @@ Column mobileAddressInputContainer(BuildContext context,
     required bool isElectric,
     required bool isShared}) {
   AppLocalizations lang = AppLocalizations.of(context)!;
+  AddressPickerBloc addressPickerBloc = sl<AddressPickerBloc>();
   return Column(
     children: [
       Row(
@@ -65,6 +69,9 @@ Column mobileAddressInputContainer(BuildContext context,
               hintText: lang.from,
               onChanged: (value) {
                 onStartChanged(value);
+                addressPickerBloc.add(
+                  StartAddressInputChanged(value),
+                );
               },
             ),
           ),
@@ -80,14 +87,20 @@ Column mobileAddressInputContainer(BuildContext context,
         ],
       ),
       smallVerticalSpacer,
+      startAddressPickerBuilder(addressPickerBloc, startController, isMobile: true),
       textInputField(
         context,
         controller: endController,
         hintText: lang.to,
         onChanged: (value) {
           onEndChanged(value);
+          addressPickerBloc.add(
+            EndAddressInputChanged(value),
+          );
         },
       ),
+      smallVerticalSpacer,
+      endAddressPickerBuilder(addressPickerBloc, endController, isMobile: true),
       largeVerticalSpacer,
       statefulCalculateButton(context,
           cubit: cubit,
@@ -111,16 +124,26 @@ Row desktopAddressInputRow(BuildContext context,
     required bool isElectric,
     required bool isShared}) {
   AppLocalizations lang = AppLocalizations.of(context)!;
+  AddressPickerBloc addressPickerBloc = sl<AddressPickerBloc>();
   return Row(
+    crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Expanded(
-        child: textInputField(
-          context,
-          controller: startController,
-          hintText: lang.from,
-          onChanged: (value) {
-            onStartChanged(value);
-          },
+        child: Column(
+          children: [
+            textInputField(
+              context,
+              controller: startController,
+              hintText: lang.from,
+              onChanged: (value) {
+                onStartChanged(value);
+                addressPickerBloc.add(
+                  StartAddressInputChanged(value),
+                );
+              },
+            ),
+            startAddressPickerBuilder(addressPickerBloc, startController)
+          ],
         ),
       ),
       const SizedBox(width: 8),
@@ -132,25 +155,102 @@ Row desktopAddressInputRow(BuildContext context,
       ),
       const SizedBox(width: 8),
       Expanded(
-        child: textInputField(
-          context,
-          controller: endController,
-          hintText: lang.to,
-          onChanged: (value) {
-            onEndChanged(value);
-          },
+        child: Column(
+          children: [
+            textInputField(
+              context,
+              controller: endController,
+              hintText: lang.to,
+              onChanged: (value) {
+                onEndChanged(value);
+                addressPickerBloc.add(
+                  EndAddressInputChanged(value),
+                );
+              },
+            ),
+            endAddressPickerBuilder(addressPickerBloc, endController)
+          ],
         ),
       ),
       smallHorizontalSpacer,
-      statefulCalculateButton(context,
-          cubit: cubit,
-          startAddress: startController.text,
-          endAddress: endController.text,
-          selectedMode: selectedMode,
-          isElectric: isElectric,
-          isShared: isShared),
+      Padding(
+        padding: EdgeInsets.only(top: smallPadding),
+        child: statefulCalculateButton(context,
+            cubit: cubit,
+            startAddress: startController.text,
+            endAddress: endController.text,
+            selectedMode: selectedMode,
+            isElectric: isElectric,
+            isShared: isShared),
+      ),
     ],
   );
+}
+
+BlocBuilder<AddressPickerBloc, AddressPickerState> endAddressPickerBuilder(
+    AddressPickerBloc addressPickerBloc, endController,
+    {bool isMobile = false}) {
+  return BlocBuilder<AddressPickerBloc, AddressPickerState>(
+      bloc: addressPickerBloc,
+      builder: (context, state) {
+        if (state is RetrievingEndAddress) {
+          return loadingIndicator(isMobile: isMobile);
+        } else if (state is EndAddressRetrieved) {
+          if (state.listAddresses.isNotEmpty) {
+            return Padding(
+              padding: EdgeInsets.only(top: smallPadding),
+              child: AddressPickerListV3(
+                  width: double.infinity,
+                  listAddresses: state.listAddresses,
+                  addressInputController: endController,
+                  onAddressSelectedCallback: (address) {
+                    addressPickerBloc.add(PickEndAddress(address));
+                  }),
+            );
+          }
+        }
+        return SizedBox(height: !isMobile ? 200 : null);
+      });
+}
+
+BlocBuilder<AddressPickerBloc, AddressPickerState> startAddressPickerBuilder(
+    AddressPickerBloc addressPickerBloc, TextEditingController controller,
+    {bool isMobile = false}) {
+  return BlocBuilder<AddressPickerBloc, AddressPickerState>(
+      bloc: addressPickerBloc,
+      builder: (context, state) {
+        if (state is RetrievingStartAddress) {
+          return loadingIndicator(isMobile: isMobile);
+        } else if (state is StartAddressRetrieved) {
+          if (state.listAddresses.isNotEmpty) {
+            return Padding(
+              padding: EdgeInsets.only(top: !isMobile ? smallPadding : 0, bottom: isMobile ? smallPadding : 0),
+              child: AddressPickerListV3(
+                  width: double.infinity,
+                  listAddresses: state.listAddresses,
+                  addressInputController: controller,
+                  onAddressSelectedCallback: (address) {
+                    addressPickerBloc.add(PickStartAddress(address));
+                  }),
+            );
+          }
+        }
+        return SizedBox(height: !isMobile ? 200 : null);
+      });
+}
+
+SizedBox loadingIndicator({bool isMobile = false}) {
+  return SizedBox(
+      height: !isMobile ? 200 : null,
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: Padding(
+          padding: EdgeInsets.all(smallPadding),
+          child: LinearProgressIndicator(
+            color: secondaryColorV3,
+          ),
+        ),
+      ));
 }
 
 Widget textInputField(
@@ -161,7 +261,7 @@ Widget textInputField(
 }) {
   TextTheme textTheme = Theme.of(context).textTheme;
   return Container(
-    decoration: boxDecorationWithShadow(),
+    decoration: customBoxDecorationWithShadow(),
     child: TextField(
       controller: controller,
       decoration: InputDecoration(

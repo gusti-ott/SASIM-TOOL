@@ -6,6 +6,7 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/ResultScreen.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/search_screen/address_picker/AddressPickerList.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/address_picker/address_picker_bloc.dart';
+import 'package:multimodal_routeplanner/config/setup_dependencies.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -32,14 +33,15 @@ class _SearchScreenState extends State<SearchScreen> {
     const double searchAreaWidth = 800;
     const double textInputWidth = (searchAreaWidth - 100) / 2;
 
+    AddressPickerBloc addressPickerBloc = sl<AddressPickerBloc>();
+
     return Column(
       children: [
         Center(
           child: Column(
             children: [
               TitleImage(
-                  imagePath: 'assets/title_image/titelbild_ubahn.png',
-                  titleText: lang.that_are_the_true_costs_header),
+                  imagePath: 'assets/title_image/titelbild_ubahn.png', titleText: lang.that_are_the_true_costs_header),
               const SizedBox(height: 96),
               SizedBox(
                   width: searchAreaWidth,
@@ -50,6 +52,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         BlocBuilder<AddressPickerBloc, AddressPickerState>(
+                          bloc: addressPickerBloc,
                           builder: (context, state) {
                             return Column(
                               children: [
@@ -58,8 +61,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                   lang.start_address,
                                   _controllerStartLocation,
                                   (value) {
-                                    BlocProvider.of<AddressPickerBloc>(context)
-                                        .add(StartAddressInputChanged(value));
+                                    addressPickerBloc.add(StartAddressInputChanged(value));
                                   },
                                   _startInputValid,
                                 ),
@@ -75,8 +77,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                       listAddresses: state.listAddresses,
                                       addressInputController: _controllerStartLocation,
                                       onAddressSelectedCallback: (address) {
-                                        BlocProvider.of<AddressPickerBloc>(context)
-                                            .add(PickStartAddress(address));
+                                        addressPickerBloc.add(PickStartAddress(address));
                                       }),
                               ],
                             );
@@ -97,6 +98,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           ],
                         ),
                         BlocBuilder<AddressPickerBloc, AddressPickerState>(
+                          bloc: addressPickerBloc,
                           builder: (context, state) {
                             return Column(
                               children: [
@@ -105,8 +107,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                   lang.end_address,
                                   _controllerEndLocation,
                                   (value) {
-                                    BlocProvider.of<AddressPickerBloc>(context)
-                                        .add(EndAddressInputChanged(value));
+                                    BlocProvider.of<AddressPickerBloc>(context).add(EndAddressInputChanged(value));
                                   },
                                   _endInputValid,
                                 ),
@@ -122,8 +123,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                       listAddresses: state.listAddresses,
                                       addressInputController: _controllerEndLocation,
                                       onAddressSelectedCallback: (address) {
-                                        BlocProvider.of<AddressPickerBloc>(context)
-                                            .add(PickEndAddress(address));
+                                        BlocProvider.of<AddressPickerBloc>(context).add(PickEndAddress(address));
                                       }),
                               ],
                             );

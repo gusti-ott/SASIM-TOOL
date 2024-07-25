@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/mobile_scaffold_widgets.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/nav_drawer.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/search_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 
@@ -59,38 +60,6 @@ class _SearchScreenV3State extends State<SearchScreenV3> {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         backgroundColor: backgroundColorV3,
         body: SearchContent(isMobile: isMobile, scrollController: _scrollController));
-  }
-
-  Widget buildDrawer(BuildContext context) {
-    AppLocalizations lang = AppLocalizations.of(context)!;
-    TextTheme textTheme = Theme.of(context).textTheme;
-    return Drawer(
-      backgroundColor: backgroundColorV3,
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          DrawerHeader(
-            child: Align(
-                alignment: Alignment.centerLeft,
-                child: Image.asset('assets/mobiscore_logos/logo_with_text_primary.png', width: 70)),
-          ),
-          ListTile(
-            title: Text(lang.research, style: textTheme.headlineLarge!.copyWith(color: primaryColorV3)),
-            onTap: () {
-              // Handle the navigation to the Home page
-              Navigator.pop(context); // Close the drawer
-            },
-          ),
-          ListTile(
-            title: Text(lang.about_us, style: textTheme.headlineLarge!.copyWith(color: primaryColorV3)),
-            onTap: () {
-              // Handle the navigation to the Settings page
-              Navigator.pop(context); // Close the drawer
-            },
-          ),
-        ],
-      ),
-    );
   }
 
   FloatingActionButton _floatingStartButton(BuildContext context) {

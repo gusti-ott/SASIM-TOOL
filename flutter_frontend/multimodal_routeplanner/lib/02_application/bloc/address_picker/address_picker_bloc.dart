@@ -8,9 +8,8 @@ part 'address_picker_event.dart';
 part 'address_picker_state.dart';
 
 class AddressPickerBloc extends Bloc<AddressPickerEvent, AddressPickerState> {
-  AddressPickerBloc() : super(AddressPickerInitial()) {
-    AddressPickerUsecases addressPickerUsecases = AddressPickerUsecases();
-
+  final AddressPickerUsecases addressPickerUsecases;
+  AddressPickerBloc(this.addressPickerUsecases) : super(AddressPickerInitial()) {
     on<AddressPickerEvent>(
       (event, emit) async {
         if (event is AddressInputChanged) {
@@ -20,12 +19,10 @@ class AddressPickerBloc extends Bloc<AddressPickerEvent, AddressPickerState> {
             emit(RetrievingEndAddress());
           }
 
-          List<Address> listAddresses = await addressPickerUsecases.getAddress(
-              inputAddress: event.addressInput);
+          List<Address> listAddresses = await addressPickerUsecases.getAddress(inputAddress: event.addressInput);
 
-          listAddresses.removeWhere((element) =>
-              element.properties.city != 'München' &&
-              element.properties.country != 'Deutschland');
+          listAddresses.removeWhere(
+              (element) => element.properties.city != 'München' && element.properties.country != 'Deutschland');
 
           if (event is StartAddressInputChanged) {
             emit(StartAddressRetrieved(listAddresses));

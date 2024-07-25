@@ -136,18 +136,22 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
         Widget child = const SizedBox();
         FloatingActionButton? fab;
         if (state is ResultLoading) {
-          child = Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset('assets/mobiscore_logos/logo_with_text_primary.png', width: 100),
-              largeVerticalSpacer,
-              circularProgressIndicatorWithPadding(color: primaryColorV3),
-              largeVerticalSpacer,
-              Text(
-                '${lang.route_is_loading} ${state.loadedTrips}/${state.totalTrips}',
-                style: textTheme.headlineMedium!.copyWith(color: primaryColorV3),
-              ),
-            ],
+          child = Padding(
+            padding: EdgeInsets.all(mediumPadding),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset('assets/mobiscore_logos/logo_with_text_primary.png', width: 100),
+                largeVerticalSpacer,
+                circularProgressIndicatorWithPadding(color: primaryColorV3),
+                largeVerticalSpacer,
+                Text(
+                  '${lang.route_is_loading} ${state.loadedTrips}/${state.totalTrips}',
+                  style: textTheme.headlineMedium!.copyWith(color: primaryColorV3),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
           );
         } else if (state is ResultLoaded) {
           trips = state.trips;
@@ -245,7 +249,7 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
             }
           }
         }
-        return Scaffold(backgroundColor: backgroundColorV3, body: child, floatingActionButton: fab);
+        return Scaffold(backgroundColor: backgroundColor, body: child, floatingActionButton: fab);
       },
     );
   }

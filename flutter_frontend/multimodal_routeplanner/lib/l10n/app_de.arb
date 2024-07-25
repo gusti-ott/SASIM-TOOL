@@ -87,9 +87,9 @@
   "environment": "Umwelt",
   "fixed": "Fix",
   "variable": "Variabel",
-  "route_is_loading": "...von Routen werden geladen...",
+  "route_is_loading": "...Routen werden geladen...",
   "learn_about": "Lerne über die wahren Kosten deiner Mobilität",
-  "input_instructions": "Wählen Sie ein Verkehrsmittel aus und geben Sie Start und Ziel Ihres Weges ein, um die wahren Kosten zu berechnen.",
+  "input_instructions": "Wähle ein Verkehrsmittel aus und gib Start und Ziel deines Weges ein, um die wahren Kosten zu berechnen.",
   "total_costs": "Vollkosten",
   "total": "Vollkosten",
   "social": "extern",
@@ -111,5 +111,9 @@
   "detail_personal_description": "Diese Kosten bestehen aus Fixkosten und variablen Kosten.",
   "detail_personal_fixed_description": "Zu den Fixkosten gehören Kosten wie der Wertverlust von Fahrzeugen.",
   "detail_personal_variable_description": "Variable Kosten sind kilometerabhängige Kosten, wie z. B. Kraftstoffkosten.",
-  "get_started": "Los geht's"
+  "get_started": "Los geht's",
+  "diagram": "Diagramm",
+  "about_us_title": "Wer wir sind",
+  "about_us_content": "Wir sind ein interdisziplinäres Team bestehend aus fünf Lehrstühlen der TU München und mehreren externen Partnern.\n\nUnser Ziel ist es, die wahren Kosten des urbanen\nVerkehrs in München transparent darzustellen und zu kommunizieren.\n\nWir möchten Bewusstsein für die Kosten von Luftschadstoffen, Klimaschäden, Unfälle, Stau, Flächenverbrauch und Lärm schaffen, die unsere Mobilität hervorruft.\n\nDamit wollen wir nachhaltiges und gerechtes Mobilitätsverhalten fördern.",
+  "research_content": "Folgende wissenschaftliche Arbeiten wurden für die Entwicklung des Vollkostenrechners verwendet:"
 }

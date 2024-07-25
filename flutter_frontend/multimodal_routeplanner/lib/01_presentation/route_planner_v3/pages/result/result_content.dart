@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/input_to_trip.dart';
@@ -7,6 +8,7 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/r
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/layer_1/layer_1_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/layer_2_detailed/layer_2_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/mobiscore_score_board/mobi_score_score_board.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/search_screen_v3.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/mode_selection_components.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 
@@ -65,14 +67,25 @@ class ResultContent extends StatelessWidget {
     String currentPublicTransportTripMode = getPublicTransportTripMode();
     Trip? currentPublicTransportTrip = trips.firstWhereOrNull((trip) => trip.mode == currentPublicTransportTripMode);
 
+    ScrollController scrollController = ScrollController();
+
     return Stack(
       children: [
         if (isMobile)
           CustomScrollView(
+            controller: scrollController,
             slivers: [
               SliverAppBar(
                 pinned: true,
-                expandedHeight: 150.0,
+                leading: Padding(
+                  padding: EdgeInsets.all(smallPadding),
+                  child: InkWell(
+                      onTap: () {
+                        context.goNamed(SearchScreenV3.routeName);
+                      },
+                      child: Image.asset('assets/mobiscore_logos/logo_with_text_primary.png')),
+                ),
+                expandedHeight: 110,
                 flexibleSpace: FlexibleSpaceBar(
                   background: mobileModeSelectionContainer(
                     context,
@@ -121,13 +134,17 @@ class ResultContent extends StatelessWidget {
                                     setDiagramTypeCallback: setDiagramTypeCallback,
                                     isMobile: isMobile,
                                     contentMaxWidth: contentMaxWidth,
-                                    changeLayerCallback: changeLayerCallback,
+                                    changeLayerCallback: (layer) {
+                                      changeLayerAndScrollUp(layer, scrollController);
+                                    },
                                   ),
                                 if (contentLayer == ContentLayer.layer2)
                                   Layer2Content(
                                     selectedTrip: selectedTrip,
                                     isMobile: isMobile,
-                                    changeLayerCallback: changeLayerCallback,
+                                    changeLayerCallback: (layer) {
+                                      changeLayerAndScrollUp(layer, scrollController);
+                                    },
                                     setInfoViewTypeCallback: setInfoViewTypeCallback,
                                     setDiagramTypeCallback: setDiagramTypeCallback,
                                     contentMaxWidth: contentMaxWidth,
@@ -153,6 +170,7 @@ class ResultContent extends StatelessWidget {
                   children: [
                     Expanded(
                       child: SingleChildScrollView(
+                        controller: scrollController,
                         child: Padding(
                           padding: EdgeInsets.only(
                               left: horizontalPadding,
@@ -187,13 +205,17 @@ class ResultContent extends StatelessWidget {
                                         setDiagramTypeCallback: setDiagramTypeCallback,
                                         isMobile: isMobile,
                                         contentMaxWidth: contentMaxWidth,
-                                        changeLayerCallback: changeLayerCallback,
+                                        changeLayerCallback: (layer) {
+                                          changeLayerAndScrollUp(layer, scrollController);
+                                        },
                                       ),
                                     if (contentLayer == ContentLayer.layer2)
                                       Layer2Content(
                                         selectedTrip: selectedTrip,
                                         isMobile: isMobile,
-                                        changeLayerCallback: changeLayerCallback,
+                                        changeLayerCallback: (layer) {
+                                          changeLayerAndScrollUp(layer, scrollController);
+                                        },
                                         setInfoViewTypeCallback: setInfoViewTypeCallback,
                                         setDiagramTypeCallback: setDiagramTypeCallback,
                                         contentMaxWidth: contentMaxWidth,
@@ -246,6 +268,15 @@ class ResultContent extends StatelessWidget {
             setDiagramTypeCallback: setDiagramTypeCallback,
           ),
       ],
+    );
+  }
+
+  void changeLayerAndScrollUp(ContentLayer layer, ScrollController scrollController) {
+    changeLayerCallback(layer);
+    scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
     );
   }
 }

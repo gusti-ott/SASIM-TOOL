@@ -4,7 +4,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/color_schemes.g.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/typography.dart';
-import 'package:multimodal_routeplanner/02_application/bloc/address_picker/address_picker_bloc.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/app_cubit.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/cost_details/cost_details_bloc.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/diagram_type/diagram_type_bloc.dart';
@@ -67,9 +66,6 @@ class _VmrpAppState extends State<VmrpApp> {
           ),
           BlocProvider(
             create: (BuildContext context) => InfoDropdownCostsCubit(),
-          ),
-          BlocProvider(
-            create: (BuildContext context) => AddressPickerBloc(),
           ),
           BlocProvider(create: (BuildContext context) => TripsCubit()),
           BlocProvider(create: (BuildContext context) => AppCubit())
