@@ -111,5 +111,6 @@
   "detail_personal_description": "These costs consist of fixed costs and variable costs.",
   "detail_personal_fixed_description": "Fixed costs include costs such as the depreciation of vehicles.",
   "detail_personal_variable_description": "Variable costs are kilometer-dependent costs, such as fuel costs.",
-  "get_started": "Get Started"
+  "get_started": "Get Started",
+  "diagram": "Diagram"
 }

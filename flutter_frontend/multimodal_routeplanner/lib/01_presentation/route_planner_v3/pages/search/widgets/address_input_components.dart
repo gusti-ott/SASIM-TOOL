@@ -194,7 +194,7 @@ BlocBuilder<AddressPickerBloc, AddressPickerState> endAddressPickerBuilder(
       bloc: addressPickerBloc,
       builder: (context, state) {
         if (state is RetrievingEndAddress) {
-          return loadingIndicator();
+          return loadingIndicator(isMobile: isMobile);
         } else if (state is EndAddressRetrieved) {
           if (state.listAddresses.isNotEmpty) {
             return Padding(
@@ -220,7 +220,7 @@ BlocBuilder<AddressPickerBloc, AddressPickerState> startAddressPickerBuilder(
       bloc: addressPickerBloc,
       builder: (context, state) {
         if (state is RetrievingStartAddress) {
-          return loadingIndicator();
+          return loadingIndicator(isMobile: isMobile);
         } else if (state is StartAddressRetrieved) {
           if (state.listAddresses.isNotEmpty) {
             return Padding(
@@ -239,9 +239,9 @@ BlocBuilder<AddressPickerBloc, AddressPickerState> startAddressPickerBuilder(
       });
 }
 
-SizedBox loadingIndicator() {
+SizedBox loadingIndicator({bool isMobile = false}) {
   return SizedBox(
-      height: 200,
+      height: !isMobile ? 200 : null,
       child: Align(
         alignment: Alignment.topCenter,
         child: Padding(

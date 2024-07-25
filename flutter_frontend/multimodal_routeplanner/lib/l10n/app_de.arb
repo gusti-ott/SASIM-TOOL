@@ -111,5 +111,6 @@
   "detail_personal_description": "Diese Kosten bestehen aus Fixkosten und variablen Kosten.",
   "detail_personal_fixed_description": "Zu den Fixkosten gehören Kosten wie der Wertverlust von Fahrzeugen.",
   "detail_personal_variable_description": "Variable Kosten sind kilometerabhängige Kosten, wie z. B. Kraftstoffkosten.",
-  "get_started": "Los geht's"
+  "get_started": "Los geht's",
+  "diagram": "Diagramm"
 }
