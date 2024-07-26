@@ -22,6 +22,8 @@ class ResearchScreen extends StatelessWidget {
         key: scaffoldKey,
         appBar: isMobile ? mobileAppBar(scaffoldKey) : null,
         drawer: buildDrawer(context),
-        body: const ResearchContent());
+        body: ResearchContent(
+          isMobile: isMobile,
+        ));
   }
 }
