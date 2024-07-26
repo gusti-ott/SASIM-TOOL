@@ -65,32 +65,44 @@ class TripController:
 
         trip_type = self._get_trip_type_from_trip_mode(trip_mode=trip_mode)
 
-        if (trip_type == TripType.TYPE_1):
+        if trip_type == TripType.TYPE_1:
+            try:
+                mode = self._get_mode_from_trip_mode(trip_mode)
+                trip = self._get_trip_type_1(start_location=start_location, end_location=end_location, mode=mode,
+                                             trip_mode=trip_mode)
+            except IndexError:
+                print("Error: could not get trip type 1")
+                trip = None
 
-            mode = self._get_mode_from_trip_mode(trip_mode)
-            trip = self._get_trip_type_1(start_location=start_location, end_location=end_location, mode=mode,
-                                         trip_mode=trip_mode)
-
-        elif (trip_type == TripType.TYPE_2):
+        elif trip_type == TripType.TYPE_2:
 
             mode = self._get_mode_from_trip_mode(trip_mode=trip_mode)
 
-            trip = self._get_trip_type_2(start_location=start_location, end_location=end_location, sharing_mode=mode,
-                                         trip_mode=trip_mode, df_sharing_vehicles=df_sharing_vehicels)
+            try:
+                trip = self._get_trip_type_2(start_location=start_location, end_location=end_location,
+                                             sharing_mode=mode,
+                                             trip_mode=trip_mode, df_sharing_vehicles=df_sharing_vehicels)
+            except IndexError:
+                print("Error: could not get trip type 2")
+                trip = None
 
-        elif (trip_type == TripType.TYPE_3):
-            # trip = self._get_trip_type_3_4(start_location=start_location, end_location=end_location,
-            #                                trip_type=TripType.TYPE_3, trip_mode=trip_mode)
-            trip = self._get_trip_type_3_4_efa(start_location=start_location, end_location=end_location,
-                                               trip_type=TripType.TYPE_3, trip_mode=trip_mode, start_id=start_id,
-                                               end_id=end_id)
+        elif trip_type == TripType.TYPE_3:
+            try:
+                trip = self._get_trip_type_3_4_efa(start_location=start_location, end_location=end_location,
+                                                   trip_type=TripType.TYPE_3, trip_mode=trip_mode, start_id=start_id,
+                                                   end_id=end_id)
+            except IndexError:
+                print("Error: could not get trip type 3")
+                trip = None
 
-        elif (trip_type == TripType.TYPE_4):
-            # trip = self._get_trip_type_3_4(start_location=start_location, end_location=end_location,
-            #                                trip_type=TripType.TYPE_4, trip_mode=trip_mode)
-            trip = self._get_trip_type_3_4_efa(start_location=start_location, end_location=end_location,
-                                               trip_type=TripType.TYPE_4, trip_mode=trip_mode, start_id=start_id,
-                                               end_id=end_id)
+        elif trip_type == TripType.TYPE_4:
+            try:
+                trip = self._get_trip_type_3_4_efa(start_location=start_location, end_location=end_location,
+                                                   trip_type=TripType.TYPE_4, trip_mode=trip_mode, start_id=start_id,
+                                                   end_id=end_id)
+            except IndexError:
+                print("Error: could not get trip type 4")
+                trip = None
 
         else:
             print("Error: trip type now valid")
@@ -289,7 +301,7 @@ class TripController:
                 to_tarif_zone = mvv_trip_data.mvv_trip[i].to_tarif_zone
 
                 external_costs = self._costs_controller.get_external_costs(distance, mode)
-                internal_costs = InternalCosts(internal_costs=0)
+                internal_costs = InternalCosts(variable=0)
 
                 costs = Costs(
                     internal_costs=internal_costs,
@@ -389,7 +401,7 @@ class TripController:
                 to_tarif_zone = MvvTarifZone.none
 
                 external_costs = self._costs_controller.get_external_costs(distance, mode)
-                internal_costs = InternalCosts(internal_costs=0)
+                internal_costs = InternalCosts(variable=0)
 
                 costs = Costs(
                     internal_costs=internal_costs,
@@ -419,7 +431,7 @@ class TripController:
             direct_distance=direct_distance
         )
 
-        internal_trip_costs = InternalCosts(internal_costs=efa_trip.ticket_price)
+        internal_trip_costs = InternalCosts(variable=efa_trip.ticket_price)
         total_costs = Costs(
             internal_costs=internal_trip_costs + total_internal_costs,
             external_costs=total_external_costs
@@ -461,9 +473,9 @@ class TripController:
 
         return closest_vehicle
 
-    def _fetch_sharing_vehicles_efa(self, start_location: Location):
+    def _fetch_sharing_vehicles_efa(self, start_location: Location, quick_response: bool):
 
-        response = self._efa_coords_controller.get_response(start_location, radius=1000)
+        response = self._efa_coords_controller.get_response(start_location, radius=1000, quick_response=quick_response)
         df_all_vehicles = self._efa_coords_controller.get_closest_vehicles_each(response, start_location)
 
         return df_all_vehicles
@@ -519,7 +531,6 @@ class TripController:
         else:
             print("ERROR: trip mode not valid for conversion into mode")
             return None
-
 
 # ## TESTING
 # # Ansprengerstr. 22

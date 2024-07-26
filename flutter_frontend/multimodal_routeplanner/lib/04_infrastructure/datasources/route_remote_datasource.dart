@@ -17,7 +17,7 @@ import 'package:multimodal_routeplanner/04_infrastructure/models/trip_model.dart
 /// throws a server-exception if respond code is not 200
 abstract class RouteRemoteDatasource {
   Future<Trip> getSingleRouteFromApi(
-      {required String startInput, required String endInput, required MobilityMode mode});
+      {required String startInput, required String endInput, required MobilityMode mode, bool? quickResponse});
 }
 
 class RouteRemoteDatasourceImpl implements RouteRemoteDatasource {
@@ -25,19 +25,20 @@ class RouteRemoteDatasourceImpl implements RouteRemoteDatasource {
 
   @override
   Future<Trip> getSingleRouteFromApi(
-      {required String startInput, required String endInput, required MobilityMode mode}) async {
+      {required String startInput, required String endInput, required MobilityMode mode, bool? quickResponse}) async {
     String modeString = mapMode(mode: mode);
+    String quickResponseString = quickResponse != null ? quickResponse.toString() : 'false';
 
     // TODO: set to false, when in production
     bool isMocked = false;
 
     // url for local server
     /*var url =
-        "http://127.0.0.1:5000/plattform?inputStartAddress=$startInput&inputEndAddress=$endInput&tripMode=$modeString";*/
+        "http://127.0.0.1:5000/plattform?inputStartAddress=$startInput&inputEndAddress=$endInput&tripMode=$modeString&quickResponse=$quickResponseString";*/
 
     // url for ftm server
     var url =
-        "https://sasim.mcube-cluster.de/plattform?inputStartAddress=$startInput&inputEndAddress=$endInput&tripMode=$modeString";
+        "https://sasim.mcube-cluster.de/plattform?inputStartAddress=$startInput&inputEndAddress=$endInput&tripMode=$modeString&quickResponse=$quickResponseString";
 
     // var url =
     //     "https://vmrp-web-app.herokuapp.com/plattform?inputStartAddress=$startInput&inputEndAddress=$endInput&tripMode=$modeString";

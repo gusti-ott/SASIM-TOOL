@@ -1,9 +1,11 @@
 import json
 import time
 from datetime import datetime
+from typing import List
 
 import requests
 from controllers.efa_mvv.EfaMvvHelper import EfaMvvHelper, EfaTripData, EfaSegmentData, PtSegmentType
+from controllers.mvv.MvvHelper import MvvSegmentData
 from helpers.GeoHelper import GeoHelper
 from model.enums.mode.IndividualMode import IndividualMode
 

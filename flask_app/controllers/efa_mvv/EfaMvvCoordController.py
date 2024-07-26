@@ -18,15 +18,22 @@ class EfaMvvCoordController:
     # input parameters
     # - location: Location (center of search radius - type Location, contains latitude and logitude variables)
     # - radius: int (search radius in meters)
-    def get_response(self, location: Location, radius: int = 1000) -> json:
+    def get_response(self, location: Location, quick_response: bool, radius: int = 1000) -> json:
 
         start = time.time()
 
-        url = 'BASE_URL/MVV_API_COORDS_PATH/ 
-               
-               
-              '1&coordRadius=' + str(location.lon) + ':' + str(location.lat) + ':WGS84[dd.ddddd]:' + str(
-            radius) + '&vehSR=1'
+        if not quick_response:
+            url = 'BASE_URL/MVV_API_COORDS_PATH/ 
+                   
+                   
+                  '1&coordRadius=' + str(location.lon) + ':' + str(location.lat) + ':WGS84[dd.ddddd]:' + str(
+                radius) + '&vehSR=1'
+
+        else:
+            url = ('BASE_URL/MVV_API_COORDS_PATH/'
+                   ''
+                   ***REMOVED***
+                location.lon) + ':' + str(location.lat) + ':WGS84[dd.ddddd]:' + str(radius) + '&vehSR=1'
 
         response = requests.get(url)
         print("Efa MVV API Coord response: " + str(response))
@@ -41,29 +48,30 @@ class EfaMvvCoordController:
         pins = response.get('pins')
         df_closest_vehicles = pd.DataFrame(columns=['vehicle_location', 'mode', 'distance'])
 
-        for i in range(len(pins)):
+        if pins is not None:
+            for i in range(len(pins)):
 
-            mode = pins[i].get('type')
-            coords = pins[i].get('coords')
-            coords_array = coords.split(',')
-            location_new = Location(lat=float(coords_array[1]), lon=float(coords_array[0]))
+                mode = pins[i].get('type')
+                coords = pins[i].get('coords')
+                coords_array = coords.split(',')
+                location_new = Location(lat=float(coords_array[1]), lon=float(coords_array[0]))
 
-            # print(location_list)
-            if (mode not in df_closest_vehicles['mode'].unique()):
-                distance = self.geo_helper.get_distance(my_location, location_new)
-                dict_location = {'vehicle_location': location_new, 'mode': mode, 'distance': distance}
-                df_closest_vehicles.loc[len(df_closest_vehicles)] = dict_location
+                # print(location_list)
+                if (mode not in df_closest_vehicles['mode'].unique()):
+                    distance = self.geo_helper.get_distance(my_location, location_new)
+                    dict_location = {'vehicle_location': location_new, 'mode': mode, 'distance': distance}
+                    df_closest_vehicles.loc[len(df_closest_vehicles)] = dict_location
 
-            if (mode in df_closest_vehicles['mode'].unique()):
+                if (mode in df_closest_vehicles['mode'].unique()):
 
-                distance_old = df_closest_vehicles.loc[df_closest_vehicles['mode'] == mode, 'distance'].iloc[0]
-                distance_new = self.geo_helper.get_distance(my_location, location_new)
+                    distance_old = df_closest_vehicles.loc[df_closest_vehicles['mode'] == mode, 'distance'].iloc[0]
+                    distance_new = self.geo_helper.get_distance(my_location, location_new)
 
-                if (distance_new < distance_old):
-                    # print('its closer! Old ' + str(mode) + ' is ' + str(distance_old) + ' m away and new is ' + str(distance_new) + ' m away')
-                    df_closest_vehicles.loc[
-                        df_closest_vehicles['mode'] == mode, ['vehicle_location', 'mode', 'distance']] = [
-                        location_new, mode, distance_new]
+                    if (distance_new < distance_old):
+                        # print('its closer! Old ' + str(mode) + ' is ' + str(distance_old) + ' m away and new is ' + str(distance_new) + ' m away')
+                        df_closest_vehicles.loc[
+                            df_closest_vehicles['mode'] == mode, ['vehicle_location', 'mode', 'distance']] = [
+                            location_new, mode, distance_new]
 
         return df_closest_vehicles
 

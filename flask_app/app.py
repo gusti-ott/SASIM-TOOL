@@ -82,8 +82,13 @@ def return_trip():
 
     input_trip_mode = str(request.args['tripMode'])
     trip_mode = api_helper.get_trip_mode_from_input(input_trip_mode)
+    quick_response_arg = request.args.get('quickResponse')
+    if quick_response_arg is None or quick_response_arg.strip() == '':
+        quick_response = False
+    else:
+        quick_response = quick_response_arg.lower() == 'true'
 
-    df_sharing_vehicles = get_efa_sharing_vehicles(start_location)
+    df_sharing_vehicles = get_efa_sharing_vehicles(start_location, quick_response)
 
     trip_controller = TripController(df_sharing_vehicles)
     trip = trip_controller.get_trip(
@@ -132,7 +137,10 @@ def return_trip():
                         'barrier': trip.costs.external_costs.barrier,
                         'congestion': trip.costs.external_costs.congestion
                     },
-                    'internalCosts': {'all': new_segment.costs.internal_costs.internal_costs}
+                    'internalCosts': {
+                        'all': new_segment.costs.internal_costs.variable + new_segment.costs.internal_costs.fixed,
+                        'variable': new_segment.costs.internal_costs.variable,
+                        'fixed': new_segment.costs.internal_costs.fixed}
                 },
                 'waypoints': segment_waypoints
 
@@ -171,7 +179,10 @@ def return_trip():
                     'barrier': trip.costs.external_costs.barrier,
                     'congestion': trip.costs.external_costs.congestion
                 },
-                'internalCosts': {'all': new_segment.costs.internal_costs.internal_costs}
+                'internalCosts': {
+                    'all': new_segment.costs.internal_costs.variable + new_segment.costs.variable.variable,
+                    'variable': new_segment.costs.internal_costs.variable,
+                    'fixed': new_segment.costs.internal_costs.fixed}
             },
             'waypoints': segment_waypoints
 
@@ -194,7 +205,9 @@ def return_trip():
                 'barrier': trip.costs.external_costs.barrier,
                 'congestion': trip.costs.external_costs.congestion
             },
-            'internalCosts': {'all': trip.costs.internal_costs.internal_costs}
+            'internalCosts': {'all': trip.costs.internal_costs.variable + trip.costs.internal_costs.fixed,
+                              'variable': trip.costs.internal_costs.variable,
+                              'fixed': trip.costs.internal_costs.fixed}
 
         },
         'mobiScore': trip.mobi_score.value,
@@ -225,9 +238,9 @@ def get_efa_geolocation(address: str):
 
 
 @cache.memoize(300)
-def get_efa_sharing_vehicles(start_address: Location):
+def get_efa_sharing_vehicles(start_address: Location, quick_response: bool):
     efa_coords_controller = EfaMvvCoordController()
-    response = efa_coords_controller.get_response(start_address)
+    response = efa_coords_controller.get_response(start_address, quick_response)
     df_sharing_vehices = efa_coords_controller.get_closest_vehicles_each(response, start_address)
 
     return df_sharing_vehices

@@ -34,8 +34,8 @@ class ResultCubit extends Cubit<ResultState> {
 
       for (int i = 0; i < tripModes.length; i++) {
         try {
-          Trip trip =
-              await _routePlannerUsecases.getTrip(startInput: startInput, endInput: endInput, mode: tripModes[i]);
+          Trip trip = await _routePlannerUsecases.getTrip(
+              startInput: startInput, endInput: endInput, mode: tripModes[i], quickResponse: true);
           listTrips.add(trip);
           emit(ResultLoading(i + 1, tripModes.length));
         } catch (e) {
