@@ -18,15 +18,22 @@ class EfaMvvCoordController:
     # input parameters
     # - location: Location (center of search radius - type Location, contains latitude and logitude variables)
     # - radius: int (search radius in meters)
-    def get_response(self, location: Location, radius: int = 1000) -> json:
+    def get_response(self, location: Location, quick_response: bool, radius: int = 1000) -> json:
 
         start = time.time()
 
-        url = 'BASE_URL/MVV_API_COORDS_PATH/ 
-               
-               
-              '1&coordRadius=' + str(location.lon) + ':' + str(location.lat) + ':WGS84[dd.ddddd]:' + str(
-            radius) + '&vehSR=1'
+        if not quick_response:
+            url = 'BASE_URL/MVV_API_COORDS_PATH/' \
+                   
+                   
+                  '1&coordRadius=' + str(location.lon) + ':' + str(location.lat) + ':WGS84[dd.ddddd]:' + str(
+                radius) + '&vehSR=1'
+
+        else:
+            url = ('BASE_URL/MVV_API_COORDS_PATH/'
+                   ''
+                   ***REMOVED***
+                location.lon) + ':' + str(location.lat) + ':WGS84[dd.ddddd]:' + str(radius) + '&vehSR=1'
 
         response = requests.get(url)
         print("Efa MVV API Coord response: " + str(response))

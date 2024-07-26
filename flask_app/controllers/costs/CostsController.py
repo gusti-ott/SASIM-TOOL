@@ -19,14 +19,14 @@ class CostsController:
 
     def get_external_costs(self, distance: float, mode: Mode) -> ExternalCosts or None:
 
-        if (type(mode) == SharingMode):
-            if (mode == SharingMode.TIER):
+        if type(mode) == SharingMode:
+            if mode == SharingMode.TIER:
                 mode = SharingMode.ESCOOTER_SHARING
-            elif (mode == SharingMode.EMMY):
+            elif mode == SharingMode.EMMY:
                 mode = SharingMode.MOPED_SHARING
-            elif (mode == SharingMode.CAB):
+            elif mode == SharingMode.CAB:
                 mode = SharingMode.BICYCLE_SHARING
-            elif (mode == SharingMode.SHARENOW or mode == SharingMode.FLINKSTER):
+            elif mode == SharingMode.SHARENOW or mode == SharingMode.FLINKSTER:
                 mode = SharingMode.CAR_SHARING
             else:
                 print("ERROR: mode cannot be converted to simplified sharing mode ")
@@ -51,13 +51,13 @@ class CostsController:
 
         distance = distance / 1000
 
-        if (type(mode) == IndividualMode):
+        if type(mode) == IndividualMode:
             internal_costs = self._calculate_internal_costs_individual(distance, mode)
 
-        elif (type(mode) == PublicTransportMode):
+        elif type(mode) == PublicTransportMode:
             internal_costs = self._calculate_internal_costs_pt()
 
-        elif (type(mode) == SharingMode):
+        elif type(mode) == SharingMode:
             internal_costs = self._calculate_internal_costs_sharing(distance, duration, mode)
 
         else:
@@ -69,9 +69,10 @@ class CostsController:
     def get_internal_public_transport_costs(self, mvv_ticket_name: str) -> InternalCosts:
 
         internal_costs_mvv = self._df_db_internal_costs_mvv['TICKET'][mvv_ticket_name]
-        return InternalCosts(internal_costs=internal_costs_mvv)
+        return InternalCosts(variable=internal_costs_mvv)
 
-    def _initialise_db(self):
+    @staticmethod
+    def _initialise_db():
         # internal_costs_path = os.path.join(ROOT_DIR, 'multimodal-costbased-routeplanner', 'db', 'costs_db',
         #                                    'db_internal_costs.csv')
         # internal_costs_mvv_path = os.path.join(ROOT_DIR, 'multimodal-costbased-routeplanner', 'db', 'costs_db',
@@ -104,22 +105,25 @@ class CostsController:
         internal_costs_per_hour = self._df_db_internal_costs['PER_HOUR'][mode.value]
         internal_costs_max = self._df_db_internal_costs['MAX_COSTS'][mode.value]
 
-        internal_costs = internal_costs_per_ride + internal_costs_per_minute * math.ceil(duration) + \
-                         internal_costs_per_quarter_hour * math.ceil(duration / 15) + \
-                         internal_costs_per_hour * math.ceil(duration / 60) + internal_costs_per_km * distance
+        internal_costs = internal_costs_per_ride + internal_costs_per_minute * math.ceil(
+            duration) + internal_costs_per_quarter_hour * math.ceil(
+            duration / 15) + internal_costs_per_hour * math.ceil(duration / 60) + internal_costs_per_km * distance
 
-        if (internal_costs_max != 0 and internal_costs > internal_costs_max):
+        if internal_costs_max != 0 and internal_costs > internal_costs_max:
             internal_costs = internal_costs_max
 
-        return InternalCosts(internal_costs=internal_costs)
+        return InternalCosts(variable=internal_costs)
 
     def _calculate_internal_costs_individual(self, distance: float, mode: IndividualMode) -> InternalCosts:
 
-        internal_costs = self._df_db_internal_costs['PER_KM'][mode.value] * distance
-        return InternalCosts(internal_costs=internal_costs)
+        internal_variable_costs = self._df_db_internal_costs['PER_KM'][mode.value] * distance
+        internal_fixed_costs = self._df_db_internal_costs['FIXED_PER_KM'][mode.value]
 
-    def _calculate_internal_costs_pt(self) -> InternalCosts:
+        return InternalCosts(variable=internal_variable_costs, fixed=internal_fixed_costs)
+
+    @staticmethod
+    def _calculate_internal_costs_pt() -> InternalCosts:
 
         internal_costs = 0
 
-        return InternalCosts(internal_costs=internal_costs)
+        return InternalCosts(variable=internal_costs)
