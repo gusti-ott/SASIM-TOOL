@@ -1,4 +1,5 @@
 import json
+import os
 import time
 from datetime import datetime
 from typing import List
@@ -15,14 +16,13 @@ class EfaMvvRouteController:
     def __init__(self):
         self._efa_mvv_helper = EfaMvvHelper()
         self._geo_helper = GeoHelper()
+        self.base_url = os.getenv('MVV_API_BASE_URL')
+        self.path = os.getenv('MVV_API_ROUTE_PATH')
 
     def get_response(self, start_id: str, end_id: str) -> json:
         start = time.time()
 
-        url = 'BASE_URL/MVV_API_ROUTE_PATH/name_origin' \
-              '=' + start_id + 'name_destination=' \
-              + end_id + 
-                         
+        url = self.base_url + self.path + start_id + '&name_destination=' + end_id
 
         response = requests.get(url)
         print("Efa MVV API Trip response: " + str(response))
