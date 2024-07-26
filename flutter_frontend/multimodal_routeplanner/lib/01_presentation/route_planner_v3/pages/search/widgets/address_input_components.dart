@@ -86,8 +86,15 @@ Column mobileAddressInputContainer(BuildContext context,
           ),
         ],
       ),
+      Row(
+        children: [
+          Expanded(child: startAddressPickerBuilder(addressPickerBloc, startController, isMobile: true)),
+          const SizedBox(
+            width: 50,
+          )
+        ],
+      ),
       smallVerticalSpacer,
-      startAddressPickerBuilder(addressPickerBloc, startController, isMobile: true),
       textInputField(
         context,
         controller: endController,
@@ -99,7 +106,6 @@ Column mobileAddressInputContainer(BuildContext context,
           );
         },
       ),
-      smallVerticalSpacer,
       endAddressPickerBuilder(addressPickerBloc, endController, isMobile: true),
       largeVerticalSpacer,
       statefulCalculateButton(context,
@@ -197,16 +203,13 @@ BlocBuilder<AddressPickerBloc, AddressPickerState> endAddressPickerBuilder(
           return loadingIndicator(isMobile: isMobile);
         } else if (state is EndAddressRetrieved) {
           if (state.listAddresses.isNotEmpty) {
-            return Padding(
-              padding: EdgeInsets.only(top: smallPadding),
-              child: AddressPickerListV3(
-                  width: double.infinity,
-                  listAddresses: state.listAddresses,
-                  addressInputController: endController,
-                  onAddressSelectedCallback: (address) {
-                    addressPickerBloc.add(PickEndAddress(address));
-                  }),
-            );
+            return AddressPickerListV3(
+                width: double.infinity,
+                listAddresses: state.listAddresses,
+                addressInputController: endController,
+                onAddressSelectedCallback: (address) {
+                  addressPickerBloc.add(PickEndAddress(address));
+                });
           }
         }
         return SizedBox(height: !isMobile ? 200 : null);
@@ -215,7 +218,7 @@ BlocBuilder<AddressPickerBloc, AddressPickerState> endAddressPickerBuilder(
 
 BlocBuilder<AddressPickerBloc, AddressPickerState> startAddressPickerBuilder(
     AddressPickerBloc addressPickerBloc, TextEditingController controller,
-    {bool isMobile = false}) {
+    {bool isMobile = false, double? width}) {
   return BlocBuilder<AddressPickerBloc, AddressPickerState>(
       bloc: addressPickerBloc,
       builder: (context, state) {
@@ -223,16 +226,13 @@ BlocBuilder<AddressPickerBloc, AddressPickerState> startAddressPickerBuilder(
           return loadingIndicator(isMobile: isMobile);
         } else if (state is StartAddressRetrieved) {
           if (state.listAddresses.isNotEmpty) {
-            return Padding(
-              padding: EdgeInsets.only(top: !isMobile ? smallPadding : 0, bottom: isMobile ? smallPadding : 0),
-              child: AddressPickerListV3(
-                  width: double.infinity,
-                  listAddresses: state.listAddresses,
-                  addressInputController: controller,
-                  onAddressSelectedCallback: (address) {
-                    addressPickerBloc.add(PickStartAddress(address));
-                  }),
-            );
+            return AddressPickerListV3(
+                width: width ?? double.infinity,
+                listAddresses: state.listAddresses,
+                addressInputController: controller,
+                onAddressSelectedCallback: (address) {
+                  addressPickerBloc.add(PickStartAddress(address));
+                });
           }
         }
         return SizedBox(height: !isMobile ? 200 : null);

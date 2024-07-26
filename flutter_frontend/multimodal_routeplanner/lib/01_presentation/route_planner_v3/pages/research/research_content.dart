@@ -6,7 +6,9 @@ import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dar
 import 'package:url_launcher/url_launcher.dart';
 
 class ResearchContent extends StatelessWidget {
-  const ResearchContent({super.key});
+  const ResearchContent({super.key, required this.isMobile});
+
+  final bool isMobile;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +17,7 @@ class ResearchContent extends StatelessWidget {
 
     return Column(
       children: [
-        navigationHeaderRow(context),
+        if (!isMobile) navigationHeaderRow(context),
         Center(
           child: Padding(
             padding: EdgeInsets.all(mediumPadding),

@@ -22,6 +22,8 @@ class AboutUsScreen extends StatelessWidget {
         key: scaffoldKey,
         appBar: isMobile ? mobileAppBar(scaffoldKey) : null,
         drawer: buildDrawer(context),
-        body: const AboutUsContent());
+        body: AboutUsContent(
+          isMobile: isMobile,
+        ));
   }
 }
