@@ -18,7 +18,7 @@ class OtpController:
 
         self.otp_helper = OtpHelper()
         self.base_url = os.getenv('OTP_BASE_URL')
-        self.path = os.getenv('OTP_API_ROUTE_PATH')
+        self.path = os.getenv('OTP_ROUTE_PATH')
 
     def get_waypoints(self, response: json) -> List[Location] or None:
         try:
@@ -87,7 +87,7 @@ class OtpController:
         if not input_time:
             input_time = datetime.now()
 
-            # input_time = '1:02pm&date=22-02-2020'
+        # input_time = '1:02pm&date=22-02-2020'
         start = t.time()
 
         # # local IP for testing
