@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:multimodal_routeplanner/03_domain/entities/MobilityMode.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
@@ -29,16 +30,19 @@ class RouteRemoteDatasourceImpl implements RouteRemoteDatasource {
     String modeString = mapMode(mode: mode);
     String quickResponseString = quickResponse != null ? quickResponse.toString() : 'false';
 
+    String baseUrl = dotenv.env['APP_BASE_URL']!;
+    String path = dotenv.env['APP_BACKEND_PATH']!;
+
     // TODO: set to false, when in production
     bool isMocked = false;
 
     // url for local server
-    /*var url =
-        "http://127.0.0.1:5000/plattform?inputStartAddress=$startInput&inputEndAddress=$endInput&tripMode=$modeString&quickResponse=$quickResponseString";*/
+    var url =
+        "http://127.0.0.1:5000/plattform?inputStartAddress=$startInput&inputEndAddress=$endInput&tripMode=$modeString&quickResponse=$quickResponseString";
 
     // url for ftm server
-    var url =
-        "https://sasim.mcube-cluster.de/plattform?inputStartAddress=$startInput&inputEndAddress=$endInput&tripMode=$modeString&quickResponse=$quickResponseString";
+    /*var url =
+        "$baseUrl$path?inputStartAddress=$startInput&inputEndAddress=$endInput&tripMode=$modeString&quickResponse=$quickResponseString";*/
 
     // var url =
     //     "https://vmrp-web-app.herokuapp.com/plattform?inputStartAddress=$startInput&inputEndAddress=$endInput&tripMode=$modeString";
