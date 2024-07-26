@@ -1,4 +1,5 @@
 import json
+import os
 import time
 
 import pandas as pd
@@ -14,6 +15,9 @@ class EfaMvvCoordController:
     def __init__(self):
         self.geo_helper = GeoHelper()
         self.efaMvvHelper = EfaMvvHelper()
+        self.base_url = os.getenv('MVV_API_BASE_URL')
+        self.path = os.getenv('MVV_API_COORDS_PATH')
+        self.path_quick = os.getenv('MVV_API_COORDS_PATH_QUICK')
 
     # input parameters
     # - location: Location (center of search radius - type Location, contains latitude and logitude variables)
@@ -23,17 +27,12 @@ class EfaMvvCoordController:
         start = time.time()
 
         if not quick_response:
-            url = 'BASE_URL/MVV_API_COORDS_PATH/ 
-                   
-                   
-                  '1&coordRadius=' + str(location.lon) + ':' + str(location.lat) + ':WGS84[dd.ddddd]:' + str(
-                radius) + '&vehSR=1'
+            url = self.base_url + self.path + '&coordRadius=' + str(location.lon) + ':' + str(
+                location.lat) + ':WGS84[dd.ddddd]:' + str(radius)
 
         else:
-            url = ('BASE_URL/MVV_API_COORDS_PATH/'
-                   ''
-                   ***REMOVED***
-                location.lon) + ':' + str(location.lat) + ':WGS84[dd.ddddd]:' + str(radius) + '&vehSR=1'
+            url = self.base_url + self.path_quick + '&coordRadius=' + str(location.lon) + ':' + str(
+                location.lat) + ':WGS84[dd.ddddd]:' + str(radius)
 
         response = requests.get(url)
         print("Efa MVV API Coord response: " + str(response))

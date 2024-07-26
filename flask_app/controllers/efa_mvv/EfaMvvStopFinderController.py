@@ -1,4 +1,5 @@
 import json
+import os
 import time
 
 import requests
@@ -9,16 +10,16 @@ from model.entities.location.Location import Location
 class EfaMvvStopFinder:
 
     def __init__(self):
-        pass
+        self.base_url = os.getenv('MVV_API_BASE_URL')
+        self.path = os.getenv('MVV_API_STOP_FINDER_PATH')
 
     def get_response(self, address: str) -> json:
         start = time.time()
 
-        url = 'BASE_URL/MVV_API_STOP_FINDER_PATH/
-              + str(address) + 
-                               
+        url = (self.base_url + self.path + '&name_sf=' + str(address))
 
         response = requests.get(url)
+
         print("Efa MVV API StopFinder response: " + str(response))
         end = time.time()
         print("Efa MVV API StopFinder time: " + str(end - start))

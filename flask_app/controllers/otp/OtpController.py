@@ -1,4 +1,5 @@
 import json
+import os
 import time as t
 from datetime import datetime
 from typing import List
@@ -16,6 +17,8 @@ class OtpController:
     def __init__(self):
 
         self.otp_helper = OtpHelper()
+        self.base_url = os.getenv('OTP_BASE_URL')
+        self.path = os.getenv('OTP_API_ROUTE_PATH')
 
     def get_waypoints(self, response: json) -> List[Location] or None:
         try:
@@ -40,7 +43,6 @@ class OtpController:
             print("Liste der OTP Strecken ist leer")
             return None
 
-
     def get_distance(self, response: json) -> float:
         try:
             itineraries = (response["plan"].get("itineraries"))
@@ -58,7 +60,6 @@ class OtpController:
 
         return int(dist)
 
-
     def get_duration(self, response: json) -> float:
         try:
             itineraries = (response["plan"].get("itineraries"))
@@ -74,7 +75,7 @@ class OtpController:
             print('OTP KeyError duration')
             return 0
 
-        return duration/60
+        return duration / 60
 
     def get_response(self, start_location: Location, end_location: Location, mode: TripMode,
                      input_time=None, input_waxWalkDistance='500'):
@@ -98,8 +99,8 @@ class OtpController:
 
         # IP of locally running otp server
         response = requests.get(
-            "OTP_BASE_URL/otp/routers/default/plan?fromPlace=" + start_location + "&toPlace=" +
-            end_location + "&time=" + str(input_time.hour) + ":" + str(input_time.minute) + "&date=" +
+            self.base_url + self.path + "?fromPlace=" + start_location + "&toPlace=" + end_location + "&time=" + str(
+                input_time.hour) + ":" + str(input_time.minute) + "&date=" +
             str(input_time.month) + "-" + str(input_time.day) + "-" + str(input_time.year) + "&mode=" +
             mode + "&maxWalkDistance=50000&arriveBy=false")
 
@@ -119,4 +120,3 @@ class OtpController:
         print("otp time: " + str(end - start))
 
         return resp
-

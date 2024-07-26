@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/color_schemes.g.dart';
@@ -18,7 +19,8 @@ import 'package:multimodal_routeplanner/config/setup_dependencies.dart';
 import '02_application/bloc/route_info/route_info_bloc.dart';
 import '02_application/bloc/visualization/visualization_bloc.dart';
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: ".env");
   setupDependencies();
   runApp(const VmrpApp());
 }
