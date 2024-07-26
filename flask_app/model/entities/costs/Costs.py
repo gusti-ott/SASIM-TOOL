@@ -20,6 +20,6 @@ class Costs:
 
     def __add__(self, other):
         return Costs(
-            internal_costs=self.internal_costs + other.variable,
+            internal_costs=self.internal_costs + other.internal_costs,
             external_costs=self.external_costs + other.external_costs
         )
