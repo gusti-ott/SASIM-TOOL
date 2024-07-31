@@ -9,7 +9,8 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/values.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/detail_route_info_section.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/layer_1/layer_1_content.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/layer_2_detailed/layer_2_content.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/layer_2_detailed/layer_2_content_desktop.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/layer_2_detailed/layer_2_content_mobile.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/mobiscore_score_board/mobi_score_score_board.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/search_screen_v3.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/mode_selection_components.dart';
@@ -167,15 +168,13 @@ class ResultContent extends StatelessWidget {
                                     },
                                   ),
                                 if (contentLayer == ContentLayer.layer2)
-                                  Layer2Content(
+                                  Layer2ContentMobile(
                                     selectedTrip: selectedTrip,
-                                    isMobile: isMobile,
                                     changeLayerCallback: (layer) {
                                       changeLayerAndScrollUp(layer, scrollController);
                                     },
                                     setInfoViewTypeCallback: setInfoViewTypeCallback,
                                     setDiagramTypeCallback: setDiagramTypeCallback,
-                                    contentMaxWidth: contentMaxWidth,
                                   ),
                               ],
                             ),
@@ -241,9 +240,8 @@ class ResultContent extends StatelessWidget {
                                         },
                                       ),
                                     if (contentLayer == ContentLayer.layer2)
-                                      Layer2Content(
+                                      Layer2ContentDesktop(
                                         selectedTrip: selectedTrip,
-                                        isMobile: isMobile,
                                         changeLayerCallback: (layer) {
                                           changeLayerAndScrollUp(layer, scrollController);
                                         },

@@ -56,7 +56,8 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
   late DiagramType selectedDiagramType;
   bool showAdditionalMobileInfo = false;
 
-  ContentLayer contentLayer = ContentLayer.layer1;
+  //TODO: change to default before release
+  ContentLayer contentLayer = ContentLayer.layer2;
 
   void updateSelectedTrip() {
     logger.i('updating selected trip');

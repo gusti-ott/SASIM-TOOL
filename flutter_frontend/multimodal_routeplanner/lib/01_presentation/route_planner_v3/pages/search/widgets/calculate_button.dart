@@ -12,10 +12,12 @@ Widget statefulCalculateButton(BuildContext context,
     required String endAddress,
     required SelectionMode selectedMode,
     required bool isElectric,
-    required bool isShared}) {
+    required bool isShared,
+    double? width}) {
   AppLocalizations lang = AppLocalizations.of(context)!;
 
   return V3CustomButton(
+    width: width,
     height: 40,
     label: lang.calculate,
     onTap: () {

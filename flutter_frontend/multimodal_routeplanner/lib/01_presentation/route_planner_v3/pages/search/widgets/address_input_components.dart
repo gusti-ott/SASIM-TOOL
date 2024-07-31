@@ -5,7 +5,6 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/decorations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_cubit.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/values.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/address_picker_list.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/calculate_button.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
@@ -64,17 +63,12 @@ Column mobileAddressInputContainer(BuildContext context,
       Row(
         children: [
           Expanded(
-            child: textInputField(
-              context,
-              controller: startController,
-              hintText: lang.from,
-              onChanged: (value) {
-                onStartChanged(value);
-                addressPickerBloc.add(
-                  StartAddressInputChanged(value),
-                );
-              },
-            ),
+            child: textInputField(context, controller: startController, hintText: lang.from, onChanged: (value) {
+              onStartChanged(value);
+              addressPickerBloc.add(
+                StartAddressInputChanged(value),
+              );
+            }, isMobile: true),
           ),
           SizedBox(
             width: 50,
@@ -96,26 +90,22 @@ Column mobileAddressInputContainer(BuildContext context,
         ],
       ),
       smallVerticalSpacer,
-      textInputField(
-        context,
-        controller: endController,
-        hintText: lang.to,
-        onChanged: (value) {
-          onEndChanged(value);
-          addressPickerBloc.add(
-            EndAddressInputChanged(value),
-          );
-        },
-      ),
+      textInputField(context, controller: endController, hintText: lang.to, onChanged: (value) {
+        onEndChanged(value);
+        addressPickerBloc.add(
+          EndAddressInputChanged(value),
+        );
+      }, isMobile: true),
       endAddressPickerBuilder(addressPickerBloc, endController, isMobile: true),
-      largeVerticalSpacer,
+      mediumVerticalSpacer,
       statefulCalculateButton(context,
           cubit: cubit,
           startAddress: startController.text,
           endAddress: endController.text,
           selectedMode: selectedMode,
           isElectric: isElectric,
-          isShared: isShared),
+          isShared: isShared,
+          width: 220),
     ],
   );
 }
@@ -139,17 +129,12 @@ Widget desktopAddressInputRow(BuildContext context,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
-            child: textInputField(
-              context,
-              controller: startController,
-              hintText: lang.from,
-              onChanged: (value) {
-                onStartChanged(value);
-                addressPickerBloc.add(
-                  StartAddressInputChanged(value),
-                );
-              },
-            ),
+            child: textInputField(context, controller: startController, hintText: lang.from, onChanged: (value) {
+              onStartChanged(value);
+              addressPickerBloc.add(
+                StartAddressInputChanged(value),
+              );
+            }, isMobile: false),
           ),
           const SizedBox(width: 8),
           IconButton(
@@ -160,17 +145,12 @@ Widget desktopAddressInputRow(BuildContext context,
           ),
           const SizedBox(width: 8),
           Expanded(
-            child: textInputField(
-              context,
-              controller: endController,
-              hintText: lang.to,
-              onChanged: (value) {
-                onEndChanged(value);
-                addressPickerBloc.add(
-                  EndAddressInputChanged(value),
-                );
-              },
-            ),
+            child: textInputField(context, controller: endController, hintText: lang.to, onChanged: (value) {
+              onEndChanged(value);
+              addressPickerBloc.add(
+                EndAddressInputChanged(value),
+              );
+            }, isMobile: false),
           ),
           smallHorizontalSpacer,
           statefulCalculateButton(
@@ -263,10 +243,10 @@ Widget textInputField(
   required TextEditingController controller,
   required String hintText,
   required ValueChanged<String> onChanged,
+  required bool isMobile,
 }) {
   TextTheme textTheme = Theme.of(context).textTheme;
   return Container(
-    height: heightSearchBar,
     decoration: customBoxDecorationWithShadow(),
     child: TextField(
       controller: controller,
@@ -289,9 +269,15 @@ Widget textInputField(
           borderRadius: BorderRadius.circular(30),
           borderSide: BorderSide(color: secondaryColorV3), // Border when the TextField is focused
         ),
-        contentPadding: const EdgeInsets.symmetric(vertical: 30),
+        contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
       ),
       onChanged: onChanged,
+      maxLines: 1, // Ensure single-line input
+      textInputAction: TextInputAction.done, // Handle done action on keyboard
+      style: textTheme.labelMedium, // Style the text
+      // Ensure text scrolls to the end when focused
+      keyboardType: TextInputType.text,
+      textAlignVertical: TextAlignVertical.center,
     ),
   );
 }

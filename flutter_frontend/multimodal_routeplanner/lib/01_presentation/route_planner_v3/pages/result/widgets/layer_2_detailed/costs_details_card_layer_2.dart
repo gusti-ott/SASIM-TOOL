@@ -9,8 +9,7 @@ import 'package:multimodal_routeplanner/03_domain/entities/costs/Costs.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/costs/ExternalCosts.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/costs/InternalCosts.dart';
 
-Widget costsDetailsCardLayer2(BuildContext context,
-    {required Trip selectedTrip, required CostsType costsType, required bool isMobile}) {
+Widget costsDetailsCardLayer2(BuildContext context, {required Trip selectedTrip, required CostsType costsType}) {
   String mobiScore = selectedTrip.mobiScore;
   return Container(
       decoration: BoxDecoration(
@@ -24,38 +23,41 @@ Widget costsDetailsCardLayer2(BuildContext context,
               (costsType == CostsType.personal) ? MainAxisAlignment.spaceAround : MainAxisAlignment.spaceBetween,
           children: [
             if (costsType == CostsType.social) ...[
-              costsDetailColumn(context,
-                  trip: selectedTrip,
-                  costsType: costsType,
-                  socialCostsCategory: SocialCostsCategory.time,
-                  mobiScore: mobiScore,
-                  isMobile: isMobile),
-              costsDetailColumn(context,
-                  trip: selectedTrip,
-                  costsType: costsType,
-                  socialCostsCategory: SocialCostsCategory.health,
-                  mobiScore: mobiScore,
-                  isMobile: isMobile),
-              costsDetailColumn(context,
-                  trip: selectedTrip,
-                  costsType: costsType,
-                  socialCostsCategory: SocialCostsCategory.environment,
-                  mobiScore: mobiScore,
-                  isMobile: isMobile),
+              costsDetailColumn(
+                context,
+                trip: selectedTrip,
+                costsType: costsType,
+                socialCostsCategory: SocialCostsCategory.time,
+                mobiScore: mobiScore,
+              ),
+              costsDetailColumn(
+                context,
+                trip: selectedTrip,
+                costsType: costsType,
+                socialCostsCategory: SocialCostsCategory.health,
+                mobiScore: mobiScore,
+              ),
+              costsDetailColumn(
+                context,
+                trip: selectedTrip,
+                costsType: costsType,
+                socialCostsCategory: SocialCostsCategory.environment,
+                mobiScore: mobiScore,
+              ),
             ] else if (costsType == CostsType.personal) ...[
-              costsDetailColumn(context,
-                  trip: selectedTrip,
-                  costsType: costsType,
-                  personalCostsCategory: PersonalCostsCategory.fixed,
-                  mobiScore: mobiScore,
-                  isMobile: isMobile),
+              costsDetailColumn(
+                context,
+                trip: selectedTrip,
+                costsType: costsType,
+                personalCostsCategory: PersonalCostsCategory.fixed,
+                mobiScore: mobiScore,
+              ),
               costsDetailColumn(
                 context,
                 trip: selectedTrip,
                 costsType: costsType,
                 personalCostsCategory: PersonalCostsCategory.variable,
                 mobiScore: mobiScore,
-                isMobile: isMobile,
               ),
             ]
           ],
@@ -63,24 +65,25 @@ Widget costsDetailsCardLayer2(BuildContext context,
       ));
 }
 
-Widget costsDetailColumn(BuildContext context,
-    {required Trip trip,
-    required CostsType costsType,
-    required String mobiScore,
-    SocialCostsCategory? socialCostsCategory,
-    PersonalCostsCategory? personalCostsCategory,
-    required bool isMobile}) {
+Widget costsDetailColumn(
+  BuildContext context, {
+  required Trip trip,
+  required CostsType costsType,
+  required String mobiScore,
+  SocialCostsCategory? socialCostsCategory,
+  PersonalCostsCategory? personalCostsCategory,
+}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
       Image.asset(
-        getImagePath(
+        getImagePathFromCostsCategoryAndMobiScore(
             costsType: costsType,
             mobiScore: mobiScore,
             socialCostsCategory: socialCostsCategory,
             personalCostsCategory: personalCostsCategory),
-        height: isMobile ? 80 : 100,
-        width: isMobile ? 80 : 100,
+        height: 100,
+        width: 100,
         errorBuilder: (context, error, stackTrace) {
           return const Center(child: Icon(Icons.error));
         },
@@ -104,22 +107,6 @@ Widget costsDetailColumn(BuildContext context,
           style: Theme.of(context).textTheme.labelSmall),
     ],
   );
-}
-
-String getImagePath(
-    {required CostsType costsType,
-    required String mobiScore,
-    SocialCostsCategory? socialCostsCategory,
-    PersonalCostsCategory? personalCostsCategory}) {
-  String path = '';
-  if (costsType == CostsType.social && socialCostsCategory != null) {
-    path = getSocialCostsImagePath(socialCostsCategory: socialCostsCategory, mobiScore: mobiScore);
-  }
-  if (costsType == CostsType.personal && personalCostsCategory != null) {
-    // no mobiScore parameter, because Mobi-Score is (for now) not dependent on personal costs
-    path = getPersonalCostsImagePath(personalCostsCategory: personalCostsCategory);
-  }
-  return path;
 }
 
 String getSocialCostsCurrencyValue(
@@ -163,5 +150,26 @@ String getPersonalCostsLabel(BuildContext context, {required PersonalCostsCatego
       return lang.fixed.toUpperCase();
     case PersonalCostsCategory.variable:
       return lang.variable.toUpperCase();
+  }
+}
+
+double getSocialCostsValue({required ExternalCosts socialCosts, required SocialCostsCategory socialCostsCategory}) {
+  switch (socialCostsCategory) {
+    case SocialCostsCategory.time:
+      return socialCosts.timeCosts;
+    case SocialCostsCategory.health:
+      return socialCosts.healthCosts;
+    case SocialCostsCategory.environment:
+      return socialCosts.environmentCosts;
+  }
+}
+
+double getPersonalCostsValue(
+    {required InternalCosts personalCosts, required PersonalCostsCategory personalCostsCategory}) {
+  switch (personalCostsCategory) {
+    case PersonalCostsCategory.fixed:
+      return personalCosts.fixed;
+    case PersonalCostsCategory.variable:
+      return personalCosts.variable;
   }
 }

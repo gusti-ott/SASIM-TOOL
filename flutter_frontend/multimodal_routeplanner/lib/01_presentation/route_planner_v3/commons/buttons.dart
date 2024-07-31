@@ -10,6 +10,7 @@ class V3CustomButton extends StatefulWidget {
   final Color? textColor;
   final IconData? leadingIcon;
   final double? height;
+  final double? width;
   final bool reverseColors;
 
   const V3CustomButton(
@@ -20,6 +21,7 @@ class V3CustomButton extends StatefulWidget {
       this.textColor,
       this.leadingIcon,
       this.height,
+      this.width,
       this.reverseColors = false})
       : super(key: key);
 
@@ -59,6 +61,7 @@ class _V3CustomButtonState extends State<V3CustomButton> {
               },
               borderRadius: BorderRadius.circular(100),
               child: Container(
+                width: widget.width,
                 height: widget.height,
                 decoration: BoxDecoration(
                   color: _isHovered
@@ -73,6 +76,8 @@ class _V3CustomButtonState extends State<V3CustomButton> {
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: mediumPadding, vertical: smallPadding),
                     child: Row(
+                      mainAxisAlignment:
+                          (widget.leadingIcon != null) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
                       children: [
                         if (widget.leadingIcon != null) ...[
                           Icon(widget.leadingIcon, color: widget.textColor ?? Colors.white),

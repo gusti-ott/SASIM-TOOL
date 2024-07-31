@@ -1,3 +1,4 @@
+import 'package:multimodal_routeplanner/03_domain/entities/costs/Costs.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/costs/ExternalCosts.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/costs/InternalCosts.dart';
 
@@ -58,4 +59,20 @@ String getPersonalCostsImagePath({required PersonalCostsCategory personalCostsCa
   return personalCostsAssetPaths[personalCostsCategory]?[mobiScore ?? 'null'] ??
       personalCostsAssetPaths[personalCostsCategory]?['null'] ??
       '';
+}
+
+String getImagePathFromCostsCategoryAndMobiScore(
+    {required CostsType costsType,
+    required String mobiScore,
+    SocialCostsCategory? socialCostsCategory,
+    PersonalCostsCategory? personalCostsCategory}) {
+  String path = '';
+  if (costsType == CostsType.social && socialCostsCategory != null) {
+    path = getSocialCostsImagePath(socialCostsCategory: socialCostsCategory, mobiScore: mobiScore);
+  }
+  if (costsType == CostsType.personal && personalCostsCategory != null) {
+    // no mobiScore parameter, because Mobi-Score is (for now) not dependent on personal costs
+    path = getPersonalCostsImagePath(personalCostsCategory: personalCostsCategory);
+  }
+  return path;
 }

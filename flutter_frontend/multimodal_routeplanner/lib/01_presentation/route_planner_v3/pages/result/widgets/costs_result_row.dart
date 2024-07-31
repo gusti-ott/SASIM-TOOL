@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mobiscore_to_x.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/costs_result_column_1.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/detail_route_info_section.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/question_icons.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/costs/Costs.dart';
 
@@ -18,20 +17,12 @@ Widget costResultRow(BuildContext context,
       spacing: largePadding,
       runSpacing: largePadding,
       children: [
-        socialCostsCardLayer1(context,
-            width: width,
-            height: diameter,
-            trip: trip,
-            setDiagramType: setDiagramType,
-            isMobile: isMobile,
-            screenWidth: screenWidth),
-        personalCostsCardLayer1(context,
-            width: width,
-            height: diameter,
-            trip: trip,
-            setDiagramType: setDiagramType,
-            isMobile: isMobile,
-            screenWidth: screenWidth),
+        socialCostsCardLayer1(context, width: width, height: diameter, trip: trip, setDiagramType: () {
+          setDiagramType(DiagramType.social);
+        }, isMobile: isMobile, screenWidth: screenWidth),
+        personalCostsCardLayer1(context, width: width, height: diameter, trip: trip, setDiagramType: () {
+          setDiagramType(DiagramType.personal);
+        }, isMobile: isMobile, screenWidth: screenWidth),
       ],
     ),
   );
@@ -41,12 +32,9 @@ Widget socialCostsCardLayer1(BuildContext context,
     {required double width,
     required double height,
     required Trip trip,
-    required Function(DiagramType) setDiagramType,
+    required Function() setDiagramType,
     required bool isMobile,
     required double screenWidth}) {
-  AppLocalizations lang = AppLocalizations.of(context)!;
-  TextTheme textTheme = Theme.of(context).textTheme;
-
   double responsiveSmallSize = screenWidth < 380 ? smallImageSize * screenWidth / 380 : smallImageSize;
 
   return SizedBox(
@@ -69,26 +57,8 @@ Widget socialCostsCardLayer1(BuildContext context,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      trip.costs.externalCosts.all.currencyString,
-                      style: textTheme.headlineMedium,
-                    ),
-                    Text(
-                      lang.social_costs_two_line.toUpperCase(),
-                      style: textTheme.labelLarge,
-                    ),
-                    smallVerticalSpacer,
-                    customQuestionIcon(
-                      onTap: () {
-                        setDiagramType(DiagramType.social);
-                      },
-                    ),
-                  ],
-                ),
+                costsResultColumn1(context,
+                    trip: trip, costsType: CostsType.social, onInfoClickedCallback: setDiagramType),
               ],
             ),
           ),
@@ -112,12 +82,9 @@ Widget personalCostsCardLayer1(BuildContext context,
     {required double width,
     required double height,
     required Trip trip,
-    required Function(DiagramType) setDiagramType,
+    required Function() setDiagramType,
     required bool isMobile,
     required double screenWidth}) {
-  AppLocalizations lang = AppLocalizations.of(context)!;
-  TextTheme textTheme = Theme.of(context).textTheme;
-
   double responsiveSmallSize = screenWidth < 380 ? smallImageSize * screenWidth / 380 : smallImageSize;
 
   return SizedBox(
@@ -140,26 +107,8 @@ Widget personalCostsCardLayer1(BuildContext context,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      trip.costs.internalCosts.all.currencyString,
-                      style: textTheme.headlineMedium,
-                    ),
-                    Text(
-                      lang.personal_costs_two_line.toUpperCase(),
-                      style: textTheme.labelLarge,
-                    ),
-                    smallVerticalSpacer,
-                    customQuestionIcon(
-                      onTap: () {
-                        setDiagramType(DiagramType.personal);
-                      },
-                    ),
-                  ],
-                ),
+                costsResultColumn1(context,
+                    trip: trip, costsType: CostsType.personal, onInfoClickedCallback: setDiagramType),
               ],
             ),
           ),

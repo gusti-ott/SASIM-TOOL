@@ -6,6 +6,7 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/r
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/address_input_components.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/mode_selection_components.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
+import 'package:multimodal_routeplanner/01_presentation/theme_data/typography.dart';
 import 'package:multimodal_routeplanner/config/setup_dependencies.dart';
 
 class SearchInputContent extends StatefulWidget {
@@ -142,7 +143,9 @@ class _SearchInputContentState extends State<SearchInputContent> {
       child: Align(
           alignment: Alignment.centerLeft,
           child: Text(lang.note_address,
-              style: textTheme.bodyMedium!.copyWith(color: primaryColorV3, fontStyle: FontStyle.italic))),
+              style: widget.isMobile
+                  ? mobileSearchSubtitleTextStyle.copyWith(color: primaryColorV3, fontStyle: FontStyle.italic)
+                  : textTheme.bodyMedium!.copyWith(color: primaryColorV3, fontStyle: FontStyle.italic))),
     );
   }
 

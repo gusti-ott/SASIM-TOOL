@@ -13,7 +13,6 @@ Widget costsCardLayer2(BuildContext context,
     required double height,
     required heightImage,
     required Trip trip,
-    required bool isMobile,
     required Function(CostsType) showInfoCallback}) {
   TextTheme textTheme = Theme.of(context).textTheme;
   AppLocalizations lang = AppLocalizations.of(context)!;
@@ -38,36 +37,34 @@ Widget costsCardLayer2(BuildContext context,
             child: Align(
               alignment: Alignment.centerRight,
               child: SizedBox(
-                width: 135,
+                width: 140,
                 child: Row(
                   children: [
                     IntrinsicWidth(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            costsType == CostsType.social
-                                ? lang.social_costs_two_line.toUpperCase()
-                                : lang.personal_costs_two_line.toUpperCase(),
-                            style: textTheme.labelLarge,
-                          ),
-                          const Divider(
-                            thickness: 1,
-                            color: Colors.black,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                costsType == CostsType.social
-                                    ? trip.costs.externalCosts.all.currencyString
-                                    : trip.costs.internalCosts.all.currencyString,
-                                style: textTheme.headlineMedium,
-                              ),
-                            ],
-                          ),
-                        ],
+                      child: SizedBox(
+                        width: 120,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              costsType == CostsType.social
+                                  ? lang.social_costs_two_line.toUpperCase()
+                                  : lang.personal_costs_two_line.toUpperCase(),
+                              style: textTheme.labelLarge,
+                            ),
+                            const Divider(
+                              thickness: 1,
+                              color: Colors.black,
+                            ),
+                            Text(
+                              costsType == CostsType.social
+                                  ? trip.costs.externalCosts.all.currencyString
+                                  : trip.costs.internalCosts.all.currencyString,
+                              style: textTheme.headlineMedium,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     const SizedBox(width: 20)

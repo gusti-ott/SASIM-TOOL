@@ -91,9 +91,11 @@ Widget textRowCostsBar(BuildContext context,
     {required Trip selectedTrip,
     required PercentageTextPosition position,
     required List<PercentageTextPosition> positions,
-    required List<int> percentages}) {
+    required List<int> percentages,
+    List<String>? labels}) {
   TextTheme textTheme = Theme.of(context).textTheme;
   double height = 20;
+  int percentageLimit = 15;
 
   if (positions.any((element) => element == position)) {
     return SizedBox(
@@ -102,15 +104,24 @@ Widget textRowCostsBar(BuildContext context,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ...positions.asMap().entries.map((entry) {
+            String label = '';
             int index = entry.key;
+            int flex = positions[index] != position
+                ? 1
+                : percentages[index] < percentageLimit
+                    ? percentageLimit
+                    : percentages[index];
+
+            if (labels != null && labels.length >= index + 1) {
+              label = ' ${labels[index]}'.toUpperCase();
+            }
             return Expanded(
               // if 1% then flex 2, because 1% is too small for whole text
-              flex: percentages[index] < 7 ? 7 : percentages[index],
+              flex: flex,
               child: positions[index] == position
-                  ? Text(
-                      '${percentages[index].toString()} %',
+                  ? Text('${percentages[index].toString()} %$label',
                       style: textTheme.labelMedium,
-                    )
+                      textAlign: index + 1 == positions.length ? TextAlign.right : TextAlign.left)
                   : const SizedBox(),
             );
           }).toList(),
@@ -123,6 +134,8 @@ Widget textRowCostsBar(BuildContext context,
 }
 
 Widget socialCostsBar(BuildContext context, {required Trip selectedTrip}) {
+  AppLocalizations lang = AppLocalizations.of(context)!;
+
   int timeCostsPercentage = getSocialTimeCostsPercentage(selectedTrip);
   int healthCostsPercentage = getSocialHealthCostsPercentage(selectedTrip);
   int environmentCostsPercentage = getSocialEnvironmentalCostsPercentage(selectedTrip);
@@ -136,7 +149,8 @@ Widget socialCostsBar(BuildContext context, {required Trip selectedTrip}) {
           selectedTrip: selectedTrip,
           position: PercentageTextPosition.above,
           positions: positions,
-          percentages: percentages),
+          percentages: percentages,
+          labels: [lang.time, lang.health, lang.environment]),
       Container(
         decoration: BoxDecoration(
           color: getColorFromMobiScore(selectedTrip.mobiScore).lighten(0.4),
@@ -188,12 +202,15 @@ Widget socialCostsBar(BuildContext context, {required Trip selectedTrip}) {
           selectedTrip: selectedTrip,
           position: PercentageTextPosition.below,
           positions: positions,
-          percentages: percentages),
+          percentages: percentages,
+          labels: [lang.time, lang.health, lang.environment]),
     ],
   );
 }
 
 Widget privateCostsBar(BuildContext context, {required Trip selectedTrip}) {
+  AppLocalizations lang = AppLocalizations.of(context)!;
+
   int fixedCosts = getPrivateFixedCostsPercentage(selectedTrip);
   int variableCosts = getPrivateVariableCostsPercentage(selectedTrip);
 
@@ -206,7 +223,8 @@ Widget privateCostsBar(BuildContext context, {required Trip selectedTrip}) {
           selectedTrip: selectedTrip,
           position: PercentageTextPosition.above,
           positions: positions,
-          percentages: percentages),
+          percentages: percentages,
+          labels: [lang.fixed, lang.variable]),
       Container(
         decoration: BoxDecoration(
           color: customLightGrey.lighten(0.4),
@@ -235,7 +253,8 @@ Widget privateCostsBar(BuildContext context, {required Trip selectedTrip}) {
           selectedTrip: selectedTrip,
           position: PercentageTextPosition.below,
           positions: positions,
-          percentages: percentages),
+          percentages: percentages,
+          labels: [lang.fixed, lang.variable]),
     ],
   );
 }
