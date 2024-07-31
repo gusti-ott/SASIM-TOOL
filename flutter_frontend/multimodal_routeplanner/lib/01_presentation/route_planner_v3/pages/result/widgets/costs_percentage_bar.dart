@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/colors_helper.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/costs_rates.dart';
@@ -7,10 +8,10 @@ import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dar
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 
 Widget costsPercentageBar(BuildContext context,
-    {required Trip selectedTrip, required CostsPercentageBarType barType, double? width}) {
+    {required Trip selectedTrip, required CostsPercentageBarType barType, double? width, bool isMobile = false}) {
   late Widget costsBar;
   if (barType == CostsPercentageBarType.total) {
-    costsBar = totalCostsBar(context, selectedTrip: selectedTrip);
+    costsBar = totalCostsBar(context, selectedTrip: selectedTrip, isMobile: isMobile);
   } else if (barType == CostsPercentageBarType.social) {
     costsBar = socialCostsBar(context, selectedTrip: selectedTrip);
   } else {
@@ -22,46 +23,67 @@ Widget costsPercentageBar(BuildContext context,
   );
 }
 
-Widget totalCostsBar(BuildContext context, {required Trip selectedTrip}) {
+Widget totalCostsBar(BuildContext context, {required Trip selectedTrip, bool isMobile = false}) {
   TextTheme textTheme = Theme.of(context).textTheme;
+  AppLocalizations lang = AppLocalizations.of(context)!;
 
   int externalCostsPercentage = getSocialCostsPercentage(selectedTrip);
   int internalCostsPercentage = 100 - externalCostsPercentage;
 
-  return Container(
-    decoration: const BoxDecoration(color: Colors.white),
-    height: 20,
-    child: Row(children: [
-      Expanded(
-        flex: externalCostsPercentage,
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.only(
-              topRight: Radius.circular(30),
-              bottomRight: Radius.circular(30),
+  return Column(
+    children: [
+      Container(
+        decoration: const BoxDecoration(color: Colors.white),
+        height: 20,
+        child: Row(children: [
+          Expanded(
+            flex: externalCostsPercentage,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.only(
+                  topRight: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
+                ),
+                color: getColorFromMobiScore(selectedTrip.mobiScore),
+              ),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: EdgeInsets.only(left: smallPadding),
+                  child: Text('${externalCostsPercentage.toString()} %',
+                      style: textTheme.labelMedium!.copyWith(color: Colors.white)),
+                ),
+              ),
             ),
-            color: getColorFromMobiScore(selectedTrip.mobiScore),
           ),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: EdgeInsets.only(left: smallPadding),
-              child: Text('${externalCostsPercentage.toString()} %',
-                  style: textTheme.labelMedium!.copyWith(color: Colors.white)),
-            ),
-          ),
-        ),
+          Expanded(
+              flex: internalCostsPercentage,
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: EdgeInsets.only(right: smallPadding),
+                  child: Text('${internalCostsPercentage.toString()} %', style: textTheme.labelMedium),
+                ),
+              ))
+        ]),
       ),
-      Expanded(
-          flex: internalCostsPercentage,
-          child: Align(
-            alignment: Alignment.centerRight,
-            child: Padding(
-              padding: EdgeInsets.only(right: smallPadding),
-              child: Text('${internalCostsPercentage.toString()} %', style: textTheme.labelMedium),
+      if (isMobile) ...[
+        smallVerticalSpacer,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              lang.social_costs.toUpperCase(),
+              style: textTheme.labelLarge,
             ),
-          ))
-    ]),
+            Text(
+              lang.personal_costs.toUpperCase(),
+              style: textTheme.labelLarge,
+            )
+          ],
+        )
+      ]
+    ],
   );
 }
 

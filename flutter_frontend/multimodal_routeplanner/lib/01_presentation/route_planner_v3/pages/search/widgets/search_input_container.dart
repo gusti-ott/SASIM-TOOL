@@ -39,10 +39,12 @@ class _SearchInputContentState extends State<SearchInputContent> {
 
   @override
   Widget build(BuildContext context) {
-    return (widget.isMobile) ? buildMobileContent() : buildDesktopContent();
+    return (widget.isMobile) ? buildMobileContent(context) : buildDesktopContent(context);
   }
 
-  Widget buildDesktopContent() {
+  Widget buildDesktopContent(BuildContext context) {
+    AppLocalizations lang = AppLocalizations.of(context)!;
+    TextTheme textTheme = Theme.of(context).textTheme;
     return Column(
       children: [
         extraLargeVerticalSpacer,
@@ -68,6 +70,7 @@ class _SearchInputContentState extends State<SearchInputContent> {
           },
         ),
         largeVerticalSpacer,
+        addressNote(lang, textTheme),
         addressInputRow(
           context,
           isMobile: false,
@@ -92,7 +95,9 @@ class _SearchInputContentState extends State<SearchInputContent> {
     );
   }
 
-  Widget buildMobileContent() {
+  Widget buildMobileContent(BuildContext context) {
+    AppLocalizations lang = AppLocalizations.of(context)!;
+    TextTheme textTheme = Theme.of(context).textTheme;
     return Column(
       children: [
         mediumVerticalSpacer,
@@ -116,6 +121,7 @@ class _SearchInputContentState extends State<SearchInputContent> {
               });
             }),
         largeVerticalSpacer,
+        addressNote(lang, textTheme),
         addressInputRow(context, isMobile: true, startController: startController, endController: endController,
             onStartChanged: (value) {
           setState(() {
@@ -127,6 +133,16 @@ class _SearchInputContentState extends State<SearchInputContent> {
           });
         }, swapInputs: swapInputs, selectedMode: selectionMode, isElectric: isElectric, isShared: isShared),
       ],
+    );
+  }
+
+  Padding addressNote(AppLocalizations lang, TextTheme textTheme) {
+    return Padding(
+      padding: EdgeInsets.all(smallPadding),
+      child: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(lang.note_address,
+              style: textTheme.bodyMedium!.copyWith(color: primaryColorV3, fontStyle: FontStyle.italic))),
     );
   }
 

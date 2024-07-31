@@ -42,6 +42,8 @@ class ResultScreenV3 extends StatefulWidget {
 class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProviderStateMixin {
   Logger logger = getLogger();
 
+  late ResultCubit cubit;
+
   Trip? selectedTrip;
   List<Trip>? trips;
   Color backgroundColor = Colors.white;
@@ -78,11 +80,11 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
   late AnimationController _animationController;
   late Animation<Color?> _animation;
 
-  ResultCubit cubit = sl<ResultCubit>();
-
   @override
   void initState() {
     super.initState();
+
+    cubit = sl<ResultCubit>();
 
     selectionMode = widget.selectedMode ?? SelectionMode.bicycle;
     isElectric = widget.isElectric ?? false;
@@ -133,7 +135,7 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
       bloc: cubit,
       listener: (context, state) {},
       builder: (context, state) {
-        Widget child = const SizedBox();
+        Widget child = const Center(child: Text('Waiting for something to happen ...'));
         FloatingActionButton? fab;
         if (state is ResultLoading) {
           child = Padding(
@@ -185,6 +187,7 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
                 backgroundColor = getColorFromMobiScore(mobiScore, isLight: true);
                 child = ResultContent(
                   isMobile: isMobile,
+                  screenWidth: screenWidth,
                   trips: state.trips,
                   selectedTrip: selectedTrip!,
                   selectionMode: selectionMode!,
@@ -242,6 +245,7 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
                       showAdditionalMobileInfo = false;
                     });
                   },
+                  backgroundColor: backgroundColor,
                 );
               }
             } else {

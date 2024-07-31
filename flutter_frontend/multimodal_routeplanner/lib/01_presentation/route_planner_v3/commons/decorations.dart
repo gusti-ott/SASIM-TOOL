@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/colors_helper.dart';
 
-BoxDecoration customBoxDecorationWithShadow() {
+BoxDecoration customBoxDecorationWithShadow({Color? backgroundColor}) {
   return BoxDecoration(
-    color: Colors.white,
+    color: backgroundColor?.lighten(0.7) ?? Colors.white,
     borderRadius: BorderRadius.circular(30.0),
     boxShadow: [
       BoxShadow(

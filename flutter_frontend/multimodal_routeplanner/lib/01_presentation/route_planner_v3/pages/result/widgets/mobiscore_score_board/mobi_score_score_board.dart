@@ -13,7 +13,7 @@ double borderWidthScoreColumn = 6;
 Widget mobiScoreScoreBoard(BuildContext context, {required Trip selectedTrip, bool isMobile = false}) {
   return Container(
     decoration: BoxDecoration(
-      color: backgroundColorV3,
+      color: backgroundColorGreyV3,
       borderRadius: BorderRadius.circular(30),
       border: Border.all(color: Colors.white, width: borderWidthScoreColumn),
     ),
@@ -138,7 +138,7 @@ Expanded _scoreSection(BuildContext context,
             bottomLeft:
                 (isFirst && isMobile || isLast && !isMobile) ? const Radius.circular(30) : const Radius.circular(0),
             bottomRight: (isLast) ? const Radius.circular(30) : const Radius.circular(0)),
-        color: (selectedTrip.mobiScore == letter) ? color : backgroundColorV3,
+        color: (selectedTrip.mobiScore == letter) ? color : backgroundColorGreyV3,
       ),
       child: Center(
         child: Text(

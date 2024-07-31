@@ -7,14 +7,10 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/r
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/costs/Costs.dart';
 
-Widget costResultRow(
-  BuildContext context, {
-  required Trip trip,
-  required Function(DiagramType) setDiagramType,
-  isMobile = false,
-}) {
-  double diameter = 200;
-  double width = 350;
+Widget costResultRow(BuildContext context,
+    {required Trip trip, required Function(DiagramType) setDiagramType, isMobile = false, required screenWidth}) {
+  double diameter = 180;
+  double width = 400;
   return SizedBox(
     width: double.infinity,
     child: Wrap(
@@ -22,8 +18,20 @@ Widget costResultRow(
       spacing: largePadding,
       runSpacing: largePadding,
       children: [
-        socialCostsCardLayer1(context, width: width, height: diameter, trip: trip, setDiagramType: setDiagramType),
-        personalCostsCardLayer1(context, width: width, height: diameter, trip: trip, setDiagramType: setDiagramType)
+        socialCostsCardLayer1(context,
+            width: width,
+            height: diameter,
+            trip: trip,
+            setDiagramType: setDiagramType,
+            isMobile: isMobile,
+            screenWidth: screenWidth),
+        personalCostsCardLayer1(context,
+            width: width,
+            height: diameter,
+            trip: trip,
+            setDiagramType: setDiagramType,
+            isMobile: isMobile,
+            screenWidth: screenWidth),
       ],
     ),
   );
@@ -33,22 +41,31 @@ Widget socialCostsCardLayer1(BuildContext context,
     {required double width,
     required double height,
     required Trip trip,
-    required Function(DiagramType) setDiagramType}) {
+    required Function(DiagramType) setDiagramType,
+    required bool isMobile,
+    required double screenWidth}) {
   AppLocalizations lang = AppLocalizations.of(context)!;
   TextTheme textTheme = Theme.of(context).textTheme;
+
+  double responsiveSmallSize = screenWidth < 380 ? smallImageSize * screenWidth / 380 : smallImageSize;
+
   return SizedBox(
     width: width,
-    height: height,
+    height: height + 25,
     child: Stack(
       children: [
         Positioned.fill(
-          left: 40, // Adjust this value as needed for proper alignment
+          top: 20,
+          left: 40,
+          bottom: 5,
           child: Container(
-            padding: EdgeInsets.all(mediumPadding),
+            height: height,
             decoration: BoxDecoration(
               color: Colors.white.withOpacity(0.45),
               borderRadius: BorderRadius.circular(height / 2),
             ),
+            padding: EdgeInsets.only(
+                top: largePadding, bottom: largePadding, right: isMobile ? largePadding : largePadding * 2),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -72,14 +89,19 @@ Widget socialCostsCardLayer1(BuildContext context,
                     ),
                   ],
                 ),
-                mediumHorizontalSpacer
               ],
             ),
           ),
         ),
         Positioned(
+          top: screenWidth < 380 ? 30 : 0,
+          bottom: screenWidth < 380 ? 31 : 1,
           left: 0,
-          child: Image.asset(getAssetPathFromMobiScore(trip.mobiScore)),
+          child: Image.asset(
+            fit: BoxFit.fitHeight,
+            getAssetPathFromMobiScore(trip.mobiScore),
+            height: isMobile ? responsiveSmallSize : largeImageSize,
+          ),
         ),
       ],
     ),
@@ -90,18 +112,27 @@ Widget personalCostsCardLayer1(BuildContext context,
     {required double width,
     required double height,
     required Trip trip,
-    required Function(DiagramType) setDiagramType}) {
+    required Function(DiagramType) setDiagramType,
+    required bool isMobile,
+    required double screenWidth}) {
   AppLocalizations lang = AppLocalizations.of(context)!;
   TextTheme textTheme = Theme.of(context).textTheme;
+
+  double responsiveSmallSize = screenWidth < 380 ? smallImageSize * screenWidth / 380 : smallImageSize;
+
   return SizedBox(
     width: width,
-    height: height,
+    height: height + 25,
     child: Stack(
       children: [
         Positioned.fill(
-          left: 100,
+          top: 20,
+          left: screenWidth < 380 ? 53 : 75,
+          bottom: 5,
           child: Container(
-            padding: EdgeInsets.all(mediumPadding),
+            height: height,
+            padding: EdgeInsets.only(
+                top: largePadding, bottom: largePadding, right: isMobile ? largePadding : extraLargePadding),
             decoration: BoxDecoration(
               color: Colors.white.withOpacity(0.45),
               borderRadius: BorderRadius.circular(0),
@@ -129,16 +160,21 @@ Widget personalCostsCardLayer1(BuildContext context,
                     ),
                   ],
                 ),
-                mediumHorizontalSpacer,
               ],
             ),
           ),
         ),
         Positioned(
-          left: 0,
-          child: Image.asset('assets/icons/personal_null.png'),
+          top: screenWidth < 380 ? 35 : 5,
+          bottom: screenWidth < 380 ? 24 : -6,
+          left: -20,
+          child: Image.asset('assets/icons/personal_null.png',
+              fit: BoxFit.fitHeight, height: isMobile ? responsiveSmallSize : largeImageSize),
         ),
       ],
     ),
   );
 }
+
+double smallImageSize = 130;
+double largeImageSize = 220;

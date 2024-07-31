@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/costs_category_to_image.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/layer_2_detailed/values.dart';
+import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/costs/Costs.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/costs/ExternalCosts.dart';
@@ -12,13 +14,14 @@ Widget costsDetailsCardLayer2(BuildContext context,
   String mobiScore = selectedTrip.mobiScore;
   return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.45),
-        borderRadius: BorderRadius.circular(smallPadding),
+        color: detailCardColor,
+        borderRadius: BorderRadius.circular(cardBorderRadius),
       ),
       child: Padding(
-        padding: EdgeInsets.all(largePadding),
+        padding: EdgeInsets.symmetric(horizontal: mediumPadding, vertical: largePadding),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment:
+              (costsType == CostsType.personal) ? MainAxisAlignment.spaceAround : MainAxisAlignment.spaceBetween,
           children: [
             if (costsType == CostsType.social) ...[
               costsDetailColumn(context,
@@ -135,9 +138,9 @@ String getPrivateCostsCurrencyValue(
     {required InternalCosts personalCosts, required PersonalCostsCategory personalCostsCategory}) {
   switch (personalCostsCategory) {
     case PersonalCostsCategory.fixed:
-      return personalCosts.fixedCosts.currencyString;
+      return personalCosts.fixed.currencyString;
     case PersonalCostsCategory.variable:
-      return personalCosts.variableCosts.currencyString;
+      return personalCosts.variable.currencyString;
   }
 }
 

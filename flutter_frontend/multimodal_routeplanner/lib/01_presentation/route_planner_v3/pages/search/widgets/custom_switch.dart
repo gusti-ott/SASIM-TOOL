@@ -4,13 +4,14 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/app_cubit.dart';
 
-class CustomSwitch extends StatelessWidget {
-  const CustomSwitch({super.key});
+class LanguageSwitch extends StatelessWidget {
+  const LanguageSwitch({super.key});
 
   @override
   Widget build(BuildContext context) {
     AppCubit appCubit = context.read<AppCubit>();
     AppLocalizations lang = AppLocalizations.of(context)!;
+    TextTheme textTheme = Theme.of(context).textTheme;
 
     bool isEnglish = Localizations.localeOf(context).languageCode == 'en';
 
@@ -37,8 +38,8 @@ class CustomSwitch extends StatelessWidget {
                 borderRadius: kBorderRadius,
               ),
               child: Text(
-                lang.en,
-                style: TextStyle(
+                lang.en.toUpperCase(),
+                style: textTheme.labelSmall!.copyWith(
                   color: isEnglish ? Colors.white : primaryColorV3,
                 ),
               ),
@@ -55,8 +56,8 @@ class CustomSwitch extends StatelessWidget {
                 borderRadius: kBorderRadius,
               ),
               child: Text(
-                lang.de,
-                style: TextStyle(
+                lang.de.toUpperCase(),
+                style: textTheme.labelSmall!.copyWith(
                   color: !isEnglish ? Colors.white : primaryColorV3,
                 ),
               ),

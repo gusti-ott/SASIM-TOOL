@@ -32,9 +32,6 @@ class RoutePlannerScreen extends StatelessWidget {
 
     Map<String, Trip> savedTrips = {};
 
-    bool infoIsShown = false;
-    late Trip currentInfoTrip;
-
     return Scaffold(
       body: Stack(
         children: [
@@ -185,12 +182,8 @@ class RoutePlannerScreen extends StatelessWidget {
             ),
             BlocBuilder<RouteInfoBloc, RouteInfoState>(builder: (context, routeInfoState) {
               if (routeInfoState is RouteInfoLoadedState) {
-                infoIsShown = true;
-                currentInfoTrip = routeInfoState.trip;
                 return RouteInfo(trip: routeInfoState.trip, visible: true);
               } else if (routeInfoState is RouteInfoHiddenState) {
-                infoIsShown = false;
-                currentInfoTrip = routeInfoState.trip;
                 return RouteInfo(trip: routeInfoState.trip, visible: false);
               } else {
                 return const Visibility(visible: false, child: Placeholder());

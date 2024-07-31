@@ -20,7 +20,7 @@ Widget mobiScoreWithMcubeLogo(BuildContext context) {
       smallHorizontalSpacer,
       Text(lang.by, style: textTheme.labelLarge!.copyWith(color: primaryColorV3)),
       smallHorizontalSpacer,
-      mcubeLogo(),
+      mcubeLogo(isGrey: true),
     ],
   );
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/values.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/detail_route_info_diagram.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/detail_route_info_map.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/detail_route_text_info.dart';
@@ -49,9 +50,9 @@ class DetailRouteInfoSection extends StatelessWidget {
     AppLocalizations lang = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
-        color: backgroundColorV3,
+        color: backgroundColorGreyV3,
       ),
-      width: isMobile ? double.infinity : 350,
+      width: isMobile ? double.infinity : widthInfoSection,
       height: double.infinity,
       child: Stack(
         fit: StackFit.expand,
@@ -60,17 +61,9 @@ class DetailRouteInfoSection extends StatelessWidget {
           if (infoViewType == InfoViewType.diagram)
             SingleChildScrollView(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: largePadding),
+                padding: EdgeInsets.only(left: largePadding * 4, right: largePadding * 2),
                 child: Column(children: [
                   SizedBox(height: extraLargePadding + largePadding),
-                  Text(
-                    getDiagramTitle(context, selectedDiagramType),
-                    style: textTheme.headlineMedium,
-                    textAlign: TextAlign.center,
-                  ),
-                  mediumVerticalSpacer,
-                  detailRouteTextInfo(context, diagramType: selectedDiagramType),
-                  mediumVerticalSpacer,
                   DiagramTypeSelection(
                     height: diagramTypeSelectionHeight,
                     setDiagramType: (DiagramType value) {
@@ -84,6 +77,14 @@ class DetailRouteInfoSection extends StatelessWidget {
                       currentBicycleTrip: currentBicycleTrip,
                       currentPublicTransportTrip: currentPublicTransportTrip,
                       selectedDiagramType: selectedDiagramType),
+                  mediumVerticalSpacer,
+                  Text(
+                    getDiagramTitle(context, selectedDiagramType),
+                    style: textTheme.headlineMedium,
+                    textAlign: TextAlign.center,
+                  ),
+                  mediumVerticalSpacer,
+                  detailRouteTextInfo(context, diagramType: selectedDiagramType),
                   largeVerticalSpacer
                 ]),
               ),

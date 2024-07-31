@@ -58,7 +58,7 @@ class _SearchScreenV3State extends State<SearchScreenV3> {
         drawer: buildDrawer(context),
         floatingActionButton: !started && !isMobile ? _floatingStartButton(context) : null,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        backgroundColor: backgroundColorV3,
+        backgroundColor: backgroundColorYellowV3,
         body: SearchContent(isMobile: isMobile, scrollController: _scrollController));
   }
 
@@ -67,10 +67,7 @@ class _SearchScreenV3State extends State<SearchScreenV3> {
     AppLocalizations lang = AppLocalizations.of(context)!;
 
     return FloatingActionButton.extended(
-      label: Text(
-        lang.get_started,
-        style: textTheme.bodyMedium!.copyWith(color: onPrimaryColorV3),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
       backgroundColor: primaryColorV3,
       onPressed: () {
         setState(() {
@@ -82,6 +79,10 @@ class _SearchScreenV3State extends State<SearchScreenV3> {
           );
         });
       },
+      label: Text(
+        lang.get_started,
+        style: textTheme.bodyMedium!.copyWith(color: onPrimaryColorV3),
+      ),
     );
   }
 }

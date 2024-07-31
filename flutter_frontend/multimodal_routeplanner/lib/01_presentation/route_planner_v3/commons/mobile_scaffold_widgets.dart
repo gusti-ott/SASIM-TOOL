@@ -8,7 +8,7 @@ AppBar mobileAppBar(GlobalKey<ScaffoldState> scaffoldKey) {
     leading: Padding(
         padding: EdgeInsets.all(smallPadding), child: Image.asset('assets/mobiscore_logos/logo_with_text_primary.png')),
     actions: [
-      const CustomSwitch(),
+      const LanguageSwitch(),
       IconButton(
         icon: Icon(Icons.menu, color: primaryColorV3),
         onPressed: () {

@@ -15,7 +15,7 @@ class DiagramTypeSelection extends StatelessWidget {
     final height = this.height ?? 80;
     return Center(
       child: SizedBox(
-        width: 170,
+        width: double.infinity,
         height: height,
         child: Column(
           children: [
@@ -84,14 +84,26 @@ Widget diagramTypeSelectionButton(BuildContext context,
     required Function(DiagramType) onPressed}) {
   TextTheme textTheme = Theme.of(context).textTheme;
   String label = getSelectionButtonLabel(context, diagramType);
+
+  bool isSelected = selectedDiagramType == diagramType;
+
   return InkWell(
     onTap: () {
       onPressed(diagramType);
     },
     child: Container(
       decoration: BoxDecoration(
-        color: selectedDiagramType == diagramType ? Colors.white : Colors.transparent,
+        color: isSelected ? Colors.white : Colors.transparent,
         borderRadius: BorderRadius.circular(30),
+        boxShadow: [
+          if (isSelected)
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: const Offset(0, 3),
+            ),
+        ],
       ),
       height: 20,
       width: double.infinity,

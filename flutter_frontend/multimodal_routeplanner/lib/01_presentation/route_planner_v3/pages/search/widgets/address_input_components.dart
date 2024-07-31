@@ -5,6 +5,7 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/decorations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_cubit.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/values.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/address_picker_list.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/calculate_button.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
@@ -119,7 +120,7 @@ Column mobileAddressInputContainer(BuildContext context,
   );
 }
 
-Row desktopAddressInputRow(BuildContext context,
+Widget desktopAddressInputRow(BuildContext context,
     {required ResultCubit cubit,
     required startController,
     required endController,
@@ -131,13 +132,14 @@ Row desktopAddressInputRow(BuildContext context,
     required bool isShared}) {
   AppLocalizations lang = AppLocalizations.of(context)!;
   AddressPickerBloc addressPickerBloc = sl<AddressPickerBloc>();
-  return Row(
-    crossAxisAlignment: CrossAxisAlignment.start,
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.start,
     children: [
-      Expanded(
-        child: Column(
-          children: [
-            textInputField(
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: textInputField(
               context,
               controller: startController,
               hintText: lang.from,
@@ -148,22 +150,17 @@ Row desktopAddressInputRow(BuildContext context,
                 );
               },
             ),
-            startAddressPickerBuilder(addressPickerBloc, startController)
-          ],
-        ),
-      ),
-      const SizedBox(width: 8),
-      IconButton(
-        icon: const Icon(Icons.swap_horiz, color: Colors.grey),
-        onPressed: () {
-          swapInputs();
-        },
-      ),
-      const SizedBox(width: 8),
-      Expanded(
-        child: Column(
-          children: [
-            textInputField(
+          ),
+          const SizedBox(width: 8),
+          IconButton(
+            icon: const Icon(Icons.swap_horiz, color: Colors.grey),
+            onPressed: () {
+              swapInputs();
+            },
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: textInputField(
               context,
               controller: endController,
               hintText: lang.to,
@@ -174,21 +171,29 @@ Row desktopAddressInputRow(BuildContext context,
                 );
               },
             ),
-            endAddressPickerBuilder(addressPickerBloc, endController)
-          ],
-        ),
-      ),
-      smallHorizontalSpacer,
-      Padding(
-        padding: EdgeInsets.only(top: smallPadding),
-        child: statefulCalculateButton(context,
+          ),
+          smallHorizontalSpacer,
+          statefulCalculateButton(
+            context,
             cubit: cubit,
             startAddress: startController.text,
             endAddress: endController.text,
             selectedMode: selectedMode,
             isElectric: isElectric,
-            isShared: isShared),
+            isShared: isShared,
+          ),
+        ],
       ),
+      Row(
+        children: [
+          Expanded(child: startAddressPickerBuilder(addressPickerBloc, startController)),
+          const SizedBox(width: 45),
+          Expanded(child: endAddressPickerBuilder(addressPickerBloc, endController)),
+          const SizedBox(
+            width: 95,
+          )
+        ],
+      )
     ],
   );
 }
@@ -261,6 +266,7 @@ Widget textInputField(
 }) {
   TextTheme textTheme = Theme.of(context).textTheme;
   return Container(
+    height: heightSearchBar,
     decoration: customBoxDecorationWithShadow(),
     child: TextField(
       controller: controller,
@@ -268,7 +274,7 @@ Widget textInputField(
         fillColor: Colors.white,
         filled: true,
         prefixIcon: const Icon(Icons.search, color: Colors.black),
-        suffixIcon: Icon(Icons.location_on, color: tertiaryColorV3),
+        suffixIcon: Icon(Icons.location_on, color: tertiaryColorV3, fill: 0.5),
         hintText: hintText,
         hintStyle: textTheme.labelMedium!.copyWith(color: Colors.grey),
         border: OutlineInputBorder(
@@ -283,6 +289,7 @@ Widget textInputField(
           borderRadius: BorderRadius.circular(30),
           borderSide: BorderSide(color: secondaryColorV3), // Border when the TextField is focused
         ),
+        contentPadding: const EdgeInsets.symmetric(vertical: 30),
       ),
       onChanged: onChanged,
     ),
