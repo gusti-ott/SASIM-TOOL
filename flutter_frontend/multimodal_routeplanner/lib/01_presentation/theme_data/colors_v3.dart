@@ -21,6 +21,7 @@ Color customGrey = const Color(0xFF79747E);
 Color customLightGrey = const Color(0xFFACA59D);
 Color customOffWhite = const Color(0xFFEBEBEB);
 Color customWhite100 = const Color(0xFFFFFFFF);
+Color customMobiScoreIconWhite = const Color(0xFFFAFAFA);
 
 Color backgroundColorGreyV3 = const Color(0xFFE6E6E6);
 Color backgroundColorYellowV3 = const Color(0xFFF0F0E4);

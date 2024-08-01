@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/mobiscore_circle_logo.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/input_to_trip.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/mobiscore_score_board/score_pointer.dart';
@@ -49,7 +50,13 @@ Widget mobiScoreScoreBoardWithPointers(BuildContext context,
       children: [
         Align(
             alignment: Alignment.centerLeft,
-            child: mobiScoreScoreBoard(context, selectedTrip: selectedTrip, isMobile: true)),
+            child: Row(
+              children: [
+                mobiScoreCircleLogo(size: widthScoreColumn),
+                largeHorizontalSpacer,
+                Expanded(child: mobiScoreScoreBoard(context, selectedTrip: selectedTrip, isMobile: true)),
+              ],
+            )),
         if (currentCarTrip != null)
           positionedScorePointer(
             widthScoreColumn: widthScoreColumn,
@@ -162,17 +169,7 @@ List<Widget> scoreBoardWithPointers(BuildContext context,
     Positioned(
       right: widthInfoSection - (widthScoreColumn / 2),
       top: (screenHeight - heightScoreColumn) / 2 - mediumPadding - widthScoreColumn,
-      child: CircleAvatar(
-        backgroundColor: Colors.white,
-        child: Padding(
-          padding: EdgeInsets.all(smallPadding),
-          child: Image.asset(
-            'assets/mobiscore_logos/logo_primary.png',
-            height: widthScoreColumn,
-            width: widthScoreColumn,
-          ),
-        ),
-      ),
+      child: mobiScoreCircleLogo(size: widthScoreColumn),
     ),
     Positioned(
       right: widthInfoSection - (widthScoreColumn / 2),

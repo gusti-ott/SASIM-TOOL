@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mobiscore_to_x.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mode_to_x.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
@@ -177,12 +178,13 @@ double _getTopPositionScorePointerMobile(double sectionHeight, double widthScore
 double _getLeftPositionScorePointerMobile(
     double screenWidth, double horizontalPadding, double borderWidthScoreColumn, bool isLargePointer, int index) {
   double position = 0.0;
-  double partHeight = (screenWidth - 2 * horizontalPadding - 2 * borderWidthScoreColumn) / 5;
+  double iconOffset = largePadding + 44;
+  double partHeight = (screenWidth - 2 * horizontalPadding - 2 * borderWidthScoreColumn - iconOffset) / 5;
 
   if (isLargePointer) {
-    position = partHeight * index - largeScoreContainerWidth / 2 - partHeight / 2 + borderWidthScoreColumn;
+    position = partHeight * index - largeScoreContainerWidth / 2 - partHeight / 2 + borderWidthScoreColumn + iconOffset;
   } else {
-    position = partHeight * index - smallScoreContainerWidth / 2 - partHeight / 2 + borderWidthScoreColumn;
+    position = partHeight * index - smallScoreContainerWidth / 2 - partHeight / 2 + borderWidthScoreColumn + iconOffset;
   }
   return position;
 }

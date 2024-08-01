@@ -23,7 +23,7 @@ Widget sharedSelectionPart(BuildContext context,
               },
             ),
           ),
-          SizedBox(width: smallPadding),
+          smallHorizontalSpacer,
           sharedChip(
             context,
             label: 'Shared',
@@ -51,14 +51,16 @@ Widget sharedChip(
   bool isMobile = false,
 }) {
   TextTheme textTheme = Theme.of(context).textTheme;
-  return SizedBox(
-    width: 100,
+  return IntrinsicWidth(
     child: ChoiceChip(
       avatar: Icon(icon, color: isSelected ? Colors.black : Colors.grey),
-      label: Text(label,
-          style: isMobile
-              ? mobileChipLabelTextStyle
-              : textTheme.titleSmall!.copyWith(color: isSelected ? Colors.black : Colors.grey)),
+      label: FittedBox(
+        fit: BoxFit.contain,
+        child: Text(label,
+            style: isMobile
+                ? mobileChipLabelTextStyle
+                : textTheme.titleSmall!.copyWith(color: isSelected ? Colors.black : Colors.grey)),
+      ),
       showCheckmark: false,
       selected: isSelected,
       onSelected: (selected) {

@@ -29,20 +29,30 @@ class Layer2ContentMobile extends StatelessWidget {
     return Column(
       children: [
         costsRowMobile(context, costsType: CostsType.social),
-        costsPercentageBar(context, selectedTrip: selectedTrip, barType: CostsPercentageBarType.social),
-        mediumVerticalSpacer,
-        ...socialCostsCards(context,
-            selectedTrip: selectedTrip,
-            setInfoViewTypeCallback: setInfoViewTypeCallback,
-            setDiagramTypeCallback: setDiagramTypeCallback),
+        Padding(
+          padding: EdgeInsets.only(left: mediumPadding),
+          child: Column(children: [
+            costsPercentageBar(context, selectedTrip: selectedTrip, barType: CostsPercentageBarType.social),
+            mediumVerticalSpacer,
+            ...socialCostsCards(context,
+                selectedTrip: selectedTrip,
+                setInfoViewTypeCallback: setInfoViewTypeCallback,
+                setDiagramTypeCallback: setDiagramTypeCallback),
+          ]),
+        ),
         largeVerticalSpacer,
         costsRowMobile(context, costsType: CostsType.personal),
-        costsPercentageBar(context, selectedTrip: selectedTrip, barType: CostsPercentageBarType.personal),
-        mediumVerticalSpacer,
-        ...personalCostsCards(context,
-            selectedTrip: selectedTrip,
-            setInfoViewTypeCallback: setInfoViewTypeCallback,
-            setDiagramTypeCallback: setDiagramTypeCallback),
+        Padding(
+          padding: EdgeInsets.only(left: mediumPadding),
+          child: Column(children: [
+            costsPercentageBar(context, selectedTrip: selectedTrip, barType: CostsPercentageBarType.personal),
+            mediumVerticalSpacer,
+            ...personalCostsCards(context,
+                selectedTrip: selectedTrip,
+                setInfoViewTypeCallback: setInfoViewTypeCallback,
+                setDiagramTypeCallback: setDiagramTypeCallback),
+          ]),
+        ),
       ],
     );
   }
@@ -51,23 +61,24 @@ class Layer2ContentMobile extends StatelessWidget {
     return SizedBox(
       height: 200,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Image.asset(
             costsType == CostsType.social
                 ? getAssetPathFromMobiScore(selectedTrip.mobiScore)
                 : 'assets/icons/personal_null.png',
             fit: BoxFit.fitWidth,
-            width: 180,
+            width: 170,
           ),
-          Padding(
-            padding: EdgeInsets.only(right: mediumPadding),
-            child: costsResultColumn1(context, trip: selectedTrip, costsType: costsType, onInfoClickedCallback: () {
-              setInfoViewTypeCallback(InfoViewType.diagram);
+          Expanded(
+            child: Center(
+              child: costsResultColumn1(context, trip: selectedTrip, costsType: costsType, onInfoClickedCallback: () {
+                setInfoViewTypeCallback(InfoViewType.diagram);
 
-              setDiagramTypeCallback(
-                  costsType == CostsType.social ? DiagramType.detailSocial : DiagramType.detailPersonal);
-            }),
+                setDiagramTypeCallback(
+                    costsType == CostsType.social ? DiagramType.detailSocial : DiagramType.detailPersonal);
+              }),
+            ),
           ),
         ],
       ),

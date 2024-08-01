@@ -128,17 +128,20 @@ class ResultContent extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 if (contentLayer == ContentLayer.layer2)
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: V3CustomButton(
-                                      label: lang.back_to_results,
-                                      leadingIcon: Icons.arrow_back,
-                                      color: primaryColorV3,
-                                      textColor: primaryColorV3,
-                                      onTap: () {
-                                        changeLayerCallback(ContentLayer.layer1);
-                                      },
-                                      reverseColors: true,
+                                  Padding(
+                                    padding: EdgeInsets.only(left: mediumPadding),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: V3CustomButton(
+                                        label: lang.back_to_results,
+                                        leadingIcon: Icons.arrow_back,
+                                        color: primaryColorV3,
+                                        textColor: primaryColorV3,
+                                        onTap: () {
+                                          changeLayerCallback(ContentLayer.layer1);
+                                        },
+                                        reverseColors: true,
+                                      ),
                                     ),
                                   ),
                                 mediumVerticalSpacer,
