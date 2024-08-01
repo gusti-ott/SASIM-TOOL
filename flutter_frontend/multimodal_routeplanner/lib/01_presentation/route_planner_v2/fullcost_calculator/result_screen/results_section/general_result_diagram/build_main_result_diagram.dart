@@ -155,13 +155,13 @@ Widget bottomTitles(double value, TitleMeta meta, Trip trip1, Trip trip2, Trip t
   String text = 'kein Titel';
   switch (value.toInt()) {
     case 0:
-      text = modeMappingHelper.mapModeStringToGermanString(trip1.mode);
+      text = modeMappingHelper.mapModeStringToLocalizedString(trip1.mode);
       break;
     case 1:
-      text = modeMappingHelper.mapModeStringToGermanString(trip2.mode);
+      text = modeMappingHelper.mapModeStringToLocalizedString(trip2.mode);
       break;
     case 2:
-      text = modeMappingHelper.mapModeStringToGermanString(trip3.mode);
+      text = modeMappingHelper.mapModeStringToLocalizedString(trip3.mode);
       break;
   }
   return SideTitleWidget(

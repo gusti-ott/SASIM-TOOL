@@ -11,7 +11,7 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mobiscore_to_x.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_cubit.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/detail_route_info_section.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/detail_route_info_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 import 'package:multimodal_routeplanner/config/setup_dependencies.dart';
@@ -247,6 +247,8 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
                     });
                   },
                   backgroundColor: backgroundColor,
+                  startAddress: widget.startAddress,
+                  endAddress: widget.endAddress,
                 );
               }
             } else {

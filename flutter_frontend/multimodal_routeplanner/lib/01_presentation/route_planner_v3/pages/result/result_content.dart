@@ -7,7 +7,7 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/input_to_trip.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/values.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/detail_route_info_section.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/detail_route_info_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/layer_1/layer_1_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/layer_2_detailed/layer_2_content_desktop.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/layer_2_detailed/layer_2_content_mobile.dart';
@@ -39,6 +39,8 @@ class ResultContent extends StatelessWidget {
     required this.contentLayer,
     required this.hideAdditionalInfoCallback,
     required this.backgroundColor,
+    required this.startAddress,
+    required this.endAddress,
   });
 
   final bool isMobile;
@@ -60,6 +62,8 @@ class ResultContent extends StatelessWidget {
   final Function(ContentLayer) changeLayerCallback;
   final Function() hideAdditionalInfoCallback;
   final Color backgroundColor;
+  final String startAddress;
+  final String endAddress;
 
   @override
   Widget build(BuildContext context) {
@@ -260,7 +264,7 @@ class ResultContent extends StatelessWidget {
                         ),
                       ),
                     ),
-                    DetailRouteInfoSection(
+                    DetailRouteInfoContent(
                       currentCarTrip: currentCarTrip,
                       currentBicycleTrip: currentBicycleTrip,
                       currentPublicTransportTrip: currentPublicTransportTrip,
@@ -269,6 +273,8 @@ class ResultContent extends StatelessWidget {
                       selectedDiagramType: selectedDiagramType,
                       setInfoViewTypeCallback: setInfoViewTypeCallback,
                       setDiagramTypeCallback: setDiagramTypeCallback,
+                      startAddress: startAddress,
+                      endAddress: endAddress,
                     ),
                   ],
                 ),
@@ -287,7 +293,7 @@ class ResultContent extends StatelessWidget {
             onSelectionModeChanged: onSelectionModeChanged,
           ),
         if (isMobile && showAdditionalMobileInfo)
-          DetailRouteInfoSection(
+          DetailRouteInfoContent(
             isMobile: isMobile,
             closeCallback: hideAdditionalInfoCallback,
             currentCarTrip: currentCarTrip,
@@ -298,6 +304,8 @@ class ResultContent extends StatelessWidget {
             selectedDiagramType: selectedDiagramType,
             setInfoViewTypeCallback: setInfoViewTypeCallback,
             setDiagramTypeCallback: setDiagramTypeCallback,
+            startAddress: startAddress,
+            endAddress: endAddress,
           ),
       ],
     );

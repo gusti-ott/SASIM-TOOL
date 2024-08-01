@@ -299,7 +299,7 @@ class ModeMappingHelper {
     }
   }
 
-  String mapModeStringToGermanString(String mode) {
+  String mapModeStringToLocalizedString(String mode) {
     Logger logger = getLogger();
     switch (mode) {
       case 'WALK':

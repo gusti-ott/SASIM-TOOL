@@ -130,7 +130,7 @@ class TripInfoItem extends StatelessWidget {
             Expanded(
               child: Column(
                 children: [
-                  Text(modeMappingHelper.mapModeStringToGermanString(segment.mode),
+                  Text(modeMappingHelper.mapModeStringToLocalizedString(segment.mode),
                       style: textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold)),
                   Text('${segment.distance.toStringAsFixed(1)} km', style: textTheme.bodyMedium),
                   Text('${segment.duration.toStringAsFixed(0)} Minuten', style: textTheme.bodyMedium),
