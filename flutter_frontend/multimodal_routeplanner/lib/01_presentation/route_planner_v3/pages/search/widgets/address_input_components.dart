@@ -165,6 +165,7 @@ Widget desktopAddressInputRow(BuildContext context,
         ],
       ),
       Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(child: startAddressPickerBuilder(addressPickerBloc, startController)),
           const SizedBox(width: 45),

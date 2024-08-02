@@ -4,7 +4,6 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/r
 import 'package:multimodal_routeplanner/01_presentation/theme_data/typography.dart';
 
 Widget detailRouteTextInfo(BuildContext context, {required DiagramType diagramType}) {
-  TextTheme textTheme = Theme.of(context).textTheme;
   AppLocalizations lang = AppLocalizations.of(context)!;
 
   String text = '';

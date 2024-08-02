@@ -106,11 +106,7 @@ Widget textRowCostsBar(BuildContext context,
           ...positions.asMap().entries.map((entry) {
             String label = '';
             int index = entry.key;
-            int flex = positions[index] != position
-                ? 1
-                : percentages[index] < percentageLimit
-                    ? percentageLimit
-                    : percentages[index];
+            int flex = getFlexValue(index, percentages, position);
 
             if (labels != null && labels.length >= index + 1) {
               label = ' ${labels[index]}'.toUpperCase();
@@ -262,19 +258,43 @@ Widget privateCostsBar(BuildContext context, {required Trip selectedTrip}) {
 List<PercentageTextPosition> getPercentageTextPositions(List<int> percentages) {
   int length = percentages.length;
   List<PercentageTextPosition> positions = List.filled(length, PercentageTextPosition.above);
-  if (percentages.length > 1 && (percentages[0] < 10 || percentages[0] >= 10 && percentages[1] < 10)) {
-    positions[1] = PercentageTextPosition.below;
-  }
 
-  if (percentages.length >= 2 && (percentages[0] >= 10 && percentages[1] < 10)) {
-    positions[1] = PercentageTextPosition.below;
-  }
-
-  if (percentages.length >= 3 && (positions[1] == PercentageTextPosition.above && percentages[2] < 10)) {
-    positions[2] = PercentageTextPosition.below;
+  // make all uneven indexes of positions below
+  for (int i = 0; i < length; i++) {
+    if (i % 2 == 1) {
+      positions[i] = PercentageTextPosition.below;
+    }
   }
 
   return positions;
+}
+
+int getFlexValue(int index, List<int> percentages, PercentageTextPosition position) {
+  if (percentages.length == 3) {
+    if ((index == 0 || index == 2) && position == PercentageTextPosition.above) {
+      return 1;
+    } else if (index == 0 && position == PercentageTextPosition.below) {
+      return percentages[0];
+    } else if (index == 1 && position == PercentageTextPosition.below) {
+      return percentages[1] + percentages[2];
+    } else {
+      return 0;
+    }
+  } else if (percentages.length == 2) {
+    if (index == 0 && position == PercentageTextPosition.above) {
+      return 1;
+    } else if (index == 0 && position == PercentageTextPosition.below) {
+      return 0;
+    } else if (index == 1 && position == PercentageTextPosition.below) {
+      return 1;
+    } else if (index == 1 && position == PercentageTextPosition.above) {
+      return 0;
+    } else {
+      return 0;
+    }
+  } else {
+    return percentages[index];
+  }
 }
 
 enum CostsPercentageBarType { total, social, personal }
