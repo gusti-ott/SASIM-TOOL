@@ -3,7 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_cubit.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/address_input_components.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/address_input/address_input_components.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/mode_selection_components.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/typography.dart';
@@ -176,26 +176,5 @@ class _SearchInputContentState extends State<SearchInputContent> {
       startController.text = endController.text;
       endController.text = temp;
     });
-  }
-
-  Widget routeErrorWidget(ResultState state) {
-    AppLocalizations lang = AppLocalizations.of(context)!;
-    return Column(
-      children: [
-        if (state is ResultError) ...[
-          smallVerticalSpacer,
-          Text(
-            '${lang.error}: ${state.message}',
-            style: const TextStyle(color: Colors.red),
-          )
-        ] else if (state is ResultLoaded) ...[
-          smallVerticalSpacer,
-          Text(
-            'Successfully loaded ${state.trips.length} trips',
-            style: const TextStyle(color: Colors.green),
-          )
-        ],
-      ],
-    );
   }
 }

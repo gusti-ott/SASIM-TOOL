@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mobiscore_to_x.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mode_to_x.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/mobiscore_score_board/values.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 
 enum ShapeDirection { left, right, top, bottom }
@@ -132,11 +133,7 @@ double _getTopPositionScorePointerDesktop(double screenHeight, double heightScor
 
   double partHeight = (heightScoreColumn - 2 * borderWidthScoreColumn) / 5;
 
-  return (screenHeight - heightScoreColumn) / 2 -
-      scoreContainerHeight / 2 +
-      borderWidthScoreColumn +
-      index * partHeight -
-      partHeight / 2;
+  return topOffsetScoreBar - scoreContainerHeight / 2 + borderWidthScoreColumn + index * partHeight - partHeight / 2;
 }
 
 double _getRightPositionScorePointerDesktop(double widthInfoSection, double widthScoreColumn,
@@ -204,10 +201,3 @@ int _getIndexFromMobiScore(String mobiScore) {
     return 0;
   }
 }
-
-double smallScoreContainerWidth = 40;
-double largeScoreContainerWidth = 60;
-double borderWidthScoreContainer = 4;
-
-double smallOffset = 3;
-double largeOffset = 8;

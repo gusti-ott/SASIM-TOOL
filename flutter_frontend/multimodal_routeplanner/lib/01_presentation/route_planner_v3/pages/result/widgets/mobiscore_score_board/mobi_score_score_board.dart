@@ -4,6 +4,7 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/input_to_trip.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/mobiscore_score_board/score_pointer.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/mobiscore_score_board/values.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 
@@ -168,12 +169,14 @@ List<Widget> scoreBoardWithPointers(BuildContext context,
   return [
     Positioned(
       right: widthInfoSection - (widthScoreColumn / 2),
-      top: (screenHeight - heightScoreColumn) / 2 - mediumPadding - widthScoreColumn,
+      top: topOffsetMobiScoreLogo,
+      // top: (screenHeight - heightScoreColumn) / 2 - mediumPadding - widthScoreColumn,
       child: mobiScoreCircleLogo(size: widthScoreColumn),
     ),
     Positioned(
       right: widthInfoSection - (widthScoreColumn / 2),
-      bottom: (screenHeight - heightScoreColumn) / 2,
+      top: topOffsetScoreBar,
+      // bottom: (screenHeight - heightScoreColumn) / 2,
       child: mobiScoreScoreBoard(context, selectedTrip: selectedTrip),
     ),
     ...positionedScorePointers(

@@ -56,7 +56,8 @@
   "header_internal_costs": "interne\nKosten",
   "header_fullcosts": "Voll\nkosten",
   "header_mobi_score": "Mobi-\nScore",
-  "something_went_wrong": "...irgendwas ist schiefgegangen, versuche eine neue Route",
+  "something_went_wrong": "...Irgendwas ist schiefgegangen",
+  "please_try_again": "Bitte lade die Seite neu oder wähle eine andere Route.",
   "try_again": "Versuche es erneut",
   "research": "Forschung",
   "by": "von",
@@ -117,5 +118,8 @@
   "about_us_content": "Wir sind ein interdisziplinäres Team bestehend aus fünf Lehrstühlen der TU München und mehreren externen Partnern.\n\nUnser Ziel ist es, die wahren Kosten des urbanen\nVerkehrs in München transparent darzustellen und zu kommunizieren.\n\nWir möchten Bewusstsein für die Kosten von Luftschadstoffen, Klimaschäden, Unfälle, Stau, Flächenverbrauch und Lärm schaffen, die unsere Mobilität hervorruft.\n\nDamit wollen wir nachhaltiges und gerechtes Mobilitätsverhalten fördern.",
   "research_content": "Folgende wissenschaftliche Arbeiten wurden für die Entwicklung des Vollkostenrechners verwendet:",
   "note_address": "*Bitte gib nur Adressen in München ein, sonst nicht jede Route berechnet werden kann.",
-  "mode_of_transport": "Verkehrsmittel"
+  "mode_of_transport": "Verkehrsmittel",
+  "reload": "Neu laden",
+  "error_empty": "Gib eine Adresse ein.",
+  "error_shorter_than_2": "Gib eine längere Adresse ein."
 }

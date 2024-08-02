@@ -95,7 +95,6 @@ Widget textRowCostsBar(BuildContext context,
     List<String>? labels}) {
   TextTheme textTheme = Theme.of(context).textTheme;
   double height = 20;
-  int percentageLimit = 15;
 
   if (positions.any((element) => element == position)) {
     return SizedBox(
