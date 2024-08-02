@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-Widget mcubeLogo() {
+Widget mcubeLogo({bool isGrey = false}) {
   final Uri mcubeUrl = Uri.parse('https://www.mcube-cluster.de/');
 
   Future<void> launchMcubeUrl() async {
@@ -19,7 +19,9 @@ Widget mcubeLogo() {
           launchMcubeUrl();
         },
         hoverColor: Colors.transparent,
-        child: const Image(height: 64, image: AssetImage('assets/logos/mcube_logo.png')),
+        child: Image(
+            height: 64,
+            image: AssetImage(!isGrey ? 'assets/logos/mcube_logo.png' : 'assets/logos/mcube_logo_grey.png')),
       ),
     ),
   );

@@ -10,7 +10,7 @@ var mockTrip2 = {
       "noise": 0,
       "space": 0.053737449607159996
     },
-    "internalCosts": {"all": 0.76632}
+    "internalCosts": {"all": 0.76632, "variable": 0.66632, "fixed": 0.1}
   },
   "distance": 6386,
   "duration": 28.333333333333332,
@@ -28,7 +28,7 @@ var mockTrip2 = {
           "noise": 0,
           "space": 0.053737449607159996
         },
-        "internalCosts": {"all": 0.76632}
+        "internalCosts": {"all": 0.76632, "variable": 0.66632, "fixed": 0.1}
       },
       "distance": 6386,
       "duration": 28.333333333333332,

@@ -1,14 +1,9 @@
 class InternalCosts {
   final double all;
+  final double fixed;
+  final double variable;
 
-  InternalCosts({required this.all});
-}
-
-extension InternalCostsExtension on InternalCosts {
-  // TODO: replace by real implementation
-  double get fixedCosts => 0.7 * all;
-
-  double get variableCosts => 0.3 * all;
+  InternalCosts({required this.all, required this.fixed, required this.variable});
 }
 
 enum PersonalCostsCategory { fixed, variable }

@@ -32,7 +32,7 @@ class HeaderItem extends StatelessWidget {
               .map((String value) => DropdownMenuItem<String>(
                     alignment: Alignment.center,
                     value: value,
-                    child: Text(modeMappingHelper.mapModeStringToGermanString(value)),
+                    child: Text(modeMappingHelper.mapModeStringToLocalizedString(value)),
                   ))
               .toList(),
         ),

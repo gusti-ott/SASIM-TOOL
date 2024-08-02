@@ -6,13 +6,12 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/costs_rates.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mobiscore_to_x.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mode_to_x.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/detail_route_info_section.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/detail_route_info_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/stacked_diagram_bar.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/costs/Costs.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/costs/ExternalCosts.dart';
-import 'package:multimodal_routeplanner/03_domain/entities/costs/InternalCosts.dart';
 
 class DetailRouteInfoDiagram extends StatelessWidget {
   const DetailRouteInfoDiagram(
@@ -40,14 +39,14 @@ class DetailRouteInfoDiagram extends StatelessWidget {
 
     return SizedBox(
       height: 350,
-      width: 160,
+      width: double.infinity,
       child: Column(
         children: [
           SizedBox(
             height: 270,
             width: double.infinity,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 if (currentCarTrip != null)
                   stackedDiagramBar(context,
@@ -210,10 +209,10 @@ String getDiagramCostsValue(DiagramType type, Costs costs) {
       costsValue = costs.externalCosts.healthCosts;
       break;
     case DiagramType.detailPersonalFixed:
-      costsValue = costs.internalCosts.fixedCosts;
+      costsValue = costs.internalCosts.fixed;
       break;
     case DiagramType.detailPersonalVariable:
-      costsValue = costs.internalCosts.variableCosts;
+      costsValue = costs.internalCosts.variable;
       break;
     default:
       costsValue = 0.0;

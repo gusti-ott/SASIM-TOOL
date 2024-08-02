@@ -17,10 +17,16 @@ Color secondaryColorV3 = colorC;
 Color tertiaryColorV3 = colorE;
 
 Color customDarkGrey = const Color(0xFF282828);
+Color customGrey = const Color(0xFF79747E);
 Color customLightGrey = const Color(0xFFACA59D);
 Color customOffWhite = const Color(0xFFEBEBEB);
 Color customWhite100 = const Color(0xFFFFFFFF);
+Color customMobiScoreIconWhite = const Color(0xFFFAFAFA);
 
-Color backgroundColorV3 = const Color(0xFFF0F0E4);
+Color backgroundColorGreyV3 = const Color(0xFFE6E6E6);
+Color backgroundColorYellowV3 = const Color(0xFFF0F0E4);
+Color detailCardColor = const Color(0xFFEBEBEB);
+
+Color customBlack = const Color(0xFF282828);
 
 Color blend = Colors.white.withOpacity(0.75);

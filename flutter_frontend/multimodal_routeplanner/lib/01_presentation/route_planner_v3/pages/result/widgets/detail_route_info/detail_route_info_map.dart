@@ -35,7 +35,7 @@ class _DetailRouteInfoMapState extends State<DetailRouteInfoMap> {
               if (bounds != null) {
                 _mapController.fitBounds(
                   bounds!,
-                  options: const FitBoundsOptions(padding: EdgeInsets.all(96)),
+                  options: const FitBoundsOptions(padding: EdgeInsets.symmetric(horizontal: 96, vertical: 192)),
                 );
               }
             },
@@ -72,7 +72,7 @@ class _DetailRouteInfoMapState extends State<DetailRouteInfoMap> {
               color: mapSegmentModeToV3Color(trip.segments[i].mode),
             ),
         ],
-        onTap: (polylines, tapPosition) => {},
+        onTap: (polyline, tapPosition) => {},
         onMiss: (tapPosition) {});
   }
 
@@ -83,18 +83,13 @@ class _DetailRouteInfoMapState extends State<DetailRouteInfoMap> {
           width: 30,
           height: 30,
           point: trip.segments.first.getWaypointInLagLng().first,
-          builder: (context) => const Icon(
-            Icons.circle,
-            color: Colors.black,
-          ),
+          builder: (context) => startIcon(),
         ),
         Marker(
             width: 50,
             height: 50,
             point: trip.segments.last.getWaypointInLagLng().last,
-            builder: (context) => Transform.translate(
-                offset: const Offset(0, -30),
-                child: iconWithTransparentFilling(Icons.location_on, Icons.location_on_outlined, Colors.black, 50))),
+            builder: (context) => Transform.translate(offset: const Offset(0, -30), child: endIcon(size: 50))),
       ],
     );
   }
@@ -109,24 +104,6 @@ class _DetailRouteInfoMapState extends State<DetailRouteInfoMap> {
       ],
     );
   }
-
-  Widget iconWithTransparentFilling(IconData iconData, IconData iconDataOutlined, Color color, double size) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        Icon(
-          iconData,
-          size: size,
-          color: color.withOpacity(0.3), // 50% transparent black
-        ),
-        Icon(
-          iconDataOutlined,
-          size: size,
-          color: color,
-        ),
-      ],
-    );
-  }
 }
 
 mapSegmentModeToV3Color(String segmentMode) {
@@ -135,4 +112,33 @@ mapSegmentModeToV3Color(String segmentMode) {
   } else {
     return colorC;
   }
+}
+
+Widget startIcon() {
+  return const Icon(
+    Icons.circle,
+    color: Colors.black,
+  );
+}
+
+Widget endIcon({double? size}) {
+  return iconWithTransparentFilling(Icons.location_on, Icons.location_on_outlined, Colors.black, size);
+}
+
+Widget iconWithTransparentFilling(IconData iconData, IconData iconDataOutlined, Color color, double? size) {
+  return Stack(
+    alignment: Alignment.center,
+    children: [
+      Icon(
+        iconData,
+        size: size,
+        color: color.withOpacity(0.3), // 50% transparent black
+      ),
+      Icon(
+        iconDataOutlined,
+        size: size,
+        color: color,
+      ),
+    ],
+  );
 }

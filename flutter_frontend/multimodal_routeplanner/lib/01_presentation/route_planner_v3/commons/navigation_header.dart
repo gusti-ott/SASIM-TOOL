@@ -5,6 +5,7 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/logos.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/about_us/about_us_screen.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/research/research_screen.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/search_screen_v3.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/custom_switch.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 
@@ -18,6 +19,10 @@ Widget navigationHeaderRow(BuildContext context) {
         mobiScoreWithMcubeLogo(context),
         Row(
           children: [
+            headerButton(context, label: lang.calculator, onPressed: () {
+              context.goNamed(SearchScreenV3.routeName);
+            }),
+            largeHorizontalSpacer,
             headerButton(context, label: lang.research, onPressed: () {
               context.goNamed(ResearchScreen.routeName);
             }),
@@ -26,7 +31,7 @@ Widget navigationHeaderRow(BuildContext context) {
               context.goNamed(AboutUsScreen.routeName);
             }),
             largeHorizontalSpacer,
-            const CustomSwitch(),
+            const LanguageSwitch(),
           ],
         )
       ],

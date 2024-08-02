@@ -10,7 +10,7 @@ var mockTrip7 = {
       "noise": 0.0019559629995100003,
       "space": 0.16472532894654998
     },
-    "internalCosts": {"all": 3.9}
+    "internalCosts": {"all": 3.9, "variable": 3.9, "fixed": 0}
   },
   "distance": 6352,
   "duration": 18,
@@ -28,7 +28,7 @@ var mockTrip7 = {
           "noise": 0,
           "space": 0
         },
-        "internalCosts": {"all": 0}
+        "internalCosts": {"all": 0, "fixed": 0, "variable": 0}
       },
       "distance": 146,
       "duration": 4,
@@ -52,7 +52,7 @@ var mockTrip7 = {
           "noise": 0.0010029158722700002,
           "space": 0.08446256243434999
         },
-        "internalCosts": {"all": 0}
+        "internalCosts": {"all": 0, "fixed": 0, "variable": 0}
       },
       "distance": 3077,
       "duration": 6,
@@ -82,7 +82,7 @@ var mockTrip7 = {
           "noise": 0,
           "space": 0
         },
-        "internalCosts": {"all": 0}
+        "internalCosts": {"all": 0, "fixed": 0, "variable": 0}
       },
       "distance": 205,
       "duration": 4,
@@ -105,7 +105,7 @@ var mockTrip7 = {
           "noise": 0.0009530471272400002,
           "space": 0.08026276651219999
         },
-        "internalCosts": {"all": 0}
+        "internalCosts": {"all": 0, "fixed": 0, "variable": 0}
       },
       "distance": 2924,
       "duration": 4,

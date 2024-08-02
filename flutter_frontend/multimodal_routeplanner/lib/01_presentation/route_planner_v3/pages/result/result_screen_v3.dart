@@ -1,17 +1,24 @@
+import 'dart:html' as html;
+
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/animations/background_loading_animation.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/buttons.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/decorations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/progress_indicators.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/input_to_trip.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mobiscore_to_x.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_cubit.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/detail_route_info_section.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/detail_route_info_content.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/search_screen_v3.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 import 'package:multimodal_routeplanner/config/setup_dependencies.dart';
@@ -41,6 +48,8 @@ class ResultScreenV3 extends StatefulWidget {
 
 class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProviderStateMixin {
   Logger logger = getLogger();
+
+  late ResultCubit cubit;
 
   Trip? selectedTrip;
   List<Trip>? trips;
@@ -78,11 +87,11 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
   late AnimationController _animationController;
   late Animation<Color?> _animation;
 
-  ResultCubit cubit = sl<ResultCubit>();
-
   @override
   void initState() {
     super.initState();
+
+    cubit = sl<ResultCubit>();
 
     selectionMode = widget.selectedMode ?? SelectionMode.bicycle;
     isElectric = widget.isElectric ?? false;
@@ -133,7 +142,7 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
       bloc: cubit,
       listener: (context, state) {},
       builder: (context, state) {
-        Widget child = const SizedBox();
+        Widget child = resultErrorWidget(context);
         FloatingActionButton? fab;
         if (state is ResultLoading) {
           child = Padding(
@@ -185,6 +194,7 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
                 backgroundColor = getColorFromMobiScore(mobiScore, isLight: true);
                 child = ResultContent(
                   isMobile: isMobile,
+                  screenWidth: screenWidth,
                   trips: state.trips,
                   selectedTrip: selectedTrip!,
                   selectionMode: selectionMode!,
@@ -242,10 +252,13 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
                       showAdditionalMobileInfo = false;
                     });
                   },
+                  backgroundColor: backgroundColor,
+                  startAddress: widget.startAddress,
+                  endAddress: widget.endAddress,
                 );
               }
             } else {
-              child = const Center(child: Text('No trips found'));
+              child = resultErrorWidget(context);
             }
           }
         }
@@ -253,4 +266,57 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
       },
     );
   }
+}
+
+Widget resultErrorWidget(BuildContext context) {
+  TextTheme textTheme = Theme.of(context).textTheme;
+  AppLocalizations lang = AppLocalizations.of(context)!;
+  return Padding(
+    padding: EdgeInsets.all(mediumPadding),
+    child: Center(
+      child: IntrinsicWidth(
+        child: IntrinsicHeight(
+          child: Container(
+            decoration: customBoxDecorationWithShadow(backgroundColor: backgroundColorGreyV3),
+            child: Padding(
+              padding: EdgeInsets.all(largePadding),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(Icons.u_turn_right, size: 70, color: colorE),
+                    largeVerticalSpacer,
+                    Text(lang.something_went_wrong, style: textTheme.displayMedium, textAlign: TextAlign.center),
+                    smallVerticalSpacer,
+                    Text(lang.please_try_again, style: textTheme.displaySmall, textAlign: TextAlign.center),
+                    largeVerticalSpacer,
+                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                      V3CustomButton(
+                          label: lang.new_route,
+                          leadingIcon: Icons.arrow_back,
+                          reverseColors: true,
+                          color: primaryColorV3,
+                          textColor: primaryColorV3,
+                          onTap: () {
+                            context.goNamed(SearchScreenV3.routeName);
+                          }),
+                      V3CustomButton(
+                        leadingIcon: Icons.refresh_rounded,
+                        label: lang.reload,
+                        onTap: () {
+                          if (kIsWeb) {
+                            html.window.location.reload();
+                          }
+                        },
+                      ),
+                    ])
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
 }

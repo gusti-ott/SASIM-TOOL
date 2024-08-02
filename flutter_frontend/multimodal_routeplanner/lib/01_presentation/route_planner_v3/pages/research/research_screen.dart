@@ -18,7 +18,7 @@ class ResearchScreen extends StatelessWidget {
     bool isMobile = screenWidth < 600;
 
     return Scaffold(
-        backgroundColor: backgroundColorV3,
+        backgroundColor: backgroundColorYellowV3,
         key: scaffoldKey,
         appBar: isMobile ? mobileAppBar(scaffoldKey) : null,
         drawer: buildDrawer(context),

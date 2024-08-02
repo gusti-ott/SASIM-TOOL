@@ -16,7 +16,7 @@ final _shellNavigatorCalculatorKey = GlobalKey<NavigatorState>(debugLabel: 'shel
 final _shellNavigatorInfoKey = GlobalKey<NavigatorState>(debugLabel: 'shellInfo');
 
 final GoRouter vmrpRouter = GoRouter(
-  initialLocation: '/v3/search',
+  initialLocation: '/search',
   routes: [
     GoRoute(
       path: '/v2',
@@ -81,7 +81,7 @@ final GoRouter vmrpRouter = GoRouter(
           return const RoutePlannerScreen();
         }),
     GoRoute(
-        path: '/v3',
+        path: '/',
         redirect: (context, state) {
           return null;
         },

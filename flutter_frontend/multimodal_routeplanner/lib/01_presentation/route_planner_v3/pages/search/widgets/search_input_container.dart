@@ -3,9 +3,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_cubit.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/address_input_components.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/address_input/address_input_components.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/mode_selection_components.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
+import 'package:multimodal_routeplanner/01_presentation/theme_data/typography.dart';
 import 'package:multimodal_routeplanner/config/setup_dependencies.dart';
 
 class SearchInputContent extends StatefulWidget {
@@ -39,10 +40,12 @@ class _SearchInputContentState extends State<SearchInputContent> {
 
   @override
   Widget build(BuildContext context) {
-    return (widget.isMobile) ? buildMobileContent() : buildDesktopContent();
+    return (widget.isMobile) ? buildMobileContent(context) : buildDesktopContent(context);
   }
 
-  Widget buildDesktopContent() {
+  Widget buildDesktopContent(BuildContext context) {
+    AppLocalizations lang = AppLocalizations.of(context)!;
+    TextTheme textTheme = Theme.of(context).textTheme;
     return Column(
       children: [
         extraLargeVerticalSpacer,
@@ -68,6 +71,7 @@ class _SearchInputContentState extends State<SearchInputContent> {
           },
         ),
         largeVerticalSpacer,
+        addressNote(lang, textTheme),
         addressInputRow(
           context,
           isMobile: false,
@@ -92,7 +96,9 @@ class _SearchInputContentState extends State<SearchInputContent> {
     );
   }
 
-  Widget buildMobileContent() {
+  Widget buildMobileContent(BuildContext context) {
+    AppLocalizations lang = AppLocalizations.of(context)!;
+    TextTheme textTheme = Theme.of(context).textTheme;
     return Column(
       children: [
         mediumVerticalSpacer,
@@ -116,6 +122,7 @@ class _SearchInputContentState extends State<SearchInputContent> {
               });
             }),
         largeVerticalSpacer,
+        addressNote(lang, textTheme),
         addressInputRow(context, isMobile: true, startController: startController, endController: endController,
             onStartChanged: (value) {
           setState(() {
@@ -127,6 +134,18 @@ class _SearchInputContentState extends State<SearchInputContent> {
           });
         }, swapInputs: swapInputs, selectedMode: selectionMode, isElectric: isElectric, isShared: isShared),
       ],
+    );
+  }
+
+  Padding addressNote(AppLocalizations lang, TextTheme textTheme) {
+    return Padding(
+      padding: EdgeInsets.all(smallPadding),
+      child: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(lang.note_address,
+              style: widget.isMobile
+                  ? mobileSearchSubtitleTextStyle.copyWith(color: primaryColorV3, fontStyle: FontStyle.italic)
+                  : textTheme.bodyMedium!.copyWith(color: primaryColorV3, fontStyle: FontStyle.italic))),
     );
   }
 
@@ -157,26 +176,5 @@ class _SearchInputContentState extends State<SearchInputContent> {
       startController.text = endController.text;
       endController.text = temp;
     });
-  }
-
-  Widget routeErrorWidget(ResultState state) {
-    AppLocalizations lang = AppLocalizations.of(context)!;
-    return Column(
-      children: [
-        if (state is ResultError) ...[
-          smallVerticalSpacer,
-          Text(
-            '${lang.error}: ${state.message}',
-            style: const TextStyle(color: Colors.red),
-          )
-        ] else if (state is ResultLoaded) ...[
-          smallVerticalSpacer,
-          Text(
-            'Successfully loaded ${state.trips.length} trips',
-            style: const TextStyle(color: Colors.green),
-          )
-        ],
-      ],
-    );
   }
 }

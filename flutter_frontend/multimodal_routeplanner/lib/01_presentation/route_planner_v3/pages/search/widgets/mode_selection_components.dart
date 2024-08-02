@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/decorations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/values.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/electric_selection_components.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/shared_selection_components.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
@@ -12,21 +13,25 @@ Widget modeSelectionRow(BuildContext context,
     required SelectionMode selectionMode,
     required Function(SelectionMode) onSelectionModeChanged,
     required bool isShared,
-    required Function(bool) onSharedChanged}) {
+    required Function(bool) onSharedChanged,
+    double? width,
+    double? height,
+    bool makePartlyTransparent = false,
+    Color? backgroundColor = Colors.white}) {
   return Container(
-    width: double.infinity,
-    decoration: customBoxDecorationWithShadow(),
-    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-    child: Wrap(
-      alignment: WrapAlignment.spaceBetween,
-      runAlignment: WrapAlignment.center,
-      spacing: largePadding,
-      runSpacing: smallPadding,
-      children: [
-        modeSelectionPart(selectedMode: selectionMode, onSelectionModeChanged: onSelectionModeChanged),
-        sharedSelectionPart(context, isShared: isShared, onSharedChanged: onSharedChanged),
-        electricSelectionPart(context, isElectric: isElectric, onElectricChanged: onElectricChanged),
-      ],
+    width: width ?? double.infinity,
+    height: height ?? heightSearchBar,
+    decoration: customBoxDecorationWithShadow(backgroundColor: backgroundColor),
+    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+    child: Center(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          modeSelectionPart(selectedMode: selectionMode, onSelectionModeChanged: onSelectionModeChanged),
+          sharedSelectionPart(context, isShared: isShared, onSharedChanged: onSharedChanged, isMobile: false),
+          electricSelectionPart(context, isElectric: isElectric, onElectricChanged: onElectricChanged, isMobile: false),
+        ],
+      ),
     ),
   );
 }
@@ -103,10 +108,12 @@ Widget mobileModeSelectionContainer(BuildContext context,
         smallVerticalSpacer,
         Wrap(
           alignment: WrapAlignment.center,
+          crossAxisAlignment: WrapCrossAlignment.center,
           children: [
-            sharedSelectionPart(context, isShared: isShared, onSharedChanged: onSharedChanged),
+            sharedSelectionPart(context, isShared: isShared, onSharedChanged: onSharedChanged, isMobile: true),
             smallHorizontalSpacer,
-            electricSelectionPart(context, isElectric: isElectric, onElectricChanged: onElectricChanged),
+            electricSelectionPart(context,
+                isElectric: isElectric, onElectricChanged: onElectricChanged, isMobile: true),
           ],
         )
       ],

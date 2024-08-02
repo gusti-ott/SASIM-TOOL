@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/mobiscore_circle_logo.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/input_to_trip.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/mobiscore_score_board/score_pointer.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/mobiscore_score_board/values.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 
@@ -13,7 +15,7 @@ double borderWidthScoreColumn = 6;
 Widget mobiScoreScoreBoard(BuildContext context, {required Trip selectedTrip, bool isMobile = false}) {
   return Container(
     decoration: BoxDecoration(
-      color: backgroundColorV3,
+      color: backgroundColorGreyV3,
       borderRadius: BorderRadius.circular(30),
       border: Border.all(color: Colors.white, width: borderWidthScoreColumn),
     ),
@@ -49,7 +51,13 @@ Widget mobiScoreScoreBoardWithPointers(BuildContext context,
       children: [
         Align(
             alignment: Alignment.centerLeft,
-            child: mobiScoreScoreBoard(context, selectedTrip: selectedTrip, isMobile: true)),
+            child: Row(
+              children: [
+                mobiScoreCircleLogo(size: widthScoreColumn),
+                largeHorizontalSpacer,
+                Expanded(child: mobiScoreScoreBoard(context, selectedTrip: selectedTrip, isMobile: true)),
+              ],
+            )),
         if (currentCarTrip != null)
           positionedScorePointer(
             widthScoreColumn: widthScoreColumn,
@@ -138,7 +146,7 @@ Expanded _scoreSection(BuildContext context,
             bottomLeft:
                 (isFirst && isMobile || isLast && !isMobile) ? const Radius.circular(30) : const Radius.circular(0),
             bottomRight: (isLast) ? const Radius.circular(30) : const Radius.circular(0)),
-        color: (selectedTrip.mobiScore == letter) ? color : backgroundColorV3,
+        color: (selectedTrip.mobiScore == letter) ? color : backgroundColorGreyV3,
       ),
       child: Center(
         child: Text(
@@ -161,22 +169,14 @@ List<Widget> scoreBoardWithPointers(BuildContext context,
   return [
     Positioned(
       right: widthInfoSection - (widthScoreColumn / 2),
-      top: (screenHeight - heightScoreColumn) / 2 - mediumPadding - widthScoreColumn,
-      child: CircleAvatar(
-        backgroundColor: Colors.white,
-        child: Padding(
-          padding: EdgeInsets.all(smallPadding),
-          child: Image.asset(
-            'assets/mobiscore_logos/logo_primary.png',
-            height: widthScoreColumn,
-            width: widthScoreColumn,
-          ),
-        ),
-      ),
+      top: topOffsetMobiScoreLogo,
+      // top: (screenHeight - heightScoreColumn) / 2 - mediumPadding - widthScoreColumn,
+      child: mobiScoreCircleLogo(size: widthScoreColumn),
     ),
     Positioned(
       right: widthInfoSection - (widthScoreColumn / 2),
-      bottom: (screenHeight - heightScoreColumn) / 2,
+      top: topOffsetScoreBar,
+      // bottom: (screenHeight - heightScoreColumn) / 2,
       child: mobiScoreScoreBoard(context, selectedTrip: selectedTrip),
     ),
     ...positionedScorePointers(

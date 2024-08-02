@@ -10,7 +10,7 @@ Widget buildDrawer(BuildContext context) {
   AppLocalizations lang = AppLocalizations.of(context)!;
   TextTheme textTheme = Theme.of(context).textTheme;
   return Drawer(
-    backgroundColor: backgroundColorV3,
+    backgroundColor: backgroundColorGreyV3,
     child: ListView(
       padding: EdgeInsets.zero,
       children: <Widget>[

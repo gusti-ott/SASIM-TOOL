@@ -6,7 +6,7 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/costs_percentage_bar.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/costs_result_row.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/detail_route_info_section.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/detail_route_info_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/question_icons.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/costs/Costs.dart';
@@ -18,6 +18,7 @@ class Layer1Content extends StatelessWidget {
       required this.setInfoViewTypeCallback,
       required this.setDiagramTypeCallback,
       required this.isMobile,
+      required this.screenWidth,
       required this.contentMaxWidth,
       required this.changeLayerCallback});
 
@@ -25,32 +26,45 @@ class Layer1Content extends StatelessWidget {
   final Function(InfoViewType) setInfoViewTypeCallback;
   final Function(DiagramType) setDiagramTypeCallback;
   final bool isMobile;
+  final double screenWidth;
   final double contentMaxWidth;
   final Function(ContentLayer) changeLayerCallback;
 
   @override
   Widget build(BuildContext context) {
     AppLocalizations lang = AppLocalizations.of(context)!;
+
     return SizedBox(
-      width: contentMaxWidth,
+      width: contentMaxWidth + mediumPadding,
       child: Column(
         children: [
-          largeVerticalSpacer,
-          layer1Header(context, selectedTrip.mode),
-          extraLargeVerticalSpacer,
-          costsPercentageBar(context, selectedTrip: selectedTrip, barType: CostsPercentageBarType.total),
-          extraLargeVerticalSpacer,
+          Padding(
+            padding: EdgeInsets.only(left: mediumPadding),
+            child: Column(
+              children: [
+                largeVerticalSpacer,
+                layer1Header(context, selectedTrip.mode),
+                isMobile ? largeVerticalSpacer : extraLargeVerticalSpacer,
+                costsPercentageBar(context,
+                    selectedTrip: selectedTrip, barType: CostsPercentageBarType.total, isMobile: isMobile),
+                isMobile ? largeVerticalSpacer : extraLargeVerticalSpacer,
+              ],
+            ),
+          ),
           costResultRow(context, trip: selectedTrip, setDiagramType: (value) {
             setInfoViewTypeCallback(InfoViewType.diagram);
             setDiagramTypeCallback(value);
-          }, isMobile: isMobile),
+          }, isMobile: isMobile, screenWidth: screenWidth),
           extraLargeVerticalSpacer,
-          v3CustomButton(
-              label: lang.show_detailed_info,
-              leadingIcon: Icons.bar_chart,
-              onTap: () {
-                changeLayerCallback(ContentLayer.layer2);
-              }),
+          Padding(
+            padding: EdgeInsets.only(left: mediumPadding),
+            child: V3CustomButton(
+                label: lang.show_detailed_info,
+                leadingIcon: Icons.bar_chart,
+                onTap: () {
+                  changeLayerCallback(ContentLayer.layer2);
+                }),
+          ),
           extraLargeVerticalSpacer,
         ],
       ),
@@ -68,9 +82,9 @@ class Layer1Content extends StatelessWidget {
         runSpacing: mediumPadding,
         children: [
           SizedBox(
-              width: 500,
+              width: 700,
               child: Text('${lang.these_are_the_costs_of_your_journey_with} ${getModeNameWithArticle(context, mode)}',
-                  style: textTheme.displayMedium)),
+                  style: isMobile ? textTheme.displaySmall : textTheme.displayMedium)),
           SizedBox(
             width: 200,
             child: Column(

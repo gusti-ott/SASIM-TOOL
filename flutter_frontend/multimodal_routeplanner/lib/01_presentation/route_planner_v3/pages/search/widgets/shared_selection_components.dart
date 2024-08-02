@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
+import 'package:multimodal_routeplanner/01_presentation/theme_data/typography.dart';
 
-Widget sharedSelectionPart(BuildContext context, {required bool isShared, required Function(bool) onSharedChanged}) {
+Widget sharedSelectionPart(BuildContext context,
+    {required bool isShared, required Function(bool) onSharedChanged, required bool isMobile}) {
   return IntrinsicWidth(
     child: IntrinsicHeight(
       child: Row(
@@ -13,6 +15,7 @@ Widget sharedSelectionPart(BuildContext context, {required bool isShared, requir
               label: 'Private',
               icon: Icons.person,
               isSelected: !isShared,
+              isMobile: isMobile,
               onSelected: (selected) {
                 if (isShared) {
                   onSharedChanged(!isShared);
@@ -20,12 +23,13 @@ Widget sharedSelectionPart(BuildContext context, {required bool isShared, requir
               },
             ),
           ),
-          SizedBox(width: smallPadding),
+          smallHorizontalSpacer,
           sharedChip(
             context,
             label: 'Shared',
             icon: Icons.supervised_user_circle,
             isSelected: isShared,
+            isMobile: isMobile,
             onSelected: (selected) {
               if (!isShared) {
                 onSharedChanged(!isShared);
@@ -44,13 +48,19 @@ Widget sharedChip(
   required IconData icon,
   required bool isSelected,
   required Function(bool) onSelected,
+  bool isMobile = false,
 }) {
   TextTheme textTheme = Theme.of(context).textTheme;
-  return SizedBox(
-    width: 100,
+  return IntrinsicWidth(
     child: ChoiceChip(
       avatar: Icon(icon, color: isSelected ? Colors.black : Colors.grey),
-      label: Text(label, style: textTheme.titleSmall!.copyWith(color: isSelected ? Colors.black : Colors.grey)),
+      label: FittedBox(
+        fit: BoxFit.contain,
+        child: Text(label,
+            style: isMobile
+                ? mobileChipLabelTextStyle
+                : textTheme.titleSmall!.copyWith(color: isSelected ? Colors.black : Colors.grey)),
+      ),
       showCheckmark: false,
       selected: isSelected,
       onSelected: (selected) {

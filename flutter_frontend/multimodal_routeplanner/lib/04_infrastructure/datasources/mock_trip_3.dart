@@ -10,7 +10,7 @@ var mockTrip3 = {
       "noise": 0,
       "space": 0.05304742911423999
     },
-    "internalCosts": {"all": 2}
+    "internalCosts": {"all": 2, "variable": 0.5, "fixed": 1.5}
   },
   "distance": 6439,
   "duration": 29.916666666666664,
@@ -28,7 +28,7 @@ var mockTrip3 = {
           "noise": 0,
           "space": 0
         },
-        "internalCosts": {"all": 0}
+        "internalCosts": {"all": 0, "variable": 0, "fixed": 0}
       },
       "distance": 135,
       "duration": 2.0833333333333335,
@@ -52,7 +52,7 @@ var mockTrip3 = {
           "noise": 0,
           "space": 0.05304742911423999
         },
-        "internalCosts": {"all": 2}
+        "internalCosts": {"all": 2, "variable": 0.5, "fixed": 1.5}
       },
       "distance": 6304,
       "duration": 27.833333333333332,

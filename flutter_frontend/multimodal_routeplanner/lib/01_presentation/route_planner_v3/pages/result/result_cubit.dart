@@ -48,6 +48,8 @@ class ResultCubit extends Cubit<ResultState> {
       } else {
         emit(ResultError('No trips could be loaded.'));
       }
+    } else {
+      emit(ResultLoaded(cachedListTrips));
     }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/colors_helper.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/costs_rates.dart';
@@ -7,10 +8,10 @@ import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dar
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 
 Widget costsPercentageBar(BuildContext context,
-    {required Trip selectedTrip, required CostsPercentageBarType barType, double? width}) {
+    {required Trip selectedTrip, required CostsPercentageBarType barType, double? width, bool isMobile = false}) {
   late Widget costsBar;
   if (barType == CostsPercentageBarType.total) {
-    costsBar = totalCostsBar(context, selectedTrip: selectedTrip);
+    costsBar = totalCostsBar(context, selectedTrip: selectedTrip, isMobile: isMobile);
   } else if (barType == CostsPercentageBarType.social) {
     costsBar = socialCostsBar(context, selectedTrip: selectedTrip);
   } else {
@@ -22,46 +23,67 @@ Widget costsPercentageBar(BuildContext context,
   );
 }
 
-Widget totalCostsBar(BuildContext context, {required Trip selectedTrip}) {
+Widget totalCostsBar(BuildContext context, {required Trip selectedTrip, bool isMobile = false}) {
   TextTheme textTheme = Theme.of(context).textTheme;
+  AppLocalizations lang = AppLocalizations.of(context)!;
 
   int externalCostsPercentage = getSocialCostsPercentage(selectedTrip);
   int internalCostsPercentage = 100 - externalCostsPercentage;
 
-  return Container(
-    decoration: const BoxDecoration(color: Colors.white),
-    height: 20,
-    child: Row(children: [
-      Expanded(
-        flex: externalCostsPercentage,
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.only(
-              topRight: Radius.circular(30),
-              bottomRight: Radius.circular(30),
+  return Column(
+    children: [
+      Container(
+        decoration: const BoxDecoration(color: Colors.white),
+        height: 20,
+        child: Row(children: [
+          Expanded(
+            flex: externalCostsPercentage,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.only(
+                  topRight: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
+                ),
+                color: getColorFromMobiScore(selectedTrip.mobiScore),
+              ),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: EdgeInsets.only(left: smallPadding),
+                  child: Text('${externalCostsPercentage.toString()} %',
+                      style: textTheme.labelMedium!.copyWith(color: Colors.white)),
+                ),
+              ),
             ),
-            color: getColorFromMobiScore(selectedTrip.mobiScore),
           ),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: EdgeInsets.only(left: smallPadding),
-              child: Text('${externalCostsPercentage.toString()} %',
-                  style: textTheme.labelMedium!.copyWith(color: Colors.white)),
-            ),
-          ),
-        ),
+          Expanded(
+              flex: internalCostsPercentage,
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: EdgeInsets.only(right: smallPadding),
+                  child: Text('${internalCostsPercentage.toString()} %', style: textTheme.labelMedium),
+                ),
+              ))
+        ]),
       ),
-      Expanded(
-          flex: internalCostsPercentage,
-          child: Align(
-            alignment: Alignment.centerRight,
-            child: Padding(
-              padding: EdgeInsets.only(right: smallPadding),
-              child: Text('${internalCostsPercentage.toString()} %', style: textTheme.labelMedium),
+      if (isMobile) ...[
+        smallVerticalSpacer,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              lang.social_costs.toUpperCase(),
+              style: textTheme.labelLarge,
             ),
-          ))
-    ]),
+            Text(
+              lang.personal_costs.toUpperCase(),
+              style: textTheme.labelLarge,
+            )
+          ],
+        )
+      ]
+    ],
   );
 }
 
@@ -69,7 +91,8 @@ Widget textRowCostsBar(BuildContext context,
     {required Trip selectedTrip,
     required PercentageTextPosition position,
     required List<PercentageTextPosition> positions,
-    required List<int> percentages}) {
+    required List<int> percentages,
+    List<String>? labels}) {
   TextTheme textTheme = Theme.of(context).textTheme;
   double height = 20;
 
@@ -80,15 +103,20 @@ Widget textRowCostsBar(BuildContext context,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ...positions.asMap().entries.map((entry) {
+            String label = '';
             int index = entry.key;
+            int flex = getFlexValue(index, percentages, position);
+
+            if (labels != null && labels.length >= index + 1) {
+              label = ' ${labels[index]}'.toUpperCase();
+            }
             return Expanded(
               // if 1% then flex 2, because 1% is too small for whole text
-              flex: percentages[index] < 7 ? 7 : percentages[index],
+              flex: flex,
               child: positions[index] == position
-                  ? Text(
-                      '${percentages[index].toString()} %',
+                  ? Text('${percentages[index].toString()} %$label',
                       style: textTheme.labelMedium,
-                    )
+                      textAlign: index + 1 == positions.length ? TextAlign.right : TextAlign.left)
                   : const SizedBox(),
             );
           }).toList(),
@@ -101,6 +129,8 @@ Widget textRowCostsBar(BuildContext context,
 }
 
 Widget socialCostsBar(BuildContext context, {required Trip selectedTrip}) {
+  AppLocalizations lang = AppLocalizations.of(context)!;
+
   int timeCostsPercentage = getSocialTimeCostsPercentage(selectedTrip);
   int healthCostsPercentage = getSocialHealthCostsPercentage(selectedTrip);
   int environmentCostsPercentage = getSocialEnvironmentalCostsPercentage(selectedTrip);
@@ -114,7 +144,8 @@ Widget socialCostsBar(BuildContext context, {required Trip selectedTrip}) {
           selectedTrip: selectedTrip,
           position: PercentageTextPosition.above,
           positions: positions,
-          percentages: percentages),
+          percentages: percentages,
+          labels: [lang.time, lang.health, lang.environment]),
       Container(
         decoration: BoxDecoration(
           color: getColorFromMobiScore(selectedTrip.mobiScore).lighten(0.4),
@@ -166,12 +197,15 @@ Widget socialCostsBar(BuildContext context, {required Trip selectedTrip}) {
           selectedTrip: selectedTrip,
           position: PercentageTextPosition.below,
           positions: positions,
-          percentages: percentages),
+          percentages: percentages,
+          labels: [lang.time, lang.health, lang.environment]),
     ],
   );
 }
 
 Widget privateCostsBar(BuildContext context, {required Trip selectedTrip}) {
+  AppLocalizations lang = AppLocalizations.of(context)!;
+
   int fixedCosts = getPrivateFixedCostsPercentage(selectedTrip);
   int variableCosts = getPrivateVariableCostsPercentage(selectedTrip);
 
@@ -184,7 +218,8 @@ Widget privateCostsBar(BuildContext context, {required Trip selectedTrip}) {
           selectedTrip: selectedTrip,
           position: PercentageTextPosition.above,
           positions: positions,
-          percentages: percentages),
+          percentages: percentages,
+          labels: [lang.fixed, lang.variable]),
       Container(
         decoration: BoxDecoration(
           color: customLightGrey.lighten(0.4),
@@ -213,7 +248,8 @@ Widget privateCostsBar(BuildContext context, {required Trip selectedTrip}) {
           selectedTrip: selectedTrip,
           position: PercentageTextPosition.below,
           positions: positions,
-          percentages: percentages),
+          percentages: percentages,
+          labels: [lang.fixed, lang.variable]),
     ],
   );
 }
@@ -221,19 +257,43 @@ Widget privateCostsBar(BuildContext context, {required Trip selectedTrip}) {
 List<PercentageTextPosition> getPercentageTextPositions(List<int> percentages) {
   int length = percentages.length;
   List<PercentageTextPosition> positions = List.filled(length, PercentageTextPosition.above);
-  if (percentages.length > 1 && (percentages[0] < 10 || percentages[0] >= 10 && percentages[1] < 10)) {
-    positions[1] = PercentageTextPosition.below;
-  }
 
-  if (percentages.length >= 2 && (percentages[0] >= 10 && percentages[1] < 10)) {
-    positions[1] = PercentageTextPosition.below;
-  }
-
-  if (percentages.length >= 3 && (positions[1] == PercentageTextPosition.above && percentages[2] < 10)) {
-    positions[2] = PercentageTextPosition.below;
+  // make all uneven indexes of positions below
+  for (int i = 0; i < length; i++) {
+    if (i % 2 == 1) {
+      positions[i] = PercentageTextPosition.below;
+    }
   }
 
   return positions;
+}
+
+int getFlexValue(int index, List<int> percentages, PercentageTextPosition position) {
+  if (percentages.length == 3) {
+    if ((index == 0 || index == 2) && position == PercentageTextPosition.above) {
+      return 1;
+    } else if (index == 0 && position == PercentageTextPosition.below) {
+      return percentages[0];
+    } else if (index == 1 && position == PercentageTextPosition.below) {
+      return percentages[1] + percentages[2];
+    } else {
+      return 0;
+    }
+  } else if (percentages.length == 2) {
+    if (index == 0 && position == PercentageTextPosition.above) {
+      return 1;
+    } else if (index == 0 && position == PercentageTextPosition.below) {
+      return 0;
+    } else if (index == 1 && position == PercentageTextPosition.below) {
+      return 1;
+    } else if (index == 1 && position == PercentageTextPosition.above) {
+      return 0;
+    } else {
+      return 0;
+    }
+  } else {
+    return percentages[index];
+  }
 }
 
 enum CostsPercentageBarType { total, social, personal }

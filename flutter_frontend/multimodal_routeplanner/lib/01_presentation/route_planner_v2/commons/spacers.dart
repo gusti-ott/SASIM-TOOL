@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 SizedBox smallHorizontalSpacer = const SizedBox(width: 8);
 SizedBox mediumHorizontalSpacer = const SizedBox(width: 16);
 SizedBox largeHorizontalSpacer = const SizedBox(width: 32);
+SizedBox extraLargeHorizontalSpacer = const SizedBox(width: 64);
 
 SizedBox smallVerticalSpacer = const SizedBox(height: 8);
 SizedBox mediumVerticalSpacer = const SizedBox(height: 16);

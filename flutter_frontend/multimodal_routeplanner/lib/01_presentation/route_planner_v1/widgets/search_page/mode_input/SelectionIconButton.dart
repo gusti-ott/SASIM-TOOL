@@ -67,7 +67,7 @@ class AdvancedSelectionIconButton extends StatelessWidget {
                             child: modeMappingHelper.mapModeStringToIcon(stringMode),
                           ),
                     iconSize: modeMappingHelper.mapModeStringToIcon(stringMode).runtimeType == Icon ? 25 : 40,
-                    tooltip: modeMappingHelper.mapModeStringToGermanString(stringMode),
+                    tooltip: modeMappingHelper.mapModeStringToLocalizedString(stringMode),
                     color: isSelected ? themeData.colorScheme.secondary : Colors.white),
                 Divider(
                   height: 4,
