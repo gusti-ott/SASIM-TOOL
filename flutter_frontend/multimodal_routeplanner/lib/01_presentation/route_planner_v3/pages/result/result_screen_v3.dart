@@ -263,7 +263,7 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
             }
           }
         }
-        return Scaffold(backgroundColor: backgroundColor, body: child, floatingActionButton: fab);
+        return SelectionArea(child: Scaffold(backgroundColor: backgroundColor, body: child, floatingActionButton: fab));
       },
     );
   }
