@@ -35,7 +35,7 @@ Widget textInputField(
           borderSide: BorderSide(color: secondaryColorV3), // Border when the TextField is focused
         ),
         contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-        errorStyle: TextStyle(color: Colors.red, fontSize: 12),
+        errorStyle: const TextStyle(color: Colors.red, fontSize: 12),
       ),
       onChanged: onChanged,
       maxLines: 1, // Ensure single-line input

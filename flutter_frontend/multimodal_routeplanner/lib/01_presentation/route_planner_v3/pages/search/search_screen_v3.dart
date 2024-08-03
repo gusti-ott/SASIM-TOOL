@@ -52,14 +52,16 @@ class _SearchScreenV3State extends State<SearchScreenV3> {
     double screenWidth = MediaQuery.of(context).size.width;
     bool isMobile = screenWidth < 600;
 
-    return Scaffold(
-        key: _scaffoldKey,
-        appBar: isMobile ? mobileAppBar(_scaffoldKey) : null,
-        drawer: buildDrawer(context),
-        floatingActionButton: !started && !isMobile ? _floatingStartButton(context) : null,
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        backgroundColor: backgroundColorYellowV3,
-        body: SearchContent(isMobile: isMobile, scrollController: _scrollController));
+    return SelectionArea(
+      child: Scaffold(
+          key: _scaffoldKey,
+          appBar: isMobile ? mobileAppBar(_scaffoldKey) : null,
+          drawer: buildDrawer(context),
+          floatingActionButton: !started && !isMobile ? _floatingStartButton(context) : null,
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+          backgroundColor: backgroundColorYellowV3,
+          body: SearchContent(isMobile: isMobile, scrollController: _scrollController)),
+    );
   }
 
   FloatingActionButton _floatingStartButton(BuildContext context) {

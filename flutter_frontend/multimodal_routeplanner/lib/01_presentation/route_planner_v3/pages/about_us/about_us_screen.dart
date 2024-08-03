@@ -17,13 +17,15 @@ class AboutUsScreen extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     bool isMobile = screenWidth < 600;
 
-    return Scaffold(
-        backgroundColor: backgroundColorYellowV3,
-        key: scaffoldKey,
-        appBar: isMobile ? mobileAppBar(scaffoldKey) : null,
-        drawer: buildDrawer(context),
-        body: AboutUsContent(
-          isMobile: isMobile,
-        ));
+    return SelectionArea(
+      child: Scaffold(
+          backgroundColor: backgroundColorYellowV3,
+          key: scaffoldKey,
+          appBar: isMobile ? mobileAppBar(scaffoldKey) : null,
+          drawer: buildDrawer(context),
+          body: AboutUsContent(
+            isMobile: isMobile,
+          )),
+    );
   }
 }

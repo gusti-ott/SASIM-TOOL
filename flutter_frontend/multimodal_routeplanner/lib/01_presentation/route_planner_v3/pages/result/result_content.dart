@@ -6,11 +6,11 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/buttons.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/input_to_trip.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/layer_1/layer_1_content.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/layer_2_detailed/layer_2_content_desktop.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/layer_2_detailed/layer_2_content_mobile.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/values.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/detail_route_info_content.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/layer_1/layer_1_content.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/layer_2_detailed/layer_2_content_desktop.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/layer_2_detailed/layer_2_content_mobile.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/mobiscore_score_board/mobi_score_score_board.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/search_screen_v3.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/mode_selection_components.dart';
@@ -131,7 +131,7 @@ class ResultContent extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                if (contentLayer == ContentLayer.layer2)
+                                if (contentLayer == ContentLayer.layer2details)
                                   Padding(
                                     padding: EdgeInsets.only(left: mediumPadding),
                                     child: Align(
@@ -173,8 +173,8 @@ class ResultContent extends StatelessWidget {
                                     changeLayerCallback: (layer) {
                                       changeLayerAndScrollUp(layer, scrollController);
                                     },
-                                  ),
-                                if (contentLayer == ContentLayer.layer2)
+                                  )
+                                else if (contentLayer == ContentLayer.layer2details)
                                   Layer2ContentMobile(
                                     selectedTrip: selectedTrip,
                                     changeLayerCallback: (layer) {
@@ -182,7 +182,7 @@ class ResultContent extends StatelessWidget {
                                     },
                                     setInfoViewTypeCallback: setInfoViewTypeCallback,
                                     setDiagramTypeCallback: setDiagramTypeCallback,
-                                  ),
+                                  )
                               ],
                             ),
                           ),
@@ -245,8 +245,8 @@ class ResultContent extends StatelessWidget {
                                         changeLayerCallback: (layer) {
                                           changeLayerAndScrollUp(layer, scrollController);
                                         },
-                                      ),
-                                    if (contentLayer == ContentLayer.layer2)
+                                      )
+                                    else if (contentLayer == ContentLayer.layer2details)
                                       Layer2ContentDesktop(
                                         selectedTrip: selectedTrip,
                                         changeLayerCallback: (layer) {
@@ -255,7 +255,9 @@ class ResultContent extends StatelessWidget {
                                         setInfoViewTypeCallback: setInfoViewTypeCallback,
                                         setDiagramTypeCallback: setDiagramTypeCallback,
                                         contentMaxWidth: contentMaxWidth,
-                                      )
+                                        startAddress: startAddress,
+                                        endAddress: endAddress,
+                                      ),
                                   ],
                                 ),
                               ),
@@ -321,4 +323,4 @@ class ResultContent extends StatelessWidget {
   }
 }
 
-enum ContentLayer { layer1, layer2 }
+enum ContentLayer { layer1, layer2details }

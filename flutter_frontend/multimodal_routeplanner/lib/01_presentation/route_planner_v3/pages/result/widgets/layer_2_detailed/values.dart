@@ -1,1 +1,0 @@
-double cardBorderRadius = 16;
