@@ -121,5 +121,9 @@
   "mode_of_transport": "Verkehrsmittel",
   "reload": "Neu laden",
   "error_empty": "Gib eine Adresse ein.",
-  "error_shorter_than_2": "Gib eine längere Adresse ein."
+  "error_shorter_than_2": "Gib eine längere Adresse ein.",
+  "copy_url": "URL kopieren",
+  "url_copied": "URL in die Zwischenablage kopiert",
+  "tell_a_friend": "Gefällt dir Mobi-Score? Erzähle es einem Freund!"
+
 }

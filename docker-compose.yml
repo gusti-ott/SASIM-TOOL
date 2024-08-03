@@ -1,6 +1,7 @@
+version: '3.8'
 services:
   flask_app:
-    container_name: flask_app
+    container_name: sasim-app
     restart: always
     image: gusott/sasim:latest
     ports:
@@ -9,3 +10,11 @@ services:
     volumes:
       - ./flask_app:/usr/src/app/
       - ./db:/usr/src/app/db
+    env_file:
+      - ./env/.env
+    networks:
+      - otp_network
+
+networks:
+  otp_network:
+    driver: bridge

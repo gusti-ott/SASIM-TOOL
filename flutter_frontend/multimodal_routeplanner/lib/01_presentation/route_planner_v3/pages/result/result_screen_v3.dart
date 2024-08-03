@@ -53,7 +53,7 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
 
   Trip? selectedTrip;
   List<Trip>? trips;
-  Color backgroundColor = Colors.white;
+  Color backgroundColor = backgroundColorGreyV3;
 
   SelectionMode? selectionMode;
   bool? isElectric;
@@ -92,12 +92,12 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
     super.initState();
 
     cubit = sl<ResultCubit>();
+    cubit.loadTrips(widget.startAddress, widget.endAddress);
 
     selectionMode = widget.selectedMode ?? SelectionMode.bicycle;
     isElectric = widget.isElectric ?? false;
     isShared = widget.isShared ?? false;
 
-    cubit.loadTrips(widget.startAddress, widget.endAddress);
     _startColorAnimation();
 
     infoViewType = InfoViewType.map;
@@ -170,6 +170,7 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
                   onPressed: () {
                     setState(() {
                       showAdditionalMobileInfo = !showAdditionalMobileInfo;
+                      infoViewType = InfoViewType.map;
                     });
                   },
                   child: Icon(
@@ -241,7 +242,7 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
                       contentLayer = value;
                       if (contentLayer == ContentLayer.layer1) {
                         selectedDiagramType = DiagramType.total;
-                      } else if (contentLayer == ContentLayer.layer2) {
+                      } else if (contentLayer == ContentLayer.layer2details) {
                         selectedDiagramType = DiagramType.detailSocial;
                       }
                     });

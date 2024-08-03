@@ -48,16 +48,14 @@ class AddressPickerListV3 extends StatelessWidget {
               // geometry = listAddresses[index].geometry;
 
               if (index + 1 == listAddresses.length) {
-                return addressItem(
-                    name: name,
-                    addressInputController: addressInputController,
-                    onTap: () {
-                      onAddressSelectedCallback(name);
-                    });
+                return addressItem(context, name: name, addressInputController: addressInputController, onTap: () {
+                  onAddressSelectedCallback(name);
+                });
               } else {
                 return Column(
                   children: [
                     addressItem(
+                      context,
                       name: name,
                       addressInputController: addressInputController,
                       onTap: () {
@@ -76,22 +74,25 @@ class AddressPickerListV3 extends StatelessWidget {
   }
 }
 
-Widget addressItem({
+Widget addressItem(
+  BuildContext context, {
   required String name,
   required VoidCallback onTap,
   required TextEditingController addressInputController,
 }) {
+  TextTheme textTheme = Theme.of(context).textTheme;
   return InkWell(
     onTap: () {
       addressInputController.text = name;
       onTap();
     },
     child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           name,
-          style: const TextStyle(fontSize: 16),
-          textAlign: TextAlign.center,
+          style: textTheme.labelMedium,
+          textAlign: TextAlign.left,
         ),
       ],
     ),

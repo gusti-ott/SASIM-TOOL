@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/buttons.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/layer_2_detailed/costs_card_layer_2.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/layer_2_detailed/costs_details_card_layer_2.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/costs_percentage_bar.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/detail_route_info_content.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/layer_2_detailed/costs_card_layer_2.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/layer_2_detailed/costs_details_card_layer_2.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/share/share_screen.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/costs/Costs.dart';
@@ -18,13 +20,17 @@ class Layer2ContentDesktop extends StatelessWidget {
       required this.setInfoViewTypeCallback,
       required this.setDiagramTypeCallback,
       required this.contentMaxWidth,
-      required this.changeLayerCallback});
+      required this.changeLayerCallback,
+      required this.startAddress,
+      required this.endAddress});
 
   final Trip selectedTrip;
   final Function(InfoViewType) setInfoViewTypeCallback;
   final Function(DiagramType) setDiagramTypeCallback;
   final Function(ContentLayer) changeLayerCallback;
   final double contentMaxWidth;
+  final String startAddress;
+  final String endAddress;
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +98,15 @@ class Layer2ContentDesktop extends StatelessWidget {
                 },
                 reverseColors: true,
               ),
-              V3CustomButton(label: lang.share, leadingIcon: Icons.share, onTap: () {}),
+              V3CustomButton(
+                  label: lang.share,
+                  leadingIcon: Icons.share,
+                  onTap: () {
+                    context.goNamed(ShareScreen.routeName, queryParameters: {
+                      'startAddress': startAddress,
+                      'endAddress': endAddress,
+                    });
+                  }),
             ],
           ),
           extraLargeVerticalSpacer

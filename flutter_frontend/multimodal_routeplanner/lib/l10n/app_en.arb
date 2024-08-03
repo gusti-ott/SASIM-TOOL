@@ -121,5 +121,8 @@
   "mode_of_transport": "mode",
   "reload": "Reload",
   "error_empty": "Enter an address.",
-  "error_shorter_than_2": "Enter a longer address."
+  "error_shorter_than_2": "Enter a longer address.",
+  "copy_url": "Copy URL",
+  "url_copied": "URL copied to clipboard",
+  "tell_a_friend": "Do you like Mobi-Score? Tell a friend!"
 }

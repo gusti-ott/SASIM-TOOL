@@ -62,7 +62,7 @@ class Layer1Content extends StatelessWidget {
                 label: lang.show_detailed_info,
                 leadingIcon: Icons.bar_chart,
                 onTap: () {
-                  changeLayerCallback(ContentLayer.layer2);
+                  changeLayerCallback(ContentLayer.layer2details);
                 }),
           ),
           extraLargeVerticalSpacer,

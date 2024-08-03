@@ -10,6 +10,7 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/a
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/research/research_screen.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_screen_v3.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/search_screen_v3.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/share/share_screen.dart';
 
 // final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorCalculatorKey = GlobalKey<NavigatorState>(debugLabel: 'shellCalculator');
@@ -130,6 +131,21 @@ final GoRouter vmrpRouter = GoRouter(
             path: ResearchScreen.path,
             builder: (context, state) {
               return const ResearchScreen();
+            },
+          ),
+          GoRoute(
+            name: ShareScreen.routeName,
+            path: ShareScreen.path,
+            builder: (context, state) {
+              final String? startAddress = state.uri.queryParameters['startAddress'];
+              final String? endAddress = state.uri.queryParameters['endAddress'];
+              if (startAddress == null || endAddress == null) {
+                return const Scaffold(
+                    body: Center(
+                  child: Text('Error: parameters in url missing'),
+                ));
+              }
+              return ShareScreen(startAddress: startAddress, endAddress: endAddress);
             },
           )
         ])
