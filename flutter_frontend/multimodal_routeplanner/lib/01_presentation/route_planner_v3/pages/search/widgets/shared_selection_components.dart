@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/typography.dart';
 
 Widget sharedSelectionPart(BuildContext context,
     {required bool isShared, required Function(bool) onSharedChanged, required bool isMobile}) {
+  AppLocalizations lang = AppLocalizations.of(context)!;
   return IntrinsicWidth(
     child: IntrinsicHeight(
       child: Row(
@@ -12,7 +14,7 @@ Widget sharedSelectionPart(BuildContext context,
           IntrinsicHeight(
             child: sharedChip(
               context,
-              label: 'Private',
+              label: lang.private,
               icon: Icons.person,
               isSelected: !isShared,
               isMobile: isMobile,
@@ -26,7 +28,7 @@ Widget sharedSelectionPart(BuildContext context,
           smallHorizontalSpacer,
           sharedChip(
             context,
-            label: 'Shared',
+            label: lang.shared,
             icon: Icons.supervised_user_circle,
             isSelected: isShared,
             isMobile: isMobile,

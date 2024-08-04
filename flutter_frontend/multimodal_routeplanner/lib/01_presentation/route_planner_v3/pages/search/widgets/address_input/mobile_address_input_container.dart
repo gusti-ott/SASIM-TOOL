@@ -6,7 +6,8 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_screen_v3.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/address_input/address_input_components.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/address_input/text_input_field.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/address_input/address_input_field.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/address_input/input_validation.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/address_picker/address_picker_bloc.dart';
 import 'package:multimodal_routeplanner/config/setup_dependencies.dart';
 
@@ -39,15 +40,6 @@ class MobileAddressInputContainer extends StatefulWidget {
 class _MobileAddressInputContainerState extends State<MobileAddressInputContainer> {
   final _formKey = GlobalKey<FormState>();
 
-  String? validateInput(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'This field cannot be empty';
-    } else if (value.length <= 2) {
-      return 'Input must be longer than 2 characters';
-    }
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
     AppLocalizations lang = AppLocalizations.of(context)!;
@@ -63,7 +55,7 @@ class _MobileAddressInputContainerState extends State<MobileAddressInputContaine
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    textInputField(
+                    addressInputField(
                       context,
                       controller: widget.startController,
                       hintText: lang.from,
@@ -74,7 +66,9 @@ class _MobileAddressInputContainerState extends State<MobileAddressInputContaine
                         );
                       },
                       isMobile: true,
-                      validator: validateInput,
+                      validator: (value) {
+                        return validateInput(context, value);
+                      },
                     ),
                   ],
                 ),
@@ -106,7 +100,7 @@ class _MobileAddressInputContainerState extends State<MobileAddressInputContaine
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              textInputField(
+              addressInputField(
                 context,
                 controller: widget.endController,
                 hintText: lang.to,
@@ -117,7 +111,9 @@ class _MobileAddressInputContainerState extends State<MobileAddressInputContaine
                   );
                 },
                 isMobile: true,
-                validator: validateInput,
+                validator: (value) {
+                  return validateInput(context, value);
+                },
               ),
             ],
           ),

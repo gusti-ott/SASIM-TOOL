@@ -124,6 +124,9 @@
   "error_shorter_than_2": "Gib eine längere Adresse ein.",
   "copy_url": "URL kopieren",
   "url_copied": "URL in die Zwischenablage kopiert",
-  "tell_a_friend": "Gefällt dir Mobi-Score? Erzähle es einem Freund!"
-
+  "tell_a_friend": "Gefällt dir Mobi-Score? Erzähle es einem Freund!",
+  "field_empty_alert": "Das Addressfeld darf nicht leer sein.",
+  "input_short_alert": "Bitte gib eine längere Adresse ein.",
+  "shared": "Shared",
+  "private": "Privat"
 }

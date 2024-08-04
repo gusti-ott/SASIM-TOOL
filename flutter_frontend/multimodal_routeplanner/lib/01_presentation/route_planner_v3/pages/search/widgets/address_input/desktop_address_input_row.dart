@@ -7,7 +7,8 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_cubit.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_screen_v3.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/address_input/address_input_components.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/address_input/text_input_field.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/address_input/address_input_field.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/address_input/input_validation.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/address_picker/address_picker_bloc.dart';
 import 'package:multimodal_routeplanner/config/setup_dependencies.dart';
 
@@ -36,20 +37,11 @@ class DesktopAddressInputRow extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _DesktopAddressInputRowState createState() => _DesktopAddressInputRowState();
+  State<DesktopAddressInputRow> createState() => _DesktopAddressInputRowState();
 }
 
 class _DesktopAddressInputRowState extends State<DesktopAddressInputRow> {
   final _formKey = GlobalKey<FormState>();
-
-  String? validateInput(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'This field cannot be empty';
-    } else if (value.length <= 2) {
-      return 'Input must be longer than 2 characters';
-    }
-    return null;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +57,7 @@ class _DesktopAddressInputRowState extends State<DesktopAddressInputRow> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
-                child: textInputField(
+                child: addressInputField(
                   context,
                   controller: widget.startController,
                   hintText: lang.from,
@@ -76,19 +68,21 @@ class _DesktopAddressInputRowState extends State<DesktopAddressInputRow> {
                     );
                   },
                   isMobile: false,
-                  validator: validateInput,
+                  validator: (value) {
+                    return validateInput(context, value);
+                  },
                 ),
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: smallPadding),
               IconButton(
                 icon: const Icon(Icons.swap_horiz, color: Colors.grey),
                 onPressed: () {
                   widget.swapInputs();
                 },
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: smallPadding),
               Expanded(
-                child: textInputField(
+                child: addressInputField(
                   context,
                   controller: widget.endController,
                   hintText: lang.to,
@@ -99,7 +93,9 @@ class _DesktopAddressInputRowState extends State<DesktopAddressInputRow> {
                     );
                   },
                   isMobile: false,
-                  validator: validateInput,
+                  validator: (value) {
+                    return validateInput(context, value);
+                  },
                 ),
               ),
               smallHorizontalSpacer,

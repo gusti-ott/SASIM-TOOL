@@ -30,13 +30,13 @@ class V3CustomButton extends StatefulWidget {
 }
 
 class _V3CustomButtonState extends State<V3CustomButton> {
-  bool _isHovered = false;
+  bool _isHoveredOrPressed = false;
 
   @override
   Widget build(BuildContext context) {
     final Color buttonColor = widget.color ?? primaryColorV3;
     final Color? borderColor = widget.reverseColors ? widget.color : null;
-    final hoverColor = buttonColor.lighten(widget.reverseColors ? 0.6 : 0.15);
+    final pressColor = buttonColor.lighten(widget.reverseColors ? 0.6 : 0.15);
     TextTheme textTheme = Theme.of(context).textTheme;
 
     return IntrinsicWidth(
@@ -45,30 +45,43 @@ class _V3CustomButtonState extends State<V3CustomButton> {
         child: MouseRegion(
           onEnter: (_) {
             setState(() {
-              _isHovered = true;
+              _isHoveredOrPressed = true;
             });
           },
           onExit: (_) {
             setState(() {
-              _isHovered = false;
+              _isHoveredOrPressed = false;
             });
           },
           child: Material(
             color: Colors.transparent,
             child: InkWell(
-              onTap: () {
+              onTap: () async {
+                setState(() {
+                  _isHoveredOrPressed = true;
+                });
+                await Future.delayed(Duration(milliseconds: 100));
                 widget.onTap();
+                setState(() {
+                  _isHoveredOrPressed = false;
+                });
               },
               borderRadius: BorderRadius.circular(100),
+              onTapDown: (_) {
+                setState(() {
+                  _isHoveredOrPressed = true;
+                });
+              },
+              onTapCancel: () {
+                setState(() {
+                  _isHoveredOrPressed = false;
+                });
+              },
               child: Container(
                 width: widget.width,
                 height: widget.height,
                 decoration: BoxDecoration(
-                  color: _isHovered
-                      ? hoverColor
-                      : (widget.reverseColors)
-                          ? Colors.transparent
-                          : buttonColor,
+                  color: _isHoveredOrPressed ? pressColor : (widget.reverseColors ? Colors.transparent : buttonColor),
                   borderRadius: BorderRadius.circular(100),
                   border: Border.all(color: borderColor ?? Colors.transparent),
                 ),

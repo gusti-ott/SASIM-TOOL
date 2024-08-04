@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/decorations.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 
-Widget textInputField(
+Widget addressInputField(
   BuildContext context, {
   required TextEditingController controller,
   required String hintText,
