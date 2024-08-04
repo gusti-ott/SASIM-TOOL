@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/buttons.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mobiscore_to_x.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/layer_2_detailed/costs_card_mobile_layer_2.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/costs_percentage_bar.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/costs_result_column_1.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/detail_route_info_content.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/share/share_screen.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/costs/Costs.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/costs/ExternalCosts.dart';
@@ -17,15 +21,20 @@ class Layer2ContentMobile extends StatelessWidget {
       required this.selectedTrip,
       required this.setInfoViewTypeCallback,
       required this.setDiagramTypeCallback,
-      required this.changeLayerCallback});
+      required this.changeLayerCallback,
+      required this.startAddress,
+      required this.endAddress});
 
   final Trip selectedTrip;
   final Function(InfoViewType) setInfoViewTypeCallback;
   final Function(DiagramType) setDiagramTypeCallback;
   final Function(ContentLayer) changeLayerCallback;
+  final String startAddress;
+  final String endAddress;
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations lang = AppLocalizations.of(context)!;
     return Column(
       children: [
         costsRowMobile(context, costsType: CostsType.social),
@@ -53,6 +62,17 @@ class Layer2ContentMobile extends StatelessWidget {
                 setDiagramTypeCallback: setDiagramTypeCallback),
           ]),
         ),
+        extraLargeVerticalSpacer,
+        V3CustomButton(
+            label: lang.share,
+            leadingIcon: Icons.share,
+            onTap: () {
+              context.goNamed(ShareScreen.routeName, queryParameters: {
+                'startAddress': startAddress,
+                'endAddress': endAddress,
+              });
+            }),
+        extraLargeVerticalSpacer,
       ],
     );
   }
