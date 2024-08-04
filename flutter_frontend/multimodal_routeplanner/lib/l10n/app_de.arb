@@ -117,13 +117,16 @@
   "about_us_title": "Wer wir sind",
   "about_us_content": "Wir sind ein interdisziplinäres Team bestehend aus fünf Lehrstühlen der TU München und mehreren externen Partnern.\n\nUnser Ziel ist es, die wahren Kosten des urbanen\nVerkehrs in München transparent darzustellen und zu kommunizieren.\n\nWir möchten Bewusstsein für die Kosten von Luftschadstoffen, Klimaschäden, Unfälle, Stau, Flächenverbrauch und Lärm schaffen, die unsere Mobilität hervorruft.\n\nDamit wollen wir nachhaltiges und gerechtes Mobilitätsverhalten fördern.",
   "research_content": "Folgende wissenschaftliche Arbeiten wurden für die Entwicklung des Vollkostenrechners verwendet:",
-  "note_address": "*Bitte gib nur Adressen in München ein, sonst nicht jede Route berechnet werden kann.",
+  "note_address": "*Bitte gib nur Adressen in München ein, weil sonst nicht jede Route berechnet werden kann.",
   "mode_of_transport": "Verkehrsmittel",
   "reload": "Neu laden",
   "error_empty": "Gib eine Adresse ein.",
   "error_shorter_than_2": "Gib eine längere Adresse ein.",
   "copy_url": "URL kopieren",
   "url_copied": "URL in die Zwischenablage kopiert",
-  "tell_a_friend": "Gefällt dir Mobi-Score? Erzähle es einem Freund!"
-
+  "tell_a_friend": "Gefällt dir Mobi-Score? Erzähle es einem Freund!",
+  "field_empty_alert": "Das Addressfeld darf nicht leer sein.",
+  "input_short_alert": "Bitte gib eine längere Adresse ein.",
+  "shared": "Shared",
+  "private": "Privat"
 }

@@ -182,6 +182,8 @@ class ResultContent extends StatelessWidget {
                                     },
                                     setInfoViewTypeCallback: setInfoViewTypeCallback,
                                     setDiagramTypeCallback: setDiagramTypeCallback,
+                                    startAddress: startAddress,
+                                    endAddress: endAddress,
                                   )
                               ],
                             ),

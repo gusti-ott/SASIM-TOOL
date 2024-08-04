@@ -124,5 +124,9 @@
   "error_shorter_than_2": "Enter a longer address.",
   "copy_url": "Copy URL",
   "url_copied": "URL copied to clipboard",
-  "tell_a_friend": "Do you like Mobi-Score? Tell a friend!"
+  "tell_a_friend": "Do you like Mobi-Score? Tell a friend!",
+  "field_empty_alert": "The address field cannot be empty",
+  "input_short_alert": "Input must be longer than 2 characters",
+  "shared": "Shared",
+  "private": "Private"
 }

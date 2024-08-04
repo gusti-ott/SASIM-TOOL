@@ -94,7 +94,7 @@ Widget personalCostsCardLayer1(BuildContext context,
       children: [
         Positioned.fill(
           top: 20,
-          left: screenWidth < 380 ? 53 : 75,
+          left: 75,
           bottom: 5,
           child: Container(
             height: height,
@@ -116,7 +116,7 @@ Widget personalCostsCardLayer1(BuildContext context,
         Positioned(
           top: screenWidth < 380 ? 35 : 5,
           bottom: screenWidth < 380 ? 24 : -6,
-          left: -20,
+          left: isMobile ? 2 : -20,
           child: Image.asset('assets/icons/personal_null.png',
               fit: BoxFit.fitHeight, height: isMobile ? responsiveSmallSize : largeImageSize),
         ),
