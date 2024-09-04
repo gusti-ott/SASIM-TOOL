@@ -6,7 +6,7 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/r
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/search_screen_v3.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 
-Widget buildDrawer(BuildContext context) {
+Drawer buildDrawer(BuildContext context) {
   AppLocalizations lang = AppLocalizations.of(context)!;
   TextTheme textTheme = Theme.of(context).textTheme;
   return Drawer(

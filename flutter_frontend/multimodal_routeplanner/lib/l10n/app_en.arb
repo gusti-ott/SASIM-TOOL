@@ -9,7 +9,9 @@
   "end_address": "Destination Address",
   "please_insert_address": "Please insert address",
   "from": "From",
+  "from_hint": "From (e.g. Arcisstraße 21, München)",
   "to": "To",
+  "to_hint": "To (e.g. Ostbahnhof, München)",
   "new_route": "New Route",
   "show_route": "Show Route",
   "car": "Car",
@@ -128,5 +130,6 @@
   "field_empty_alert": "The address field cannot be empty",
   "input_short_alert": "Input must be longer than 2 characters",
   "shared": "Shared",
-  "private": "Private"
+  "private": "Private",
+  "header_image_label": "The title image shows an urban scene with multiple modes of transport: a teal bus, a cyclist on a teal bicycle, and an elevated white-and-orange train. People are walking in the background, and a large profile of a woman with dark hair is shown to the right, overlooking the city. The city has modern buildings, greenery, and statues."
 }

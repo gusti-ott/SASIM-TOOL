@@ -85,20 +85,22 @@ class _SearchContentState extends State<SearchContent> {
 
   Widget screenHeader(BuildContext context, {required bool isMobile}) {
     if (isMobile) {
-      return headerImage();
+      return headerImage(context);
     } else {
       return Stack(
-        children: [headerImage(), navigationHeaderRow(context)],
+        children: [headerImage(context), navigationHeaderRow(context)],
       );
     }
   }
 }
 
-Widget headerImage() {
-  return SizedBox(
-      width: double.infinity,
-      child: Image.asset(
-        'assets/title_image/mobiscore_header_1.png',
-        fit: BoxFit.fitWidth,
-      ));
+Widget headerImage(BuildContext context) {
+  AppLocalizations lang = AppLocalizations.of(context)!;
+  return Semantics(
+    label: lang.header_image_label,
+    child: Image.asset(
+      'assets/title_image/mobiscore_header_1.png',
+      fit: BoxFit.fitWidth,
+    ),
+  );
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/mobile_scaffold_widgets.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/nav_drawer.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/v3_scaffold.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/search_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 
@@ -52,16 +53,14 @@ class _SearchScreenV3State extends State<SearchScreenV3> {
     double screenWidth = MediaQuery.of(context).size.width;
     bool isMobile = screenWidth < 600;
 
-    return SelectionArea(
-      child: Scaffold(
-          key: _scaffoldKey,
-          appBar: isMobile ? mobileAppBar(_scaffoldKey) : null,
-          drawer: buildDrawer(context),
-          floatingActionButton: !started && !isMobile ? _floatingStartButton(context) : null,
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-          backgroundColor: backgroundColorYellowV3,
-          body: SearchContent(isMobile: isMobile, scrollController: _scrollController)),
-    );
+    return V3Scaffold(
+        scaffoldKey: _scaffoldKey,
+        appBar: isMobile ? mobileAppBar(_scaffoldKey) : null,
+        drawer: buildDrawer(context),
+        floatingActionButton: !started && !isMobile ? _floatingStartButton(context) : null,
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        backgroundColor: backgroundColorYellowV3,
+        body: SearchContent(isMobile: isMobile, scrollController: _scrollController));
   }
 
   FloatingActionButton _floatingStartButton(BuildContext context) {

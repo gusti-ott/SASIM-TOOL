@@ -60,7 +60,7 @@ class _DesktopAddressInputRowState extends State<DesktopAddressInputRow> {
                 child: addressInputField(
                   context,
                   controller: widget.startController,
-                  hintText: lang.from,
+                  hintText: lang.from_hint,
                   onChanged: (value) {
                     widget.onStartChanged(value);
                     addressPickerBloc.add(
@@ -85,7 +85,7 @@ class _DesktopAddressInputRowState extends State<DesktopAddressInputRow> {
                 child: addressInputField(
                   context,
                   controller: widget.endController,
-                  hintText: lang.to,
+                  hintText: lang.to_hint,
                   onChanged: (value) {
                     widget.onEndChanged(value);
                     addressPickerBloc.add(

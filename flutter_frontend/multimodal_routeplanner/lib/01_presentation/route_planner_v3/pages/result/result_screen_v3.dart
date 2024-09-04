@@ -13,6 +13,7 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/decorations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/progress_indicators.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/v3_scaffold.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/input_to_trip.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mobiscore_to_x.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_content.dart';
@@ -263,7 +264,11 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
             }
           }
         }
-        return SelectionArea(child: Scaffold(backgroundColor: backgroundColor, body: child, floatingActionButton: fab));
+        return V3Scaffold(
+          backgroundColor: backgroundColor,
+          body: child,
+          floatingActionButton: fab,
+        );
       },
     );
   }

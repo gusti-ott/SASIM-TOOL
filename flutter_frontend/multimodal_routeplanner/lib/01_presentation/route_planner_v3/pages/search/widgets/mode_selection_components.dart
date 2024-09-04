@@ -29,7 +29,14 @@ Widget modeSelectionRow(BuildContext context,
         children: [
           modeSelectionPart(selectedMode: selectionMode, onSelectionModeChanged: onSelectionModeChanged),
           sharedSelectionPart(context, isShared: isShared, onSharedChanged: onSharedChanged, isMobile: false),
-          electricSelectionPart(context, isElectric: isElectric, onElectricChanged: onElectricChanged, isMobile: false),
+          Visibility(
+            visible: !isShared,
+            maintainSize: true,
+            maintainAnimation: true,
+            maintainState: true,
+            child: electricSelectionPart(context,
+                isElectric: isElectric, onElectricChanged: onElectricChanged, isMobile: false),
+          )
         ],
       ),
     ),
@@ -112,8 +119,14 @@ Widget mobileModeSelectionContainer(BuildContext context,
           children: [
             sharedSelectionPart(context, isShared: isShared, onSharedChanged: onSharedChanged, isMobile: true),
             smallHorizontalSpacer,
-            electricSelectionPart(context,
-                isElectric: isElectric, onElectricChanged: onElectricChanged, isMobile: true),
+            Visibility(
+              visible: !isShared,
+              maintainSize: true,
+              maintainAnimation: true,
+              maintainState: true,
+              child: electricSelectionPart(context,
+                  isElectric: isElectric, onElectricChanged: onElectricChanged, isMobile: true),
+            ),
           ],
         )
       ],
