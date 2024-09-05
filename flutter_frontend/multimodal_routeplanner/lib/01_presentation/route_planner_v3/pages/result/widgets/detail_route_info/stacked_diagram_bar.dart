@@ -54,39 +54,41 @@ Widget stackedDiagramBar(BuildContext context,
                 )
               ],
             ),
-            Column(
-              children: [
-                Expanded(
-                  flex: getFlexLargerZero(internalFlex),
-                  child: const SizedBox(),
-                ),
-                Container(
-                  height: width,
-                  decoration: BoxDecoration(
-                    color: getColorFromMobiScore(trip.mobiScore),
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30),
+            LayoutBuilder(builder: (context, constraints) {
+              double availableHeight = constraints.maxHeight - width;
+              double internalHeight = availableHeight * (100 - internalFlex) / 100;
+              return Column(
+                children: [
+                  const Expanded(
+                    child: SizedBox(),
+                  ),
+                  Container(
+                    height: width,
+                    decoration: BoxDecoration(
+                      color: getColorFromMobiScore(trip.mobiScore),
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30),
+                      ),
+                    ),
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: CircleAvatar(
+                          backgroundColor: Colors.white, radius: width / 2, child: getIconFromMode(trip.mode)),
                     ),
                   ),
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    child: CircleAvatar(
-                        backgroundColor: Colors.white, radius: width / 2, child: getIconFromMode(trip.mode)),
-                  ),
-                ),
-                Expanded(
-                  flex: getFlexLargerZero(100 - internalFlex),
-                  child: Container(
-                    height: double.infinity,
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                    height: internalHeight,
                     width: width,
                     decoration: BoxDecoration(
                       color: getColorFromMobiScore(trip.mobiScore),
                     ),
-                  ),
-                )
-              ],
-            ),
+                  )
+                ],
+              );
+            }),
           ],
         ),
       ),
