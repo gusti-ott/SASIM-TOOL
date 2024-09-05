@@ -73,7 +73,11 @@ class _VmrpAppState extends State<VmrpApp> {
         child: BlocBuilder<AppCubit, AppState>(
           builder: (context, state) {
             if (state is LocaleChanged) {
-              _currentLocale = state.locale;
+              if (_currentLocale == const Locale('en')) {
+                _currentLocale = const Locale('de');
+              } else {
+                _currentLocale = const Locale('en');
+              }
             }
 
             return MaterialApp.router(

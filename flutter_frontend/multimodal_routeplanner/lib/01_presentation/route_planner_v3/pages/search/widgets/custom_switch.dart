@@ -27,7 +27,7 @@ class LanguageSwitch extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          GestureDetector(
+          InkWell(
             onTap: () {
               appCubit.changeLocale(const Locale('en'));
             },
@@ -45,7 +45,7 @@ class LanguageSwitch extends StatelessWidget {
               ),
             ),
           ),
-          GestureDetector(
+          InkWell(
             onTap: () {
               appCubit.changeLocale(const Locale('de'));
             },

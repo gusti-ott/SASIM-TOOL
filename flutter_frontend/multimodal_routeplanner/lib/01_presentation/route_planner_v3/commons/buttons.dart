@@ -7,6 +7,7 @@ class V3CustomButton extends StatefulWidget {
   final String label;
   final Function onTap;
   final Color? color;
+  final TextStyle? textStyle;
   final Color? textColor;
   final IconData? leadingIcon;
   final double? height;
@@ -18,6 +19,7 @@ class V3CustomButton extends StatefulWidget {
       required this.label,
       required this.onTap,
       this.color,
+      this.textStyle,
       this.textColor,
       this.leadingIcon,
       this.height,
@@ -60,7 +62,7 @@ class _V3CustomButtonState extends State<V3CustomButton> {
                 setState(() {
                   _isHoveredOrPressed = true;
                 });
-                await Future.delayed(Duration(milliseconds: 100));
+                await Future.delayed(const Duration(milliseconds: 100));
                 widget.onTap();
                 setState(() {
                   _isHoveredOrPressed = false;
@@ -98,7 +100,9 @@ class _V3CustomButtonState extends State<V3CustomButton> {
                         ],
                         Text(
                           widget.label,
-                          style: textTheme.labelLarge!.copyWith(color: widget.textColor ?? Colors.white),
+                          style: (widget.textStyle != null)
+                              ? widget.textStyle!.copyWith(color: widget.textColor ?? Colors.white)
+                              : textTheme.labelLarge!.copyWith(color: widget.textColor ?? Colors.white),
                         ),
                       ],
                     ),
