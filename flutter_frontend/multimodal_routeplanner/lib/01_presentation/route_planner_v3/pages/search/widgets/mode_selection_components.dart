@@ -29,13 +29,12 @@ Widget modeSelectionRow(BuildContext context,
         children: [
           modeSelectionPart(selectedMode: selectionMode, onSelectionModeChanged: onSelectionModeChanged),
           sharedSelectionPart(context, isShared: isShared, onSharedChanged: onSharedChanged, isMobile: false),
-          Visibility(
-            visible: !isShared,
-            maintainSize: true,
-            maintainAnimation: true,
-            maintainState: true,
-            child: electricSelectionPart(context,
-                isElectric: isElectric, onElectricChanged: onElectricChanged, isMobile: false),
+          electricSelectionPart(
+            context,
+            isElectric: isElectric,
+            onElectricChanged: isShared ? null : onElectricChanged, // Disable switch when isShared is true
+            isMobile: false,
+            isDisabled: isShared, // Add an isDisabled parameter to control the grey styling
           )
         ],
       ),
@@ -119,13 +118,12 @@ Widget mobileModeSelectionContainer(BuildContext context,
           children: [
             sharedSelectionPart(context, isShared: isShared, onSharedChanged: onSharedChanged, isMobile: true),
             smallHorizontalSpacer,
-            Visibility(
-              visible: !isShared,
-              maintainSize: true,
-              maintainAnimation: true,
-              maintainState: true,
-              child: electricSelectionPart(context,
-                  isElectric: isElectric, onElectricChanged: onElectricChanged, isMobile: true),
+            electricSelectionPart(
+              context,
+              isElectric: isElectric,
+              onElectricChanged: isShared ? null : onElectricChanged, // Disable switch when isShared is true
+              isMobile: false,
+              isDisabled: isShared, // Add an isDisabled parameter to control the grey styling
             ),
           ],
         )

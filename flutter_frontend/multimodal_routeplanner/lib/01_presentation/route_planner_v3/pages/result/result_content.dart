@@ -10,12 +10,13 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/r
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/layer_2_detailed/layer_2_content_desktop.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/layer_2_detailed/layer_2_content_mobile.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/values.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/detail_route_info_content.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/detail_route_info/detail_route_info_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/mobiscore_score_board/mobi_score_score_board.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/search_screen_v3.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/mode_selection_components.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
+
+import '../search/search_screen_v3.dart';
 
 class ResultContent extends StatelessWidget {
   const ResultContent({
@@ -93,13 +94,13 @@ class ResultContent extends StatelessWidget {
                 pinned: true,
                 leading: Padding(
                   padding: EdgeInsets.all(smallPadding),
-                  child: InkWell(
-                      onTap: () {
+                  child: IconButton(
+                      icon: const Icon(Icons.arrow_back),
+                      onPressed: () {
                         context.goNamed(SearchScreenV3.routeName);
-                      },
-                      child: Image.asset('assets/mobiscore_logos/logo_with_text_primary.png')),
+                      }),
                 ),
-                expandedHeight: screenWidth < 380 ? 140 : 110,
+                expandedHeight: screenWidth < 340 ? 140 : 110,
                 flexibleSpace: FlexibleSpaceBar(
                   background: mobileModeSelectionContainer(
                     context,
@@ -225,16 +226,32 @@ class ResultContent extends StatelessWidget {
                                   children: [
                                     Padding(
                                       padding: EdgeInsets.symmetric(horizontal: mediumPadding, vertical: largePadding),
-                                      child: modeSelectionRow(context,
-                                          isElectric: isElectric,
-                                          onElectricChanged: onElectricChanged,
-                                          selectionMode: selectionMode,
-                                          onSelectionModeChanged: onSelectionModeChanged,
-                                          isShared: isShared,
-                                          onSharedChanged: onSharedChanged,
-                                          width: 700,
-                                          makePartlyTransparent: true,
-                                          backgroundColor: backgroundColor),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          SizedBox(
+                                            width: 40,
+                                            child: IconButton(
+                                                icon: const Icon(Icons.arrow_back),
+                                                onPressed: () {
+                                                  context.goNamed(SearchScreenV3.routeName);
+                                                }),
+                                          ),
+                                          modeSelectionRow(context,
+                                              isElectric: isElectric,
+                                              onElectricChanged: onElectricChanged,
+                                              selectionMode: selectionMode,
+                                              onSelectionModeChanged: onSelectionModeChanged,
+                                              isShared: isShared,
+                                              onSharedChanged: onSharedChanged,
+                                              width: 700,
+                                              makePartlyTransparent: true,
+                                              backgroundColor: backgroundColor),
+                                          const SizedBox(
+                                            width: 30,
+                                          )
+                                        ],
+                                      ),
                                     ),
                                     if (contentLayer == ContentLayer.layer1)
                                       Layer1Content(

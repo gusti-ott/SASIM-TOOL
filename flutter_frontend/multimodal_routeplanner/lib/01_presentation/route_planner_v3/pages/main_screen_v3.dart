@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:multimodal_routeplanner/01_presentation/dimensions.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/mobile_scaffold_widgets.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/nav_drawer.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/navigation_header.dart';
@@ -16,7 +17,7 @@ class MainScreenV3 extends StatelessWidget {
     GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
     double screenWidth = MediaQuery.of(context).size.width;
-    bool isMobile = screenWidth < 600;
+    bool isMobile = screenWidth < mobileScreenWidthMinimum;
 
     return V3Scaffold(
         backgroundColor: backgroundColorYellowV3,

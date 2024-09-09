@@ -12,6 +12,19 @@ class Address {
 
   Address(this.properties, this.geometry);
 
-  factory Address.fromJson(Map<String, dynamic> json) =>
-      _$AddressFromJson(json);
+  factory Address.fromJson(Map<String, dynamic> json) => _$AddressFromJson(json);
+}
+
+// make extension that returns the address name
+extension AddressName on Address {
+  String get name {
+    if (properties.city != null && properties.postcode != null) {
+      if (properties.name != null) {
+        return '${properties.name}, ${properties.postcode.toString()} ${properties.city}';
+      } else if (properties.street != null && properties.housenumber != null) {
+        return '${properties.street} ${properties.housenumber.toString()}, ${properties.postcode.toString()} ${properties.city}';
+      }
+    }
+    return 'kein Name gefunden';
+  }
 }

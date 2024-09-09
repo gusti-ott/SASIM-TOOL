@@ -10,6 +10,7 @@ Widget navigationHeaderRow(BuildContext context, {required StatefulNavigationShe
   AppLocalizations lang = AppLocalizations.of(context)!;
 
   int currentIndex = navigationShell.currentIndex;
+
   return Padding(
     padding: EdgeInsets.symmetric(vertical: largePadding, horizontal: 2 * extraLargePadding),
     child: Row(

@@ -23,75 +23,77 @@ class ShareContent extends StatelessWidget {
     AppLocalizations lang = AppLocalizations.of(context)!;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: mediumPadding),
-      child: Column(
-        children: [
-          if (!isMobile) SizedBox(height: headerHeight),
-          if (isMobile) ...[
-            mediumVerticalSpacer,
-            Align(
-              alignment: Alignment.centerLeft,
-              child: V3CustomButton(
-                label: lang.back_to_results,
-                leadingIcon: Icons.arrow_back,
-                color: primaryColorV3,
-                textColor: primaryColorV3,
-                onTap: () {
-                  context.goNamed(
-                    ResultScreenV3.routeName,
-                    queryParameters: {
-                      'startAddress': startAddress,
-                      'endAddress': endAddress,
-                    },
-                  );
-                },
-                reverseColors: true,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            if (!isMobile) SizedBox(height: headerHeight),
+            if (isMobile) ...[
+              mediumVerticalSpacer,
+              Align(
+                alignment: Alignment.centerLeft,
+                child: V3CustomButton(
+                  label: lang.back_to_results,
+                  leadingIcon: Icons.arrow_back,
+                  color: primaryColorV3,
+                  textColor: primaryColorV3,
+                  onTap: () {
+                    context.goNamed(
+                      ResultScreenV3.routeName,
+                      queryParameters: {
+                        'startAddress': startAddress,
+                        'endAddress': endAddress,
+                      },
+                    );
+                  },
+                  reverseColors: true,
+                ),
               ),
-            ),
-          ],
-          SizedBox(width: contentMaxWidth, child: (!isMobile) ? desktopShare(context) : mobileShare(context)),
-          if (isMobile) ...[
-            mediumVerticalSpacer,
-            V3CustomButton(
-                label: 'Neue Route starten',
-                leadingIcon: Icons.restart_alt,
-                onTap: () {
-                  context.goNamed(SearchScreenV3.routeName);
-                }),
-          ],
-          if (!isMobile) ...[
-            extraLargeVerticalSpacer,
-            SizedBox(
-              width: contentMaxWidth,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  V3CustomButton(
-                    label: lang.back_to_results,
-                    leadingIcon: Icons.arrow_back,
-                    color: primaryColorV3,
-                    textColor: primaryColorV3,
-                    onTap: () {
-                      context.goNamed(
-                        ResultScreenV3.routeName,
-                        queryParameters: {
-                          'startAddress': startAddress,
-                          'endAddress': endAddress,
-                        },
-                      );
-                    },
-                    reverseColors: true,
-                  ),
-                  V3CustomButton(
-                      label: 'Neue Route starten',
-                      leadingIcon: Icons.restart_alt,
+            ],
+            SizedBox(width: contentMaxWidth, child: (!isMobile) ? desktopShare(context) : mobileShare(context)),
+            if (isMobile) ...[
+              mediumVerticalSpacer,
+              V3CustomButton(
+                  label: 'Neue Route starten',
+                  leadingIcon: Icons.restart_alt,
+                  onTap: () {
+                    context.goNamed(SearchScreenV3.routeName);
+                  }),
+            ],
+            if (!isMobile) ...[
+              extraLargeVerticalSpacer,
+              SizedBox(
+                width: contentMaxWidth,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    V3CustomButton(
+                      label: lang.back_to_results,
+                      leadingIcon: Icons.arrow_back,
+                      color: primaryColorV3,
+                      textColor: primaryColorV3,
                       onTap: () {
-                        context.goNamed(SearchScreenV3.routeName);
-                      }),
-                ],
+                        context.goNamed(
+                          ResultScreenV3.routeName,
+                          queryParameters: {
+                            'startAddress': startAddress,
+                            'endAddress': endAddress,
+                          },
+                        );
+                      },
+                      reverseColors: true,
+                    ),
+                    V3CustomButton(
+                        label: 'Neue Route starten',
+                        leadingIcon: Icons.restart_alt,
+                        onTap: () {
+                          context.goNamed(SearchScreenV3.routeName);
+                        }),
+                  ],
+                ),
               ),
-            ),
-          ]
-        ],
+            ]
+          ],
+        ),
       ),
     );
   }

@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/about_us/about_us_screen.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/research/research_screen.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/search_screen_v3.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 
 Drawer buildDrawer(BuildContext context, {required StatefulNavigationShell navigationShell}) {
@@ -26,12 +23,7 @@ Drawer buildDrawer(BuildContext context, {required StatefulNavigationShell navig
               style: textTheme.headlineLarge!
                   .copyWith(color: primaryColorV3, fontWeight: (currentIndex == 0) ? FontWeight.bold : null)),
           onTap: () {
-            if (navigationShell != null) {
-              navigationShell.goBranch(0);
-            } else {
-              // Handle the navigation to the Home page
-              context.goNamed(SearchScreenV3.routeName); // Close the drawer
-            }
+            navigationShell.goBranch(0);
           },
         ),
         ListTile(
@@ -39,12 +31,8 @@ Drawer buildDrawer(BuildContext context, {required StatefulNavigationShell navig
               style: textTheme.headlineLarge!
                   .copyWith(color: primaryColorV3, fontWeight: (currentIndex == 1) ? FontWeight.bold : null)),
           onTap: () {
-            if (navigationShell != null) {
-              navigationShell.goBranch(1);
-            } else {
-              // Handle the navigation to the Home page
-              context.goNamed(ResearchScreen.routeName);
-            } // Close the drawer
+            navigationShell.goBranch(1);
+            // Close the drawer
           },
         ),
         ListTile(
@@ -52,12 +40,7 @@ Drawer buildDrawer(BuildContext context, {required StatefulNavigationShell navig
               style: textTheme.headlineLarge!
                   .copyWith(color: primaryColorV3, fontWeight: (currentIndex == 2) ? FontWeight.bold : null)),
           onTap: () {
-            if (navigationShell != null) {
-              navigationShell.goBranch(2);
-            } else {
-              // Handle the navigation to the Settings page
-              context.goNamed(AboutUsScreen.routeName);
-            } // Close the drawer
+            navigationShell.goBranch(2);
           },
         ),
       ],
