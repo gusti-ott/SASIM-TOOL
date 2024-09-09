@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/helpers/mode_mapping_helper.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/values.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/detail_route_info/detail_route_info_diagram.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/detail_route_info/detail_route_info_map.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/detail_route_info/detail_route_text_info.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/detail_route_info/diagram_helper_methods.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/detail_route_info/diagram_type_selection.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/detail_route_info/detail_route_info_mobiscore.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/detail_route_info/diagram/diagram_content.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/values.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/typography.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
@@ -43,7 +41,7 @@ class DetailRouteInfoContent extends StatelessWidget {
   final String endAddress;
 
   void changeInfoViewType() {
-    if (infoViewType == InfoViewType.diagram) {
+    if (infoViewType == InfoViewType.diagram || infoViewType == InfoViewType.mobiscore) {
       setInfoViewTypeCallback(InfoViewType.map);
     } else {
       setInfoViewTypeCallback(InfoViewType.diagram);
@@ -52,8 +50,6 @@ class DetailRouteInfoContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double diagramTypeSelectionHeight = 80;
-    TextTheme textTheme = Theme.of(context).textTheme;
     return Container(
       decoration: BoxDecoration(
         color: backgroundColorGreyV3,
@@ -64,39 +60,16 @@ class DetailRouteInfoContent extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           if (infoViewType == InfoViewType.map) DetailRouteInfoMap(trip: selectedTrip),
+          if (infoViewType == InfoViewType.mobiscore) detailRouteInfoMobiscore(context, isMobile: isMobile),
           if (infoViewType == InfoViewType.diagram)
-            SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.only(
-                    left: isMobile ? extraLargePadding : extraLargePadding * 2, right: extraLargePadding),
-                child: Column(children: [
-                  SizedBox(height: extraLargePadding + largePadding),
-                  DiagramTypeSelection(
-                    height: diagramTypeSelectionHeight,
-                    setDiagramType: (DiagramType value) {
-                      setDiagramTypeCallback(value);
-                    },
-                    selectedDiagramType: selectedDiagramType,
-                  ),
-                  extraLargeVerticalSpacer,
-                  DetailRouteInfoDiagram(
-                      currentCarTrip: currentCarTrip,
-                      currentBicycleTrip: currentBicycleTrip,
-                      currentPublicTransportTrip: currentPublicTransportTrip,
-                      selectedDiagramType: selectedDiagramType),
-                  smallVerticalSpacer,
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      getDiagramTitle(context, selectedDiagramType),
-                      style: textTheme.titleSmall,
-                    ),
-                  ),
-                  smallVerticalSpacer,
-                  detailRouteTextInfo(context, diagramType: selectedDiagramType),
-                  largeVerticalSpacer
-                ]),
-              ),
+            diagramContent(
+              context,
+              isMobile: isMobile,
+              setDiagramTypeCallback: setDiagramTypeCallback,
+              selectedDiagramType: selectedDiagramType,
+              currentCarTrip: currentCarTrip,
+              currentBicycleTrip: currentBicycleTrip,
+              currentPublicTransportTrip: currentPublicTransportTrip,
             ),
           Positioned.fill(
             child: Padding(
@@ -129,24 +102,22 @@ class DetailRouteInfoContent extends StatelessWidget {
                           )
                         else
                           const SizedBox(),
-                        Row(children: [
-                          Switch(
-                            thumbIcon: WidgetStateProperty.resolveWith<Icon?>((Set<WidgetState> states) {
-                              return Icon(
-                                Icons.bar_chart,
-                                color: customBlack,
-                              ); // All other states will use the default thumbIcon.
-                            }),
-                            activeTrackColor: primaryColorV3,
-                            inactiveTrackColor: backgroundColorGreyV3,
-                            activeColor: Colors.white,
-                            inactiveThumbColor: customGrey,
-                            value: (infoViewType == InfoViewType.diagram),
-                            onChanged: (value) {
-                              changeInfoViewType();
-                            },
-                          ),
-                        ])
+                        Switch(
+                          thumbIcon: WidgetStateProperty.resolveWith<Icon?>((Set<WidgetState> states) {
+                            return Icon(
+                              Icons.bar_chart,
+                              color: customBlack,
+                            ); // All other states will use the default thumbIcon.
+                          }),
+                          activeTrackColor: primaryColorV3,
+                          inactiveTrackColor: backgroundColorGreyV3,
+                          activeColor: Colors.white,
+                          inactiveThumbColor: customGrey,
+                          value: (infoViewType == InfoViewType.diagram || infoViewType == InfoViewType.mobiscore),
+                          onChanged: (value) {
+                            changeInfoViewType();
+                          },
+                        )
                       ],
                     ),
                     if (infoViewType == InfoViewType.map && selectedTrip != null) ...[
@@ -283,7 +254,7 @@ Widget mapContainer({required Widget child}) {
   );
 }
 
-enum InfoViewType { diagram, map }
+enum InfoViewType { diagram, map, mobiscore }
 
 enum DiagramType {
   total,

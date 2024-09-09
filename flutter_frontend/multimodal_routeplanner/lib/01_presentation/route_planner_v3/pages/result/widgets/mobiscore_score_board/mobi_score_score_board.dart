@@ -38,6 +38,7 @@ Widget mobiScoreScoreBoardWithPointers(BuildContext context,
     required Trip? currentBicycleTrip,
     required Trip? currentPublicTransportTrip,
     required Function(SelectionMode) onSelectionModeChanged,
+    required Function() onMobiscoreLogoPressed,
     double horizontalPadding = 0}) {
   // get screen width
   double screenWidth = MediaQuery.of(context).size.width;
@@ -53,7 +54,7 @@ Widget mobiScoreScoreBoardWithPointers(BuildContext context,
             alignment: Alignment.centerLeft,
             child: Row(
               children: [
-                mobiScoreCircleLogo(size: widthScoreColumn),
+                mobiScoreCircleLogo(size: widthScoreColumn, onTap: onMobiscoreLogoPressed),
                 largeHorizontalSpacer,
                 Expanded(child: mobiScoreScoreBoard(context, selectedTrip: selectedTrip, isMobile: true)),
               ],
@@ -112,23 +113,74 @@ Widget mobiScoreScoreBoardWithPointers(BuildContext context,
   );
 }
 
+Widget colorfulScoreBoard(BuildContext context) {
+  return Container(
+    decoration: BoxDecoration(
+      color: backgroundColorGreyV3,
+      borderRadius: BorderRadius.circular(30),
+      border: Border.all(color: Colors.white, width: borderWidthScoreColumn),
+    ),
+    width: double.infinity,
+    height: widthScoreColumn,
+    child: Row(
+      children: [
+        _scoreSection(context,
+            mobiScore: 'A', letter: 'A', color: colorA, isFirst: true, isLast: false, isMobile: true),
+        _scoreSection(context,
+            mobiScore: 'B', letter: 'B', color: colorB, isFirst: false, isLast: false, isMobile: true),
+        _scoreSection(context,
+            mobiScore: 'C', letter: 'C', color: colorC, isFirst: false, isLast: false, isMobile: true),
+        _scoreSection(context,
+            mobiScore: 'D', letter: 'D', color: colorD, isFirst: false, isLast: false, isMobile: true),
+        _scoreSection(context,
+            mobiScore: 'E', letter: 'E', color: colorE, isFirst: false, isLast: true, isMobile: true),
+      ],
+    ),
+  );
+}
+
 List<Widget> _listScoreSections(BuildContext context, {required Trip selectedTrip, required bool isMobile}) {
   return [
     _scoreSection(context,
-        selectedTrip: selectedTrip, letter: 'A', color: colorA, isFirst: true, isLast: false, isMobile: isMobile),
+        mobiScore: selectedTrip.mobiScore,
+        letter: 'A',
+        color: colorA,
+        isFirst: true,
+        isLast: false,
+        isMobile: isMobile),
     _scoreSection(context,
-        selectedTrip: selectedTrip, letter: 'B', color: colorB, isFirst: false, isLast: false, isMobile: isMobile),
+        mobiScore: selectedTrip.mobiScore,
+        letter: 'B',
+        color: colorB,
+        isFirst: false,
+        isLast: false,
+        isMobile: isMobile),
     _scoreSection(context,
-        selectedTrip: selectedTrip, letter: 'C', color: colorC, isFirst: false, isLast: false, isMobile: isMobile),
+        mobiScore: selectedTrip.mobiScore,
+        letter: 'C',
+        color: colorC,
+        isFirst: false,
+        isLast: false,
+        isMobile: isMobile),
     _scoreSection(context,
-        selectedTrip: selectedTrip, letter: 'D', color: colorD, isFirst: false, isLast: false, isMobile: isMobile),
+        mobiScore: selectedTrip.mobiScore,
+        letter: 'D',
+        color: colorD,
+        isFirst: false,
+        isLast: false,
+        isMobile: isMobile),
     _scoreSection(context,
-        selectedTrip: selectedTrip, letter: 'E', color: colorE, isFirst: false, isLast: true, isMobile: isMobile),
+        mobiScore: selectedTrip.mobiScore,
+        letter: 'E',
+        color: colorE,
+        isFirst: false,
+        isLast: true,
+        isMobile: isMobile),
   ];
 }
 
 Expanded _scoreSection(BuildContext context,
-    {required Trip selectedTrip,
+    {required String mobiScore,
     required String letter,
     required Color color,
     isFirst = false,
@@ -146,12 +198,12 @@ Expanded _scoreSection(BuildContext context,
             bottomLeft:
                 (isFirst && isMobile || isLast && !isMobile) ? const Radius.circular(30) : const Radius.circular(0),
             bottomRight: (isLast) ? const Radius.circular(30) : const Radius.circular(0)),
-        color: (selectedTrip.mobiScore == letter) ? color : backgroundColorGreyV3,
+        color: (mobiScore == letter) ? color : backgroundColorGreyV3,
       ),
       child: Center(
         child: Text(
           letter,
-          style: textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.bold),
+          style: textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.w800),
         ),
       ),
     ),
@@ -165,13 +217,14 @@ List<Widget> scoreBoardWithPointers(BuildContext context,
     required Trip? currentCarTrip,
     required Trip? currentPublicTransportTrip,
     required Trip? currentBicycleTrip,
-    required Function(SelectionMode) onSelectionModeChanged}) {
+    required Function(SelectionMode) onSelectionModeChanged,
+    required Function() onMobiscoreLogoPressed}) {
   return [
     Positioned(
       right: widthInfoSection - (widthScoreColumn / 2),
       top: topOffsetMobiScoreLogo,
       // top: (screenHeight - heightScoreColumn) / 2 - mediumPadding - widthScoreColumn,
-      child: mobiScoreCircleLogo(size: widthScoreColumn),
+      child: mobiScoreCircleLogo(size: widthScoreColumn, onTap: onMobiscoreLogoPressed),
     ),
     Positioned(
       right: widthInfoSection - (widthScoreColumn / 2),

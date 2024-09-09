@@ -1,2 +1,2 @@
-double resultTablewidth = 1200;
-double mobileScreenWidthMinimum = 900;
+double resultTableWidth = 1200;
+double mobileScreenWidthMinimum = 1000;

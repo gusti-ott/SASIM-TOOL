@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/detail_route_info/detail_route_info_content.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/detail_route_info/diagram_helper_methods.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/detail_route_info/diagram/diagram_helper_methods.dart';
 
 class DiagramTypeSelection extends StatelessWidget {
-  const DiagramTypeSelection({super.key, required this.setDiagramType, required this.selectedDiagramType, this.height});
+  const DiagramTypeSelection({super.key, required this.setDiagramType, required this.selectedDiagramType});
 
-  final double? height;
   final Function(DiagramType) setDiagramType;
   final DiagramType selectedDiagramType;
 
   @override
   Widget build(BuildContext context) {
-    final height = this.height ?? 80;
     return Center(
       child: SizedBox(
         width: double.infinity,
-        height: height,
         child: Column(
           children: [
             if (isGeneralView(selectedDiagramType)) ...[
@@ -105,7 +102,7 @@ Widget diagramTypeSelectionButton(BuildContext context,
             ),
         ],
       ),
-      height: 20,
+      height: 30,
       width: double.infinity,
       child: Center(
         child: Text(

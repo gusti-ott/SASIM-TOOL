@@ -131,30 +131,30 @@ String getDiagramTitle(BuildContext context, DiagramType diagramType) {
   AppLocalizations lang = AppLocalizations.of(context)!;
   switch (diagramType) {
     case DiagramType.total:
-      return lang.total_costs.toUpperCase();
+      return lang.total_costs;
     case DiagramType.social:
-      return lang.social_costs.toUpperCase();
+      return lang.social_costs;
     case DiagramType.personal:
-      return lang.personal_costs.toUpperCase();
+      return lang.personal_costs;
 
     case DiagramType.detailSocial:
-      return lang.social_costs.toUpperCase();
+      return lang.social_costs;
     case DiagramType.detailSocialTime:
-      return lang.time_costs.toUpperCase();
+      return lang.time_costs;
     case DiagramType.detailSocialHealth:
-      return lang.health_costs.toUpperCase();
+      return lang.health_costs;
     case DiagramType.detailSocialEnvironment:
-      return lang.environment_costs.toUpperCase();
+      return lang.environment_costs;
 
     case DiagramType.detailPersonal:
-      return lang.personal_costs.toUpperCase();
+      return lang.personal_costs;
     case DiagramType.detailPersonalFixed:
-      return lang.fixed_costs.toUpperCase();
+      return lang.fixed_costs;
     case DiagramType.detailPersonalVariable:
-      return lang.variable_costs.toUpperCase();
+      return lang.variable_costs;
 
     default:
-      return lang.unknown.toUpperCase();
+      return lang.unknown;
   }
 }
 

@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/buttons.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mode_to_x.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/detail_route_info/detail_route_info_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/costs_percentage_bar.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/costs_result_row.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/detail_route_info/detail_route_info_content.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/mobiscore_score_board/mobi_score_score_board.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/question_icons.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/costs/Costs.dart';
@@ -15,14 +17,22 @@ class Layer1Content extends StatelessWidget {
   const Layer1Content(
       {super.key,
       required this.selectedTrip,
+      required this.currentCarTrip,
+      required this.currentBicycleTrip,
+      required this.currentPublicTransportTrip,
       required this.setInfoViewTypeCallback,
       required this.setDiagramTypeCallback,
       required this.isMobile,
       required this.screenWidth,
       required this.contentMaxWidth,
-      required this.changeLayerCallback});
+      required this.changeLayerCallback,
+      required this.onSelectionModeChanged});
 
   final Trip selectedTrip;
+  final Trip? currentCarTrip;
+  final Trip? currentBicycleTrip;
+  final Trip? currentPublicTransportTrip;
+  final Function(SelectionMode) onSelectionModeChanged;
   final Function(InfoViewType) setInfoViewTypeCallback;
   final Function(DiagramType) setDiagramTypeCallback;
   final bool isMobile;
@@ -34,15 +44,17 @@ class Layer1Content extends StatelessWidget {
   Widget build(BuildContext context) {
     AppLocalizations lang = AppLocalizations.of(context)!;
 
+    double horizontalPadding = largePadding;
+
     return SizedBox(
       width: contentMaxWidth + mediumPadding,
       child: Column(
         children: [
+          largeVerticalSpacer,
           Padding(
             padding: EdgeInsets.only(left: mediumPadding),
             child: Column(
               children: [
-                largeVerticalSpacer,
                 layer1Header(context, selectedTrip.mode),
                 isMobile ? largeVerticalSpacer : extraLargeVerticalSpacer,
                 costsPercentageBar(context,
@@ -51,6 +63,20 @@ class Layer1Content extends StatelessWidget {
               ],
             ),
           ),
+          if (isMobile)
+            Padding(
+              padding: EdgeInsets.only(left: mediumPadding),
+              child: mobiScoreScoreBoardWithPointers(context,
+                  heightSection: 240,
+                  selectedTrip: selectedTrip,
+                  currentCarTrip: currentCarTrip,
+                  currentBicycleTrip: currentBicycleTrip,
+                  currentPublicTransportTrip: currentPublicTransportTrip,
+                  onSelectionModeChanged: onSelectionModeChanged,
+                  horizontalPadding: horizontalPadding, onMobiscoreLogoPressed: () {
+                setInfoViewTypeCallback(InfoViewType.mobiscore);
+              }),
+            ),
           costResultRow(context, trip: selectedTrip, setDiagramType: (value) {
             setInfoViewTypeCallback(InfoViewType.diagram);
             setDiagramTypeCallback(value);

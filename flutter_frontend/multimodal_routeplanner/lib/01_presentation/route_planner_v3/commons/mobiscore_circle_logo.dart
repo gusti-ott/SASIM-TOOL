@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 
-Widget mobiScoreCircleLogo({required double size}) {
+Widget mobiScoreCircleLogo({required double size, required Function() onTap}) {
   return Container(
     height: size,
     width: size,
@@ -16,10 +16,13 @@ Widget mobiScoreCircleLogo({required double size}) {
     ),
     child: Padding(
       padding: EdgeInsets.all(smallPadding / 1.7),
-      child: Image.asset(
-        'assets/mobiscore_logos/logo_primary.png',
-        fit: BoxFit.contain,
-        height: size,
+      child: InkWell(
+        onTap: onTap,
+        child: Image.asset(
+          'assets/mobiscore_logos/logo_primary.png',
+          fit: BoxFit.contain,
+          height: size,
+        ),
       ),
     ),
   );

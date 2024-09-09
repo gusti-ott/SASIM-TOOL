@@ -55,8 +55,8 @@ final textTheme = TextTheme(
   ),
   labelLarge: GoogleFonts.barlow(
     fontWeight: FontWeight.w400,
-    fontSize: 12,
-    height: 16 / 12,
+    fontSize: 14,
+    height: 16 / 14,
     letterSpacing: -0.3,
   ),
   labelMedium: GoogleFonts.barlow(
@@ -104,4 +104,4 @@ final mobileElectricSwitchLabelTextStyle =
     GoogleFonts.barlow(fontWeight: FontWeight.w400, fontSize: 11.47, height: 16.38 / 11.47, letterSpacing: 0.08);
 
 final mapLegendTextStyle =
-    GoogleFonts.barlow(fontWeight: FontWeight.w400, fontSize: 14, height: 20 / 14, letterSpacing: 0.1);
+    GoogleFonts.barlow(fontWeight: FontWeight.w400, fontSize: 16, height: 20 / 16, letterSpacing: 0.1);

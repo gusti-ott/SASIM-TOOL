@@ -11,8 +11,7 @@ import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 import 'package:multimodal_routeplanner/logger.dart';
 
 class ExternalCostsDiagram extends StatefulWidget {
-  const ExternalCostsDiagram(
-      {super.key, required this.trip1, required this.trip2, required this.trip3});
+  const ExternalCostsDiagram({super.key, required this.trip1, required this.trip2, required this.trip3});
 
   final Trip trip1;
   final Trip trip2;
@@ -42,7 +41,7 @@ class _ExternalCostsDiagramState extends State<ExternalCostsDiagram> {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
 
     return Container(
-      width: resultTablewidth,
+      width: resultTableWidth,
       decoration: BoxDecoration(
         color: colorScheme.primary,
       ),
@@ -71,7 +70,7 @@ class _ExternalCostsDiagramState extends State<ExternalCostsDiagram> {
                     smallVerticalSpacer,
                     Expanded(
                       child: SizedBox(
-                        width: resultTablewidth,
+                        width: resultTableWidth,
                         child: diagramDescriptionBox(),
                       ),
                     )
@@ -93,8 +92,8 @@ class _ExternalCostsDiagramState extends State<ExternalCostsDiagram> {
     );
   }
 
-  Column mainDiagramButtonsColumn(BuildContext context, TextTheme textTheme,
-      ColorScheme colorScheme, double resultDiagramHeight) {
+  Column mainDiagramButtonsColumn(
+      BuildContext context, TextTheme textTheme, ColorScheme colorScheme, double resultDiagramHeight) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -159,12 +158,9 @@ class _ExternalCostsDiagramState extends State<ExternalCostsDiagram> {
     );
   }
 
-  void triggerStackTouchResonse(
-      FlTouchEvent event, BarTouchResponse? barTouchResponse, Logger logger) {
+  void triggerStackTouchResonse(FlTouchEvent event, BarTouchResponse? barTouchResponse, Logger logger) {
     setState(() {
-      if (!event.isInterestedForInteractions ||
-          barTouchResponse == null ||
-          barTouchResponse.spot == null) {
+      if (!event.isInterestedForInteractions || barTouchResponse == null || barTouchResponse.spot == null) {
         touchedBar = -1;
         touchedStack = -1;
         return;

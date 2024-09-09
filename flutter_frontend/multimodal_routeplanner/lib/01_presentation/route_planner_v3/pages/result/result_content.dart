@@ -6,43 +6,42 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/buttons.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/input_to_trip.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/detail_route_info/detail_route_info_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/layer_1/layer_1_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/layer_2_detailed/layer_2_content_desktop.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/layer_2_detailed/layer_2_content_mobile.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/values.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/detail_route_info/detail_route_info_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/mobiscore_score_board/mobi_score_score_board.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/search_screen_v3.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/mode_selection_components.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 
-import '../search/search_screen_v3.dart';
-
 class ResultContent extends StatelessWidget {
-  const ResultContent({
-    super.key,
-    this.isMobile = false,
-    required this.screenWidth,
-    this.showAdditionalMobileInfo = false,
-    required this.selectionMode,
-    required this.isElectric,
-    required this.isShared,
-    required this.trips,
-    required this.selectedTrip,
-    required this.onSelectionModeChanged,
-    required this.onElectricChanged,
-    required this.onSharedChanged,
-    required this.infoViewType,
-    required this.selectedDiagramType,
-    required this.setInfoViewTypeCallback,
-    required this.setDiagramTypeCallback,
-    required this.changeLayerCallback,
-    required this.contentLayer,
-    required this.hideAdditionalInfoCallback,
-    required this.backgroundColor,
-    required this.startAddress,
-    required this.endAddress,
-  });
+  const ResultContent(
+      {super.key,
+      this.isMobile = false,
+      required this.screenWidth,
+      this.showAdditionalMobileInfo = false,
+      required this.selectionMode,
+      required this.isElectric,
+      required this.isShared,
+      required this.trips,
+      required this.selectedTrip,
+      required this.onSelectionModeChanged,
+      required this.onElectricChanged,
+      required this.onSharedChanged,
+      required this.infoViewType,
+      required this.selectedDiagramType,
+      required this.setInfoViewTypeCallback,
+      required this.setDiagramTypeCallback,
+      required this.changeLayerCallback,
+      required this.contentLayer,
+      required this.hideAdditionalInfoCallback,
+      required this.backgroundColor,
+      required this.startAddress,
+      required this.endAddress,
+      required this.onMobiscoreLogoPressed});
 
   final bool isMobile;
   final double screenWidth;
@@ -65,6 +64,7 @@ class ResultContent extends StatelessWidget {
   final Color backgroundColor;
   final String startAddress;
   final String endAddress;
+  final Function() onMobiscoreLogoPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +91,8 @@ class ResultContent extends StatelessWidget {
             controller: scrollController,
             slivers: [
               SliverAppBar(
-                pinned: true,
+                floating: true,
+                snap: true,
                 leading: Padding(
                   padding: EdgeInsets.all(smallPadding),
                   child: IconButton(
@@ -149,23 +150,13 @@ class ResultContent extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                mediumVerticalSpacer,
-                                Padding(
-                                  padding: EdgeInsets.only(left: mediumPadding),
-                                  child: mobiScoreScoreBoardWithPointers(
-                                    context,
-                                    heightSection: 240,
+                                if (contentLayer == ContentLayer.layer1)
+                                  Layer1Content(
                                     selectedTrip: selectedTrip,
                                     currentCarTrip: currentCarTrip,
                                     currentBicycleTrip: currentBicycleTrip,
                                     currentPublicTransportTrip: currentPublicTransportTrip,
                                     onSelectionModeChanged: onSelectionModeChanged,
-                                    horizontalPadding: horizontalPadding,
-                                  ),
-                                ),
-                                if (contentLayer == ContentLayer.layer1)
-                                  Layer1Content(
-                                    selectedTrip: selectedTrip,
                                     setInfoViewTypeCallback: setInfoViewTypeCallback,
                                     setDiagramTypeCallback: setDiagramTypeCallback,
                                     isMobile: isMobile,
@@ -227,7 +218,7 @@ class ResultContent extends StatelessWidget {
                                     Padding(
                                       padding: EdgeInsets.symmetric(horizontal: mediumPadding, vertical: largePadding),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           SizedBox(
                                             width: 40,
@@ -237,25 +228,28 @@ class ResultContent extends StatelessWidget {
                                                   context.goNamed(SearchScreenV3.routeName);
                                                 }),
                                           ),
-                                          modeSelectionRow(context,
-                                              isElectric: isElectric,
-                                              onElectricChanged: onElectricChanged,
-                                              selectionMode: selectionMode,
-                                              onSelectionModeChanged: onSelectionModeChanged,
-                                              isShared: isShared,
-                                              onSharedChanged: onSharedChanged,
-                                              width: 700,
-                                              makePartlyTransparent: true,
-                                              backgroundColor: backgroundColor),
-                                          const SizedBox(
-                                            width: 30,
-                                          )
+                                          Expanded(
+                                            child: modeSelectionRow(context,
+                                                isElectric: isElectric,
+                                                onElectricChanged: onElectricChanged,
+                                                selectionMode: selectionMode,
+                                                onSelectionModeChanged: onSelectionModeChanged,
+                                                isShared: isShared,
+                                                onSharedChanged: onSharedChanged,
+                                                width: 700,
+                                                makePartlyTransparent: true,
+                                                backgroundColor: backgroundColor),
+                                          ),
                                         ],
                                       ),
                                     ),
                                     if (contentLayer == ContentLayer.layer1)
                                       Layer1Content(
                                         selectedTrip: selectedTrip,
+                                        currentCarTrip: currentCarTrip,
+                                        currentBicycleTrip: currentBicycleTrip,
+                                        currentPublicTransportTrip: currentPublicTransportTrip,
+                                        onSelectionModeChanged: onSelectionModeChanged,
                                         setInfoViewTypeCallback: setInfoViewTypeCallback,
                                         setDiagramTypeCallback: setDiagramTypeCallback,
                                         isMobile: isMobile,
@@ -312,6 +306,7 @@ class ResultContent extends StatelessWidget {
             currentPublicTransportTrip: currentPublicTransportTrip,
             currentBicycleTrip: currentBicycleTrip,
             onSelectionModeChanged: onSelectionModeChanged,
+            onMobiscoreLogoPressed: onMobiscoreLogoPressed,
           ),
         if (isMobile && showAdditionalMobileInfo)
           DetailRouteInfoContent(

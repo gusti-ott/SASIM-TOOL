@@ -1,2 +1,2 @@
-double widthInfoSection = 400;
+double widthInfoSection = 480;
 double contentMaxWidth = 1000;

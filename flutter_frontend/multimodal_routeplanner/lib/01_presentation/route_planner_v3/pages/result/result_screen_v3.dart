@@ -17,9 +17,9 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/v3_scaffold.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/input_to_trip.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mobiscore_to_x.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/detail_route_info/detail_route_info_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_cubit.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/detail_route_info/detail_route_info_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/search_screen_v3.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
@@ -227,6 +227,11 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
                     setState(() {
                       infoViewType = value;
                     });
+                    if (!showAdditionalMobileInfo) {
+                      setState(() {
+                        showAdditionalMobileInfo = true;
+                      });
+                    }
                   },
                   setDiagramTypeCallback: (DiagramType diagramType) {
                     setState(() {
@@ -258,6 +263,16 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
                   backgroundColor: backgroundColor,
                   startAddress: widget.startAddress,
                   endAddress: widget.endAddress,
+                  onMobiscoreLogoPressed: () {
+                    if (!showAdditionalMobileInfo) {
+                      setState(() {
+                        showAdditionalMobileInfo = true;
+                      });
+                    }
+                    setState(() {
+                      infoViewType = InfoViewType.mobiscore;
+                    });
+                  },
                 );
               }
             } else {
