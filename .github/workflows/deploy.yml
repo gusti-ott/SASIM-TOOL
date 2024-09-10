@@ -36,7 +36,7 @@ jobs:
       - name: Build Flutter Web
         run: |
           flutter gen-l10n
-          flutter build web
+          flutter build web --web-renderer canvaskit
           sed -i 's|<base href="/">|<base href="/web/">|' build/web/index.html
 
       - name: Upload Build Artifacts
