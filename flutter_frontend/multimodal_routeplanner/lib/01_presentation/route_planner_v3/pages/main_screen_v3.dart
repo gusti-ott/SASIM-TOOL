@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:multimodal_routeplanner/01_presentation/dimensions.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/mobile_scaffold_widgets.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/nav_drawer.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/navigation_header.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/v3_scaffold.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
+import 'package:multimodal_routeplanner/01_presentation/values/dimensions.dart';
 
 class MainScreenV3 extends StatelessWidget {
   const MainScreenV3({super.key, required this.navigationShell});
