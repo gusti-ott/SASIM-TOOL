@@ -44,7 +44,8 @@ class ResultCubit extends Cubit<ResultState> {
       }
 
       if (listTrips.isNotEmpty) {
-        emit(ResultLoaded(listTrips));
+        cachedListTrips = listTrips;
+        emit(ResultLoaded(cachedListTrips));
       } else {
         emit(ResultError('No trips could be loaded.'));
       }

@@ -7,17 +7,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
+import 'package:multimodal_routeplanner/01_presentation/dimensions.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/animations/background_loading_animation.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/buttons.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/decorations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/progress_indicators.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/v3_scaffold.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/input_to_trip.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mobiscore_to_x.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/detail_route_info/detail_route_info_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_cubit.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/detail_route_info/detail_route_info_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/search_screen_v3.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
@@ -136,7 +138,7 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
     TextTheme textTheme = Theme.of(context).textTheme;
 
     double screenWidth = MediaQuery.of(context).size.width;
-    bool isMobile = screenWidth < 1000;
+    bool isMobile = screenWidth < mobileScreenWidthMinimum;
 
     return BlocConsumer<ResultCubit, ResultState>(
       bloc: cubit,
@@ -145,23 +147,7 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
         Widget child = resultErrorWidget(context);
         FloatingActionButton? fab;
         if (state is ResultLoading) {
-          child = Padding(
-            padding: EdgeInsets.all(mediumPadding),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset('assets/mobiscore_logos/logo_with_text_primary.png', width: 100),
-                largeVerticalSpacer,
-                circularProgressIndicatorWithPadding(color: primaryColorV3),
-                largeVerticalSpacer,
-                Text(
-                  '${lang.route_is_loading} ${state.loadedTrips}/${state.totalTrips}',
-                  style: textTheme.headlineMedium!.copyWith(color: primaryColorV3),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          );
+          child = buildLoadingWidget(lang, state, textTheme);
         } else if (state is ResultLoaded) {
           trips = state.trips;
           fab = isMobile && !showAdditionalMobileInfo
@@ -225,6 +211,11 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
                     setState(() {
                       infoViewType = value;
                     });
+                    if (!showAdditionalMobileInfo) {
+                      setState(() {
+                        showAdditionalMobileInfo = true;
+                      });
+                    }
                   },
                   setDiagramTypeCallback: (DiagramType diagramType) {
                     setState(() {
@@ -256,6 +247,16 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
                   backgroundColor: backgroundColor,
                   startAddress: widget.startAddress,
                   endAddress: widget.endAddress,
+                  onMobiscoreLogoPressed: () {
+                    if (!showAdditionalMobileInfo) {
+                      setState(() {
+                        showAdditionalMobileInfo = true;
+                      });
+                    }
+                    setState(() {
+                      infoViewType = InfoViewType.mobiscore;
+                    });
+                  },
                 );
               }
             } else {
@@ -263,8 +264,39 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
             }
           }
         }
-        return SelectionArea(child: Scaffold(backgroundColor: backgroundColor, body: child, floatingActionButton: fab));
+        return V3Scaffold(
+          backgroundColor: backgroundColor,
+          body: child,
+          floatingActionButton: fab,
+        );
       },
+    );
+  }
+
+  Padding buildLoadingWidget(AppLocalizations lang, ResultLoading state, TextTheme textTheme) {
+    return Padding(
+      padding: EdgeInsets.all(mediumPadding),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const SizedBox(height: 80),
+          Column(
+            children: [
+              circularProgressIndicatorWithPadding(color: primaryColorV3),
+              largeVerticalSpacer,
+              Text(
+                '${lang.route_is_loading} ${state.loadedTrips}/${state.totalTrips}',
+                style: textTheme.headlineMedium!.copyWith(color: primaryColorV3),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+          Padding(
+            padding: EdgeInsets.only(bottom: extraLargePadding),
+            child: Image.asset('assets/mobiscore_logos/logo_with_text_primary.png', width: 100),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -289,7 +321,7 @@ Widget resultErrorWidget(BuildContext context) {
                     largeVerticalSpacer,
                     Text(lang.something_went_wrong, style: textTheme.displayMedium, textAlign: TextAlign.center),
                     smallVerticalSpacer,
-                    Text(lang.please_try_again, style: textTheme.displaySmall, textAlign: TextAlign.center),
+                    Text(lang.please_try_again, style: textTheme.headlineSmall, textAlign: TextAlign.center),
                     largeVerticalSpacer,
                     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                       V3CustomButton(

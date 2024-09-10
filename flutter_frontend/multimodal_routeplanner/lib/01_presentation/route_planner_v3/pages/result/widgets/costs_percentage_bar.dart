@@ -30,60 +30,83 @@ Widget totalCostsBar(BuildContext context, {required Trip selectedTrip, bool isM
   int externalCostsPercentage = getSocialCostsPercentage(selectedTrip);
   int internalCostsPercentage = 100 - externalCostsPercentage;
 
-  return Column(
-    children: [
-      Container(
-        decoration: const BoxDecoration(color: Colors.white),
-        height: 20,
-        child: Row(children: [
-          Expanded(
-            flex: externalCostsPercentage,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
+  return LayoutBuilder(
+    builder: (context, constraints) {
+      // Get the available width from the parent container
+      double availableWidth = constraints.maxWidth;
+
+      // Calculate the widths for external and internal costs
+      double externalCostWidth = availableWidth * (externalCostsPercentage / 100);
+      double internalCostWidth = availableWidth * (internalCostsPercentage / 100);
+
+      return Column(
+        children: [
+          Container(
+            decoration: const BoxDecoration(color: Colors.white),
+            height: 20,
+            child: Row(
+              children: [
+                // External costs part with AnimatedContainer
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 500), // Animation duration
+                  curve: Curves.easeInOut, // Optional curve for smooth animation
+                  width: externalCostWidth, // Calculate the width based on percentage
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(30),
+                      bottomRight: Radius.circular(30),
+                    ),
+                    color: getColorFromMobiScore(selectedTrip.mobiScore),
+                  ),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: smallPadding),
+                      child: Text(
+                        '${externalCostsPercentage.toString()} %',
+                        style: textTheme.labelMedium!.copyWith(color: Colors.white),
+                      ),
+                    ),
+                  ),
                 ),
-                color: getColorFromMobiScore(selectedTrip.mobiScore),
-              ),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: EdgeInsets.only(left: smallPadding),
-                  child: Text('${externalCostsPercentage.toString()} %',
-                      style: textTheme.labelMedium!.copyWith(color: Colors.white)),
+                // Internal costs part
+                Expanded(
+                  child: SizedBox(
+                    width: internalCostWidth, // Calculate the width based on percentage
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Padding(
+                        padding: EdgeInsets.only(right: smallPadding),
+                        child: Text(
+                          '${internalCostsPercentage.toString()} %',
+                          style: textTheme.labelMedium,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
-          Expanded(
-              flex: internalCostsPercentage,
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: EdgeInsets.only(right: smallPadding),
-                  child: Text('${internalCostsPercentage.toString()} %', style: textTheme.labelMedium),
+          if (isMobile) ...[
+            smallVerticalSpacer,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  lang.social_costs.toUpperCase(),
+                  style: textTheme.labelLarge,
                 ),
-              ))
-        ]),
-      ),
-      if (isMobile) ...[
-        smallVerticalSpacer,
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              lang.social_costs.toUpperCase(),
-              style: textTheme.labelLarge,
+                Text(
+                  lang.personal_costs.toUpperCase(),
+                  style: textTheme.labelLarge,
+                ),
+              ],
             ),
-            Text(
-              lang.personal_costs.toUpperCase(),
-              style: textTheme.labelLarge,
-            )
-          ],
-        )
-      ]
-    ],
+          ]
+        ],
+      );
+    },
   );
 }
 
@@ -115,7 +138,7 @@ Widget textRowCostsBar(BuildContext context,
               flex: flex,
               child: positions[index] == position
                   ? Text('${percentages[index].toString()} %$label',
-                      style: textTheme.labelMedium,
+                      style: textTheme.labelSmall,
                       textAlign: index + 1 == positions.length ? TextAlign.right : TextAlign.left)
                   : const SizedBox(),
             );
@@ -138,24 +161,40 @@ Widget socialCostsBar(BuildContext context, {required Trip selectedTrip}) {
   List<int> percentages = [timeCostsPercentage, healthCostsPercentage, environmentCostsPercentage];
   List<PercentageTextPosition> positions = getPercentageTextPositions(percentages);
 
-  return Column(
-    children: [
-      textRowCostsBar(context,
-          selectedTrip: selectedTrip,
-          position: PercentageTextPosition.above,
-          positions: positions,
-          percentages: percentages,
-          labels: [lang.time, lang.health, lang.environment]),
-      Container(
-        decoration: BoxDecoration(
-          color: getColorFromMobiScore(selectedTrip.mobiScore).lighten(0.4),
-        ),
-        height: 20,
-        child: Row(
-          children: [
-            Expanded(
-              flex: timeCostsPercentage + healthCostsPercentage,
-              child: Container(
+  return LayoutBuilder(
+    builder: (context, constraints) {
+      // Use constraints.maxWidth to get the available width
+      double availableWidth = constraints.maxWidth;
+
+      // Adjust barWidth calculation based on availableWidth
+      double barWidth = availableWidth;
+
+      // Calculate individual widths based on the available bar width
+      double timeCostWidth = barWidth * (timeCostsPercentage / 100);
+      double healthCostWidth = barWidth * (healthCostsPercentage / 100);
+
+      return Column(
+        children: [
+          textRowCostsBar(context,
+              selectedTrip: selectedTrip,
+              position: PercentageTextPosition.above,
+              positions: positions,
+              percentages: percentages,
+              labels: [lang.time, lang.health, lang.environment]),
+          // Main cost bar
+          Container(
+            decoration: BoxDecoration(
+              color: getColorFromMobiScore(selectedTrip.mobiScore).lighten(0.4),
+            ),
+            height: 20,
+            child: Row(
+              children: [
+                // Time and Health costs combined (animated)
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeInOut,
+                  width: timeCostWidth + healthCostWidth,
+                  height: 20,
                   decoration: BoxDecoration(
                     color: getColorFromMobiScore(selectedTrip.mobiScore).lighten(0.2),
                     borderRadius: const BorderRadius.only(
@@ -163,43 +202,53 @@ Widget socialCostsBar(BuildContext context, {required Trip selectedTrip}) {
                       bottomRight: Radius.circular(30),
                     ),
                   ),
-                  height: 20,
                   child: Row(
                     children: [
-                      Expanded(
-                        flex: timeCostsPercentage,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: getColorFromMobiScore(selectedTrip.mobiScore),
-                            borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(30),
-                              bottomRight: Radius.circular(30),
-                            ),
+                      // Time costs (animated)
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeInOut,
+                        width: timeCostWidth, // Time costs width
+                        decoration: BoxDecoration(
+                          color: getColorFromMobiScore(selectedTrip.mobiScore),
+                          borderRadius: const BorderRadius.only(
+                            topRight: Radius.circular(30),
+                            bottomRight: Radius.circular(30),
                           ),
+                        ),
+                        height: 20,
+                      ),
+                      // Health costs (remaining part of the bar)
+                      Expanded(
+                        child: Container(
+                          color: Colors.transparent, // Transparent to show the combined background
                           height: 20,
                         ),
                       ),
-                      Expanded(
-                        flex: healthCostsPercentage,
-                        child: const SizedBox(),
-                      )
                     ],
-                  )),
+                  ),
+                ),
+                // Environment costs (static, non-animated, fills remaining space)
+                Expanded(
+                  child: Container(
+                    height: 20,
+                    decoration: const BoxDecoration(
+                      color: Colors.transparent, // No animation or color change
+                    ),
+                  ),
+                ),
+              ],
             ),
-            Expanded(
-              flex: environmentCostsPercentage,
-              child: const SizedBox(),
-            )
-          ],
-        ),
-      ),
-      textRowCostsBar(context,
-          selectedTrip: selectedTrip,
-          position: PercentageTextPosition.below,
-          positions: positions,
-          percentages: percentages,
-          labels: [lang.time, lang.health, lang.environment]),
-    ],
+          ),
+          textRowCostsBar(context,
+              selectedTrip: selectedTrip,
+              position: PercentageTextPosition.below,
+              positions: positions,
+              percentages: percentages,
+              labels: [lang.time, lang.health, lang.environment]),
+        ],
+      );
+    },
   );
 }
 
@@ -212,45 +261,67 @@ Widget privateCostsBar(BuildContext context, {required Trip selectedTrip}) {
   List<int> percentages = [fixedCosts, variableCosts];
   List<PercentageTextPosition> positions = getPercentageTextPositions(percentages);
 
-  return Column(
-    children: [
-      textRowCostsBar(context,
-          selectedTrip: selectedTrip,
-          position: PercentageTextPosition.above,
-          positions: positions,
-          percentages: percentages,
-          labels: [lang.fixed, lang.variable]),
-      Container(
-        decoration: BoxDecoration(
-          color: customLightGrey.lighten(0.4),
-        ),
-        height: 20,
-        child: Row(
-          children: [
-            Expanded(
-              flex: fixedCosts,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: customLightGrey,
-                  borderRadius: const BorderRadius.only(
-                    topRight: Radius.circular(30),
-                    bottomRight: Radius.circular(30),
+  return LayoutBuilder(
+    builder: (context, constraints) {
+      // Use constraints.maxWidth to get the available width
+      double availableWidth = constraints.maxWidth;
+
+      // Calculate the widths for fixed and variable costs based on available space
+      double fixedCostsWidth = availableWidth * (fixedCosts / 100);
+
+      return Column(
+        children: [
+          // Above text labels for the bar
+          textRowCostsBar(context,
+              selectedTrip: selectedTrip,
+              position: PercentageTextPosition.above,
+              positions: positions,
+              percentages: percentages,
+              labels: [lang.fixed, lang.variable]),
+
+          // The bar itself
+          Container(
+            decoration: BoxDecoration(
+              color: customLightGrey.lighten(0.4),
+            ),
+            height: 20,
+            child: Row(
+              children: [
+                // Fixed Costs (animated)
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeInOut,
+                  width: fixedCostsWidth, // Animate width of fixed costs
+                  height: 20,
+                  decoration: BoxDecoration(
+                    color: customLightGrey,
+                    borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(30),
+                      bottomRight: Radius.circular(30),
+                    ),
                   ),
                 ),
-                height: 20,
-              ),
+                // Variable Costs (remaining part)
+                Expanded(
+                  child: Container(
+                    color: Colors.transparent, // Transparent to show the combined background
+                    height: 20,
+                  ),
+                ),
+              ],
             ),
-            Expanded(flex: variableCosts, child: const SizedBox()),
-          ],
-        ),
-      ),
-      textRowCostsBar(context,
-          selectedTrip: selectedTrip,
-          position: PercentageTextPosition.below,
-          positions: positions,
-          percentages: percentages,
-          labels: [lang.fixed, lang.variable]),
-    ],
+          ),
+
+          // Below text labels for the bar
+          textRowCostsBar(context,
+              selectedTrip: selectedTrip,
+              position: PercentageTextPosition.below,
+              positions: positions,
+              percentages: percentages,
+              labels: [lang.fixed, lang.variable]),
+        ],
+      );
+    },
   );
 }
 

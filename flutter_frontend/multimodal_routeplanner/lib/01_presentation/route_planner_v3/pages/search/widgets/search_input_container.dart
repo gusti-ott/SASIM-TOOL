@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_cubit.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/values.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/address_input/address_input_components.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/mode_selection_components.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
@@ -71,7 +72,11 @@ class _SearchInputContentState extends State<SearchInputContent> {
           },
         ),
         largeVerticalSpacer,
-        addressNote(lang, textTheme),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: heightSearchBar / 2),
+          child: addressNote(lang, textTheme),
+        ),
+        smallVerticalSpacer,
         addressInputRow(
           context,
           isMobile: false,
@@ -123,6 +128,7 @@ class _SearchInputContentState extends State<SearchInputContent> {
             }),
         largeVerticalSpacer,
         addressNote(lang, textTheme),
+        smallVerticalSpacer,
         addressInputRow(context, isMobile: true, startController: startController, endController: endController,
             onStartChanged: (value) {
           setState(() {
@@ -137,16 +143,13 @@ class _SearchInputContentState extends State<SearchInputContent> {
     );
   }
 
-  Padding addressNote(AppLocalizations lang, TextTheme textTheme) {
-    return Padding(
-      padding: EdgeInsets.all(smallPadding),
-      child: Align(
-          alignment: Alignment.centerLeft,
-          child: Text(lang.note_address,
-              style: widget.isMobile
-                  ? mobileSearchSubtitleTextStyle.copyWith(color: primaryColorV3, fontStyle: FontStyle.italic)
-                  : textTheme.bodyMedium!.copyWith(color: primaryColorV3, fontStyle: FontStyle.italic))),
-    );
+  Widget addressNote(AppLocalizations lang, TextTheme textTheme) {
+    return Align(
+        alignment: Alignment.centerLeft,
+        child: Text(lang.note_address,
+            style: widget.isMobile
+                ? mobileSearchSubtitleTextStyle.copyWith(color: primaryColorV3, fontStyle: FontStyle.italic)
+                : textTheme.bodyMedium!.copyWith(color: primaryColorV3, fontStyle: FontStyle.italic)));
   }
 
   Widget modeIconButton({

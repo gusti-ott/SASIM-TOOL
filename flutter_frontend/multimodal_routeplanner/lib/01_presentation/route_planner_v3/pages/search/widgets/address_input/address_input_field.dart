@@ -21,7 +21,7 @@ Widget addressInputField(
         prefixIcon: const Icon(Icons.search, color: Colors.black),
         suffixIcon: Icon(Icons.location_on, color: tertiaryColorV3, fill: 0.5),
         hintText: hintText,
-        hintStyle: textTheme.labelMedium!.copyWith(color: Colors.grey),
+        hintStyle: textTheme.labelLarge!.copyWith(color: Colors.grey),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
           borderSide: BorderSide.none, // No visible border
@@ -40,7 +40,7 @@ Widget addressInputField(
       onChanged: onChanged,
       maxLines: 1, // Ensure single-line input
       textInputAction: TextInputAction.done, // Handle done action on keyboard
-      style: textTheme.labelMedium, // Style the text
+      style: textTheme.labelLarge, // Style the text
       // Ensure text scrolls to the end when focused
       keyboardType: TextInputType.text,
       textAlignVertical: TextAlignVertical.center,

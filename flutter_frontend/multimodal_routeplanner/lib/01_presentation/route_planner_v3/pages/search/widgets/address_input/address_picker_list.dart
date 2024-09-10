@@ -17,6 +17,9 @@ class AddressPickerListV3 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<String> listAddressNames = listAddresses.map((e) => e.name).toList();
+    listAddressNames = listAddressNames.toSet().toList();
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: mediumPadding),
       child: Container(
@@ -29,25 +32,11 @@ class AddressPickerListV3 extends StatelessWidget {
           child: ListView.builder(
             padding: EdgeInsets.zero,
             shrinkWrap: true,
-            itemCount: listAddresses.length < 3 ? listAddresses.length : 3,
+            itemCount: listAddressNames.length < 3 ? listAddressNames.length : 3,
             itemBuilder: (BuildContext context, int index) {
-              String name = "";
-              // Geometry geometry = Geometry([0.0, 0.0], 'geometry');
-              if (listAddresses[index].properties.city != null && listAddresses[index].properties.postcode != null) {
-                if (listAddresses[index].properties.name != null) {
-                  name =
-                      '${listAddresses[index].properties.name}, ${listAddresses[index].properties.postcode.toString()} ${listAddresses[index].properties.city}';
-                } else if (listAddresses[index].properties.street != null &&
-                    listAddresses[index].properties.housenumber != null) {
-                  name =
-                      '${listAddresses[index].properties.street} ${listAddresses[index].properties.housenumber.toString()}, ${listAddresses[index].properties.postcode.toString()} ${listAddresses[index].properties.city}';
-                }
-              } else {
-                name = 'kein Name gefunden';
-              }
-              // geometry = listAddresses[index].geometry;
+              String name = listAddressNames[index];
 
-              if (index + 1 == listAddresses.length) {
+              if (index + 1 == listAddressNames.length) {
                 return addressItem(context, name: name, addressInputController: addressInputController, onTap: () {
                   onAddressSelectedCallback(name);
                 });
@@ -87,12 +76,12 @@ Widget addressItem(
       onTap();
     },
     child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
           name,
           style: textTheme.labelMedium,
-          textAlign: TextAlign.left,
+          textAlign: TextAlign.center,
         ),
       ],
     ),

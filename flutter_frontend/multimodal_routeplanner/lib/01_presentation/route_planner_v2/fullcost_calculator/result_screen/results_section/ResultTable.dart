@@ -36,7 +36,7 @@ class ResultTable extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       controller: scrollController,
       child: Container(
-        width: resultTablewidth,
+        width: resultTableWidth,
         color: colorScheme.primary,
         child: Padding(
           padding: const EdgeInsets.all(8.0),

@@ -9,7 +9,9 @@
   "end_address": "Destination Address",
   "please_insert_address": "Please insert address",
   "from": "From",
+  "from_hint": "From (e.g. Arcisstraße 21, München)",
   "to": "To",
+  "to_hint": "To (e.g. Ostbahnhof, München)",
   "new_route": "New Route",
   "show_route": "Show Route",
   "car": "Car",
@@ -88,7 +90,7 @@
   "environment": "Environment",
   "fixed": "Fixed",
   "variable": "Variable",
-  "route_is_loading": "...routes are loading...",
+  "route_is_loading": "Routes are loading...",
   "learn_about": "Learn about the real costs of your mobility in Munich",
   "input_instructions": "Choose among the available travel modes and enter a start and end point in Munich to calculate the true costs of your trip.",
   "total_costs": "Total Costs",
@@ -128,5 +130,12 @@
   "field_empty_alert": "The address field cannot be empty",
   "input_short_alert": "Input must be longer than 2 characters",
   "shared": "Shared",
-  "private": "Private"
+  "private": "Private",
+  "header_image_label": "The title image shows an urban scene with multiple modes of transport: a teal bus, a cyclist on a teal bicycle, and an elevated white-and-orange train. People are walking in the background, and a large profile of a woman with dark hair is shown to the right, overlooking the city. The city has modern buildings, greenery, and statues.",
+  "what_are": "What are",
+  "start_new_route": "Start a new route",
+  "mobi_score_description_1": "The Mobi-Score is a color-coded rating scale that provides information on how sustainable a route is with a mode of transport in terms of its external costs.",
+  "mobi_score_description_2": "The Mobi-Score depends on the chosen mode of transport and the distance traveled. This can vary significantly between different modes of transport.",
+  "mobi_score_description_3": "If a route has comparatively high external costs, it receives the Mobi-Score E (red). On the other hand, if the route has low external costs, it receives the Mobi-Score A (green)."
+
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/decorations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/values.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/electric_selection_components.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/shared_selection_components.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
@@ -16,24 +15,39 @@ Widget modeSelectionRow(BuildContext context,
     required Function(bool) onSharedChanged,
     double? width,
     double? height,
-    bool makePartlyTransparent = false,
     Color? backgroundColor = Colors.white}) {
   return Container(
     width: width ?? double.infinity,
-    height: height ?? heightSearchBar,
+    height: null,
     decoration: customBoxDecorationWithShadow(backgroundColor: backgroundColor),
-    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-    child: Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          modeSelectionPart(selectedMode: selectionMode, onSelectionModeChanged: onSelectionModeChanged),
-          sharedSelectionPart(context, isShared: isShared, onSharedChanged: onSharedChanged, isMobile: false),
-          electricSelectionPart(context, isElectric: isElectric, onElectricChanged: onElectricChanged, isMobile: false),
-        ],
-      ),
-    ),
+    padding: EdgeInsets.all(smallPadding),
+    child: Wrap(
+        alignment: WrapAlignment.spaceBetween,
+        runAlignment: WrapAlignment.center,
+        children: listSelectionElements(
+            context, selectionMode, onSelectionModeChanged, isElectric, onElectricChanged, isShared, onSharedChanged)),
   );
+}
+
+List<Widget> listSelectionElements(
+    BuildContext context,
+    SelectionMode selectionMode,
+    Function(SelectionMode) onSelectionModeChanged,
+    bool isElectric,
+    Function(bool) onElectricChanged,
+    bool isShared,
+    Function(bool) onSharedChanged) {
+  return [
+    modeSelectionPart(selectedMode: selectionMode, onSelectionModeChanged: onSelectionModeChanged),
+    sharedSelectionPart(context, isShared: isShared, onSharedChanged: onSharedChanged, isMobile: false),
+    electricSelectionPart(
+      context,
+      isElectric: isElectric,
+      onElectricChanged: isShared ? null : onElectricChanged, // Disable switch when isShared is true
+      isMobile: false,
+      isDisabled: isShared, // Add an isDisabled parameter to control the grey styling
+    )
+  ];
 }
 
 Widget modeSelectionPart(
@@ -112,8 +126,13 @@ Widget mobileModeSelectionContainer(BuildContext context,
           children: [
             sharedSelectionPart(context, isShared: isShared, onSharedChanged: onSharedChanged, isMobile: true),
             smallHorizontalSpacer,
-            electricSelectionPart(context,
-                isElectric: isElectric, onElectricChanged: onElectricChanged, isMobile: true),
+            electricSelectionPart(
+              context,
+              isElectric: isElectric,
+              onElectricChanged: isShared ? null : onElectricChanged, // Disable switch when isShared is true
+              isMobile: false,
+              isDisabled: isShared, // Add an isDisabled parameter to control the grey styling
+            ),
           ],
         )
       ],

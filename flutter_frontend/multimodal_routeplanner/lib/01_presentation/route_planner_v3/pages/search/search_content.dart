@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/navigation_header.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/values.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/search_input_container.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
@@ -42,63 +41,58 @@ class _SearchContentState extends State<SearchContent> {
 
     return Column(
       children: [
-        screenHeader(context, isMobile: widget.isMobile),
+        headerImage(context),
         smallVerticalSpacer,
-        SizedBox(
-          width: 1000,
-          child: Padding(
-            padding: EdgeInsets.all((widget.isMobile) ? mediumPadding : largePadding),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: (!isMobile) ? heightSearchBar / 2 : 0),
-                  child: Column(
-                    children: [
-                      Text(
-                        lang.learn_about,
-                        style: isMobile
-                            ? mobileSearchHeaderTextStyle.copyWith(color: primaryColorV3)
-                            : textTheme.displayMedium!.copyWith(color: primaryColorV3),
-                        textAlign: TextAlign.start,
-                      ),
-                      smallVerticalSpacer,
-                      Text(
-                        lang.input_instructions,
-                        style: isMobile
-                            ? mobileSearchSubtitleTextStyle.copyWith(color: customBlack)
-                            : textTheme.titleLarge!.copyWith(color: customBlack),
-                        textAlign: TextAlign.start,
-                      ),
-                    ],
+        Center(
+          child: SizedBox(
+            width: 1000,
+            child: Padding(
+              padding: EdgeInsets.all((widget.isMobile) ? mediumPadding : largePadding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: (!isMobile) ? heightSearchBar / 2 : 0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          lang.learn_about,
+                          style: isMobile
+                              ? mobileSearchHeaderTextStyle.copyWith(color: primaryColorV3)
+                              : textTheme.displayMedium!.copyWith(color: primaryColorV3),
+                          textAlign: TextAlign.start,
+                        ),
+                        smallVerticalSpacer,
+                        Text(
+                          lang.input_instructions,
+                          style: isMobile
+                              ? mobileSearchSubtitleTextStyle.copyWith(color: customBlack)
+                              : textTheme.titleLarge!.copyWith(color: customBlack),
+                          textAlign: TextAlign.start,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                smallVerticalSpacer,
-                SearchInputContent(key: _searchInputContentKey, isMobile: widget.isMobile),
-              ],
+                  smallVerticalSpacer,
+                  SearchInputContent(key: _searchInputContentKey, isMobile: widget.isMobile),
+                ],
+              ),
             ),
           ),
         ),
       ],
     );
   }
-
-  Widget screenHeader(BuildContext context, {required bool isMobile}) {
-    if (isMobile) {
-      return headerImage();
-    } else {
-      return Stack(
-        children: [headerImage(), navigationHeaderRow(context)],
-      );
-    }
-  }
 }
 
-Widget headerImage() {
-  return SizedBox(
-      width: double.infinity,
-      child: Image.asset(
-        'assets/title_image/mobiscore_header_1.png',
-        fit: BoxFit.fitWidth,
-      ));
+Widget headerImage(BuildContext context) {
+  AppLocalizations lang = AppLocalizations.of(context)!;
+  return Semantics(
+    label: lang.header_image_label,
+    child: Image.asset(
+      'assets/title_image/mobiscore_header_1.png',
+      fit: BoxFit.fitWidth,
+    ),
+  );
 }

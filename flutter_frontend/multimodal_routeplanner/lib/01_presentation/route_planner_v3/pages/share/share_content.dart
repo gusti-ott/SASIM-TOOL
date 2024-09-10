@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/buttons.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/decorations.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/navigation_header.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/v3_scaffold.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_screen_v3.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/values.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/search_screen_v3.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 
 class ShareContent extends StatelessWidget {
@@ -17,21 +20,88 @@ class ShareContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        if (!isMobile) navigationHeaderRow(context),
-        SizedBox(
-            width: contentMaxWidth + mediumPadding,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: mediumPadding),
-              child: (!isMobile) ? desktopShare(context) : mobileShare(context),
-            )),
-      ],
+    AppLocalizations lang = AppLocalizations.of(context)!;
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: mediumPadding),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            if (!isMobile) SizedBox(height: headerHeight),
+            if (isMobile) ...[
+              mediumVerticalSpacer,
+              Align(
+                alignment: Alignment.centerLeft,
+                child: V3CustomButton(
+                  label: lang.back_to_results,
+                  leadingIcon: Icons.arrow_back,
+                  color: primaryColorV3,
+                  textColor: primaryColorV3,
+                  onTap: () {
+                    context.goNamed(
+                      ResultScreenV3.routeName,
+                      queryParameters: {
+                        'startAddress': startAddress,
+                        'endAddress': endAddress,
+                      },
+                    );
+                  },
+                  reverseColors: true,
+                ),
+              ),
+            ],
+            SizedBox(width: contentMaxWidth, child: (!isMobile) ? desktopShare(context) : mobileShare(context)),
+            if (isMobile) ...[
+              mediumVerticalSpacer,
+              V3CustomButton(
+                  label: lang.start_new_route,
+                  leadingIcon: Icons.restart_alt,
+                  onTap: () {
+                    context.goNamed(SearchScreenV3.routeName);
+                  }),
+              largeVerticalSpacer
+            ],
+            if (!isMobile) ...[
+              extraLargeVerticalSpacer,
+              SizedBox(
+                width: contentMaxWidth,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    V3CustomButton(
+                      label: lang.back_to_results,
+                      leadingIcon: Icons.arrow_back,
+                      color: primaryColorV3,
+                      textColor: primaryColorV3,
+                      onTap: () {
+                        context.goNamed(
+                          ResultScreenV3.routeName,
+                          queryParameters: {
+                            'startAddress': startAddress,
+                            'endAddress': endAddress,
+                          },
+                        );
+                      },
+                      reverseColors: true,
+                    ),
+                    V3CustomButton(
+                        label: lang.start_new_route,
+                        leadingIcon: Icons.restart_alt,
+                        onTap: () {
+                          context.goNamed(SearchScreenV3.routeName);
+                        }),
+                  ],
+                ),
+              ),
+            ]
+          ],
+        ),
+      ),
     );
   }
 
   Container desktopShare(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
+    AppLocalizations lang = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       height: 270,
@@ -56,12 +126,12 @@ class ShareContent extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Do you like Mobi-Score? Tell a friend!',
+                    lang.tell_a_friend,
                     style: textTheme.headlineSmall,
                     textAlign: TextAlign.left,
                   ),
                   V3CustomButton(
-                    label: 'Copy URL',
+                    label: lang.copy_url,
                     leadingIcon: Icons.link,
                     textColor: primaryColorV3,
                     color: primaryColorV3,
@@ -72,7 +142,7 @@ class ShareContent extends StatelessWidget {
                                   'startAddress=$startAddress&endAddress=$endAddress'))
                           .then((_) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('URL copied to clipboard')),
+                          SnackBar(content: Text(lang.copy_url)),
                         );
                       });
                     },
@@ -90,7 +160,7 @@ class ShareContent extends StatelessWidget {
     TextTheme textTheme = Theme.of(context).textTheme;
     AppLocalizations lang = AppLocalizations.of(context)!;
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: mediumPadding, vertical: largePadding),
+      padding: EdgeInsets.symmetric(vertical: largePadding),
       child: Container(
         width: double.infinity,
         decoration: customBoxDecorationWithShadow(),

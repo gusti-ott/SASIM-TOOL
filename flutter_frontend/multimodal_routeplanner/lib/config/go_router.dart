@@ -7,6 +7,7 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcos
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/main_screen.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/about_us/about_us_screen.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/main_screen_v3.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/research/research_screen.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_screen_v3.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/search_screen_v3.dart';
@@ -19,6 +20,89 @@ final _shellNavigatorInfoKey = GlobalKey<NavigatorState>(debugLabel: 'shellInfo'
 final GoRouter vmrpRouter = GoRouter(
   initialLocation: '/search',
   routes: [
+    GoRoute(
+        path: '/',
+        redirect: (context, state) {
+          if (state.fullPath == '/') {
+            return '/search';
+          }
+          return null;
+        },
+        routes: [
+          StatefulShellRoute.indexedStack(
+              builder: (context, state, navigationShell) {
+                return MainScreenV3(navigationShell: navigationShell);
+              },
+              branches: [
+                StatefulShellBranch(routes: [
+                  GoRoute(
+                    name: SearchScreenV3.routeName,
+                    path: SearchScreenV3.path,
+                    builder: (context, state) {
+                      return const SearchScreenV3();
+                    },
+                  ),
+                  GoRoute(
+                    name: ShareScreen.routeName,
+                    path: ShareScreen.path,
+                    builder: (context, state) {
+                      final String? startAddress = state.uri.queryParameters['startAddress'];
+                      final String? endAddress = state.uri.queryParameters['endAddress'];
+                      if (startAddress == null || endAddress == null) {
+                        return const Scaffold(
+                            body: Center(
+                          child: Text('Error: parameters in url missing'),
+                        ));
+                      }
+                      return ShareScreen(startAddress: startAddress, endAddress: endAddress);
+                    },
+                  )
+                ]),
+                StatefulShellBranch(routes: [
+                  GoRoute(
+                    name: ResearchScreen.routeName,
+                    path: ResearchScreen.path,
+                    builder: (context, state) {
+                      return const ResearchScreen();
+                    },
+                  ),
+                ]),
+                StatefulShellBranch(routes: [
+                  GoRoute(
+                    name: AboutUsScreen.routeName,
+                    path: AboutUsScreen.path,
+                    builder: (context, state) {
+                      return const AboutUsScreen();
+                    },
+                  ),
+                ]),
+              ]),
+          GoRoute(
+            name: ResultScreenV3.routeName,
+            path: ResultScreenV3.path,
+            builder: (context, state) {
+              final String? startInput = state.uri.queryParameters['startAddress'];
+              final String? endInput = state.uri.queryParameters['endAddress'];
+              final String? selectedMode = state.uri.queryParameters['selectedMode'];
+              final String? isElectric = state.uri.queryParameters['isElectric'];
+              final String? isShared = state.uri.queryParameters['isShared'];
+
+              if (startInput != null && endInput != null) {
+                return ResultScreenV3(
+                    startAddress: startInput,
+                    endAddress: endInput,
+                    selectedMode: parseStringToSelectionMode(selectedMode),
+                    isElectric: isElectric == 'true',
+                    isShared: isShared == 'true');
+              } else {
+                return const Scaffold(
+                    body: Center(
+                  child: Text('Error: parameters in url missing'),
+                ));
+              }
+            },
+          ),
+        ]),
     GoRoute(
       path: '/v2',
       redirect: (context, state) {
@@ -81,7 +165,7 @@ final GoRouter vmrpRouter = GoRouter(
         builder: (context, state) {
           return const RoutePlannerScreen();
         }),
-    GoRoute(
+    /*GoRoute(
         path: '/',
         redirect: (context, state) {
           return null;
@@ -148,6 +232,6 @@ final GoRouter vmrpRouter = GoRouter(
               return ShareScreen(startAddress: startAddress, endAddress: endAddress);
             },
           )
-        ])
+        ]),*/
   ],
 );

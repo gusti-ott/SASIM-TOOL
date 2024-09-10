@@ -1,11 +1,10 @@
-import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/MobilityMode.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 import 'package:multimodal_routeplanner/03_domain/usecases/route_usecases.dart';
 
 part 'route_planner_event.dart';
-
 part 'route_planner_state.dart';
 
 class RoutePlannerBloc extends Bloc<RoutePlannerEvent, RoutePlannerState> {
@@ -19,13 +18,10 @@ class RoutePlannerBloc extends Bloc<RoutePlannerEvent, RoutePlannerState> {
 
           // get route result
           try {
-            final trip = await usecases.getTrip(
-                startInput: event.startInput,
-                endInput: event.endInput,
-                mode: event.mode);
+            final trip =
+                await usecases.getTrip(startInput: event.startInput, endInput: event.endInput, mode: event.mode);
 
-            final Map<String, Trip> trips =
-                usecases.getListAddedTrips(trips: event.trips, trip: trip);
+            final Map<String, Trip> trips = usecases.getListAddedTrips(trips: event.trips, trip: trip);
 
             emit(RoutePlannerStateLoaded(trips: trips));
           } catch (e) {
@@ -36,8 +32,7 @@ class RoutePlannerBloc extends Bloc<RoutePlannerEvent, RoutePlannerState> {
         if (event is DeleteRouteEvent) {
           emit(RoutePlannerStateLoading());
 
-          final Map<String, Trip> trips = usecases.getListRemovedTrips(
-              trips: event.trips, mode: event.mode);
+          final Map<String, Trip> trips = usecases.getListRemovedTrips(trips: event.trips, mode: event.mode);
 
           /* tripOrFailure.fold(
             (failure) => emit(

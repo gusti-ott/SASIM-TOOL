@@ -52,7 +52,9 @@ Widget positionedScorePointer(
     }
   }
 
-  return Positioned(
+  return AnimatedPositioned(
+    duration: const Duration(milliseconds: 300),
+    curve: Curves.easeInOut,
     right: !isMobile
         ? _getRightPositionScorePointerDesktop(
             widthInfoSection, widthScoreColumn, borderWidthScoreColumn, direction, isLargeScoreContainer, isReversed)
@@ -72,6 +74,7 @@ Widget positionedScorePointer(
       backgroundColor: backgroundColor,
       direction: direction,
       isLarge: isLargeScoreContainer,
+      rotationAngle: rotationAngle,
       onTap: () {
         onTripSelected(thisTrip);
       },
@@ -79,34 +82,45 @@ Widget positionedScorePointer(
   );
 }
 
-Widget _scorePointer(
-    {required String mode,
-    required ShapeDirection direction,
-    required Color backgroundColor,
-    Color? borderColor,
-    bool isLarge = false,
-    required Function() onTap}) {
-  return Transform.rotate(
-    angle: rotationAngle,
-    child: InkWell(
-      hoverColor: Colors.transparent, // Removes the grey hover background
-      splashColor: Colors.transparent, // Removes the splash effect
-      onTap: () {
-        onTap();
-      },
-      child: Container(
-        width: isLarge ? largeScoreContainerWidth : smallScoreContainerWidth,
-        height: isLarge ? largeScoreContainerWidth : smallScoreContainerWidth,
-        decoration: BoxDecoration(
-          color: backgroundColor,
-          border: borderColor != null ? Border.all(color: borderColor, width: borderWidthScoreContainer) : null,
-          borderRadius: _getBorderRadius(direction),
+Widget _scorePointer({
+  required String mode,
+  required ShapeDirection direction,
+  required Color backgroundColor,
+  Color? borderColor,
+  bool isLarge = false,
+  required Function() onTap,
+  required double rotationAngle, // Add rotation angle as parameter
+  Duration duration = const Duration(milliseconds: 300), // Animation duration
+}) {
+  return TweenAnimationBuilder(
+    tween: Tween<double>(begin: 0, end: rotationAngle), // Animate the rotation
+    duration: duration,
+    builder: (context, double angle, child) {
+      return Transform.rotate(
+        angle: angle, // Apply the animated angle
+        child: InkWell(
+          hoverColor: Colors.transparent, // Removes the grey hover background
+          splashColor: Colors.transparent, // Removes the splash effect
+          onTap: onTap,
+          child: AnimatedContainer(
+            duration: duration, // Duration for size animation
+            width: isLarge ? largeScoreContainerWidth : smallScoreContainerWidth,
+            height: isLarge ? largeScoreContainerWidth : smallScoreContainerWidth,
+            decoration: BoxDecoration(
+              color: backgroundColor,
+              border: borderColor != null ? Border.all(color: borderColor, width: borderWidthScoreContainer) : null,
+              borderRadius: _getBorderRadius(direction),
+            ),
+            child: Center(
+              child: Transform.rotate(
+                angle: -angle, // Rotate the icon back to counter the container's rotation
+                child: getIconFromMode(mode, size: isLarge ? 30 : 20),
+              ),
+            ),
+          ),
         ),
-        child: Center(
-          child: Transform.rotate(angle: -rotationAngle, child: getIconFromMode(mode, size: isLarge ? 30 : 20)),
-        ),
-      ),
-    ),
+      );
+    },
   );
 }
 
