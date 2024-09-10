@@ -67,8 +67,8 @@ final textTheme = TextTheme(
   ),
   labelSmall: GoogleFonts.barlow(
     fontWeight: FontWeight.w400,
-    fontSize: 10,
-    height: 16 / 10,
+    fontSize: 11,
+    height: 16 / 11,
   ),
   bodyLarge: GoogleFonts.barlow(
     fontWeight: FontWeight.w400,
@@ -97,11 +97,11 @@ final scoreBarTextStyle = textTheme.labelMedium!.copyWith(fontWeight: FontWeight
 final mobileSearchHeaderTextStyle =
     textTheme.displayMedium!.copyWith(fontWeight: FontWeight.w300, fontSize: 26, height: 28 / 26, letterSpacing: -0.7);
 final mobileSearchSubtitleTextStyle =
-    GoogleFonts.barlow(fontWeight: FontWeight.w300, fontSize: 13, height: 18 / 13, letterSpacing: -0.5);
+    GoogleFonts.barlow(fontWeight: FontWeight.w300, fontSize: 14, height: 18 / 14, letterSpacing: -0.5);
 final mobileChipLabelTextStyle =
     GoogleFonts.barlow(fontWeight: FontWeight.w500, fontSize: 12.44, height: 17.77 / 12, letterSpacing: 0.09);
 final mobileElectricSwitchLabelTextStyle =
     GoogleFonts.barlow(fontWeight: FontWeight.w400, fontSize: 11.47, height: 16.38 / 11.47, letterSpacing: 0.08);
 
 final mapLegendTextStyle =
-    GoogleFonts.barlow(fontWeight: FontWeight.w400, fontSize: 16, height: 20 / 16, letterSpacing: 0.1);
+    GoogleFonts.barlow(fontWeight: FontWeight.w400, fontSize: 14, height: 18 / 14, letterSpacing: 0.1);

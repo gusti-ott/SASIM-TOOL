@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/detail_route_info/detail_route_info_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/detail_route_info/detail_route_info_diagram.dart';
@@ -17,6 +18,7 @@ Widget diagramContent(
   required Trip? currentPublicTransportTrip,
 }) {
   TextTheme textTheme = Theme.of(context).textTheme;
+  AppLocalizations lang = AppLocalizations.of(context)!;
   return SingleChildScrollView(
     child: Padding(
       padding: EdgeInsets.only(left: isMobile ? extraLargePadding : extraLargePadding * 2, right: extraLargePadding),
@@ -35,8 +37,8 @@ Widget diagramContent(
         Align(
           alignment: Alignment.centerLeft,
           child: Text(
-            'Was sind ${getDiagramTitle(context, selectedDiagramType)}?',
-            style: textTheme.titleLarge,
+            '${lang.what_are} ${getDiagramTitle(context, selectedDiagramType)}?',
+            style: textTheme.titleMedium,
           ),
         ),
         smallVerticalSpacer,

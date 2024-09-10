@@ -53,11 +53,12 @@ class ShareContent extends StatelessWidget {
             if (isMobile) ...[
               mediumVerticalSpacer,
               V3CustomButton(
-                  label: 'Neue Route starten',
+                  label: lang.start_new_route,
                   leadingIcon: Icons.restart_alt,
                   onTap: () {
                     context.goNamed(SearchScreenV3.routeName);
                   }),
+              largeVerticalSpacer
             ],
             if (!isMobile) ...[
               extraLargeVerticalSpacer,
@@ -83,7 +84,7 @@ class ShareContent extends StatelessWidget {
                       reverseColors: true,
                     ),
                     V3CustomButton(
-                        label: 'Neue Route starten',
+                        label: lang.start_new_route,
                         leadingIcon: Icons.restart_alt,
                         onTap: () {
                           context.goNamed(SearchScreenV3.routeName);
@@ -100,6 +101,7 @@ class ShareContent extends StatelessWidget {
 
   Container desktopShare(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
+    AppLocalizations lang = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       height: 270,
@@ -124,12 +126,12 @@ class ShareContent extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Do you like Mobi-Score? Tell a friend!',
+                    lang.tell_a_friend,
                     style: textTheme.headlineSmall,
                     textAlign: TextAlign.left,
                   ),
                   V3CustomButton(
-                    label: 'Copy URL',
+                    label: lang.copy_url,
                     leadingIcon: Icons.link,
                     textColor: primaryColorV3,
                     color: primaryColorV3,
@@ -140,7 +142,7 @@ class ShareContent extends StatelessWidget {
                                   'startAddress=$startAddress&endAddress=$endAddress'))
                           .then((_) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('URL copied to clipboard')),
+                          SnackBar(content: Text(lang.copy_url)),
                         );
                       });
                     },

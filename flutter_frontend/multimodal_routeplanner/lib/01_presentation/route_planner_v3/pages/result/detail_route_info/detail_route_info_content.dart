@@ -54,7 +54,7 @@ class DetailRouteInfoContent extends StatelessWidget {
       decoration: BoxDecoration(
         color: backgroundColorGreyV3,
       ),
-      width: isMobile ? double.infinity : widthInfoSection,
+      width: isMobile ? double.infinity : getWidthInfoSection(context),
       height: double.infinity,
       child: Stack(
         fit: StackFit.expand,
@@ -205,8 +205,10 @@ Widget modeLegend(BuildContext context, {required Trip trip}) {
   return IntrinsicWidth(
     child: mapContainer(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               if (containsWalkSegment(trip)) ...[
                 Text(lang.walk, style: mapLegendTextStyle),

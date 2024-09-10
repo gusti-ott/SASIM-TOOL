@@ -15,7 +15,6 @@ Widget modeSelectionRow(BuildContext context,
     required Function(bool) onSharedChanged,
     double? width,
     double? height,
-    bool makePartlyTransparent = false,
     Color? backgroundColor = Colors.white}) {
   return Container(
     width: width ?? double.infinity,

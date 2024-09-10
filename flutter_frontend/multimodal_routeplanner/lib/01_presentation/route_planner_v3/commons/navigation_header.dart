@@ -16,7 +16,9 @@ Widget navigationHeaderRow(BuildContext context, {required StatefulNavigationShe
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        mobiScoreWithMcubeLogo(context, navigationShell: navigationShell),
+        Padding(
+            padding: EdgeInsets.all(smallPadding),
+            child: mobiScoreWithMcubeLogo(context, navigationShell: navigationShell)),
         Row(
           children: [
             headerButton(context, label: lang.calculator, currentIndex: currentIndex, thisIndex: 0, onPressed: () {

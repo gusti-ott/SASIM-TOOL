@@ -138,7 +138,7 @@ Widget textRowCostsBar(BuildContext context,
               flex: flex,
               child: positions[index] == position
                   ? Text('${percentages[index].toString()} %$label',
-                      style: textTheme.labelMedium,
+                      style: textTheme.labelSmall,
                       textAlign: index + 1 == positions.length ? TextAlign.right : TextAlign.left)
                   : const SizedBox(),
             );

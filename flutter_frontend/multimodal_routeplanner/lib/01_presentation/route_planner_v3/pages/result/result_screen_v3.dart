@@ -147,23 +147,7 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
         Widget child = resultErrorWidget(context);
         FloatingActionButton? fab;
         if (state is ResultLoading) {
-          child = Padding(
-            padding: EdgeInsets.all(mediumPadding),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset('assets/mobiscore_logos/logo_with_text_primary.png', width: 100),
-                largeVerticalSpacer,
-                circularProgressIndicatorWithPadding(color: primaryColorV3),
-                largeVerticalSpacer,
-                Text(
-                  '${lang.route_is_loading} ${state.loadedTrips}/${state.totalTrips}',
-                  style: textTheme.headlineMedium!.copyWith(color: primaryColorV3),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          );
+          child = buildLoadingWidget(lang, state, textTheme);
         } else if (state is ResultLoaded) {
           trips = state.trips;
           fab = isMobile && !showAdditionalMobileInfo
@@ -288,6 +272,33 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
       },
     );
   }
+
+  Padding buildLoadingWidget(AppLocalizations lang, ResultLoading state, TextTheme textTheme) {
+    return Padding(
+      padding: EdgeInsets.all(mediumPadding),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const SizedBox(height: 80),
+          Column(
+            children: [
+              circularProgressIndicatorWithPadding(color: primaryColorV3),
+              largeVerticalSpacer,
+              Text(
+                '${lang.route_is_loading} ${state.loadedTrips}/${state.totalTrips}',
+                style: textTheme.headlineMedium!.copyWith(color: primaryColorV3),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+          Padding(
+            padding: EdgeInsets.only(bottom: extraLargePadding),
+            child: Image.asset('assets/mobiscore_logos/logo_with_text_primary.png', width: 100),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 Widget resultErrorWidget(BuildContext context) {
@@ -310,7 +321,7 @@ Widget resultErrorWidget(BuildContext context) {
                     largeVerticalSpacer,
                     Text(lang.something_went_wrong, style: textTheme.displayMedium, textAlign: TextAlign.center),
                     smallVerticalSpacer,
-                    Text(lang.please_try_again, style: textTheme.displaySmall, textAlign: TextAlign.center),
+                    Text(lang.please_try_again, style: textTheme.headlineSmall, textAlign: TextAlign.center),
                     largeVerticalSpacer,
                     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                       V3CustomButton(

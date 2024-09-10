@@ -96,7 +96,7 @@ class ResultContent extends StatelessWidget {
                 leading: Padding(
                   padding: EdgeInsets.all(smallPadding),
                   child: IconButton(
-                      icon: const Icon(Icons.arrow_back),
+                      icon: const Icon(Icons.arrow_back_ios_new),
                       onPressed: () {
                         context.goNamed(SearchScreenV3.routeName);
                       }),
@@ -218,18 +218,18 @@ class ResultContent extends StatelessWidget {
                                     Padding(
                                       padding: EdgeInsets.symmetric(horizontal: mediumPadding, vertical: largePadding),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           SizedBox(
                                             width: 40,
                                             child: IconButton(
-                                                icon: const Icon(Icons.arrow_back),
+                                                icon: const Icon(Icons.arrow_back_ios_new),
                                                 onPressed: () {
                                                   context.goNamed(SearchScreenV3.routeName);
                                                 }),
                                           ),
-                                          Expanded(
-                                            child: modeSelectionRow(context,
+                                          if (screenWidth > 1350)
+                                            modeSelectionRow(context,
                                                 isElectric: isElectric,
                                                 onElectricChanged: onElectricChanged,
                                                 selectionMode: selectionMode,
@@ -237,9 +237,19 @@ class ResultContent extends StatelessWidget {
                                                 isShared: isShared,
                                                 onSharedChanged: onSharedChanged,
                                                 width: 700,
-                                                makePartlyTransparent: true,
-                                                backgroundColor: backgroundColor),
-                                          ),
+                                                backgroundColor: backgroundColor)
+                                          else
+                                            Expanded(
+                                                child: modeSelectionRow(context,
+                                                    isElectric: isElectric,
+                                                    onElectricChanged: onElectricChanged,
+                                                    selectionMode: selectionMode,
+                                                    onSelectionModeChanged: onSelectionModeChanged,
+                                                    isShared: isShared,
+                                                    onSharedChanged: onSharedChanged,
+                                                    width: 700,
+                                                    backgroundColor: backgroundColor)),
+                                          const SizedBox(width: 40),
                                         ],
                                       ),
                                     ),
@@ -299,7 +309,7 @@ class ResultContent extends StatelessWidget {
         if (!isMobile)
           ...scoreBoardWithPointers(
             context,
-            widthInfoSection: widthInfoSection,
+            widthInfoSection: getWidthInfoSection(context),
             screenHeight: screenHeight,
             selectedTrip: selectedTrip,
             currentCarTrip: currentCarTrip,
