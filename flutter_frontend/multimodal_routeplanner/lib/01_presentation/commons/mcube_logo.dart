@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-Widget mcubeLogo({bool isGrey = false}) {
+Widget mcubeLogo(BuildContext context) {
   final Uri mcubeUrl = Uri.parse('https://www.mcube-cluster.de/');
 
   Future<void> launchMcubeUrl() async {
@@ -9,6 +9,13 @@ Widget mcubeLogo({bool isGrey = false}) {
       throw Exception('Could not launch $mcubeUrl');
     }
   }
+
+  // get localization setting
+  final Locale locale = Localizations.localeOf(context);
+
+  String imagePath = (locale == const Locale('de'))
+      ? 'assets/mcube_logos/mcube_logo_with_text_blue_de.png'
+      : 'assets/mcube_logos/mcube_logo_with_text_blue_en.png';
 
   return Align(
     alignment: Alignment.topRight,
@@ -19,9 +26,7 @@ Widget mcubeLogo({bool isGrey = false}) {
           launchMcubeUrl();
         },
         hoverColor: Colors.transparent,
-        child: Image(
-            height: 64,
-            image: AssetImage(!isGrey ? 'assets/logos/mcube_logo.png' : 'assets/logos/mcube_logo_grey.png')),
+        child: Image(height: 64, image: AssetImage(imagePath)),
       ),
     ),
   );

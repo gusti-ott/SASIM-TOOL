@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:multimodal_routeplanner/01_presentation/commons/mcube_logo.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/search_screen/SearchScreen.dart';
+import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/app_cubit.dart';
 
 class MainScreen extends StatelessWidget {
@@ -35,7 +36,7 @@ class MainScreen extends StatelessWidget {
 
   Color _getBackgroundColor(BuildContext context) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
-    return navigationShell.currentIndex == 0 ? colorScheme.primary : colorScheme.background;
+    return navigationShell.currentIndex == 0 ? colorScheme.primary : backgroundColorGreyV3;
   }
 
   Color _getAppBarColor(BuildContext context) {
@@ -80,7 +81,7 @@ class MainScreen extends StatelessWidget {
               //style: _getButtonStyle(context, 2),
               onPressed: () {},
               child: Text(lang.about_us, style: _getTextStyle(context, 2))),
-          mcubeLogo(),
+          mcubeLogo(context),
         ]),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,

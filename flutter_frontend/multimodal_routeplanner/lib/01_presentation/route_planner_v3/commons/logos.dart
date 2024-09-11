@@ -15,7 +15,7 @@ Widget mobiScoreWithMcubeLogo(BuildContext context, {StatefulNavigationShell? na
       smallHorizontalSpacer,
       Text(lang.by, style: textTheme.labelLarge!.copyWith(color: primaryColorV3)),
       smallHorizontalSpacer,
-      mcubeLogo(isGrey: true),
+      mcubeLogo(context),
     ],
   );
 }
