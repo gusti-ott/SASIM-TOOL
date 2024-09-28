@@ -14,8 +14,8 @@ Widget mcubeLogo(BuildContext context) {
   final Locale locale = Localizations.localeOf(context);
 
   String imagePath = (locale == const Locale('de'))
-      ? 'assets/mcube_logos/mcube_logo_with_text_blue_de.png'
-      : 'assets/mcube_logos/mcube_logo_with_text_blue_en.png';
+      ? 'assets/mcube_logos/mcube_logo_with_text_black_de.png'
+      : 'assets/mcube_logos/mcube_logo_with_text_black_en.png';
 
   return Align(
     alignment: Alignment.topRight,

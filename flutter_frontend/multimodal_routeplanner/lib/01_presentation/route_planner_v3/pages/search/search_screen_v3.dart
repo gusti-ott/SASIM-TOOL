@@ -67,7 +67,7 @@ class _SearchScreenV3State extends State<SearchScreenV3> {
 
     return V3CustomButton(
       height: 60,
-      width: 180,
+      width: 240,
       label: lang.get_started,
       textStyle: textTheme.bodyLarge,
       onTap: () {

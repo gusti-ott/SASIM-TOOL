@@ -109,7 +109,7 @@ class AboutUsContent extends StatelessWidget {
                 children: [
                   Image.asset('assets/partners_logos/bayrisches_ministerium_logo.png', height: 100),
                   Image.asset('assets/partners_logos/bmw_logo.png', height: 100),
-                  Image.asset('assets/partners_logos/muenchen_logo.png', height: 100),
+                  Image.asset('assets/partners_logos/muenchen_logo.jpg', height: 100),
                   Image.asset('assets/partners_logos/mvv_logo.png', height: 100),
                   Image.asset('assets/partners_logos/tum_logo.png', height: 100),
                 ],
@@ -203,7 +203,7 @@ class AboutUsContent extends StatelessWidget {
                                 context.goNamed(DataProtectionScreen.routeName);
                               }),
                         ]),
-                        Image.asset('assets/partner_logos/c4f_logo.jpg', width: 200),
+                        Image.asset('assets/partners_logos/c4f_logo.png', width: 400),
                       ],
                     ),
                   ),

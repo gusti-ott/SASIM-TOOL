@@ -223,7 +223,7 @@ class ResultContent extends StatelessWidget {
                                           SizedBox(
                                             width: 40,
                                             child: IconButton(
-                                                icon: const Icon(Icons.arrow_back_ios_new),
+                                                icon: const Icon(Icons.keyboard_double_arrow_left),
                                                 onPressed: () {
                                                   context.goNamed(SearchScreenV3.routeName);
                                                 }),
