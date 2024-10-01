@@ -6,6 +6,7 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/mobiscore_score_board/score_pointer.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/mobiscore_score_board/values.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
+import 'package:multimodal_routeplanner/01_presentation/theme_data/typography.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 
 double widthScoreColumn = 44;
@@ -54,8 +55,8 @@ Widget mobiScoreScoreBoardWithPointers(BuildContext context,
             alignment: Alignment.centerLeft,
             child: Row(
               children: [
-                mobiScoreCircleLogo(size: widthScoreColumn, onTap: onMobiscoreLogoPressed),
-                largeHorizontalSpacer,
+                mobiScoreCircleLogo(size: widthScoreColumn, onTap: onMobiscoreLogoPressed, showInfoIcon: true),
+                SizedBox(width: largePadding - 2 * infoIconPadding),
                 Expanded(child: mobiScoreScoreBoard(context, selectedTrip: selectedTrip, isMobile: true)),
               ],
             )),
@@ -186,8 +187,6 @@ Expanded _scoreSection(BuildContext context,
     isFirst = false,
     isLast = false,
     required bool isMobile}) {
-  TextTheme textTheme = Theme.of(context).textTheme;
-
   return Expanded(
     child: Container(
       decoration: BoxDecoration(
@@ -203,7 +202,7 @@ Expanded _scoreSection(BuildContext context,
       child: Center(
         child: Text(
           letter,
-          style: textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.w800),
+          style: mobiScoreLetterStyle,
         ),
       ),
     ),
@@ -224,7 +223,7 @@ List<Widget> scoreBoardWithPointers(BuildContext context,
       right: widthInfoSection - (widthScoreColumn / 2),
       top: topOffsetMobiScoreLogo,
       // top: (screenHeight - heightScoreColumn) / 2 - mediumPadding - widthScoreColumn,
-      child: mobiScoreCircleLogo(size: widthScoreColumn, onTap: onMobiscoreLogoPressed),
+      child: mobiScoreCircleLogo(size: widthScoreColumn, onTap: onMobiscoreLogoPressed, showInfoIcon: true),
     ),
     Positioned(
       right: widthInfoSection - (widthScoreColumn / 2),

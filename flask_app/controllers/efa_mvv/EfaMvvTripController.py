@@ -23,7 +23,7 @@ class EfaMvvRouteController:
         start = time.time()
 
         # set default time to 14:00
-        url = self.base_url + self.path + start_id + '&name_destination=' + end_id + 'itdTime=1400'
+        url = self.base_url + self.path + start_id + '&name_destination=' + end_id + '&itdTime=1400'
 
         response = requests.get(url)
         print("Efa MVV API Trip response: " + str(response))

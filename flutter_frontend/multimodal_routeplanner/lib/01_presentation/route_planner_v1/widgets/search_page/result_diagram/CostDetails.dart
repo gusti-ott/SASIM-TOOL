@@ -52,7 +52,7 @@ class CostDetails extends StatelessWidget {
                       fontStyle: FontStyle.normal,
                       fontWeight: FontWeight.bold,
                       color: themeData.colorScheme.onSecondary)),
-              Text('Barriereeffekte: ',
+              Text('Zerschneidung: ',
                   textAlign: TextAlign.right,
                   style: TextStyle(
                       fontSize: 12,

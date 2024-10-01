@@ -60,7 +60,7 @@ class DetailRouteInfoContent extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           if (infoViewType == InfoViewType.map) DetailRouteInfoMap(trip: selectedTrip),
-          if (infoViewType == InfoViewType.mobiscore) detailRouteInfoMobiscore(context, isMobile: isMobile),
+          if (infoViewType == InfoViewType.mobiscore) detailRouteInfoMobiScore(context, isMobile: isMobile),
           if (infoViewType == InfoViewType.diagram)
             diagramContent(
               context,
@@ -81,7 +81,7 @@ class DetailRouteInfoContent extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        if (isMobile == true)
+                        if (isMobile == true || infoViewType == InfoViewType.mobiscore)
                           Container(
                             decoration: BoxDecoration(
                               color: Colors.white,
@@ -93,8 +93,12 @@ class DetailRouteInfoContent extends StatelessWidget {
                               child: IconButton(
                                 icon: Icon(Icons.close, color: colorE),
                                 onPressed: () {
-                                  if (closeCallback != null) {
-                                    closeCallback!();
+                                  if (isMobile) {
+                                    if (closeCallback != null) {
+                                      closeCallback!();
+                                    }
+                                  } else {
+                                    setInfoViewTypeCallback(InfoViewType.map);
                                   }
                                 },
                               ),
@@ -102,22 +106,23 @@ class DetailRouteInfoContent extends StatelessWidget {
                           )
                         else
                           const SizedBox(),
-                        Switch(
-                          thumbIcon: WidgetStateProperty.resolveWith<Icon?>((Set<WidgetState> states) {
-                            return Icon(
-                              Icons.bar_chart,
-                              color: customBlack,
-                            ); // All other states will use the default thumbIcon.
-                          }),
-                          activeTrackColor: primaryColorV3,
-                          inactiveTrackColor: backgroundColorGreyV3,
-                          activeColor: Colors.white,
-                          inactiveThumbColor: customGrey,
-                          value: (infoViewType == InfoViewType.diagram || infoViewType == InfoViewType.mobiscore),
-                          onChanged: (value) {
-                            changeInfoViewType();
-                          },
-                        )
+                        if (infoViewType != InfoViewType.mobiscore)
+                          Switch(
+                            thumbIcon: WidgetStateProperty.resolveWith<Icon?>((Set<WidgetState> states) {
+                              return Icon(
+                                Icons.bar_chart,
+                                color: customBlack,
+                              ); // All other states will use the default thumbIcon.
+                            }),
+                            activeTrackColor: primaryColorV3,
+                            inactiveTrackColor: backgroundColorGreyV3,
+                            activeColor: Colors.white,
+                            inactiveThumbColor: customGrey,
+                            value: (infoViewType == InfoViewType.diagram || infoViewType == InfoViewType.mobiscore),
+                            onChanged: (value) {
+                              changeInfoViewType();
+                            },
+                          )
                       ],
                     ),
                     if (infoViewType == InfoViewType.map && selectedTrip != null) ...[

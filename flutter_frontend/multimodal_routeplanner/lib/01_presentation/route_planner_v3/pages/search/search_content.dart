@@ -7,10 +7,9 @@ import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dar
 import 'package:multimodal_routeplanner/01_presentation/theme_data/typography.dart';
 
 class SearchContent extends StatefulWidget {
-  const SearchContent({super.key, required this.isMobile, required this.scrollController});
+  const SearchContent({super.key, required this.isMobile});
 
   final bool isMobile;
-  final ScrollController scrollController;
 
   @override
   State<SearchContent> createState() => _SearchContentState();
@@ -24,14 +23,12 @@ class _SearchContentState extends State<SearchContent> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    return SingleChildScrollView(
-        controller: widget.scrollController,
-        child: searchContent(
-          context,
-          isMobile: widget.isMobile,
-          screenHeight: screenHeight,
-          screenWidth: screenWidth,
-        ));
+    return searchContent(
+      context,
+      isMobile: widget.isMobile,
+      screenHeight: screenHeight,
+      screenWidth: screenWidth,
+    );
   }
 
   Widget searchContent(BuildContext context,
@@ -91,7 +88,7 @@ Widget headerImage(BuildContext context) {
   return Semantics(
     label: lang.header_image_label,
     child: Image.asset(
-      'assets/title_image/mobiscore_header_1.png',
+      'assets/title_image/mobiscore_header_1.jpg',
       fit: BoxFit.fitWidth,
     ),
   );

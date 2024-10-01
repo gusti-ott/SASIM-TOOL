@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/logos.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/colors_helper.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/custom_switch.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 
@@ -10,33 +11,38 @@ Widget navigationHeaderRow(BuildContext context, {required StatefulNavigationShe
   AppLocalizations lang = AppLocalizations.of(context)!;
 
   int currentIndex = navigationShell.currentIndex;
+  bool isSeachPage = currentIndex == 0;
 
-  return Padding(
-    padding: EdgeInsets.symmetric(vertical: largePadding, horizontal: 2 * extraLargePadding),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Padding(
-            padding: EdgeInsets.all(smallPadding),
-            child: mobiScoreWithMcubeLogo(context, navigationShell: navigationShell)),
-        Row(
-          children: [
-            headerButton(context, label: lang.calculator, currentIndex: currentIndex, thisIndex: 0, onPressed: () {
-              navigationShell.goBranch(0);
-            }),
-            largeHorizontalSpacer,
-            headerButton(context, label: lang.research, currentIndex: currentIndex, thisIndex: 1, onPressed: () {
-              navigationShell.goBranch(1);
-            }),
-            largeHorizontalSpacer,
-            headerButton(context, label: lang.about_us, currentIndex: currentIndex, thisIndex: 2, onPressed: () {
-              navigationShell.goBranch(2);
-            }),
-            largeHorizontalSpacer,
-            const LanguageSwitch(),
-          ],
-        )
-      ],
+  return Container(
+    color: !isSeachPage ? backgroundColorYellowV3.darken(0.1) : Colors.transparent,
+    height: 100,
+    child: Padding(
+      padding: EdgeInsets.symmetric(vertical: smallPadding, horizontal: 2 * extraLargePadding),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+              padding: EdgeInsets.all(smallPadding),
+              child: mobiScoreWithMcubeLogo(context, navigationShell: navigationShell)),
+          Row(
+            children: [
+              headerButton(context, label: lang.calculator, currentIndex: currentIndex, thisIndex: 0, onPressed: () {
+                navigationShell.goBranch(0);
+              }),
+              largeHorizontalSpacer,
+              headerButton(context, label: lang.research, currentIndex: currentIndex, thisIndex: 1, onPressed: () {
+                navigationShell.goBranch(1);
+              }),
+              largeHorizontalSpacer,
+              headerButton(context, label: lang.about_us, currentIndex: currentIndex, thisIndex: 2, onPressed: () {
+                navigationShell.goBranch(2);
+              }),
+              largeHorizontalSpacer,
+              const LanguageSwitch(),
+            ],
+          )
+        ],
+      ),
     ),
   );
 }

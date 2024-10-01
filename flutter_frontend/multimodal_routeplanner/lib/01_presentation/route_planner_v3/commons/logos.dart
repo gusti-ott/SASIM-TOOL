@@ -11,11 +11,11 @@ Widget mobiScoreWithMcubeLogo(BuildContext context, {StatefulNavigationShell? na
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
-      Image.asset('assets/mobiscore_logos/logo_with_text_primary.png', width: 70),
+      Image.asset('assets/mobiscore_logos/logo_with_text_primary.png'),
       smallHorizontalSpacer,
       Text(lang.by, style: textTheme.labelLarge!.copyWith(color: primaryColorV3)),
       smallHorizontalSpacer,
-      mcubeLogo(isGrey: true),
+      mcubeLogo(context),
     ],
   );
 }

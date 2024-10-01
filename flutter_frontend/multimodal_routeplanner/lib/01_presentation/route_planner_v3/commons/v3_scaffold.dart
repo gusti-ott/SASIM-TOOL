@@ -43,4 +43,4 @@ class V3Scaffold extends StatelessWidget {
   }
 }
 
-double headerHeight = 200;
+double headerHeight = 150;

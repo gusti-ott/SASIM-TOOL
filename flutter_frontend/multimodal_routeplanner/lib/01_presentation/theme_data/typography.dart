@@ -105,3 +105,6 @@ final mobileElectricSwitchLabelTextStyle =
 
 final mapLegendTextStyle =
     GoogleFonts.barlow(fontWeight: FontWeight.w400, fontSize: 14, height: 18 / 14, letterSpacing: 0.1);
+
+final mobiScoreLetterStyle =
+    GoogleFonts.barlow(fontWeight: FontWeight.w800, fontSize: 19.07, height: 27.78 / 19.07, letterSpacing: 0);

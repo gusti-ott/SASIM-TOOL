@@ -14,6 +14,7 @@ import 'package:multimodal_routeplanner/02_application/bloc/route_info/route_inf
 import 'package:multimodal_routeplanner/02_application/bloc/route_planner/advanced_route_planner_bloc.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/visualization/visualization_bloc.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
+import 'package:multimodal_routeplanner/config/setup_dependencies.dart';
 
 class RoutePlannerScreen extends StatelessWidget {
   const RoutePlannerScreen({Key? key}) : super(key: key);
@@ -25,7 +26,7 @@ class RoutePlannerScreen extends StatelessWidget {
     String startAddress = "Arcisstraße 21, München";
     String endAddress = "Schleißheimerstr. 318, München";
 
-    AdvancedRoutePlannerBloc routeBlocProvider = BlocProvider.of<AdvancedRoutePlannerBloc>(context);
+    AdvancedRoutePlannerBloc routeBlocProvider = sl<AdvancedRoutePlannerBloc>();
 
     Map<String, Trip> selectedTrips = {};
     List<Trip> listSelectedTrips = [];

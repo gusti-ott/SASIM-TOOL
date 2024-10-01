@@ -107,7 +107,7 @@ String MapDiagramTypeToString(DiagramTypeEnum type) {
     case DiagramTypeEnum.space:
       return 'Flächenverbrauch';
     case DiagramTypeEnum.barrier:
-      return 'Barriereeffekte';
+      return 'Zerschneidung';
     case DiagramTypeEnum.congestion:
       return 'Stau';
     case DiagramTypeEnum.externalCosts:

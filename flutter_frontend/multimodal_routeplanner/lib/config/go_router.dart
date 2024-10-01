@@ -7,6 +7,8 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcos
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/main_screen.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/about_us/about_us_screen.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/about_us/data_protection_screen.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/about_us/imprint_screen.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/main_screen_v3.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/research/research_screen.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_screen_v3.dart';
@@ -73,6 +75,24 @@ final GoRouter vmrpRouter = GoRouter(
                     path: AboutUsScreen.path,
                     builder: (context, state) {
                       return const AboutUsScreen();
+                    },
+                  ),
+                ]),
+                StatefulShellBranch(routes: [
+                  GoRoute(
+                    name: ImprintScreen.routeName,
+                    path: ImprintScreen.path,
+                    builder: (context, state) {
+                      return const ImprintScreen();
+                    },
+                  ),
+                ]),
+                StatefulShellBranch(routes: [
+                  GoRoute(
+                    name: DataProtectionScreen.routeName,
+                    path: DataProtectionScreen.path,
+                    builder: (context, state) {
+                      return const DataProtectionScreen();
                     },
                   ),
                 ]),

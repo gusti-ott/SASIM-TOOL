@@ -65,8 +65,10 @@ flutter:
     - assets/icons/social_space/
     - assets/icons/social_time/
     - assets/mobiscore/
-    - assets/logos/
+    - assets/mcube_logos/
     - assets/title_image/
     - assets/mobiscore_logos/
     - assets/flags/
+    - assets/partners_logos/
+    - assets/research_data/
 

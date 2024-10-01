@@ -85,7 +85,7 @@ class ShareContent extends StatelessWidget {
                     ),
                     V3CustomButton(
                         label: lang.start_new_route,
-                        leadingIcon: Icons.restart_alt,
+                        leadingIcon: Icons.keyboard_double_arrow_left,
                         onTap: () {
                           context.goNamed(SearchScreenV3.routeName);
                         }),
@@ -113,7 +113,7 @@ class ShareContent extends StatelessWidget {
             child: ClipRRect(
               borderRadius: const BorderRadius.only(topLeft: Radius.circular(30), bottomLeft: Radius.circular(30)),
               child: Image.asset(
-                'assets/title_image/mobiscore_header_1.png',
+                'assets/title_image/mobiscore_header_1.jpg',
                 fit: BoxFit.fitWidth,
               ),
             ),
@@ -169,7 +169,7 @@ class ShareContent extends StatelessWidget {
             ClipRRect(
               borderRadius: const BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
               child: Image.asset(
-                'assets/title_image/mobiscore_header_1.png',
+                'assets/title_image/mobiscore_header_1.jpg',
                 fit: BoxFit.fitWidth,
               ),
             ),
