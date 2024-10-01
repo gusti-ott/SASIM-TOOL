@@ -187,8 +187,6 @@ Expanded _scoreSection(BuildContext context,
     isFirst = false,
     isLast = false,
     required bool isMobile}) {
-  TextTheme textTheme = Theme.of(context).textTheme;
-
   return Expanded(
     child: Container(
       decoration: BoxDecoration(

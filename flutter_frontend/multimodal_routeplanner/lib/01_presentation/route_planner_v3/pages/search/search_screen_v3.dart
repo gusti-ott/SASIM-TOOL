@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/buttons.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/information_bottom_row.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/search_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/values/dimensions.dart';
 
@@ -18,12 +19,19 @@ class SearchScreenV3 extends StatefulWidget {
 class _SearchScreenV3State extends State<SearchScreenV3> {
   bool started = false;
   late ScrollController _scrollController;
+  final GlobalKey _informationContainerKey = GlobalKey();
+  double _informationContainerHeight = 0.0;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
+
+    // Add a post-frame callback to get the height of the container after layout
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _getInformationContainerHeight();
+    });
   }
 
   @override
@@ -31,6 +39,15 @@ class _SearchScreenV3State extends State<SearchScreenV3> {
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
     super.dispose();
+  }
+
+  void _getInformationContainerHeight() {
+    final RenderBox? renderBox = _informationContainerKey.currentContext?.findRenderObject() as RenderBox?;
+    if (renderBox != null) {
+      setState(() {
+        _informationContainerHeight = renderBox.size.height;
+      });
+    }
   }
 
   void _scrollListener() {
@@ -52,11 +69,20 @@ class _SearchScreenV3State extends State<SearchScreenV3> {
 
     return Stack(
       children: [
-        SearchContent(isMobile: isMobile, scrollController: _scrollController),
+        SingleChildScrollView(
+          controller: _scrollController,
+          child: Column(
+            children: [
+              SearchContent(isMobile: isMobile),
+              largeVerticalSpacer,
+              InformationContainer(key: _informationContainerKey),
+            ],
+          ),
+        ),
         if (!started && !isMobile)
           Align(
               alignment: Alignment.bottomCenter,
-              child: Padding(padding: EdgeInsets.only(bottom: largePadding), child: _floatingStartButton(context)))
+              child: Padding(padding: EdgeInsets.only(bottom: largePadding), child: _floatingStartButton(context))),
       ],
     );
   }
@@ -73,7 +99,7 @@ class _SearchScreenV3State extends State<SearchScreenV3> {
       onTap: () {
         setState(() {
           _scrollController.animateTo(
-            _scrollController.position.maxScrollExtent,
+            _scrollController.position.maxScrollExtent - _informationContainerHeight,
             duration: const Duration(milliseconds: 500),
             curve: Curves.easeOut,
           );

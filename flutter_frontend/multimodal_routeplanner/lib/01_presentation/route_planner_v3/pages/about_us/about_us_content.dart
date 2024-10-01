@@ -19,7 +19,7 @@ class AboutUsContent extends StatelessWidget {
         children: [
           if (!isMobile) SizedBox(height: headerHeight),
           aboutUsTextContent(context, isMobile: isMobile),
-          informationContainer(context),
+          InformationContainer(),
         ],
       ),
     );
@@ -131,39 +131,4 @@ class AboutUsContent extends StatelessWidget {
       ],
     );
   }
-
-/* List<Widget> listOurTeamItems(BuildContext context, bool isMobile) {
-    return [
-      Image.asset('assets/title_image/mcube_team_image.jpg', height: 600),
-      if (!isMobile) ...[
-        mediumHorizontalSpacer,
-        Expanded(
-          child: buildFormattedTextTeam(context),
-        ),
-      ] else ...[
-        smallVerticalSpacer,
-        buildFormattedTextTeam(context),
-      ],
-    ];
-  }*/
-
-/*Widget buildFormattedTextTeam(BuildContext context) {
-    return buildFormattedText(context,
-        text:
-            'Julia Kinigadner (Projektleitung)\njulia.kinigadner@tum.de\n\nNienke Buters (wissenschaftliche Mitarbeiterin)\nGusztáv Ottrubay (Software-Entwickler)\nYihan Xu (Wissenschaftlicher Mitarbeiter)\nDaniel Schröder (Reserach Associate)\nChristoph Ungemach (Professor für Marketing)\nJohannes Horvath (Projektmanager Forschung & Innovation\nLandeshauptstadt München)\nPaulina Schmidl (Vernetzte Mobilität und Tarif MVV)\nPhilipp Blum (PhD Student)\nAllister Loder (Postdoc)\nConstantinos Antoniou (Professor, Chair of Transportation Systems Engineering)\nSara Ghaf (Research Associate)\nFilippos Adamidis (Research Associate)',
-        formatOptions: [
-          FormatOption('Julia Kinigadner', isBold: true),
-          FormatOption('Nienke Buters', isBold: true),
-          FormatOption('Gusztáv Ottrubay', isBold: true),
-          FormatOption('Johannes Horvath', isBold: true),
-          FormatOption('Paulina Schmidl', isBold: true),
-          FormatOption('Christoph Ungemach', isBold: true),
-          FormatOption('Philipp Blum', isBold: true),
-          FormatOption('Allister Loder', isBold: true),
-          FormatOption('Constantinos Antoniou', isBold: true),
-          FormatOption('Sara Ghaf', isBold: true),
-          FormatOption('Filippos Adamidis', isBold: true),
-          FormatOption('Daniel Schröder', isBold: true),
-        ]);
-  }*/
 }

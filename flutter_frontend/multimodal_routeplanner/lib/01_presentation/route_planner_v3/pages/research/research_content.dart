@@ -19,7 +19,7 @@ class ResearchContent extends StatelessWidget {
         children: [
           if (!isMobile) SizedBox(height: headerHeight),
           researchTextContent(context),
-          informationContainer(context),
+          const InformationContainer(),
         ],
       ),
     );

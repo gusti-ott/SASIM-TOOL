@@ -30,7 +30,7 @@ class RouteRemoteDatasourceImpl implements RouteRemoteDatasource {
     String quickResponseString = quickResponse != null ? quickResponse.toString() : 'false';
 
     // TODO: set to false, when in production
-    bool isMocked = true;
+    bool isMocked = false;
 
     // url for local server
     /*var url =
