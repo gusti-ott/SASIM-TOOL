@@ -215,7 +215,7 @@
   "social_costs_research_content_hyperlink_1": "Schröder et. al (2023)",
   "routing_research": "Routenplanung",
   "routing_research_content": "Der Vollkostenrechner nutzt die Software OpenTripPlanner (OTP) für die Routenplanung.\nAnhand der Eingaben (Start- und Zieladresse und gewähltes Verkehrsmittel) werden Distanz, Reisezeit und die Wegpunkte der Route berechnet.\n\nUm Routen und Fahrtkosten mit öffentlichen Verkehrsmitteln zu berechnen, wird über eine Schnittstelle auf das Fahrplaninformationssystems DEFAS zugegriffen.",
-  "development_by": "Frontent und Backend Development von",
+  "development_by": "Frontent und Backend Entwicklung von",
   "illustrations_by": "Illustrationen von",
   "ui_by": "UI/UX Design von",
   "routing_research_content_hyperlink_1": "OpenTripPlanner (OTP)",

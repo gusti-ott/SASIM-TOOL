@@ -56,7 +56,7 @@ Widget mobiScoreScoreBoardWithPointers(BuildContext context,
             child: Row(
               children: [
                 mobiScoreCircleLogo(size: widthScoreColumn, onTap: onMobiscoreLogoPressed, showInfoIcon: true),
-                SizedBox(width: largePadding - 2 * infoIconPadding),
+                SizedBox(width: largePadding - infoIconPadding),
                 Expanded(child: mobiScoreScoreBoard(context, selectedTrip: selectedTrip, isMobile: true)),
               ],
             )),

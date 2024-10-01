@@ -88,7 +88,7 @@ Widget headerImage(BuildContext context) {
   return Semantics(
     label: lang.header_image_label,
     child: Image.asset(
-      'assets/title_image/mobiscore_header_1.jpg',
+      'assets/title_image/mobiscore_header_1.png',
       fit: BoxFit.fitWidth,
     ),
   );
