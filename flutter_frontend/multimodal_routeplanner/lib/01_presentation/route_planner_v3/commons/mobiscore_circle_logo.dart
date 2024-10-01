@@ -40,13 +40,13 @@ Widget mobiScoreCircleLogo({required double size, required Function() onTap, boo
           Positioned(
               bottom: 0,
               right: 0,
-              child: IconButton(
-                icon: Icon(
+              child: InkWell(
+                onTap: onTap,
+                child: Icon(
                   Icons.info,
                   color: primaryColorV3,
                   size: 20,
                 ),
-                onPressed: onTap,
               ))
       ],
     ),
