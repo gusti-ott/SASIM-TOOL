@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 
-double infoIconPadding = 4;
+double infoIconPadding = 8;
 
 Widget mobiScoreCircleLogo({required double size, required Function() onTap, bool showInfoIcon = false}) {
   double radius = showInfoIcon ? size + infoIconPadding : size;
@@ -40,10 +40,13 @@ Widget mobiScoreCircleLogo({required double size, required Function() onTap, boo
           Positioned(
               bottom: 0,
               right: 0,
-              child: Icon(
-                Icons.info,
-                color: primaryColorV3,
-                size: 20,
+              child: IconButton(
+                icon: Icon(
+                  Icons.info,
+                  color: primaryColorV3,
+                  size: 20,
+                ),
+                onPressed: onTap,
               ))
       ],
     ),

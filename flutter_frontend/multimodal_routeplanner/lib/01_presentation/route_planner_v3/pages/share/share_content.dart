@@ -113,7 +113,7 @@ class ShareContent extends StatelessWidget {
             child: ClipRRect(
               borderRadius: const BorderRadius.only(topLeft: Radius.circular(30), bottomLeft: Radius.circular(30)),
               child: Image.asset(
-                'assets/title_image/mobiscore_header_1.jpg',
+                'assets/title_image/mobiscore_header_1.png',
                 fit: BoxFit.fitWidth,
               ),
             ),
@@ -169,7 +169,7 @@ class ShareContent extends StatelessWidget {
             ClipRRect(
               borderRadius: const BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
               child: Image.asset(
-                'assets/title_image/mobiscore_header_1.jpg',
+                'assets/title_image/mobiscore_header_1.png',
                 fit: BoxFit.fitWidth,
               ),
             ),
