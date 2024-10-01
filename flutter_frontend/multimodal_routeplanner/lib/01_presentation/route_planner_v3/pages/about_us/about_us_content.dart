@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:go_router/go_router.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/information_bottom_row.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/v3_scaffold.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/about_us/data_protection_screen.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/about_us/imprint_screen.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/about_us/text_formating_helper.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/values.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
@@ -16,21 +14,19 @@ class AboutUsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppLocalizations lang = AppLocalizations.of(context)!;
-    TextTheme textTheme = Theme.of(context).textTheme;
-
     return SingleChildScrollView(
       child: Column(
         children: [
           if (!isMobile) SizedBox(height: headerHeight),
-          aboutUsTextContent(context, lang, textTheme, isMobile: isMobile),
-          informationContainer(lang, textTheme, context),
+          aboutUsTextContent(context, isMobile: isMobile),
+          informationContainer(context),
         ],
       ),
     );
   }
 
-  Center aboutUsTextContent(BuildContext context, AppLocalizations lang, TextTheme textTheme, {bool isMobile = false}) {
+  Center aboutUsTextContent(BuildContext context, {bool isMobile = false}) {
+    AppLocalizations lang = AppLocalizations.of(context)!;
     return Center(
       child: Padding(
         padding: EdgeInsets.only(left: mediumPadding, right: mediumPadding, top: mediumPadding, bottom: largePadding),
@@ -87,16 +83,20 @@ class AboutUsContent extends StatelessWidget {
                 lang.the_team_behind,
               ),
               newlineSpacer,
-              if (!isMobile)
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: listOurTeamItems(context, isMobile),
-                )
-              else
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: listOurTeamItems(context, isMobile),
-                ),
+              buildFormattedText(context, text: lang.the_team_behind_content, formatOptions: [
+                FormatOption(lang.the_team_behind_content_hyperlink_1,
+                    hyperlink: "https://mcube-cluster.de/projekt/sasim/"),
+              ]),
+              newlineSpacer,
+              buildFormattedText(context,
+                  text: '${lang.ui_by} anelli studio',
+                  formatOptions: [FormatOption('anelli studio', hyperlink: "https://anelli.studio/")]),
+              buildFormattedText(context,
+                  text: '${lang.illustrations_by} Chiara Vercesi',
+                  formatOptions: [FormatOption('Chiara Vercesi', hyperlink: "https://www.chiaravercesi.com/")]),
+              buildFormattedText(context,
+                  text: '${lang.development_by} Gusztáv Ottrubay',
+                  formatOptions: [FormatOption('Gusztáv Ottrubay', hyperlink: "https://github.com/gusti-ott")]),
               newlineSpacer,
               headline1Text(
                 context,
@@ -109,7 +109,7 @@ class AboutUsContent extends StatelessWidget {
                 children: [
                   Image.asset('assets/partners_logos/bayrisches_ministerium_logo.png', height: 100),
                   Image.asset('assets/partners_logos/bmw_logo.png', height: 100),
-                  Image.asset('assets/partners_logos/muenchen_logo.jpg', height: 100),
+                  Image.asset('assets/partners_logos/muenchen_logo.png', height: 100),
                   Image.asset('assets/partners_logos/mvv_logo.png', height: 100),
                   Image.asset('assets/partners_logos/tum_logo.png', height: 100),
                 ],
@@ -132,7 +132,7 @@ class AboutUsContent extends StatelessWidget {
     );
   }
 
-  List<Widget> listOurTeamItems(BuildContext context, bool isMobile) {
+/* List<Widget> listOurTeamItems(BuildContext context, bool isMobile) {
     return [
       Image.asset('assets/title_image/mcube_team_image.jpg', height: 600),
       if (!isMobile) ...[
@@ -145,9 +145,9 @@ class AboutUsContent extends StatelessWidget {
         buildFormattedTextTeam(context),
       ],
     ];
-  }
+  }*/
 
-  Widget buildFormattedTextTeam(BuildContext context) {
+/*Widget buildFormattedTextTeam(BuildContext context) {
     return buildFormattedText(context,
         text:
             'Julia Kinigadner (Projektleitung)\njulia.kinigadner@tum.de\n\nNienke Buters (wissenschaftliche Mitarbeiterin)\nGusztáv Ottrubay (Software-Entwickler)\nYihan Xu (Wissenschaftlicher Mitarbeiter)\nDaniel Schröder (Reserach Associate)\nChristoph Ungemach (Professor für Marketing)\nJohannes Horvath (Projektmanager Forschung & Innovation\nLandeshauptstadt München)\nPaulina Schmidl (Vernetzte Mobilität und Tarif MVV)\nPhilipp Blum (PhD Student)\nAllister Loder (Postdoc)\nConstantinos Antoniou (Professor, Chair of Transportation Systems Engineering)\nSara Ghaf (Research Associate)\nFilippos Adamidis (Research Associate)',
@@ -165,54 +165,5 @@ class AboutUsContent extends StatelessWidget {
           FormatOption('Filippos Adamidis', isBold: true),
           FormatOption('Daniel Schröder', isBold: true),
         ]);
-  }
-
-  Container informationContainer(AppLocalizations lang, TextTheme textTheme, BuildContext context) {
-    return Container(
-      width: double.infinity,
-      color: primaryColorV3,
-      child: Center(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: mediumPadding),
-          child: SizedBox(
-            width: contentMaxWidth,
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: largePadding),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Wrap(
-                      alignment: WrapAlignment.spaceBetween,
-                      children: [
-                        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          Text(lang.contact, style: textTheme.headlineMedium!.copyWith(color: customWhite100)),
-                          Text('info@mcube-cluster.com', style: textTheme.bodyLarge!.copyWith(color: customWhite100))
-                        ]),
-                        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          Text(lang.information, style: textTheme.headlineMedium!.copyWith(color: customWhite100)),
-                          InkWell(
-                              child: Text(lang.imprint.toUpperCase(),
-                                  style: textTheme.bodyLarge!.copyWith(color: customWhite100)),
-                              onTap: () {
-                                context.goNamed(ImprintScreen.routeName);
-                              }),
-                          InkWell(
-                              child: Text(lang.privacy_policy.toUpperCase(),
-                                  style: textTheme.bodyLarge!.copyWith(color: customWhite100)),
-                              onTap: () {
-                                context.goNamed(DataProtectionScreen.routeName);
-                              }),
-                        ]),
-                        Image.asset('assets/partners_logos/c4f_logo.png', width: 400),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  }*/
 }

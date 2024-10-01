@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:multimodal_routeplanner/01_presentation/commons/mcube_logo.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 
 Drawer buildDrawer(BuildContext context, {required StatefulNavigationShell navigationShell}) {
@@ -16,7 +18,16 @@ Drawer buildDrawer(BuildContext context, {required StatefulNavigationShell navig
         DrawerHeader(
           child: Align(
               alignment: Alignment.centerLeft,
-              child: Image.asset('assets/mobiscore_logos/logo_with_text_primary.png', width: 70)),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset('assets/mobiscore_logos/logo_with_text_primary.png', width: 70),
+                  smallHorizontalSpacer,
+                  Text(lang.by, style: textTheme.labelLarge!.copyWith(color: primaryColorV3)),
+                  smallHorizontalSpacer,
+                  mcubeLogo(context, width: 140, alignment: Alignment.centerLeft),
+                ],
+              )),
         ),
         ListTile(
           title: Text(lang.calculator,

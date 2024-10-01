@@ -43,23 +43,6 @@ Widget diagramContent(
         ),
         smallVerticalSpacer,
         detailRouteTextInfo(context, diagramType: selectedDiagramType),
-        /*if ((selectedDiagramType == DiagramType.personal || selectedDiagramType == DiagramType.social) && isMobile) ...[
-          largeVerticalSpacer,
-          V3CustomButton(
-            label: 'erfahre mehr',
-            leadingIcon: Icons.info_outline,
-            color: primaryColorV3,
-            textColor: primaryColorV3,
-            onTap: () {
-              if (selectedDiagramType == DiagramType.personal) {
-                setDiagramTypeCallback(DiagramType.detailPersonal);
-              } else if (selectedDiagramType == DiagramType.social) {
-                setDiagramTypeCallback(DiagramType.detailSocial);
-              }
-            },
-            reverseColors: true,
-          ),
-        ],*/
         largeVerticalSpacer
       ]),
     ),

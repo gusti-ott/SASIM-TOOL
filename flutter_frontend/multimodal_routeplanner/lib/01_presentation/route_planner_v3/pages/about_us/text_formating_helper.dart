@@ -51,6 +51,9 @@ Widget buildFormattedText(
   defaultStyle ??= Theme.of(context).textTheme.bodyLarge!.copyWith(color: primaryColorV3);
 
   // Sort format options by the index they appear in the text
+  if (formatOptions.isEmpty) {
+    return Text(text, style: defaultStyle);
+  }
   formatOptions.sort((a, b) => text.indexOf(a.text).compareTo(text.indexOf(b.text)));
 
   List<TextSpan> textSpans = [];
@@ -72,10 +75,23 @@ Widget buildFormattedText(
         ));
       }
 
+      // Determine the style for the target text
+      TextStyle targetStyle = isBold ? defaultStyle.copyWith(fontWeight: FontWeight.bold) : defaultStyle;
+
+      // Add underline and matching underline color if the target is a hyperlink
+      if (hyperlink != null) {
+        const Color linkColor = Colors.blue;
+        targetStyle = targetStyle.copyWith(
+          decoration: TextDecoration.underline,
+          color: linkColor, // Change the text color to blue
+          decorationColor: linkColor, // Change the underline color to match the text
+        );
+      }
+
       // Create a TextSpan for the target string with styles
       textSpans.add(TextSpan(
         text: target,
-        style: isBold ? defaultStyle.copyWith(fontWeight: FontWeight.bold) : defaultStyle,
+        style: targetStyle,
         recognizer: hyperlink != null
             ? (TapGestureRecognizer()
               ..onTap = () async {

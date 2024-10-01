@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-Widget mcubeLogo(BuildContext context) {
+Widget mcubeLogo(BuildContext context, {double? width, Alignment? alignment}) {
   final Uri mcubeUrl = Uri.parse('https://www.mcube-cluster.de/');
 
   Future<void> launchMcubeUrl() async {
@@ -18,7 +18,7 @@ Widget mcubeLogo(BuildContext context) {
       : 'assets/mcube_logos/mcube_logo_with_text_black_en.png';
 
   return Align(
-    alignment: Alignment.topRight,
+    alignment: alignment ?? Alignment.topRight,
     child: Padding(
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
@@ -26,7 +26,11 @@ Widget mcubeLogo(BuildContext context) {
           launchMcubeUrl();
         },
         hoverColor: Colors.transparent,
-        child: Image(height: 64, image: AssetImage(imagePath)),
+        child: Image(
+          height: width == null ? 64 : null,
+          width: width,
+          image: AssetImage(imagePath),
+        ),
       ),
     ),
   );

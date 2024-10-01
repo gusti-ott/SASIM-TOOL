@@ -183,7 +183,7 @@ class RouteInfo extends StatelessWidget {
                                             externalCostValue: trip.costs.externalCosts.congestion,
                                             costIcon: Icons.traffic),
                                         ExternalCostsDetailRow(
-                                            externalCostName: 'Barriereeffekte',
+                                            externalCostName: 'Zerschneidung',
                                             externalCostValue: trip.costs.externalCosts.barrier,
                                             costIcon: Icons.fence),
                                         const SizedBox(height: 8),
