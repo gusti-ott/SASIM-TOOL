@@ -120,3 +120,29 @@ class OtpController:
         print("otp time: " + str(end - start))
 
         return resp
+
+    # start and end coordinates in format (lat, lom) as String
+    # OPT modes are CAR, BICYCLE, WALK
+    def get_response_from_coordinates(self, start_coordinates: str, end_coordinates: str, otp_mode: str):
+        input_time = datetime.now()
+
+        response = requests.get(
+            self.base_url + self.path + "?fromPlace=" + start_coordinates + "&toPlace=" + end_coordinates + "&time=" + str(
+                input_time.hour) + ":" + str(input_time.minute) + "&date=" +
+            str(input_time.month) + "-" + str(input_time.day) + "-" + str(input_time.year) + "&mode=" +
+            otp_mode + "&maxWalkDistance=50000&arriveBy=false")
+
+        print(response.url)
+        print("otp response: " + str(response))
+
+        resp = json.loads(response.content)
+
+        if 'error' in resp:
+            print("Error in otp request")
+
+        if resp["plan"].get("itineraries") == []:
+            print("Keine OTP Strecke für diesen Start- und End-Standort und den Modus " + str(
+                otp_mode) + " gefunden.\nVersuchen Sie es nochmal")
+
+        return resp
+

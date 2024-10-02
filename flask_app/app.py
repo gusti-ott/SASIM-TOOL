@@ -1,3 +1,4 @@
+import os
 from typing import List
 
 from flask import Flask, request, redirect, jsonify
@@ -10,6 +11,7 @@ from controllers.efa_mvv.EfaMvvCoordController import EfaMvvCoordController
 from controllers.efa_mvv.EfaMvvStopFinderController import EfaMvvStopFinder
 from controllers.geocoding.GeocodingController import GeocodingController
 from controllers.trip.TripController import TripController
+from flask_app.controllers.otp.OtpController import OtpController
 from helpers.ApiHelper import ApiHelper
 from model.entities.location.Location import Location
 from model.entities.segment.Segment import Segment
@@ -55,6 +57,28 @@ def return_flutter_doc(name):
 def home_page():
     return render_page_web()
 
+
+@server.route('/' + os.getenv('OTP_ENDPOINT_PATH'), methods=['GET'])
+def return_otp_trip():
+    otp_controller = OtpController()
+
+    if request.method == 'OPTIONS':
+        # CORS preflight request handler
+        response = jsonify({'status': 'CORS preflight successful'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Methods', 'GET, OPTIONS')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type, referrer-policy')
+        return response
+
+    input_start_coordinates = str(request.args['startCoordinates'])
+    input_end_coordinates = str(request.args['endCoordinates'])
+    input_otp_mode = str(request.args['otpMode'])
+
+    response = otp_controller.get_response_from_coordinates(start_coordinates=input_start_coordinates,
+                                                            end_coordinates=input_end_coordinates,
+                                                            otp_mode=input_otp_mode)
+
+    return response
 
 @server.route('/plattform', methods=['GET'])
 def return_trip():
