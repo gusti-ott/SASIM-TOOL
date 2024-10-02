@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_tappable_polyline/flutter_map_tappable_polyline.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/flutter_map_helper.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
@@ -16,9 +17,38 @@ class DetailRouteInfoMap extends StatefulWidget {
   State<DetailRouteInfoMap> createState() => _DetailRouteInfoMapState();
 }
 
-class _DetailRouteInfoMapState extends State<DetailRouteInfoMap> {
+class _DetailRouteInfoMapState extends State<DetailRouteInfoMap> with TickerProviderStateMixin {
   final MapController _mapController = MapController();
   LatLngBounds? bounds;
+  bool isFirstRoute = true; // Flag to check if it's the first route
+  AnimationController? _animationController;
+  Animation<LatLng>? _latLngAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController?.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(DetailRouteInfoMap oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    // Trigger animation to new route bounds when route changes
+    if (widget.trip != oldWidget.trip && widget.trip != null) {
+      bounds = fitTripBounds(widget.trip!);
+      animateMapToBounds(bounds!);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,11 +62,16 @@ class _DetailRouteInfoMapState extends State<DetailRouteInfoMap> {
         mapController: _mapController,
         options: MapOptions(
             onMapReady: () {
-              if (bounds != null) {
-                _mapController.fitBounds(
-                  bounds!,
-                  options: const FitBoundsOptions(padding: EdgeInsets.symmetric(horizontal: 96, vertical: 192)),
-                );
+              // Initial animation when the map is first ready
+              if (isFirstRoute && widget.trip != null) {
+                isFirstRoute = false;
+                // _mapController. = const LatLng(48.1662627, 11.5768211); // Start position
+                // After initial animation, animate to route bounds
+                Future.delayed(const Duration(milliseconds: 500), () {
+                  if (bounds != null) {
+                    animateMapToBounds(bounds!);
+                  }
+                });
               }
             },
             center: munichCenter,
@@ -50,6 +85,31 @@ class _DetailRouteInfoMapState extends State<DetailRouteInfoMap> {
         ],
       ),
     );
+  }
+
+  void animateMapToLatLng(LatLng targetLatLng) {
+    LatLng currentCenter = _mapController.center;
+
+    // Define the tween with CurvedAnimation for a bouncy effect
+    _latLngAnimation = LatLngTween(begin: currentCenter, end: targetLatLng).animate(
+      CurvedAnimation(
+        parent: _animationController!,
+        curve: Curves.easeInOut, // Smooth easing out towards the end
+      ),
+    );
+
+    _animationController?.addListener(() {
+      _mapController.move(_latLngAnimation!.value, _mapController.zoom);
+    });
+
+    _animationController?.forward(from: 0.0);
+  }
+
+  // Function to animate the map to the bounds of the route without changing the zoom
+  void animateMapToBounds(LatLngBounds bounds) {
+    LatLng targetCenter = bounds.center;
+
+    animateMapToLatLng(targetCenter); // Animate to the center of the bounds
   }
 
   TileLayer osmTileLayer() {
@@ -141,4 +201,14 @@ Widget iconWithTransparentFilling(IconData iconData, IconData iconDataOutlined, 
       ),
     ],
   );
+}
+
+class LatLngTween extends Tween<LatLng> {
+  LatLngTween({LatLng? begin, LatLng? end}) : super(begin: begin, end: end);
+
+  @override
+  LatLng lerp(double t) => LatLng(
+        begin!.latitude + (end!.latitude - begin!.latitude) * t,
+        begin!.longitude + (end!.longitude - begin!.longitude) * t,
+      );
 }

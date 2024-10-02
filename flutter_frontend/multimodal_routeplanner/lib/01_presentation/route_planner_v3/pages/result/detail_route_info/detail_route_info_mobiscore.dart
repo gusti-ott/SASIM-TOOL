@@ -12,19 +12,10 @@ Widget detailRouteInfoMobiScore(BuildContext context, {required isMobile}) {
         padding: EdgeInsets.only(left: !isMobile ? 2 * extraLargePadding : extraLargePadding, right: extraLargePadding),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           SizedBox(height: largePadding * 3),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Image.asset('assets/mobiscore_logos/logo_with_text_primary.png', height: 70),
-              mediumHorizontalSpacer,
-              Expanded(
-                child: Text(
-                  lang.what_is_mobi_score,
-                  style: textTheme.headlineMedium,
-                  textAlign: TextAlign.left,
-                ),
-              ),
-            ],
+          Text(
+            lang.what_is_mobi_score,
+            style: textTheme.headlineMedium,
+            textAlign: TextAlign.left,
           ),
           largeVerticalSpacer,
           Text(
@@ -33,7 +24,14 @@ Widget detailRouteInfoMobiScore(BuildContext context, {required isMobile}) {
             textAlign: TextAlign.left,
           ),
           largeVerticalSpacer,
-          colorfulScoreBoard(context),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset('assets/mobiscore_logos/logo_with_text_primary.png', height: 55),
+              mediumHorizontalSpacer,
+              Expanded(child: colorfulScoreBoard(context)),
+            ],
+          ),
           largeVerticalSpacer,
           Text(
             '${lang.mobi_score_description_2}\n\n${lang.mobi_score_description_3}',

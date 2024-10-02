@@ -52,7 +52,7 @@ class Layer1Content extends StatelessWidget {
         children: [
           largeVerticalSpacer,
           Padding(
-            padding: EdgeInsets.only(left: mediumPadding),
+            padding: EdgeInsets.only(left: mediumPadding, right: isMobile ? horizontalPadding : 0),
             child: Column(
               children: [
                 layer1Header(context, selectedTrip.mode),
@@ -77,13 +77,16 @@ class Layer1Content extends StatelessWidget {
                 setInfoViewTypeCallback(InfoViewType.mobiscore);
               }),
             ),
-          costResultRow(context, trip: selectedTrip, setDiagramType: (value) {
-            setInfoViewTypeCallback(InfoViewType.diagram);
-            setDiagramTypeCallback(value);
-          }, isMobile: isMobile, screenWidth: screenWidth),
+          Padding(
+            padding: EdgeInsets.only(right: isMobile ? horizontalPadding : 0),
+            child: costResultRow(context, trip: selectedTrip, setDiagramType: (value) {
+              setInfoViewTypeCallback(InfoViewType.diagram);
+              setDiagramTypeCallback(value);
+            }, isMobile: isMobile, screenWidth: screenWidth),
+          ),
           extraLargeVerticalSpacer,
           Padding(
-            padding: EdgeInsets.only(left: mediumPadding),
+            padding: EdgeInsets.only(left: mediumPadding, right: isMobile ? horizontalPadding : 0),
             child: V3CustomButton(
                 label: lang.show_detailed_info,
                 leadingIcon: Icons.bar_chart,

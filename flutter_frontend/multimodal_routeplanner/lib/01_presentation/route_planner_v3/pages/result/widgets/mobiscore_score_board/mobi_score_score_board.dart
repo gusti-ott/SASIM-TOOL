@@ -51,15 +51,18 @@ Widget mobiScoreScoreBoardWithPointers(BuildContext context,
     height: heightSection,
     child: Stack(
       children: [
-        Align(
-            alignment: Alignment.centerLeft,
-            child: Row(
-              children: [
-                mobiScoreCircleLogo(size: widthScoreColumn, onTap: onMobiscoreLogoPressed, showInfoIcon: true),
-                SizedBox(width: largePadding - infoIconPadding),
-                Expanded(child: mobiScoreScoreBoard(context, selectedTrip: selectedTrip, isMobile: true)),
-              ],
-            )),
+        Padding(
+          padding: EdgeInsets.only(right: horizontalPadding),
+          child: Align(
+              alignment: Alignment.centerLeft,
+              child: Row(
+                children: [
+                  mobiScoreCircleLogo(size: widthScoreColumn, onTap: onMobiscoreLogoPressed, showInfoIcon: true),
+                  SizedBox(width: largePadding - infoIconPadding),
+                  Expanded(child: mobiScoreScoreBoard(context, selectedTrip: selectedTrip, isMobile: true)),
+                ],
+              )),
+        ),
         if (currentCarTrip != null)
           positionedScorePointer(
             widthScoreColumn: widthScoreColumn,
@@ -220,7 +223,7 @@ List<Widget> scoreBoardWithPointers(BuildContext context,
     required Function() onMobiscoreLogoPressed}) {
   return [
     Positioned(
-      right: widthInfoSection - (widthScoreColumn / 2),
+      right: widthInfoSection - (widthScoreColumn / 2) - infoIconPadding / 2,
       top: topOffsetMobiScoreLogo,
       // top: (screenHeight - heightScoreColumn) / 2 - mediumPadding - widthScoreColumn,
       child: mobiScoreCircleLogo(size: widthScoreColumn, onTap: onMobiscoreLogoPressed, showInfoIcon: true),
