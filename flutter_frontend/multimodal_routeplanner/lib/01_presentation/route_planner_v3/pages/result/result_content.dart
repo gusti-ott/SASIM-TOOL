@@ -123,7 +123,7 @@ class ResultContent extends StatelessWidget {
                         left: horizontalPadding - mediumPadding,
                         top: mediumPadding,
                         bottom: mediumPadding,
-                        right: isMobile ? horizontalPadding : extraLargePadding + mediumPadding,
+                        right: isMobile ? 0 : extraLargePadding + mediumPadding,
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
