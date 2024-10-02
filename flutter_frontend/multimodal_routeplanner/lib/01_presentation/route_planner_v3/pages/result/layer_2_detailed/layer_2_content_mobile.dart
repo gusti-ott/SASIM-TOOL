@@ -4,11 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/buttons.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mobiscore_to_x.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/detail_route_info/detail_route_info_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/layer_2_detailed/costs_card_mobile_layer_2.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/costs_percentage_bar.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/costs_result_column_1.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/detail_route_info/detail_route_info_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/share/share_screen.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/costs/Costs.dart';
@@ -35,45 +35,48 @@ class Layer2ContentMobile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AppLocalizations lang = AppLocalizations.of(context)!;
-    return Column(
-      children: [
-        costsRowMobile(context, costsType: CostsType.social),
-        Padding(
-          padding: EdgeInsets.only(left: mediumPadding),
-          child: Column(children: [
-            costsPercentageBar(context, selectedTrip: selectedTrip, barType: CostsPercentageBarType.social),
-            mediumVerticalSpacer,
-            ...socialCostsCards(context,
-                selectedTrip: selectedTrip,
-                setInfoViewTypeCallback: setInfoViewTypeCallback,
-                setDiagramTypeCallback: setDiagramTypeCallback),
-          ]),
-        ),
-        largeVerticalSpacer,
-        costsRowMobile(context, costsType: CostsType.personal),
-        Padding(
-          padding: EdgeInsets.only(left: mediumPadding),
-          child: Column(children: [
-            costsPercentageBar(context, selectedTrip: selectedTrip, barType: CostsPercentageBarType.personal),
-            mediumVerticalSpacer,
-            ...personalCostsCards(context,
-                selectedTrip: selectedTrip,
-                setInfoViewTypeCallback: setInfoViewTypeCallback,
-                setDiagramTypeCallback: setDiagramTypeCallback),
-          ]),
-        ),
-        extraLargeVerticalSpacer,
-        V3CustomButton(
-            label: lang.share,
-            leadingIcon: Icons.share,
-            onTap: () {
-              context.goNamed(ShareScreen.routeName, queryParameters: {
-                'startAddress': startAddress,
-                'endAddress': endAddress,
-              });
-            }),
-        extraLargeVerticalSpacer,
-      ],
+    return Padding(
+      padding: EdgeInsets.only(right: largePadding),
+      child: Column(
+        children: [
+          costsRowMobile(context, costsType: CostsType.social),
+          Padding(
+            padding: EdgeInsets.only(left: mediumPadding),
+            child: Column(children: [
+              costsPercentageBar(context, selectedTrip: selectedTrip, barType: CostsPercentageBarType.social),
+              mediumVerticalSpacer,
+              ...socialCostsCards(context,
+                  selectedTrip: selectedTrip,
+                  setInfoViewTypeCallback: setInfoViewTypeCallback,
+                  setDiagramTypeCallback: setDiagramTypeCallback),
+            ]),
+          ),
+          largeVerticalSpacer,
+          costsRowMobile(context, costsType: CostsType.personal),
+          Padding(
+            padding: EdgeInsets.only(left: mediumPadding),
+            child: Column(children: [
+              costsPercentageBar(context, selectedTrip: selectedTrip, barType: CostsPercentageBarType.personal),
+              mediumVerticalSpacer,
+              ...personalCostsCards(context,
+                  selectedTrip: selectedTrip,
+                  setInfoViewTypeCallback: setInfoViewTypeCallback,
+                  setDiagramTypeCallback: setDiagramTypeCallback),
+            ]),
+          ),
+          extraLargeVerticalSpacer,
+          V3CustomButton(
+              label: lang.share,
+              leadingIcon: Icons.share,
+              onTap: () {
+                context.goNamed(ShareScreen.routeName, queryParameters: {
+                  'startAddress': startAddress,
+                  'endAddress': endAddress,
+                });
+              }),
+          extraLargeVerticalSpacer,
+        ],
+      ),
     );
   }
 
