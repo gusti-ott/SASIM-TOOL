@@ -1,6 +1,4 @@
 import os
-from typing import List
-
 from flask import Flask, request, redirect, jsonify
 from flask import render_template
 from flask import send_from_directory
@@ -129,7 +127,7 @@ def return_trip():
     segments = trip.segments
 
     # if trip consists of multiple segments, iterate over segments to return a list of segments in the rest-api response
-    if (type(segments) == list):
+    if type(segments) == list:
         for j in range(len(trip.segments)):
 
             new_segment: Segment = trip.segments[j]
@@ -241,6 +239,7 @@ def return_trip():
 
     response = jsonify(dict_new_result)
     response.headers.add('Access-Control-Allow-Origin', '*')
+    
     return response
 
 
