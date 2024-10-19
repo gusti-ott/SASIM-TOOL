@@ -102,7 +102,7 @@ class _SearchScreenV3State extends State<SearchScreenV3> {
         setState(() {
           _getSearchHeaderHeight();
           _scrollController.animateTo(
-            _searchHeaderHeight - 200,
+            _searchHeaderHeight - 100,
             duration: const Duration(milliseconds: 500),
             curve: Curves.easeOut,
           );
