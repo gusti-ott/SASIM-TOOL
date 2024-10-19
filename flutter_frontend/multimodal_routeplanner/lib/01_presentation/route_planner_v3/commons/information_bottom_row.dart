@@ -32,7 +32,7 @@ class InformationContainer extends StatelessWidget {
                       children: [
                         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                           Text(lang.contact, style: textTheme.headlineMedium!.copyWith(color: customWhite100)),
-                          Text('sasim@mcube-cluster.de', style: textTheme.bodyLarge!.copyWith(color: customWhite100))
+                          Text('sasim@mcube-cluster.com', style: textTheme.bodyLarge!.copyWith(color: customWhite100))
                         ]),
                         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                           Text(lang.information, style: textTheme.headlineMedium!.copyWith(color: customWhite100)),

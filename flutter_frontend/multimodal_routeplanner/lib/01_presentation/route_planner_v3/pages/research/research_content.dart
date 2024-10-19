@@ -53,8 +53,7 @@ class ResearchContent extends StatelessWidget {
                   newlineSpacer,
                   buildFormattedText(context, text: lang.personal_costs_research_content, formatOptions: [
                     FormatOption(lang.personal_costs_research_content_hyperlink_1,
-                        hyperlink:
-                            "https://www.researchgate.net/publication/349034233_An_Overview_of_Parameter_and_Cost_for_Battery_Electric_Vehicles")
+                        hyperlink: "https://www.mdpi.com/2032-6653/12/1/21")
                   ]),
                   newlineSpacer,
                   SizedBox(
@@ -78,8 +77,7 @@ class ResearchContent extends StatelessWidget {
                   newlineSpacer,
                   buildFormattedText(context, text: lang.social_costs_research_content, formatOptions: [
                     FormatOption(lang.social_costs_research_content_hyperlink_1,
-                        hyperlink:
-                            "https://www.researchgate.net/publication/365451223_Ending_the_myth_of_mobility_at_zero_costs_An_external_cost_analysis"),
+                        hyperlink: "https://doi.org/10.1016/j.retrec.2022.101246"),
                   ]),
                   newlineSpacer,
                   SizedBox(

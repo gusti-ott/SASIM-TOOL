@@ -58,15 +58,21 @@ Widget buildFormattedText(
 
   List<TextSpan> textSpans = [];
   int lastIndex = 0;
+  Set<String> formattedWords = {}; // Track words that have already been formatted
 
   for (final option in formatOptions) {
     String target = option.text;
     bool isBold = option.isBold;
     String? hyperlink = option.hyperlink;
 
+    // Only format the first occurrence of each target word
+    if (formattedWords.contains(target)) {
+      continue; // Skip if this word has already been formatted
+    }
+
     int startIndex = text.indexOf(target, lastIndex);
 
-    while (startIndex != -1) {
+    if (startIndex != -1) {
       // Add the part of the text before the target string
       if (startIndex > lastIndex) {
         textSpans.add(TextSpan(
@@ -100,11 +106,11 @@ Widget buildFormattedText(
             : null,
       ));
 
+      // Mark this word as already formatted
+      formattedWords.add(target);
+
       // Move lastIndex to the end of the current target
       lastIndex = startIndex + target.length;
-
-      // Check for any additional occurrences of the same target string
-      startIndex = text.indexOf(target, lastIndex);
     }
   }
 
