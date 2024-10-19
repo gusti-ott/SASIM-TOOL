@@ -9,7 +9,7 @@ class Costs {
   Costs({required this.externalCosts, required this.internalCosts});
 
   double getFullcosts() {
-    return externalCosts.all + internalCosts.all;
+    return double.parse(externalCosts.all.toStringAsFixed(2)) + double.parse(internalCosts.all.toStringAsFixed(2));
   }
 }
 
@@ -18,4 +18,5 @@ extension CostsExtension on double {
 }
 
 // there was a renaming of external --> social and internal --> personal
+// in the backend we still use the old naming with internal and external costs
 enum CostsType { personal, social }
