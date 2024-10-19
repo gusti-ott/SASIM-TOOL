@@ -19,7 +19,7 @@ class AboutUsContent extends StatelessWidget {
         children: [
           if (!isMobile) SizedBox(height: headerHeight),
           aboutUsTextContent(context, isMobile: isMobile),
-          InformationContainer(),
+          const InformationContainer(),
         ],
       ),
     );
