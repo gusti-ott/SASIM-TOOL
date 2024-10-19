@@ -148,7 +148,7 @@
   "header_image_label": "The title image shows an urban scene with multiple modes of transport: a teal bus, a cyclist on a teal bicycle, and an elevated white-and-orange train. People are walking in the background, and a large profile of a woman with dark hair is shown to the right, overlooking the city. The city has modern buildings, greenery, and statues.",
   "what_are": "What are",
   "start_new_route": "Start a new route",
-  "mobi_score_description_1": "The Mobi-Score is a color-coded rating scale that provides information on how sustainable a route is with a mode of transport in terms of its external costs.",
+  "mobi_score_description_1": "In addition to private, internal costs (e.g. fuel costs or insurance), our individual mobility also causes external costs such as accident costs or noise costs. The Mobi-Score assesses precisely these external costs of our individual mobility. It is intended to raise awareness of the fact that the costs of our mobility are not distributed fairly - as there are costs that are not borne by the person who causes them, but by society as a whole.",
   "mobi_score_description_2": "The Mobi-Score depends on the chosen mode of transport and the distance traveled. This can vary significantly between different modes of transport.",
   "mobi_score_description_3": "If a route has comparatively high external costs, it receives the Mobi-Score E (red). On the other hand, if the route has low external costs, it receives the Mobi-Score A (green).",
   "imprint": "Imprint",
