@@ -38,6 +38,7 @@ Widget detailRouteInfoMobiScore(BuildContext context, {required isMobile}) {
             style: textTheme.bodyLarge,
             textAlign: TextAlign.left,
           ),
+          largeVerticalSpacer,
         ]),
       ),
     ),

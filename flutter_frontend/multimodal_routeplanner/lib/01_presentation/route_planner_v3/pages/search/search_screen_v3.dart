@@ -19,8 +19,9 @@ class SearchScreenV3 extends StatefulWidget {
 class _SearchScreenV3State extends State<SearchScreenV3> {
   bool started = false;
   late ScrollController _scrollController;
-  final GlobalKey _informationContainerKey = GlobalKey();
-  double _informationContainerHeight = 0.0;
+
+  final GlobalKey _searchHeaderKey = GlobalKey();
+  double _searchHeaderHeight = 0.0;
 
   @override
   void initState() {
@@ -30,7 +31,7 @@ class _SearchScreenV3State extends State<SearchScreenV3> {
 
     // Add a post-frame callback to get the height of the container after layout
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _getInformationContainerHeight();
+      _getSearchHeaderHeight();
     });
   }
 
@@ -41,11 +42,11 @@ class _SearchScreenV3State extends State<SearchScreenV3> {
     super.dispose();
   }
 
-  void _getInformationContainerHeight() {
-    final RenderBox? renderBox = _informationContainerKey.currentContext?.findRenderObject() as RenderBox?;
+  void _getSearchHeaderHeight() {
+    final RenderBox? renderBox = _searchHeaderKey.currentContext?.findRenderObject() as RenderBox?;
     if (renderBox != null) {
       setState(() {
-        _informationContainerHeight = renderBox.size.height;
+        _searchHeaderHeight = renderBox.size.height;
       });
     }
   }
@@ -65,6 +66,7 @@ class _SearchScreenV3State extends State<SearchScreenV3> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     bool isMobile = screenWidth < mobileScreenWidthMinimum;
 
     return Stack(
@@ -73,13 +75,13 @@ class _SearchScreenV3State extends State<SearchScreenV3> {
           controller: _scrollController,
           child: Column(
             children: [
-              SearchContent(isMobile: isMobile),
+              SearchContent(isMobile: isMobile, searchHeaderKey: _searchHeaderKey),
               largeVerticalSpacer,
-              InformationContainer(key: _informationContainerKey),
+              const InformationContainer(),
             ],
           ),
         ),
-        if (!started && !isMobile)
+        if (!started && (screenWidth / screenHeight) > 1)
           Align(
               alignment: Alignment.bottomCenter,
               child: Padding(padding: EdgeInsets.only(bottom: largePadding), child: _floatingStartButton(context))),
@@ -98,8 +100,9 @@ class _SearchScreenV3State extends State<SearchScreenV3> {
       textStyle: textTheme.bodyLarge,
       onTap: () {
         setState(() {
+          _getSearchHeaderHeight();
           _scrollController.animateTo(
-            _scrollController.position.maxScrollExtent - _informationContainerHeight,
+            _searchHeaderHeight - 100,
             duration: const Duration(milliseconds: 500),
             curve: Curves.easeOut,
           );

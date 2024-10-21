@@ -7,9 +7,10 @@ import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dar
 import 'package:multimodal_routeplanner/01_presentation/theme_data/typography.dart';
 
 class SearchContent extends StatefulWidget {
-  const SearchContent({super.key, required this.isMobile});
+  const SearchContent({super.key, required this.isMobile, required this.searchHeaderKey});
 
   final bool isMobile;
+  final GlobalKey searchHeaderKey;
 
   @override
   State<SearchContent> createState() => _SearchContentState();
@@ -28,17 +29,21 @@ class _SearchContentState extends State<SearchContent> {
       isMobile: widget.isMobile,
       screenHeight: screenHeight,
       screenWidth: screenWidth,
+      searchHeaderKey: widget.searchHeaderKey,
     );
   }
 
   Widget searchContent(BuildContext context,
-      {required double screenHeight, required bool isMobile, required double screenWidth}) {
+      {required double screenHeight,
+      required bool isMobile,
+      required double screenWidth,
+      required GlobalKey searchHeaderKey}) {
     TextTheme textTheme = Theme.of(context).textTheme;
     AppLocalizations lang = AppLocalizations.of(context)!;
 
     return Column(
       children: [
-        headerImage(context),
+        HeaderImage(key: searchHeaderKey),
         smallVerticalSpacer,
         Center(
           child: SizedBox(
@@ -83,13 +88,18 @@ class _SearchContentState extends State<SearchContent> {
   }
 }
 
-Widget headerImage(BuildContext context) {
-  AppLocalizations lang = AppLocalizations.of(context)!;
-  return Semantics(
-    label: lang.header_image_label,
-    child: Image.asset(
-      'assets/title_image/mobiscore_header_1.png',
-      fit: BoxFit.fitWidth,
-    ),
-  );
+class HeaderImage extends StatelessWidget {
+  const HeaderImage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    AppLocalizations lang = AppLocalizations.of(context)!;
+    return Semantics(
+      label: lang.header_image_label,
+      child: Image.asset(
+        'assets/title_image/mobiscore_header_1.png',
+        fit: BoxFit.fitWidth,
+      ),
+    );
+  }
 }

@@ -40,6 +40,11 @@ class ImprintScreen extends StatelessWidget {
                       lang.imprint,
                     ),
                     newlineSpacer,
+                    bodyText(
+                      context,
+                      lang.imprint_content,
+                    ),
+                    newlineSpacer,
                     headline1Text(
                       context,
                       lang.contact_details,
@@ -50,34 +55,9 @@ class ImprintScreen extends StatelessWidget {
                       lang.imprint_contact_details_content,
                     ),
                     newlineSpacer,
-                    headline1Text(
-                      context,
-                      lang.authorized_to_represent,
-                    ),
-                    newlineSpacer,
                     bodyText(
                       context,
                       lang.imprint_authorized_content,
-                    ),
-                    newlineSpacer,
-                    headline1Text(
-                      context,
-                      lang.supervisory_authority,
-                    ),
-                    newlineSpacer,
-                    bodyText(
-                      context,
-                      lang.imprint_supervisory_content,
-                    ),
-                    newlineSpacer,
-                    headline1Text(
-                      context,
-                      lang.vat_id,
-                    ),
-                    newlineSpacer,
-                    bodyText(
-                      context,
-                      lang.imprint_vat_content,
                     ),
                     newlineSpacer,
                     headline1Text(
@@ -98,6 +78,16 @@ class ImprintScreen extends StatelessWidget {
                     bodyText(
                       context,
                       lang.imprint_disclaimer_content,
+                    ),
+                    newlineSpacer,
+                    headline1Text(
+                      context,
+                      lang.more_information,
+                    ),
+                    newlineSpacer,
+                    bodyText(
+                      context,
+                      lang.more_information_content,
                     ),
                     extraLargeVerticalSpacer,
                   ],
