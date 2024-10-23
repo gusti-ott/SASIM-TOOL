@@ -10,6 +10,7 @@ services:
     volumes:
       - ./flask_app:/usr/src/app/
       - ./db:/usr/src/app/db
+      - ./tracking:/usr/src/app/tracking
     env_file:
       - ./env/.env
     networks:
