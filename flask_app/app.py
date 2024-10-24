@@ -46,7 +46,7 @@ daily_summary = {
 scheduler = BackgroundScheduler()
 
 
-@scheduler.scheduled_job('cron', minute=45)
+@scheduler.scheduled_job('cron', minute='*/1')
 def save_logs_to_csv():
     global detailed_logs, daily_summary
 
@@ -54,38 +54,55 @@ def save_logs_to_csv():
     detailed_log_path = os.path.join(ROOT_DIR, 'tracking', 'detailed_logs.csv')
     daily_summary_path = os.path.join(ROOT_DIR, 'tracking', 'daily_summary.csv')
 
-    # Ensure 'tracking' directory exists
-    if not os.path.exists(tracking_dir_path):
-        os.makedirs(tracking_dir_path)
+    try:
+        # Ensure 'tracking' directory exists
+        if not os.path.exists(tracking_dir_path):
+            os.makedirs(tracking_dir_path)
 
-    # Write detailed logs to CSV file
-    file_exists = os.path.isfile(detailed_log_path)
+        # Write detailed logs to CSV file
+        file_exists = os.path.isfile(detailed_log_path)
 
-    with open(detailed_log_path, mode='a', newline='') as file:
-        writer = csv.writer(file)
-        if not file_exists:
-            writer.writerow(['Date', 'Start Address', 'End Address', 'Mode', 'Success'])  # Write header only once
-        for log in detailed_logs:
-            writer.writerow([log['date'], log['start_address'], log['end_address'], log['mode'], log['success']])
+        with open(detailed_log_path, mode='a', newline='') as file:
+            writer = csv.writer(file)
+            if not file_exists:
+                writer.writerow(['Date', 'Start Address', 'End Address', 'Mode', 'Success'])  # Write header only once
+                print('detailed_logs.csv created in location ' + detailed_log_path + ' at ')
+            else:
+                print('detailed_logs.csv exists in location ' + detailed_log_path)
+            for log in detailed_logs:
+                writer.writerow([log['date'], log['start_address'], log['end_address'], log['mode'], log['success']])
+            new_log_entries = len(detailed_logs)
+            print(str(new_log_entries) + ' new detailed logs saved to CSV at ' +
+                  datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 
-    # Write daily summary to CSV file
-    file_exists = os.path.isfile(daily_summary_path)
+    except Exception as e:
+        print('Error saving detailed logs to CSV: ' + str(e))
 
-    with open(daily_summary_path, mode='a', newline='') as file:
-        writer = csv.writer(file)
-        if not file_exists:
-            writer.writerow(['Date', 'Total Calls', 'Successful Calls', 'Error Calls'])  # Write header only once
-        writer.writerow([daily_summary['date'], daily_summary['total_calls'], daily_summary['successful_calls'], daily_summary['error_calls']])
+    try:
+        # Write daily summary to CSV file
+        file_exists = os.path.isfile(daily_summary_path)
 
-    # Reset in-memory logs for the next day
-    detailed_logs = []
-    daily_summary = {
-        "date": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-        "total_calls": 0,
-        "successful_calls": 0,
-        "error_calls": 0
-    }
-    print('Logs saved to CSV at ' + datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+        with open(daily_summary_path, mode='a', newline='') as file:
+            writer = csv.writer(file)
+            if not file_exists:
+                writer.writerow(['Date', 'Total Calls', 'Successful Calls', 'Error Calls'])  # Write header only once
+                print('daily_summary.csv created in location ' + daily_summary_path)
+            else:
+                print('daily_summary.csv exists in location ' + daily_summary_path)
+            writer.writerow([daily_summary['date'], daily_summary['total_calls'], daily_summary['successful_calls'],
+                             daily_summary['error_calls']])
+            print('Daily summary saved to CSV at ' + datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+
+        # Reset in-memory logs for the next day
+        detailed_logs = []
+        daily_summary = {
+            "date": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            "total_calls": 0,
+            "successful_calls": 0,
+            "error_calls": 0
+        }
+    except Exception as e:
+        print('Error saving daily summary to CSV: ' + str(e))
 
 
 scheduler.start()
@@ -139,6 +156,7 @@ def return_otp_trip():
                                                             otp_mode=input_otp_mode)
 
     return response
+
 
 @server.route('/plattform', methods=['GET'])
 def return_trip():
