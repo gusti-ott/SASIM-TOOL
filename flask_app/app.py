@@ -14,6 +14,7 @@ from controllers.efa_mvv.EfaMvvStopFinderController import EfaMvvStopFinder
 from controllers.geocoding.GeocodingController import GeocodingController
 from controllers.trip.TripController import TripController
 from controllers.otp.OtpController import OtpController
+from flask_app.config.definitions import ROOT_DIR
 from helpers.ApiHelper import ApiHelper
 from model.entities.location.Location import Location
 from model.entities.segment.Segment import Segment
@@ -45,30 +46,32 @@ daily_summary = {
 scheduler = BackgroundScheduler()
 
 
-@scheduler.scheduled_job('cron', hour=14, minute=10)
+@scheduler.scheduled_job('cron', hour=14, minute=30)
 def save_logs_to_csv():
     global detailed_logs, daily_summary
 
+    tracking_dir_path = os.path.join(ROOT_DIR, 'tracking')
+    detailed_log_path = os.path.join(ROOT_DIR, 'tracking', 'detailed_logs.csv')
+    daily_summary_path = os.path.join(ROOT_DIR, 'tracking', 'daily_summary.csv')
+
     # Ensure 'tracking' directory exists
-    if not os.path.exists('tracking'):
-        os.makedirs('tracking')
+    if not os.path.exists(tracking_dir_path):
+        os.makedirs(tracking_dir_path)
 
     # Write detailed logs to CSV file
-    detailed_log_file = 'tracking/detailed_logs.csv'
-    file_exists = os.path.isfile(detailed_log_file)
+    file_exists = os.path.isfile(detailed_log_path)
 
-    with open(detailed_log_file, mode='a', newline='') as file:
+    with open(detailed_log_path, mode='a', newline='') as file:
         writer = csv.writer(file)
         if not file_exists:
-            writer.writerow(['Date', 'Start Address', 'End Address', 'Mode'])  # Write header only once
+            writer.writerow(['Date', 'Start Address', 'End Address', 'Mode', 'Success'])  # Write header only once
         for log in detailed_logs:
             writer.writerow([log['date'], log['start_address'], log['end_address'], log['mode'], log['success']])
 
     # Write daily summary to CSV file
-    summary_file = 'tracking/daily_summary.csv'
-    file_exists = os.path.isfile(summary_file)
+    file_exists = os.path.isfile(daily_summary_path)
 
-    with open(summary_file, mode='a', newline='') as file:
+    with open(daily_summary_path, mode='a', newline='') as file:
         writer = csv.writer(file)
         if not file_exists:
             writer.writerow(['Date', 'Total Calls', 'Successful Calls', 'Error Calls'])  # Write header only once
