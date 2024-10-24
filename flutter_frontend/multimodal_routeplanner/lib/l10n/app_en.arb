@@ -218,6 +218,8 @@
   "illustrations_by": "Illustrations by",
   "ui_by": "UI/UX Design by",
   "routing_research_content_hyperlink_1": "OpenTripPlanner (OTP)",
-  "routing_research_content_hyperlink_2": "DEFAS"
-
+  "routing_research_content_hyperlink_2": "DEFAS",
+  "want_to_help_us": "Want to help us improve?",
+  "want_to_help_us_explanation": "Click on the button below or scan the QR code to participate in our survey. Your feedback is important to us!",
+  "to_the_survey": "To the survey"
 }

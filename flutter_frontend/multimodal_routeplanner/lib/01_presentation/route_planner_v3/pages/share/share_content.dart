@@ -10,6 +10,7 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/r
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/values.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/search_screen_v3.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ShareContent extends StatelessWidget {
   const ShareContent({super.key, required this.isMobile, required this.startAddress, required this.endAddress});
@@ -21,6 +22,16 @@ class ShareContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AppLocalizations lang = AppLocalizations.of(context)!;
+    TextTheme textTheme = Theme.of(context).textTheme;
+
+    final Uri surveyUrl = Uri.parse('https://tummgmt.eu.qualtrics.com/jfe/form/SV_0vtCdPrMuQAqEqq');
+
+    Future<void> launchSurveyUrl() async {
+      if (!await launchUrl(surveyUrl)) {
+        throw Exception('Could not launch $surveyUrl');
+      }
+    }
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: mediumPadding),
       child: SingleChildScrollView(
@@ -50,6 +61,57 @@ class ShareContent extends StatelessWidget {
               ),
             ],
             SizedBox(width: contentMaxWidth, child: (!isMobile) ? desktopShare(context) : mobileShare(context)),
+            mediumVerticalSpacer,
+            Container(
+              width: contentMaxWidth,
+              decoration: customBoxDecorationWithShadow(),
+              child: Padding(
+                padding: EdgeInsets.all(largePadding),
+                child: Wrap(
+                  alignment: WrapAlignment.center,
+                  runAlignment: WrapAlignment.start,
+                  spacing: largePadding,
+                  runSpacing: largePadding,
+                  children: [
+                    Column(
+                      children: [
+                        SizedBox(
+                          width: 320,
+                          child: Column(
+                            children: [
+                              Text(
+                                lang.want_to_help_us,
+                                style: textTheme.headlineSmall,
+                                textAlign: TextAlign.left,
+                              ),
+                              smallVerticalSpacer,
+                              Text(
+                                lang.want_to_help_us_explanation,
+                                style: textTheme.bodyLarge,
+                                textAlign: TextAlign.left,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Image.asset('assets/research_data/survey_qr.png', width: 200, height: 200),
+                        mediumVerticalSpacer,
+                        V3CustomButton(
+                            leadingIcon: Icons.star,
+                            label: lang.to_the_survey,
+                            onTap: () {
+                              launchSurveyUrl();
+                            }),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
             if (isMobile) ...[
               mediumVerticalSpacer,
               V3CustomButton(
@@ -159,56 +221,58 @@ class ShareContent extends StatelessWidget {
   Widget mobileShare(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
     AppLocalizations lang = AppLocalizations.of(context)!;
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: largePadding),
-      child: Container(
-        width: double.infinity,
-        decoration: customBoxDecorationWithShadow(),
-        child: Column(
-          children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-              child: Image.asset(
-                'assets/title_image/mobiscore_header_1.png',
-                fit: BoxFit.fitWidth,
-              ),
-            ),
-            SizedBox(
-              child: Padding(
-                padding: EdgeInsets.all(largePadding),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      lang.tell_a_friend,
-                      style: textTheme.headlineSmall,
-                      textAlign: TextAlign.left,
-                    ),
-                    largeVerticalSpacer,
-                    V3CustomButton(
-                      label: lang.copy_url,
-                      leadingIcon: Icons.link,
-                      textColor: primaryColorV3,
-                      color: primaryColorV3,
-                      reverseColors: true,
-                      onTap: () {
-                        Clipboard.setData(ClipboardData(
-                                text: 'https://sasim.mcube-cluster.de/web/#/result?'
-                                    'startAddress=$startAddress&endAddress=$endAddress'))
-                            .then((_) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(lang.url_copied)),
-                          );
-                        });
-                      },
-                    ),
-                  ],
+    return Column(
+      children: [
+        mediumVerticalSpacer,
+        Container(
+          width: double.infinity,
+          decoration: customBoxDecorationWithShadow(),
+          child: Column(
+            children: [
+              ClipRRect(
+                borderRadius: const BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+                child: Image.asset(
+                  'assets/title_image/mobiscore_header_1.png',
+                  fit: BoxFit.fitWidth,
                 ),
               ),
-            )
-          ],
+              SizedBox(
+                child: Padding(
+                  padding: EdgeInsets.all(largePadding),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        lang.tell_a_friend,
+                        style: textTheme.headlineSmall,
+                        textAlign: TextAlign.left,
+                      ),
+                      largeVerticalSpacer,
+                      V3CustomButton(
+                        label: lang.copy_url,
+                        leadingIcon: Icons.link,
+                        textColor: primaryColorV3,
+                        color: primaryColorV3,
+                        reverseColors: true,
+                        onTap: () {
+                          Clipboard.setData(ClipboardData(
+                                  text: 'https://sasim.mcube-cluster.de/web/#/result?'
+                                      'startAddress=$startAddress&endAddress=$endAddress'))
+                              .then((_) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(lang.url_copied)),
+                            );
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
-      ),
+      ],
     );
   }
 }
