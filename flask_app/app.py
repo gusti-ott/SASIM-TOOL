@@ -14,7 +14,7 @@ from controllers.efa_mvv.EfaMvvStopFinderController import EfaMvvStopFinder
 from controllers.geocoding.GeocodingController import GeocodingController
 from controllers.trip.TripController import TripController
 from controllers.otp.OtpController import OtpController
-from flask_app.config.definitions import ROOT_DIR
+from config.definitions import ROOT_DIR
 from helpers.ApiHelper import ApiHelper
 from model.entities.location.Location import Location
 from model.entities.segment.Segment import Segment
