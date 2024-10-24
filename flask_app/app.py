@@ -50,14 +50,21 @@ scheduler = BackgroundScheduler()
 def save_logs_to_csv():
     global detailed_logs, daily_summary
 
-    tracking_dir_path = os.path.join(ROOT_DIR, 'tracking')
-    detailed_log_path = os.path.join(ROOT_DIR, 'tracking', 'detailed_logs.csv')
-    daily_summary_path = os.path.join(ROOT_DIR, 'tracking', 'daily_summary.csv')
+    # paths for the detailed logs and the daily summary INSIDE THE DOCKER CONTAINER
+    tracking_dir_path = "/usr/src/app/tracking/"
+    detailed_log_path = "/usr/src/app/tracking/detailed_logs.csv"
+    daily_summary_path = "/usr/src/app/tracking/daily_summary.csv"
+
+    # paths for the detailed logs and the daily summary FOR TESTING ON LOCAL MACHINE
+    # tracking_dir_path = os.path.join(ROOT_DIR, 'tracking')
+    # detailed_log_path = os.path.join(ROOT_DIR, 'tracking', 'detailed_logs.csv')
+    # daily_summary_path = os.path.join(ROOT_DIR, 'tracking', 'daily_summary.csv')
 
     try:
         # Ensure 'tracking' directory exists
         if not os.path.exists(tracking_dir_path):
             os.makedirs(tracking_dir_path)
+
 
         # Write detailed logs to CSV file
         file_exists = os.path.isfile(detailed_log_path)
