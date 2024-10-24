@@ -46,7 +46,7 @@ daily_summary = {
 scheduler = BackgroundScheduler()
 
 
-@scheduler.scheduled_job('cron', hour=14, minute=30)
+@scheduler.scheduled_job('cron', minute=45)
 def save_logs_to_csv():
     global detailed_logs, daily_summary
 
