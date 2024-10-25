@@ -98,9 +98,9 @@ class AboutUsContent extends StatelessWidget {
                 spacing: largePadding,
                 runSpacing: mediumPadding,
                 children: [
-                  Image.asset('assets/partners_logos/bmw_logo.png', height: 100),
-                  Image.asset('assets/partners_logos/mvv_logo.png', height: 100),
-                  Image.asset('assets/partners_logos/tum_logo.png', height: 80),
+                  Image.asset('assets/partners_logos/bmw_logo.png', height: 70),
+                  Image.asset('assets/partners_logos/mvv_logo.png', height: 90),
+                  Image.asset('assets/partners_logos/tum_logo.png', height: 70),
                 ],
               ),
               largeVerticalSpacer,
