@@ -38,6 +38,7 @@ class ResultCubit extends Cubit<ResultState> {
               startInput: startInput, endInput: endInput, mode: tripModes[i], quickResponse: true);
           listTrips.add(trip);
           emit(ResultLoading(i + 1, tripModes.length));
+          logger.i('Loaded trip for ${tripModes[i].mode}');
         } catch (e) {
           logger.e('Error loading trip for ${tripModes[i].mode}: $e');
         }

@@ -356,6 +356,7 @@ def return_trip():
             "success": "false"
         }
         detailed_logs.append(log_entry)
+        return jsonify({'error': str(e)})
 
 
 @cache.memoize(300)

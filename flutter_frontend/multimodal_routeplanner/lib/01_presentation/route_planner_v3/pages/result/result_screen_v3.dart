@@ -61,28 +61,47 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
   bool? isElectric;
   bool? isShared;
 
+  bool tripNotAvailable = false;
+  String? notAvailableMode;
+
   late InfoViewType infoViewType;
   late DiagramType selectedDiagramType;
   bool showAdditionalMobileInfo = false;
 
   ContentLayer contentLayer = ContentLayer.layer1;
 
-  void updateSelectedTrip() {
+  bool updateSelectedTrip({SelectionMode? updatedSelectionMode, bool? updatedIsElectric, bool? updatedIsShared}) {
     logger.i('updating selected trip');
-    String? tripMode = getTripModeFromInput(mode: selectionMode, isElectric: isElectric, isShared: isShared);
+    updatedSelectionMode ??= selectionMode;
+    updatedIsElectric ??= isElectric;
+    updatedIsShared ??= isShared;
+    String? tripMode = getTripModeFromInput(
+        mode: updatedSelectionMode, isElectric: updatedIsElectric, isShared: updatedIsShared, trips: trips);
     Trip? trip;
     if (trips != null) {
       trip = trips!.firstWhereOrNull((trip) => trip.mode == tripMode);
       if (trip != null) {
         setState(() {
           selectedTrip = trip;
+          notAvailableMode = null;
+          tripNotAvailable = false;
         });
+        return true;
       } else {
+        setState(() {
+          tripNotAvailable = true;
+          notAvailableMode = tripMode;
+        });
         logger.e('trip not found');
       }
     } else {
+      setState(() {
+        tripNotAvailable = true;
+        notAvailableMode = tripMode;
+      });
       logger.e('trips is null');
     }
+    return false;
   }
 
   // states for the loading animation here
@@ -173,6 +192,7 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
                   mode: selectionMode!,
                   isElectric: isElectric!,
                   isShared: isShared!,
+                  trips: trips,
                 );
                 selectedTrip = state.trips.firstWhereOrNull((trip) => trip.mode == tripMode);
               }
@@ -188,22 +208,28 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
                   isElectric: isElectric!,
                   isShared: isShared!,
                   onSelectionModeChanged: (mode) {
-                    setState(() {
-                      selectionMode = mode;
-                    });
-                    updateSelectedTrip();
+                    bool successful = updateSelectedTrip(updatedSelectionMode: mode);
+                    if (successful) {
+                      setState(() {
+                        selectionMode = mode;
+                      });
+                    }
                   },
                   onElectricChanged: (electric) {
-                    setState(() {
-                      isElectric = electric;
-                    });
-                    updateSelectedTrip();
+                    bool successful = updateSelectedTrip(updatedIsElectric: electric);
+                    if (successful) {
+                      setState(() {
+                        isElectric = electric;
+                      });
+                    }
                   },
                   onSharedChanged: (shared) {
-                    setState(() {
-                      isShared = shared;
-                    });
-                    updateSelectedTrip();
+                    bool successful = updateSelectedTrip(updatedIsShared: shared);
+                    if (successful) {
+                      setState(() {
+                        isShared = shared;
+                      });
+                    }
                   },
                   infoViewType: infoViewType,
                   selectedDiagramType: selectedDiagramType,
@@ -255,6 +281,13 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
                     }
                     setState(() {
                       infoViewType = InfoViewType.mobiscore;
+                    });
+                  },
+                  tripNotAvailable: tripNotAvailable,
+                  notAvailableMode: notAvailableMode,
+                  setTripAvailableCallback: (value) {
+                    setState(() {
+                      tripNotAvailable = value;
                     });
                   },
                 );

@@ -29,12 +29,13 @@ class RouteRemoteDatasourceImpl implements RouteRemoteDatasource {
     String modeString = mapMode(mode: mode);
     String quickResponseString = quickResponse != null ? quickResponse.toString() : 'false';
 
-    // TODO: set to false, when in production
     bool isMocked = false;
 
-    // url for local server
-    /*var url =
-        "http://127.0.0.1:5000/plattform?inputStartAddress=$startInput&inputEndAddress=$endInput&tripMode=$modeString&quickResponse=$quickResponseString";*/
+    // TODO: change for production!
+    /*// url for local server
+    var url =
+        "http://127.0.0.1:5000/plattform?inputStartAddress=$startInput&inputEndAddress=$endInput&tripMode=$modeString&quickResponse=$quickResponseString";
+*/
 
     // url for ftm server
     var url =

@@ -16,6 +16,7 @@ enum MobilityModeEnum {
   flinkster,
   sharenow,
   cab,
+  mvgBike,
   walk,
   intermodal
 }
