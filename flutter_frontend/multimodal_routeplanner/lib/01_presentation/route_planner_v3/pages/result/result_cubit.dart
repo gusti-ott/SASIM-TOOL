@@ -16,7 +16,7 @@ class ResultCubit extends Cubit<ResultState> {
   String cachedStartInput = '';
   String cachedEndInput = '';
 
-  Future<void> loadTrips(String startInput, String endInput) async {
+  Future<void> loadTrips(String startInput, String endInput, String? startCoordinates, String? endCoordinates) async {
     if (cachedStartInput != startInput || cachedEndInput != endInput) {
       emit(ResultLoading(0, 7));
       cachedStartInput = startInput;
@@ -35,7 +35,12 @@ class ResultCubit extends Cubit<ResultState> {
       for (int i = 0; i < tripModes.length; i++) {
         try {
           Trip trip = await _routePlannerUsecases.getTrip(
-              startInput: startInput, endInput: endInput, mode: tripModes[i], quickResponse: true);
+              startInput: startInput,
+              endInput: endInput,
+              startCoordinates: startCoordinates,
+              endCoordinates: endCoordinates,
+              mode: tripModes[i],
+              quickResponse: true);
           listTrips.add(trip);
           emit(ResultLoading(i + 1, tripModes.length));
           logger.i('Loaded trip for ${tripModes[i].mode}');

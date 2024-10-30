@@ -33,13 +33,17 @@ class ResultScreenV3 extends StatefulWidget {
       required this.endAddress,
       this.selectedMode,
       this.isElectric,
-      this.isShared});
+      this.isShared,
+      this.startCoordinates,
+      this.endCoordinates});
 
   final String startAddress;
   final String endAddress;
   final SelectionMode? selectedMode;
   final bool? isElectric;
   final bool? isShared;
+  final String? startCoordinates;
+  final String? endCoordinates;
 
   static const String routeName = 'v3-result';
   static const String path = 'result';
@@ -113,7 +117,7 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
     super.initState();
 
     cubit = sl<ResultCubit>();
-    cubit.loadTrips(widget.startAddress, widget.endAddress);
+    cubit.loadTrips(widget.startAddress, widget.endAddress, widget.startCoordinates, widget.endCoordinates);
 
     selectionMode = widget.selectedMode ?? SelectionMode.bicycle;
     isElectric = widget.isElectric ?? false;
@@ -272,7 +276,9 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
                   },
                   backgroundColor: backgroundColor,
                   startAddress: widget.startAddress,
+                  startCoordinates: widget.startCoordinates,
                   endAddress: widget.endAddress,
+                  endCoordinates: widget.endCoordinates,
                   onMobiscoreLogoPressed: () {
                     if (!showAdditionalMobileInfo) {
                       setState(() {
@@ -356,7 +362,7 @@ Widget resultErrorWidget(BuildContext context) {
                     smallVerticalSpacer,
                     Text(lang.please_try_again, style: textTheme.headlineSmall, textAlign: TextAlign.center),
                     largeVerticalSpacer,
-                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                    Wrap(alignment: WrapAlignment.center, runSpacing: smallPadding, spacing: smallPadding, children: [
                       V3CustomButton(
                           label: lang.new_route,
                           leadingIcon: Icons.arrow_back,

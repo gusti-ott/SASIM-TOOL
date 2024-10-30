@@ -165,7 +165,7 @@ def return_otp_trip():
     return response
 
 
-@server.route('/plattform', methods=['GET'])
+@server.route('/platform', methods=['GET'])
 def return_trip():
     global daily_summary
 
@@ -186,14 +186,30 @@ def return_trip():
     input_end_address = str(request.args['inputEndAddress'])
     input_trip_mode = str(request.args['tripMode'])
 
+    input_start_coordinates = request.args.get('startCoordinates')
+    input_end_coordinates = request.args.get('endCoordinates')
+
     try:
-        # start_location = get_geolocation(input_start_address)
-        start_location_and_id = get_efa_geolocation(input_start_address)
+        if input_start_coordinates is None or input_start_coordinates == '':
+            start_location_and_id = get_efa_geolocation(input_start_address)
+        else:
+            print('using start coordinates to route: ' + str(input_start_coordinates) + ' instead of address')
+            lat = float(input_start_coordinates.split(',')[0])
+            lon = float(input_start_coordinates.split(',')[1])
+            start_loc = Location(lat=lat, lon=lon)
+            start_location_and_id = get_efa_geolocation_by_location(location=start_loc)
+
         start_location = start_location_and_id[0]
         start_id = start_location_and_id[1]
 
-        # end_location = get_geolocation(input_end_address)
-        end_location_and_id = get_efa_geolocation(input_end_address)
+        if input_end_coordinates is None or input_end_coordinates == '':
+            end_location_and_id = get_efa_geolocation(input_end_address)
+        else:
+            print('using end coordinates to route: ' + str(input_end_coordinates) + ' instead of address')
+            end_loc = Location(lat=float(input_end_coordinates.split(',')[0]),
+                               lon=float(input_end_coordinates.split(',')[1]))
+            end_location_and_id = get_efa_geolocation_by_location(location=end_loc)
+
         end_location = end_location_and_id[0]
         end_id = end_location_and_id[1]
 
@@ -347,6 +363,7 @@ def return_trip():
         return response
 
     except Exception as e:
+        print('Error in trip routing: ' + str(e))
         daily_summary['error_calls'] += 1
         log_entry = {
             "date": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
@@ -374,6 +391,16 @@ def get_efa_geolocation(address: str):
     id = efa_stop_finder.get_efa_location_id(response=response)
 
     return location, id
+
+
+@cache.memoize(300)
+def get_efa_geolocation_by_location(location: Location):
+    efa_stop_finder = EfaMvvStopFinder()
+    response = efa_stop_finder.get_response_coord(location=location)
+    location = efa_stop_finder.get_location(response=response)
+    geo_id = efa_stop_finder.get_efa_location_id(response=response)
+
+    return location, geo_id
 
 
 @cache.memoize(300)

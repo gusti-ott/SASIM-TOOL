@@ -12,9 +12,19 @@ class RoutePlannerUsecases {
   Logger logger = getLogger();
 
   Future<Trip> getTrip(
-      {required String startInput, required String endInput, required MobilityMode mode, bool? quickResponse}) async {
+      {required String startInput,
+      required String endInput,
+      required MobilityMode mode,
+      String? startCoordinates,
+      String? endCoordinates,
+      bool? quickResponse}) async {
     return routeRepository.getTripFromApi(
-        startInput: startInput, endInput: endInput, mode: mode, quickResponse: quickResponse);
+        startInput: startInput,
+        endInput: endInput,
+        startCoordinates: startCoordinates,
+        endCoordinates: endCoordinates,
+        mode: mode,
+        quickResponse: quickResponse);
   }
 
   Map<String, Trip> getListAddedTrips({required Map<String, Trip> trips, required Trip trip}) {

@@ -44,7 +44,9 @@ class ResultContent extends StatelessWidget {
       required this.hideAdditionalInfoCallback,
       required this.backgroundColor,
       required this.startAddress,
+      this.startCoordinates,
       required this.endAddress,
+      this.endCoordinates,
       required this.onMobiscoreLogoPressed,
       required this.tripNotAvailable,
       this.notAvailableMode,
@@ -70,7 +72,9 @@ class ResultContent extends StatelessWidget {
   final Function() hideAdditionalInfoCallback;
   final Color backgroundColor;
   final String startAddress;
+  final String? startCoordinates;
   final String endAddress;
+  final String? endCoordinates;
   final Function() onMobiscoreLogoPressed;
   final bool tripNotAvailable;
   final String? notAvailableMode;
@@ -185,7 +189,9 @@ class ResultContent extends StatelessWidget {
                                     setInfoViewTypeCallback: setInfoViewTypeCallback,
                                     setDiagramTypeCallback: setDiagramTypeCallback,
                                     startAddress: startAddress,
+                                    startCoordinates: startCoordinates,
                                     endAddress: endAddress,
+                                    endCoordinates: endCoordinates,
                                   )
                               ],
                             ),
@@ -289,7 +295,9 @@ class ResultContent extends StatelessWidget {
                                         setDiagramTypeCallback: setDiagramTypeCallback,
                                         contentMaxWidth: contentMaxWidth,
                                         startAddress: startAddress,
+                                        startCoordinates: startCoordinates,
                                         endAddress: endAddress,
+                                        endCoordinates: endCoordinates,
                                       ),
                                   ],
                                 ),
