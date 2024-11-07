@@ -3,11 +3,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/buttons.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/detail_route_info/detail_route_info_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/layer_2_detailed/costs_card_layer_2.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/layer_2_detailed/costs_details_card_layer_2.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/result_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/widgets/costs_percentage_bar.dart';
-import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/detail_route_info/detail_route_info_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/share/share_screen.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
@@ -22,7 +22,9 @@ class Layer2ContentDesktop extends StatelessWidget {
       required this.contentMaxWidth,
       required this.changeLayerCallback,
       required this.startAddress,
-      required this.endAddress});
+      this.startCoordinates,
+      required this.endAddress,
+      this.endCoordinates});
 
   final Trip selectedTrip;
   final Function(InfoViewType) setInfoViewTypeCallback;
@@ -30,7 +32,9 @@ class Layer2ContentDesktop extends StatelessWidget {
   final Function(ContentLayer) changeLayerCallback;
   final double contentMaxWidth;
   final String startAddress;
+  final String? startCoordinates;
   final String endAddress;
+  final String? endCoordinates;
 
   @override
   Widget build(BuildContext context) {
@@ -105,6 +109,8 @@ class Layer2ContentDesktop extends StatelessWidget {
                     context.goNamed(ShareScreen.routeName, queryParameters: {
                       'startAddress': startAddress,
                       'endAddress': endAddress,
+                      'startCoordinates': startCoordinates,
+                      'endCoordinates': endCoordinates
                     });
                   }),
             ],

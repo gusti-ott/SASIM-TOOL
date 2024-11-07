@@ -8,10 +8,17 @@ class RouteRepositoryImpl implements RouteRepository {
 
   @override
   Future<Trip> getTripFromApi(
-      {required String startInput, required String endInput, required MobilityMode mode, bool? quickResponse}) async {
+      {required String startInput,
+      required String endInput,
+      required MobilityMode mode,
+      String? startCoordinates,
+      String? endCoordinates,
+      bool? quickResponse}) async {
     final remoteTrip = await routeRemoteDatasource.getSingleRouteFromApi(
       startInput: startInput,
       endInput: endInput,
+      startCoordinates: startCoordinates,
+      endCoordinates: endCoordinates,
       mode: mode,
       quickResponse: quickResponse,
     );

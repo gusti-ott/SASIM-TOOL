@@ -1,10 +1,13 @@
+import 'package:collection/collection.dart';
 import 'package:logger/logger.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
+import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 import 'package:multimodal_routeplanner/logger.dart';
 
 Logger logger = getLogger();
 
-String? getTripModeFromInput({required SelectionMode? mode, required bool? isElectric, required bool? isShared}) {
+String? getTripModeFromInput(
+    {required SelectionMode? mode, required bool? isElectric, required bool? isShared, required List<Trip>? trips}) {
   if (mode == null || isElectric == null || isShared == null) {
     logger.e('getTripModeFromInput: mode, isElectric or isShared is null');
     return null;
@@ -18,7 +21,12 @@ String? getTripModeFromInput({required SelectionMode? mode, required bool? isEle
   // return car
   else if (mode == SelectionMode.car) {
     if (isShared) {
-      return 'SHARENOW';
+      if (trips?.firstWhereOrNull((element) => element.mode == 'SHARENOW') == null &&
+          trips?.firstWhereOrNull((element) => element.mode == 'FLINKSTER') != null) {
+        return 'FLINKSTER';
+      } else {
+        return 'SHARENOW';
+      }
     } else {
       if (isElectric) {
         return 'ECAR';
@@ -31,8 +39,12 @@ String? getTripModeFromInput({required SelectionMode? mode, required bool? isEle
   // return for bicycle
   else if (mode == SelectionMode.bicycle) {
     if (isShared) {
-      // return CAB = 'Call a Bike'
-      return 'CAB';
+      if (trips?.firstWhereOrNull((element) => element.mode == 'CAB') == null &&
+          trips?.firstWhereOrNull((element) => element.mode == 'MVG_BIKE') != null) {
+        return 'MVG_BIKE';
+      } else {
+        return 'CAB';
+      }
     } else {
       if (isElectric) {
         return 'EBICYCLE';
@@ -74,9 +86,14 @@ SelectionMode getSelectionModeFromTripMode(String mode) {
   return SelectionMode.bicycle;
 }
 
-String getBicycleTripMode({required bool isElectric, required bool isShared}) {
+String getBicycleTripMode({required bool isElectric, required bool isShared, required List<Trip> trips}) {
   if (isShared) {
-    return 'CAB';
+    if (trips.firstWhereOrNull((element) => element.mode == 'CAB') == null &&
+        trips.firstWhereOrNull((element) => element.mode == 'MVG_BIKE') != null) {
+      return 'MVG_BIKE';
+    } else {
+      return 'CAB';
+    }
   } else {
     if (isElectric) {
       return 'EBICYCLE';
@@ -86,9 +103,14 @@ String getBicycleTripMode({required bool isElectric, required bool isShared}) {
   }
 }
 
-String getCarTripMode({required bool isElectric, required bool isShared}) {
+String getCarTripMode({required bool isElectric, required bool isShared, required List<Trip> trips}) {
   if (isShared) {
-    return 'SHARENOW';
+    if (trips.firstWhereOrNull((element) => element.mode == 'SHARENOW') == null &&
+        trips.firstWhereOrNull((element) => element.mode == 'FLINKSTER') != null) {
+      return 'FLINKSTER';
+    } else {
+      return 'SHARENOW';
+    }
   } else {
     if (isElectric) {
       return 'ECAR';

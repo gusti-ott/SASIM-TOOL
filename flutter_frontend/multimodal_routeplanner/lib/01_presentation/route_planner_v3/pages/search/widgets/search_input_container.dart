@@ -28,6 +28,8 @@ class _SearchInputContentState extends State<SearchInputContent> {
 
   String startAddress = '';
   String endAddress = '';
+  String? startCoordinates;
+  String? endCoordinates;
   SelectionMode selectionMode = SelectionMode.bicycle;
   bool isElectric = false;
   bool isShared = false;
@@ -81,15 +83,23 @@ class _SearchInputContentState extends State<SearchInputContent> {
           context,
           isMobile: false,
           startController: startController,
+          startCoordinates: startCoordinates,
           endController: endController,
-          onStartChanged: (value) {
+          endCoordinates: endCoordinates,
+          onStartChanged: (value, lat, lon) {
             setState(() {
               startAddress = value;
+              if (lat != null && lon != null) {
+                startCoordinates = '$lat,$lon';
+              }
             });
           },
-          onEndChanged: (value) {
+          onEndChanged: (address, lat, lon) {
             setState(() {
-              endAddress = value;
+              endAddress = address;
+              if (lat != null && lon != null) {
+                endCoordinates = '$lat,$lon';
+              }
             });
           },
           swapInputs: swapInputs,
@@ -129,14 +139,24 @@ class _SearchInputContentState extends State<SearchInputContent> {
         largeVerticalSpacer,
         addressNote(lang, textTheme),
         smallVerticalSpacer,
-        addressInputRow(context, isMobile: true, startController: startController, endController: endController,
-            onStartChanged: (value) {
+        addressInputRow(context,
+            isMobile: true,
+            startController: startController,
+            startCoordinates: startCoordinates,
+            endController: endController,
+            endCoordinates: endCoordinates, onStartChanged: (value, lat, lon) {
           setState(() {
             startAddress = value;
+            if (lat != null && lon != null) {
+              startCoordinates = '$lat,$lon';
+            }
           });
-        }, onEndChanged: (value) {
+        }, onEndChanged: (value, lat, lon) {
           setState(() {
             endAddress = value;
+            if (lat != null && lon != null) {
+              endCoordinates = '$lat,$lon';
+            }
           });
         }, swapInputs: swapInputs, selectedMode: selectionMode, isElectric: isElectric, isShared: isShared),
       ],

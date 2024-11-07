@@ -50,13 +50,19 @@ final GoRouter vmrpRouter = GoRouter(
                     builder: (context, state) {
                       final String? startAddress = state.uri.queryParameters['startAddress'];
                       final String? endAddress = state.uri.queryParameters['endAddress'];
+                      final String? startCoordinates = state.uri.queryParameters['startCoordinates'];
+                      final String? endCoordinates = state.uri.queryParameters['endCoordinates'];
                       if (startAddress == null || endAddress == null) {
                         return const Scaffold(
                             body: Center(
                           child: Text('Error: parameters in url missing'),
                         ));
                       }
-                      return ShareScreen(startAddress: startAddress, endAddress: endAddress);
+                      return ShareScreen(
+                          startAddress: startAddress,
+                          endAddress: endAddress,
+                          startCoordinates: startCoordinates,
+                          endCoordinates: endCoordinates);
                     },
                   )
                 ]),
@@ -106,6 +112,8 @@ final GoRouter vmrpRouter = GoRouter(
               final String? selectedMode = state.uri.queryParameters['selectedMode'];
               final String? isElectric = state.uri.queryParameters['isElectric'];
               final String? isShared = state.uri.queryParameters['isShared'];
+              final String? startCoordinates = state.uri.queryParameters['startCoordinates'];
+              final String? endCoordinates = state.uri.queryParameters['endCoordinates'];
 
               if (startInput != null && endInput != null) {
                 return ResultScreenV3(
@@ -113,7 +121,9 @@ final GoRouter vmrpRouter = GoRouter(
                     endAddress: endInput,
                     selectedMode: parseStringToSelectionMode(selectedMode),
                     isElectric: isElectric == 'true',
-                    isShared: isShared == 'true');
+                    isShared: isShared == 'true',
+                    startCoordinates: startCoordinates,
+                    endCoordinates: endCoordinates);
               } else {
                 return const Scaffold(
                     body: Center(

@@ -13,7 +13,7 @@ class AddressPickerListV3 extends StatelessWidget {
   final double width;
   final List<Address> listAddresses;
   final TextEditingController addressInputController;
-  final Function(String) onAddressSelectedCallback;
+  final Function(String, String, String) onAddressSelectedCallback;
 
   @override
   Widget build(BuildContext context) {
@@ -35,10 +35,12 @@ class AddressPickerListV3 extends StatelessWidget {
             itemCount: listAddressNames.length < 3 ? listAddressNames.length : 3,
             itemBuilder: (BuildContext context, int index) {
               String name = listAddressNames[index];
+              String lon = listAddresses[index].geometry.coordinates[0].toString();
+              String lat = listAddresses[index].geometry.coordinates[1].toString();
 
               if (index + 1 == listAddressNames.length) {
                 return addressItem(context, name: name, addressInputController: addressInputController, onTap: () {
-                  onAddressSelectedCallback(name);
+                  onAddressSelectedCallback(name, lat, lon);
                 });
               } else {
                 return Column(
@@ -48,7 +50,7 @@ class AddressPickerListV3 extends StatelessWidget {
                       name: name,
                       addressInputController: addressInputController,
                       onTap: () {
-                        onAddressSelectedCallback(name);
+                        onAddressSelectedCallback(name, lat, lon);
                       },
                     ),
                     const Divider()

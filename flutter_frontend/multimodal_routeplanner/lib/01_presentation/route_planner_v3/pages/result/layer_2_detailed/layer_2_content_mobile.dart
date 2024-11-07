@@ -23,14 +23,18 @@ class Layer2ContentMobile extends StatelessWidget {
       required this.setDiagramTypeCallback,
       required this.changeLayerCallback,
       required this.startAddress,
-      required this.endAddress});
+      this.startCoordinates,
+      required this.endAddress,
+      this.endCoordinates});
 
   final Trip selectedTrip;
   final Function(InfoViewType) setInfoViewTypeCallback;
   final Function(DiagramType) setDiagramTypeCallback;
   final Function(ContentLayer) changeLayerCallback;
   final String startAddress;
+  final String? startCoordinates;
   final String endAddress;
+  final String? endCoordinates;
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +76,8 @@ class Layer2ContentMobile extends StatelessWidget {
                 context.goNamed(ShareScreen.routeName, queryParameters: {
                   'startAddress': startAddress,
                   'endAddress': endAddress,
+                  'startCoordinates': startCoordinates,
+                  'endCoordinates': endCoordinates
                 });
               }),
           extraLargeVerticalSpacer,

@@ -13,10 +13,18 @@ import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dar
 import 'package:url_launcher/url_launcher.dart';
 
 class ShareContent extends StatelessWidget {
-  const ShareContent({super.key, required this.isMobile, required this.startAddress, required this.endAddress});
+  const ShareContent(
+      {super.key,
+      required this.isMobile,
+      required this.startAddress,
+      this.startCoordinates,
+      required this.endAddress,
+      this.endCoordinates});
 
   final String startAddress;
+  final String? startCoordinates;
   final String endAddress;
+  final String? endCoordinates;
   final bool isMobile;
 
   @override
@@ -52,7 +60,9 @@ class ShareContent extends StatelessWidget {
                       ResultScreenV3.routeName,
                       queryParameters: {
                         'startAddress': startAddress,
+                        'startCoordinates': startCoordinates,
                         'endAddress': endAddress,
+                        'endCoordinates': endCoordinates,
                       },
                     );
                   },
@@ -139,7 +149,9 @@ class ShareContent extends StatelessWidget {
                           ResultScreenV3.routeName,
                           queryParameters: {
                             'startAddress': startAddress,
+                            'startCoordintes': startCoordinates,
                             'endAddress': endAddress,
+                            'endCoordinates': endCoordinates
                           },
                         );
                       },
@@ -199,14 +211,7 @@ class ShareContent extends StatelessWidget {
                     color: primaryColorV3,
                     reverseColors: true,
                     onTap: () {
-                      Clipboard.setData(ClipboardData(
-                              text: 'https://sasim.mcube-cluster.de/web/#/result?'
-                                  'startAddress=$startAddress&endAddress=$endAddress'))
-                          .then((_) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(lang.copy_url)),
-                        );
-                      });
+                      copyLinkToClipboard(context);
                     },
                   ),
                 ],
@@ -255,14 +260,7 @@ class ShareContent extends StatelessWidget {
                         color: primaryColorV3,
                         reverseColors: true,
                         onTap: () {
-                          Clipboard.setData(ClipboardData(
-                                  text: 'https://sasim.mcube-cluster.de/web/#/result?'
-                                      'startAddress=$startAddress&endAddress=$endAddress'))
-                              .then((_) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(lang.url_copied)),
-                            );
-                          });
+                          copyLinkToClipboard(context);
                         },
                       ),
                     ],
@@ -274,5 +272,22 @@ class ShareContent extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  void copyLinkToClipboard(BuildContext context) {
+    AppLocalizations lang = AppLocalizations.of(context)!;
+    String link = 'https://sasim.mcube-cluster.de/web/#/result?'
+        'startAddress=$startAddress&endAddress=$endAddress';
+    if (startCoordinates != null) {
+      link += '&startCoordinates=$startCoordinates';
+    }
+    if (endCoordinates != null) {
+      link += '&endCoordinates=$endCoordinates';
+    }
+    Clipboard.setData(ClipboardData(text: link)).then((_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(lang.copy_url)),
+      );
+    });
   }
 }

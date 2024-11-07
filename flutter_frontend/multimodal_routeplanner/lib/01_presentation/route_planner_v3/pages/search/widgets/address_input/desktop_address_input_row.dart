@@ -15,9 +15,11 @@ import 'package:multimodal_routeplanner/config/setup_dependencies.dart';
 class DesktopAddressInputRow extends StatefulWidget {
   final ResultCubit cubit;
   final TextEditingController startController;
+  final String? startCoordinates;
   final TextEditingController endController;
-  final Function onStartChanged;
-  final Function onEndChanged;
+  final String? endCoordinates;
+  final Function(String, String?, String?) onStartChanged;
+  final Function(String, String?, String?) onEndChanged;
   final Function swapInputs;
   final SelectionMode selectedMode;
   final bool isElectric;
@@ -27,7 +29,9 @@ class DesktopAddressInputRow extends StatefulWidget {
     Key? key,
     required this.cubit,
     required this.startController,
+    this.startCoordinates,
     required this.endController,
+    this.endCoordinates,
     required this.onStartChanged,
     required this.onEndChanged,
     required this.swapInputs,
@@ -62,7 +66,7 @@ class _DesktopAddressInputRowState extends State<DesktopAddressInputRow> {
                   controller: widget.startController,
                   hintText: lang.from_hint,
                   onChanged: (value) {
-                    widget.onStartChanged(value);
+                    widget.onStartChanged(value, null, null);
                     addressPickerBloc.add(
                       StartAddressInputChanged(value),
                     );
@@ -87,7 +91,7 @@ class _DesktopAddressInputRowState extends State<DesktopAddressInputRow> {
                   controller: widget.endController,
                   hintText: lang.to_hint,
                   onChanged: (value) {
-                    widget.onEndChanged(value);
+                    widget.onEndChanged(value, null, null);
                     addressPickerBloc.add(
                       EndAddressInputChanged(value),
                     );
@@ -103,15 +107,25 @@ class _DesktopAddressInputRowState extends State<DesktopAddressInputRow> {
                 label: lang.calculate,
                 onTap: () {
                   if (_formKey.currentState!.validate()) {
+                    Map<String, String> parameters = {
+                      'startAddress': widget.startController.text,
+                      'endAddress': widget.endController.text,
+                      'selectedMode': widget.selectedMode.name,
+                      'isElectric': widget.isElectric.toString(),
+                      'isShared': widget.isShared.toString(),
+                    };
+                    if (widget.startCoordinates != null) {
+                      parameters['startCoordinates'] = widget.startCoordinates!;
+                      print('added start Coordinates: ${widget.startCoordinates}');
+                    }
+                    if (widget.endCoordinates != null) {
+                      parameters['endCoordinates'] = widget.endCoordinates!;
+                      print('added end Coordinates: ${widget.endCoordinates}');
+                    }
+                    print('parameters: $parameters');
                     context.goNamed(
                       ResultScreenV3.routeName,
-                      queryParameters: {
-                        'startAddress': widget.startController.text,
-                        'endAddress': widget.endController.text,
-                        'selectedMode': widget.selectedMode.name,
-                        'isElectric': widget.isElectric.toString(),
-                        'isShared': widget.isShared.toString(),
-                      },
+                      queryParameters: parameters,
                     );
                   }
                 },
@@ -121,9 +135,10 @@ class _DesktopAddressInputRowState extends State<DesktopAddressInputRow> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(child: startAddressPickerBuilder(addressPickerBloc, widget.startController)),
+              Expanded(
+                  child: startAddressPickerBuilder(addressPickerBloc, widget.startController, widget.onStartChanged)),
               const SizedBox(width: 45),
-              Expanded(child: endAddressPickerBuilder(addressPickerBloc, widget.endController)),
+              Expanded(child: endAddressPickerBuilder(addressPickerBloc, widget.endController, widget.onEndChanged)),
               const SizedBox(
                 width: 95,
               )

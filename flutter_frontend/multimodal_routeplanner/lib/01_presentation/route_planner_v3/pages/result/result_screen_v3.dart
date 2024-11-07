@@ -33,13 +33,17 @@ class ResultScreenV3 extends StatefulWidget {
       required this.endAddress,
       this.selectedMode,
       this.isElectric,
-      this.isShared});
+      this.isShared,
+      this.startCoordinates,
+      this.endCoordinates});
 
   final String startAddress;
   final String endAddress;
   final SelectionMode? selectedMode;
   final bool? isElectric;
   final bool? isShared;
+  final String? startCoordinates;
+  final String? endCoordinates;
 
   static const String routeName = 'v3-result';
   static const String path = 'result';
@@ -61,28 +65,47 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
   bool? isElectric;
   bool? isShared;
 
+  bool tripNotAvailable = false;
+  String? notAvailableMode;
+
   late InfoViewType infoViewType;
   late DiagramType selectedDiagramType;
   bool showAdditionalMobileInfo = false;
 
   ContentLayer contentLayer = ContentLayer.layer1;
 
-  void updateSelectedTrip() {
+  bool updateSelectedTrip({SelectionMode? updatedSelectionMode, bool? updatedIsElectric, bool? updatedIsShared}) {
     logger.i('updating selected trip');
-    String? tripMode = getTripModeFromInput(mode: selectionMode, isElectric: isElectric, isShared: isShared);
+    updatedSelectionMode ??= selectionMode;
+    updatedIsElectric ??= isElectric;
+    updatedIsShared ??= isShared;
+    String? tripMode = getTripModeFromInput(
+        mode: updatedSelectionMode, isElectric: updatedIsElectric, isShared: updatedIsShared, trips: trips);
     Trip? trip;
     if (trips != null) {
       trip = trips!.firstWhereOrNull((trip) => trip.mode == tripMode);
       if (trip != null) {
         setState(() {
           selectedTrip = trip;
+          notAvailableMode = null;
+          tripNotAvailable = false;
         });
+        return true;
       } else {
+        setState(() {
+          tripNotAvailable = true;
+          notAvailableMode = tripMode;
+        });
         logger.e('trip not found');
       }
     } else {
+      setState(() {
+        tripNotAvailable = true;
+        notAvailableMode = tripMode;
+      });
       logger.e('trips is null');
     }
+    return false;
   }
 
   // states for the loading animation here
@@ -94,7 +117,7 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
     super.initState();
 
     cubit = sl<ResultCubit>();
-    cubit.loadTrips(widget.startAddress, widget.endAddress);
+    cubit.loadTrips(widget.startAddress, widget.endAddress, widget.startCoordinates, widget.endCoordinates);
 
     selectionMode = widget.selectedMode ?? SelectionMode.bicycle;
     isElectric = widget.isElectric ?? false;
@@ -173,6 +196,7 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
                   mode: selectionMode!,
                   isElectric: isElectric!,
                   isShared: isShared!,
+                  trips: trips,
                 );
                 selectedTrip = state.trips.firstWhereOrNull((trip) => trip.mode == tripMode);
               }
@@ -188,22 +212,28 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
                   isElectric: isElectric!,
                   isShared: isShared!,
                   onSelectionModeChanged: (mode) {
-                    setState(() {
-                      selectionMode = mode;
-                    });
-                    updateSelectedTrip();
+                    bool successful = updateSelectedTrip(updatedSelectionMode: mode);
+                    if (successful) {
+                      setState(() {
+                        selectionMode = mode;
+                      });
+                    }
                   },
                   onElectricChanged: (electric) {
-                    setState(() {
-                      isElectric = electric;
-                    });
-                    updateSelectedTrip();
+                    bool successful = updateSelectedTrip(updatedIsElectric: electric);
+                    if (successful) {
+                      setState(() {
+                        isElectric = electric;
+                      });
+                    }
                   },
                   onSharedChanged: (shared) {
-                    setState(() {
-                      isShared = shared;
-                    });
-                    updateSelectedTrip();
+                    bool successful = updateSelectedTrip(updatedIsShared: shared);
+                    if (successful) {
+                      setState(() {
+                        isShared = shared;
+                      });
+                    }
                   },
                   infoViewType: infoViewType,
                   selectedDiagramType: selectedDiagramType,
@@ -246,7 +276,9 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
                   },
                   backgroundColor: backgroundColor,
                   startAddress: widget.startAddress,
+                  startCoordinates: widget.startCoordinates,
                   endAddress: widget.endAddress,
+                  endCoordinates: widget.endCoordinates,
                   onMobiscoreLogoPressed: () {
                     if (!showAdditionalMobileInfo) {
                       setState(() {
@@ -255,6 +287,13 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
                     }
                     setState(() {
                       infoViewType = InfoViewType.mobiscore;
+                    });
+                  },
+                  tripNotAvailable: tripNotAvailable,
+                  notAvailableMode: notAvailableMode,
+                  setTripAvailableCallback: (value) {
+                    setState(() {
+                      tripNotAvailable = value;
                     });
                   },
                 );
@@ -323,7 +362,7 @@ Widget resultErrorWidget(BuildContext context) {
                     smallVerticalSpacer,
                     Text(lang.please_try_again, style: textTheme.headlineSmall, textAlign: TextAlign.center),
                     largeVerticalSpacer,
-                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                    Wrap(alignment: WrapAlignment.center, runSpacing: smallPadding, spacing: smallPadding, children: [
                       V3CustomButton(
                           label: lang.new_route,
                           leadingIcon: Icons.arrow_back,

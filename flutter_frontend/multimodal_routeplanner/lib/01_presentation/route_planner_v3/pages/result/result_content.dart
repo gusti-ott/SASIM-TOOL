@@ -1,11 +1,15 @@
+import 'dart:ui';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/buttons.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/decorations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/input_to_trip.dart';
+import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/mode_to_x.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/detail_route_info/detail_route_info_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/layer_1/layer_1_content.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/layer_2_detailed/layer_2_content_desktop.dart';
@@ -40,8 +44,13 @@ class ResultContent extends StatelessWidget {
       required this.hideAdditionalInfoCallback,
       required this.backgroundColor,
       required this.startAddress,
+      this.startCoordinates,
       required this.endAddress,
-      required this.onMobiscoreLogoPressed});
+      this.endCoordinates,
+      required this.onMobiscoreLogoPressed,
+      required this.tripNotAvailable,
+      this.notAvailableMode,
+      required this.setTripAvailableCallback});
 
   final bool isMobile;
   final double screenWidth;
@@ -63,8 +72,13 @@ class ResultContent extends StatelessWidget {
   final Function() hideAdditionalInfoCallback;
   final Color backgroundColor;
   final String startAddress;
+  final String? startCoordinates;
   final String endAddress;
+  final String? endCoordinates;
   final Function() onMobiscoreLogoPressed;
+  final bool tripNotAvailable;
+  final String? notAvailableMode;
+  final Function(bool) setTripAvailableCallback;
 
   @override
   Widget build(BuildContext context) {
@@ -73,9 +87,9 @@ class ResultContent extends StatelessWidget {
     double screenHeight = MediaQuery.of(context).size.height;
     double horizontalPadding = largePadding;
 
-    String currentCarTripMode = getCarTripMode(isElectric: isElectric, isShared: isShared);
+    String currentCarTripMode = getCarTripMode(isElectric: isElectric, isShared: isShared, trips: trips);
     Trip? currentCarTrip = trips.firstWhereOrNull((trip) => trip.mode == currentCarTripMode);
-    String currentBicycleTripMode = getBicycleTripMode(isElectric: isElectric, isShared: isShared);
+    String currentBicycleTripMode = getBicycleTripMode(isElectric: isElectric, isShared: isShared, trips: trips);
     Trip? currentBicycleTrip = trips.firstWhereOrNull((trip) => trip.mode == currentBicycleTripMode);
     String currentPublicTransportTripMode = getPublicTransportTripMode();
     Trip? currentPublicTransportTrip = trips.firstWhereOrNull((trip) => trip.mode == currentPublicTransportTripMode);
@@ -175,7 +189,9 @@ class ResultContent extends StatelessWidget {
                                     setInfoViewTypeCallback: setInfoViewTypeCallback,
                                     setDiagramTypeCallback: setDiagramTypeCallback,
                                     startAddress: startAddress,
+                                    startCoordinates: startCoordinates,
                                     endAddress: endAddress,
+                                    endCoordinates: endCoordinates,
                                   )
                               ],
                             ),
@@ -279,7 +295,9 @@ class ResultContent extends StatelessWidget {
                                         setDiagramTypeCallback: setDiagramTypeCallback,
                                         contentMaxWidth: contentMaxWidth,
                                         startAddress: startAddress,
+                                        startCoordinates: startCoordinates,
                                         endAddress: endAddress,
+                                        endCoordinates: endCoordinates,
                                       ),
                                   ],
                                 ),
@@ -333,6 +351,9 @@ class ResultContent extends StatelessWidget {
             startAddress: startAddress,
             endAddress: endAddress,
           ),
+        if (tripNotAvailable)
+          noTripFoundWidget(context,
+              setTripAvailableCallback: setTripAvailableCallback, notAvailableMode: notAvailableMode)
       ],
     );
   }
@@ -345,6 +366,62 @@ class ResultContent extends StatelessWidget {
       curve: Curves.easeInOut,
     );
   }
+}
+
+Widget noTripFoundWidget(BuildContext context,
+    {required Function(bool) setTripAvailableCallback, String? notAvailableMode}) {
+  TextTheme textTheme = Theme.of(context).textTheme;
+  AppLocalizations lang = AppLocalizations.of(context)!;
+
+  String? modeName = notAvailableMode != null ? getModeNameWithArticle(context, notAvailableMode) : null;
+  return Positioned.fill(
+    child: GestureDetector(
+      onTap: () {
+        setTripAvailableCallback(false);
+      },
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: Padding(
+          padding: EdgeInsets.all(smallPadding),
+          child: Center(
+            child: IntrinsicWidth(
+              child: IntrinsicHeight(
+                child: Container(
+                  width: 450,
+                  decoration: customBoxDecorationWithShadow(backgroundColor: backgroundColorGreyV3),
+                  child: Padding(
+                    padding: EdgeInsets.all(mediumPadding),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(Icons.not_listed_location, size: 40, color: colorE),
+                          mediumVerticalSpacer,
+                          Text((modeName == null) ? lang.mode_not_available : modeName + lang.x_not_available,
+                              style: textTheme.titleLarge, textAlign: TextAlign.center),
+                          smallVerticalSpacer,
+                          Text(lang.try_another_route, style: textTheme.bodyLarge, textAlign: TextAlign.center),
+                          mediumVerticalSpacer,
+                          V3CustomButton(
+                              label: lang.resume,
+                              reverseColors: true,
+                              color: primaryColorV3,
+                              textColor: primaryColorV3,
+                              onTap: () {
+                                setTripAvailableCallback(false);
+                              }),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
 }
 
 enum ContentLayer { layer1, layer2details }

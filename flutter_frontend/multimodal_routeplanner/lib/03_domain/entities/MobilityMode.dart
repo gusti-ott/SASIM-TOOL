@@ -34,6 +34,9 @@ class MobilityMode {
       case 'CAB':
         return MobilityModeEnum.cab;
 
+      case 'MVG_BIKE':
+        return MobilityModeEnum.mvgBike;
+
       case 'FLINKSTER':
         return MobilityModeEnum.flinkster;
 

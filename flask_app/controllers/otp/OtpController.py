@@ -81,45 +81,85 @@ class OtpController:
                      input_time=None, input_waxWalkDistance='500'):
 
         mode = self.otp_helper.mode_to_otp_mode(mode).value
-        start_location = self.otp_helper.location_to_otp_format(start_location)
-        end_location = self.otp_helper.location_to_otp_format(end_location)
+        original_start_location = self.otp_helper.location_to_otp_format(start_location)
+        original_end_location = self.otp_helper.location_to_otp_format(end_location)
 
         if not input_time:
             input_time = datetime.now()
 
-        # input_time = '1:02pm&date=22-02-2020'
-        start = t.time()
+        offsets = [(0, 0), (0.0001, 0), (-0.0001, 0), (0, 0.0001), (0, -0.0001)]
+        start_time = t.time()
 
-        # # local IP for testing
-        # response = requests.get(
-        #     "http://127.0.0.1:8080/otp/routers/default/plan?fromPlace=" + start_location + "&toPlace=" +
-        #     end_location + "&time=" + str(input_time.hour) + ":" + str(input_time.minute) + "&date=" +
-        #     str(input_time.month) + "-" + str(input_time.day) + "-" + str(input_time.year) + "&mode=" +
-        #     mode + "&maxWalkDistance=50000&arriveBy=false")
+        def make_request(start_loc: str, end_loc: str) -> json:
 
-        # IP of locally running otp server
-        response = requests.get(
-            self.base_url + self.path + "?fromPlace=" + start_location + "&toPlace=" + end_location + "&time=" + str(
-                input_time.hour) + ":" + str(input_time.minute) + "&date=" +
-            str(input_time.month) + "-" + str(input_time.day) + "-" + str(input_time.year) + "&mode=" +
-            mode + "&maxWalkDistance=50000&arriveBy=false")
+            is_dev = os.getenv('DEV')
 
-        print(response.url)
-        print("otp response: " + str(response))
+            if is_dev:
+                # Local IP for testing
+                response = requests.get(
+                    "http://127.0.0.1:8080/otp/routers/default/plan?fromPlace=" + start_loc + "&toPlace=" +
+                    end_loc + "&time=" + str(input_time.hour) + ":" + str(input_time.minute) + "&date=" +
+                    str(input_time.month) + "-" + str(input_time.day) + "-" + str(input_time.year) + "&mode=" +
+                    mode + "&maxWalkDistance=50000&arriveBy=false"
+                )
 
-        resp = json.loads(response.content)
+            else:
+                # IP of locally running otp server
+                response = requests.get(
+                    self.base_url + self.path + "?fromPlace=" + start_loc + "&toPlace=" + end_loc + "&time=" + str(
+                        input_time.hour) + ":" + str(input_time.minute) + "&date=" +
+                    str(input_time.month) + "-" + str(input_time.day) + "-" + str(input_time.year) + "&mode=" +
+                    mode + "&maxWalkDistance=50000&arriveBy=false")
 
-        if 'error' in resp:
-            print("Error in otp request")
+            print(response.url)
+            print("otp response: " + str(response))
+            return json.loads(response.content)
 
-        if resp["plan"].get("itineraries") == []:
-            print("Keine OTP Strecke für diesen Start- und End-Standort und den Modus " + str(
-                mode) + " gefunden.\nVersuchen Sie es nochmal")
+        def get_adjusted_location(loc: Location, offset: tuple) -> str:
+            """Returns location adjusted by the specified offset."""
+            adjusted_loc = Location(loc.lat + offset[0], loc.lon + offset[1])
+            return self.otp_helper.location_to_otp_format(adjusted_loc)
 
-        end = t.time()
-        print("otp time: " + str(end - start))
+        # Attempt routing with alternating adjustments to start and end locations
+        for offset in offsets:
+            # First, adjust the start location with the current offset
+            start_loc = get_adjusted_location(start_location, offset)
+            end_loc = original_end_location
+            try:
+                resp = make_request(start_loc, end_loc)
+                if 'error' not in resp and resp["plan"].get("itineraries"):
+                    if offset != (0, 0):
+                        print(f"Start location adjusted by ({offset[0]}, {offset[1]})")
+                    return resp
+                print(f"Attempt with start offset ({offset[0]}, {offset[1]}) failed to find a route.")
 
-        return resp
+            except KeyError:
+                print('OTP KeyError during route request with start location adjustments')
+            except IndexError:
+                print("Liste der OTP Strecken ist leer during start location adjustments")
+
+            # Next, adjust the end location with the same offset
+            start_loc = original_start_location
+            end_loc = get_adjusted_location(end_location, offset)
+            try:
+                resp = make_request(start_loc, end_loc)
+                if 'error' not in resp and resp["plan"].get("itineraries"):
+                    if offset != (0, 0):
+                        print(f"End location adjusted by ({offset[0]}, {offset[1]})")
+                    return resp
+                print(f"Attempt with end offset ({offset[0]}, {offset[1]}) failed to find a route.")
+
+            except KeyError:
+                print('OTP KeyError during route request with end location adjustments')
+            except IndexError:
+                print("Liste der OTP Strecken ist leer during end location adjustments")
+
+        end_time = t.time()
+        print("otp time: " + str(end_time - start_time))
+        print(f"Keine OTP Strecke für diesen Start- und End-Standort und den Modus {mode} gefunden.\n"
+              "Versuchen Sie es nochmal.")
+
+        return {"error": "No route found after multiple attempts"}
 
     # start and end coordinates in format (lat, lom) as String
     # OPT modes are CAR, BICYCLE, WALK

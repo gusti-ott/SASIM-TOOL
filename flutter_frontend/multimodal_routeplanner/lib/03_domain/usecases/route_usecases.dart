@@ -12,9 +12,19 @@ class RoutePlannerUsecases {
   Logger logger = getLogger();
 
   Future<Trip> getTrip(
-      {required String startInput, required String endInput, required MobilityMode mode, bool? quickResponse}) async {
+      {required String startInput,
+      required String endInput,
+      required MobilityMode mode,
+      String? startCoordinates,
+      String? endCoordinates,
+      bool? quickResponse}) async {
     return routeRepository.getTripFromApi(
-        startInput: startInput, endInput: endInput, mode: mode, quickResponse: quickResponse);
+        startInput: startInput,
+        endInput: endInput,
+        startCoordinates: startCoordinates,
+        endCoordinates: endCoordinates,
+        mode: mode,
+        quickResponse: quickResponse);
   }
 
   Map<String, Trip> getListAddedTrips({required Map<String, Trip> trips, required Trip trip}) {
@@ -163,61 +173,49 @@ class RoutePlannerUsecases {
   Future<List<Trip>> getV3Trips({required String startInput, required String endInput}) async {
     List<Trip> listTrips = [];
 
-    try {
-      Trip trip = await routeRepository.getTripFromApi(
-          startInput: startInput, endInput: endInput, mode: MobilityMode(mode: MobilityModeEnum.bike));
-      listTrips.add(trip);
-    } catch (e) {
-      logger.e('could not fetch BIKE trip: ${e.toString()}');
+    //function to try to add a trip to the list of trips
+    void tryAddTrip(MobilityModeEnum mode) async {
+      try {
+        Trip trip = await routeRepository.getTripFromApi(
+            startInput: startInput, endInput: endInput, mode: MobilityMode(mode: mode));
+        listTrips.add(trip);
+        logger.i('fetched $mode trip');
+      } catch (e) {
+        logger.e('could not fetch $mode trip: ${e.toString()}');
+      }
     }
 
-    try {
-      Trip trip = await routeRepository.getTripFromApi(
-          startInput: startInput, endInput: endInput, mode: MobilityMode(mode: MobilityModeEnum.ebike));
-      listTrips.add(trip);
-    } catch (e) {
-      logger.e('could not fetch EBIKE trip: ${e.toString()}');
+    // get bike trip
+    tryAddTrip(MobilityModeEnum.bike);
+
+    // get e-bike trip
+    tryAddTrip(MobilityModeEnum.ebike);
+
+    // get cab trip
+    tryAddTrip(MobilityModeEnum.cab);
+
+    //check whether trips contains a trip with mode "CAB"
+    if (!listTrips.contains((element) => element.mode == "CAB")) {
+      //get mvg bike trip
+      tryAddTrip(MobilityModeEnum.mvgBike);
     }
 
-    try {
-      Trip trip = await routeRepository.getTripFromApi(
-          startInput: startInput, endInput: endInput, mode: MobilityMode(mode: MobilityModeEnum.cab));
-      listTrips.add(trip);
-    } catch (e) {
-      logger.e('could not fetch CAB trip: ${e.toString()}');
+    // get car trip
+    tryAddTrip(MobilityModeEnum.car);
+
+    // get ecar trip
+    tryAddTrip(MobilityModeEnum.ecar);
+
+    // get sharenow trip
+    tryAddTrip(MobilityModeEnum.sharenow);
+
+    if (!listTrips.contains((element) => element.mode == "SHARENOW")) {
+      // get tier trip
+      tryAddTrip(MobilityModeEnum.flinkster);
     }
 
-    try {
-      Trip trip = await routeRepository.getTripFromApi(
-          startInput: startInput, endInput: endInput, mode: MobilityMode(mode: MobilityModeEnum.car));
-      listTrips.add(trip);
-    } catch (e) {
-      logger.e('could not fetch CAR trip: ${e.toString()}');
-    }
-
-    try {
-      Trip trip = await routeRepository.getTripFromApi(
-          startInput: startInput, endInput: endInput, mode: MobilityMode(mode: MobilityModeEnum.ecar));
-      listTrips.add(trip);
-    } catch (e) {
-      logger.e('could not fetch ECAR trip: ${e.toString()}');
-    }
-
-    try {
-      Trip trip = await routeRepository.getTripFromApi(
-          startInput: startInput, endInput: endInput, mode: MobilityMode(mode: MobilityModeEnum.sharenow));
-      listTrips.add(trip);
-    } catch (e) {
-      logger.e('could not fetch SHARE NOW trip: ${e.toString()}');
-    }
-
-    try {
-      Trip trip = await routeRepository.getTripFromApi(
-          startInput: startInput, endInput: endInput, mode: MobilityMode(mode: MobilityModeEnum.mvg));
-      listTrips.add(trip);
-    } catch (e) {
-      logger.e('could not fetch PT trip: ${e.toString()}');
-    }
+    // get mvg trip
+    tryAddTrip(MobilityModeEnum.mvg);
 
     return listTrips;
   }

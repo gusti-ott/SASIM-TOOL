@@ -221,5 +221,9 @@
   "routing_research_content_hyperlink_2": "DEFAS",
   "want_to_help_us": "Want to help us improve?",
   "want_to_help_us_explanation": "Click on the button below or scan the QR code to participate in our survey. Your feedback is important to us!",
-  "to_the_survey": "To the survey"
+  "to_the_survey": "To the survey",
+  "mode_not_available": "This mode of transportation is not available for this route.",
+  "x_not_available": " is not available for this route.",
+  "try_another_route": "If you still want to compare the true costs of this mode of transportation, please choose another route",
+  "resume": "Weiter"
 }

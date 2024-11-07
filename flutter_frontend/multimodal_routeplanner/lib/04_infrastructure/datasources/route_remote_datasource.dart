@@ -17,7 +17,12 @@ import 'package:multimodal_routeplanner/04_infrastructure/models/trip_model.dart
 /// throws a server-exception if respond code is not 200
 abstract class RouteRemoteDatasource {
   Future<Trip> getSingleRouteFromApi(
-      {required String startInput, required String endInput, required MobilityMode mode, bool? quickResponse});
+      {required String startInput,
+      required String endInput,
+      String? startCoordinates,
+      String? endCoordinates,
+      required MobilityMode mode,
+      bool? quickResponse});
 }
 
 class RouteRemoteDatasourceImpl implements RouteRemoteDatasource {
@@ -25,36 +30,55 @@ class RouteRemoteDatasourceImpl implements RouteRemoteDatasource {
 
   @override
   Future<Trip> getSingleRouteFromApi(
-      {required String startInput, required String endInput, required MobilityMode mode, bool? quickResponse}) async {
+      {required String startInput,
+      required String endInput,
+      String? startCoordinates,
+      String? endCoordinates,
+      required MobilityMode mode,
+      bool? quickResponse}) async {
     String modeString = mapMode(mode: mode);
     String quickResponseString = quickResponse != null ? quickResponse.toString() : 'false';
 
-    // TODO: set to false, when in production
     bool isMocked = false;
 
-    // url for local server
-    /*var url =
-        "http://127.0.0.1:5000/plattform?inputStartAddress=$startInput&inputEndAddress=$endInput&tripMode=$modeString&quickResponse=$quickResponseString";*/
+    /*// Construct URI for local server
+    var uri = Uri.http(
+      '127.0.0.1:5000',
+      '/platform',
+      {
+        'inputStartAddress': startInput,
+        'inputEndAddress': endInput,
+        'tripMode': modeString,
+        'quickResponse': quickResponseString,
+        if (startCoordinates != null) 'startCoordinates': startCoordinates,
+        if (endCoordinates != null) 'endCoordinates': endCoordinates,
+      },
+    );*/
 
-    // url for ftm server
-    var url =
-        "https://sasim.mcube-cluster.de/plattform?inputStartAddress=$startInput&inputEndAddress=$endInput&tripMode=$modeString&quickResponse=$quickResponseString";
-
-    // var url =
-    //     "https://vmrp-web-app.herokuapp.com/plattform?inputStartAddress=$startInput&inputEndAddress=$endInput&tripMode=$modeString";
+    // URI for production server
+    var uri = Uri.https(
+      'sasim.mcube-cluster.de',
+      '/platform',
+      {
+        'inputStartAddress': startInput,
+        'inputEndAddress': endInput,
+        'tripMode': modeString,
+        'quickResponse': quickResponseString,
+        if (startCoordinates != null) 'startCoordinates': startCoordinates,
+        if (endCoordinates != null) 'endCoordinates': endCoordinates,
+      },
+    );
 
     var headers = {"Referrer-Policy": "no-referrer-when-downgrade"};
-
     Map<String, dynamic> responseBody = {};
 
     if (isMocked) {
       responseBody = await getSingleRouteMockedResponse(mode: mode);
     } else {
-      final response = await client.get(Uri.parse(url), headers: headers);
+      final response = await client.get(uri, headers: headers);
       responseBody = json.decode(response.body);
     }
 
-    //print(responseBody);
     return TripModel.fromJson(responseBody);
   }
 

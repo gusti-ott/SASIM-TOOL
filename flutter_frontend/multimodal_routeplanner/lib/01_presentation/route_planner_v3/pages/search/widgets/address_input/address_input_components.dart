@@ -13,9 +13,11 @@ import 'package:multimodal_routeplanner/config/setup_dependencies.dart';
 Widget addressInputRow(BuildContext context,
     {required bool isMobile,
     required TextEditingController startController,
+    String? startCoordinates,
     required TextEditingController endController,
-    required Function onStartChanged,
-    required Function onEndChanged,
+    String? endCoordinates,
+    required Function(String, String?, String?) onStartChanged,
+    required Function(String, String?, String?) onEndChanged,
     required Function swapInputs,
     required SelectionMode selectedMode,
     required bool isElectric,
@@ -26,7 +28,9 @@ Widget addressInputRow(BuildContext context,
       ? DesktopAddressInputRow(
           cubit: cubit,
           startController: startController,
+          startCoordinates: startCoordinates,
           endController: endController,
+          endCoordinates: endCoordinates,
           onStartChanged: onStartChanged,
           onEndChanged: onEndChanged,
           swapInputs: swapInputs,
@@ -35,7 +39,9 @@ Widget addressInputRow(BuildContext context,
           isShared: isShared)
       : MobileAddressInputContainer(
           startController: startController,
+          startCoordinates: startCoordinates,
           endController: endController,
+          endCoordinates: endCoordinates,
           onStartChanged: onStartChanged,
           onEndChanged: onEndChanged,
           swapInputs: swapInputs,
@@ -44,31 +50,8 @@ Widget addressInputRow(BuildContext context,
           isShared: isShared);
 }
 
-BlocBuilder<AddressPickerBloc, AddressPickerState> endAddressPickerBuilder(
-    AddressPickerBloc addressPickerBloc, endController,
-    {bool isMobile = false}) {
-  return BlocBuilder<AddressPickerBloc, AddressPickerState>(
-      bloc: addressPickerBloc,
-      builder: (context, state) {
-        if (state is RetrievingEndAddress) {
-          return loadingIndicator(isMobile: isMobile);
-        } else if (state is EndAddressRetrieved) {
-          if (state.listAddresses.isNotEmpty) {
-            return AddressPickerListV3(
-                width: double.infinity,
-                listAddresses: state.listAddresses,
-                addressInputController: endController,
-                onAddressSelectedCallback: (address) {
-                  addressPickerBloc.add(PickEndAddress(address));
-                });
-          }
-        }
-        return SizedBox(height: !isMobile ? 200 : null);
-      });
-}
-
-BlocBuilder<AddressPickerBloc, AddressPickerState> startAddressPickerBuilder(
-    AddressPickerBloc addressPickerBloc, TextEditingController controller,
+BlocBuilder<AddressPickerBloc, AddressPickerState> startAddressPickerBuilder(AddressPickerBloc addressPickerBloc,
+    TextEditingController controller, Function(String, String, String) onAddressSelectedCallback,
     {bool isMobile = false, double? width}) {
   return BlocBuilder<AddressPickerBloc, AddressPickerState>(
       bloc: addressPickerBloc,
@@ -81,8 +64,33 @@ BlocBuilder<AddressPickerBloc, AddressPickerState> startAddressPickerBuilder(
                 width: width ?? double.infinity,
                 listAddresses: state.listAddresses,
                 addressInputController: controller,
-                onAddressSelectedCallback: (address) {
+                onAddressSelectedCallback: (address, lat, lon) {
                   addressPickerBloc.add(PickStartAddress(address));
+                  onAddressSelectedCallback(address, lat, lon);
+                });
+          }
+        }
+        return SizedBox(height: !isMobile ? 200 : null);
+      });
+}
+
+BlocBuilder<AddressPickerBloc, AddressPickerState> endAddressPickerBuilder(
+    AddressPickerBloc addressPickerBloc, endController, Function(String, String?, String?) onAddressSelectedCallback,
+    {bool isMobile = false}) {
+  return BlocBuilder<AddressPickerBloc, AddressPickerState>(
+      bloc: addressPickerBloc,
+      builder: (context, state) {
+        if (state is RetrievingEndAddress) {
+          return loadingIndicator(isMobile: isMobile);
+        } else if (state is EndAddressRetrieved) {
+          if (state.listAddresses.isNotEmpty) {
+            return AddressPickerListV3(
+                width: double.infinity,
+                listAddresses: state.listAddresses,
+                addressInputController: endController,
+                onAddressSelectedCallback: (address, lat, lon) {
+                  addressPickerBloc.add(PickEndAddress(address));
+                  onAddressSelectedCallback(address, lat, lon);
                 });
           }
         }

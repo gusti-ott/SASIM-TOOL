@@ -49,7 +49,7 @@ Before the project can be run, make sure following steps are done:
 
 ### REST-API
 
-The Backend REST-Api can be accessed at localhost:8000/plattform/ with the following params:
+The Backend REST-Api can be accessed at localhost:8000/platform/ with the following params:
 
 - inputStartAddress:
   a Munich address as type string in format "[Streetname] [#], München"
