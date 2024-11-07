@@ -91,20 +91,25 @@ class OtpController:
         start_time = t.time()
 
         def make_request(start_loc: str, end_loc: str) -> json:
-            # # Local IP for testing
-            # response = requests.get(
-            #     "http://127.0.0.1:8080/otp/routers/default/plan?fromPlace=" + start_loc + "&toPlace=" +
-            #     end_loc + "&time=" + str(input_time.hour) + ":" + str(input_time.minute) + "&date=" +
-            #     str(input_time.month) + "-" + str(input_time.day) + "-" + str(input_time.year) + "&mode=" +
-            #     mode + "&maxWalkDistance=50000&arriveBy=false"
-            # )
 
-            # IP of locally running otp server
-            response = requests.get(
-                self.base_url + self.path + "?fromPlace=" + start_loc + "&toPlace=" + end_loc + "&time=" + str(
-                    input_time.hour) + ":" + str(input_time.minute) + "&date=" +
-                str(input_time.month) + "-" + str(input_time.day) + "-" + str(input_time.year) + "&mode=" +
-                mode + "&maxWalkDistance=50000&arriveBy=false")
+            is_dev = os.getenv('DEV')
+
+            if is_dev:
+                # Local IP for testing
+                response = requests.get(
+                    "http://127.0.0.1:8080/otp/routers/default/plan?fromPlace=" + start_loc + "&toPlace=" +
+                    end_loc + "&time=" + str(input_time.hour) + ":" + str(input_time.minute) + "&date=" +
+                    str(input_time.month) + "-" + str(input_time.day) + "-" + str(input_time.year) + "&mode=" +
+                    mode + "&maxWalkDistance=50000&arriveBy=false"
+                )
+
+            else:
+                # IP of locally running otp server
+                response = requests.get(
+                    self.base_url + self.path + "?fromPlace=" + start_loc + "&toPlace=" + end_loc + "&time=" + str(
+                        input_time.hour) + ":" + str(input_time.minute) + "&date=" +
+                    str(input_time.month) + "-" + str(input_time.day) + "-" + str(input_time.year) + "&mode=" +
+                    mode + "&maxWalkDistance=50000&arriveBy=false")
 
             print(response.url)
             print("otp response: " + str(response))

@@ -3,11 +3,12 @@ import os
 from datetime import datetime
 
 from apscheduler.schedulers.background import BackgroundScheduler
-from flask import Flask, request, redirect, jsonify
+from flask import Flask, request, redirect, jsonify, abort
 from flask import render_template
 from flask import send_from_directory
 from flask_caching import Cache
 from flask_cors import CORS
+from dotenv import dotenv_values
 
 from controllers.efa_mvv.EfaMvvCoordController import EfaMvvCoordController
 from controllers.efa_mvv.EfaMvvStopFinderController import EfaMvvStopFinder
@@ -42,6 +43,15 @@ daily_summary = {
     "error_calls": 0
 }
 
+
+# Load allowed IPs from allowed_ips.env file
+def load_allowed_ips():
+    ip_config = dotenv_values("allowed_ips.env")  # Load IPs from file
+    return list(ip_config.values())  # Return only the IP values
+
+
+ALLOWED_IPS = load_allowed_ips()
+
 # Scheduler for daily log writing task
 scheduler = BackgroundScheduler()
 
@@ -64,7 +74,6 @@ def save_logs_to_csv():
         # Ensure 'tracking' directory exists
         if not os.path.exists(tracking_dir_path):
             os.makedirs(tracking_dir_path)
-
 
         # Write detailed logs to CSV file
         file_exists = os.path.isfile(detailed_log_path)
@@ -168,6 +177,10 @@ def return_otp_trip():
 @server.route('/platform', methods=['GET'])
 def return_trip():
     global daily_summary
+
+    # Restrict access based on IP
+    if request.remote_addr not in ALLOWED_IPS:
+        abort(403, 'IP is not allowed')  # Forbidden
 
     # increment for each call of this endpoint
     daily_summary['total_calls'] += 1

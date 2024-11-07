@@ -2,3 +2,6 @@
 venv
 __pycache__
 flask_app/config/api_keys.py
+/flask_app/tracking/daily_summary.csv
+/flask_app/tracking/detailed_logs.csv
+/flask_app/allowed_ips.env

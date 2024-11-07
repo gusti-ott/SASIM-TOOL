@@ -60,8 +60,8 @@ class ShareContent extends StatelessWidget {
                       ResultScreenV3.routeName,
                       queryParameters: {
                         'startAddress': startAddress,
-                        'endAddress': endAddress,
                         'startCoordinates': startCoordinates,
+                        'endAddress': endAddress,
                         'endCoordinates': endCoordinates,
                       },
                     );
@@ -223,23 +223,6 @@ class ShareContent extends StatelessWidget {
     );
   }
 
-  void copyLinkToClipboard(BuildContext context) {
-    AppLocalizations lang = AppLocalizations.of(context)!;
-    String link = 'https://sasim.mcube-cluster.de/web/#/result?'
-        'startAddress=$startAddress&endAddress=$endAddress';
-    if (startCoordinates != null) {
-      link += '&startCoordinates=$startCoordinates';
-    }
-    if (endCoordinates != null) {
-      link += '&endCoordinates=$endCoordinates';
-    }
-    Clipboard.setData(ClipboardData(text: link)).then((_) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(lang.copy_url)),
-      );
-    });
-  }
-
   Widget mobileShare(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
     AppLocalizations lang = AppLocalizations.of(context)!;
@@ -289,5 +272,22 @@ class ShareContent extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  void copyLinkToClipboard(BuildContext context) {
+    AppLocalizations lang = AppLocalizations.of(context)!;
+    String link = 'https://sasim.mcube-cluster.de/web/#/result?'
+        'startAddress=$startAddress&endAddress=$endAddress';
+    if (startCoordinates != null) {
+      link += '&startCoordinates=$startCoordinates';
+    }
+    if (endCoordinates != null) {
+      link += '&endCoordinates=$endCoordinates';
+    }
+    Clipboard.setData(ClipboardData(text: link)).then((_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(lang.copy_url)),
+      );
+    });
   }
 }
