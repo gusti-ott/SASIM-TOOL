@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:logger/logger.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/buttons.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/selection_mode.dart';
@@ -11,6 +12,7 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/s
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/widgets/address_input/input_validation.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/address_picker/address_picker_bloc.dart';
 import 'package:multimodal_routeplanner/config/setup_dependencies.dart';
+import 'package:multimodal_routeplanner/logger.dart';
 
 class DesktopAddressInputRow extends StatefulWidget {
   final ResultCubit cubit;
@@ -51,6 +53,8 @@ class _DesktopAddressInputRowState extends State<DesktopAddressInputRow> {
   Widget build(BuildContext context) {
     AppLocalizations lang = AppLocalizations.of(context)!;
     AddressPickerBloc addressPickerBloc = sl<AddressPickerBloc>();
+
+    Logger logger = getLogger();
 
     return Form(
       key: _formKey,
@@ -116,13 +120,12 @@ class _DesktopAddressInputRowState extends State<DesktopAddressInputRow> {
                     };
                     if (widget.startCoordinates != null) {
                       parameters['startCoordinates'] = widget.startCoordinates!;
-                      print('added start Coordinates: ${widget.startCoordinates}');
+                      logger.i('added start coordinates');
                     }
                     if (widget.endCoordinates != null) {
                       parameters['endCoordinates'] = widget.endCoordinates!;
-                      print('added end Coordinates: ${widget.endCoordinates}');
+                      logger.i('added end coordinates');
                     }
-                    print('parameters: $parameters');
                     context.goNamed(
                       ResultScreenV3.routeName,
                       queryParameters: parameters,

@@ -4,6 +4,7 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/buttons.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/commons/information_bottom_row.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/search_content.dart';
+import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 import 'package:multimodal_routeplanner/01_presentation/values/dimensions.dart';
 
 class SearchScreenV3 extends StatefulWidget {
@@ -23,16 +24,43 @@ class _SearchScreenV3State extends State<SearchScreenV3> {
   final GlobalKey _searchHeaderKey = GlobalKey();
   double _searchHeaderHeight = 0.0;
 
+  bool isLoading = true;
+
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
 
-    // Add a post-frame callback to get the height of the container after layout
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _getSearchHeaderHeight();
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _startLoading();
+  }
+
+  Future<void> _startLoading() async {
+    // Start both the image preloading and a minimum 3-second timer
+    await Future.wait([
+      _preloadImage(),
+      Future.delayed(const Duration(seconds: 3)),
+    ]);
+
+    // Once both are complete, remove the loading screen
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  Future<void> _preloadImage() async {
+    await precacheImage(
+      const AssetImage('assets/title_image/mobiscore_header_1.png'),
+      context,
+    );
   }
 
   @override
@@ -69,19 +97,37 @@ class _SearchScreenV3State extends State<SearchScreenV3> {
     double screenHeight = MediaQuery.of(context).size.height;
     bool isMobile = screenWidth < mobileScreenWidthMinimum;
 
+    Widget searchContent = SearchContent(isMobile: isMobile, searchHeaderKey: _searchHeaderKey);
+
     return Stack(
       children: [
-        SingleChildScrollView(
-          controller: _scrollController,
-          child: Column(
-            children: [
-              SearchContent(isMobile: isMobile, searchHeaderKey: _searchHeaderKey),
-              largeVerticalSpacer,
-              const InformationContainer(),
-            ],
+        AnimatedCrossFade(
+          duration: const Duration(milliseconds: 1000),
+          firstChild: ConstrainedBox(
+            constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
+            child: Column(
+              children: [
+                const Expanded(
+                  child: LoadingScreen(),
+                ),
+                largeVerticalSpacer,
+                const InformationContainer(),
+              ],
+            ),
           ),
+          secondChild: SingleChildScrollView(
+            controller: _scrollController,
+            child: Column(
+              children: [
+                searchContent,
+                largeVerticalSpacer,
+                const InformationContainer(),
+              ],
+            ),
+          ),
+          crossFadeState: isLoading ? CrossFadeState.showFirst : CrossFadeState.showSecond,
         ),
-        if (!started && (screenWidth / screenHeight) > 1)
+        if (!started && !isLoading && (screenWidth / screenHeight) > 1)
           Align(
               alignment: Alignment.bottomCenter,
               child: Padding(padding: EdgeInsets.only(bottom: largePadding), child: _floatingStartButton(context))),
@@ -108,6 +154,43 @@ class _SearchScreenV3State extends State<SearchScreenV3> {
           );
         });
       },
+    );
+  }
+}
+
+class LoadingScreen extends StatelessWidget {
+  const LoadingScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    TextTheme textTheme = Theme.of(context).textTheme;
+    double sizeLogo = 105;
+
+    return SizedBox(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(child: SizedBox(height: sizeLogo + 8)),
+          CircularProgressIndicator(
+            color: primaryColorV3, // Indeterminate spinner
+            strokeWidth: 5.0,
+          ),
+          mediumVerticalSpacer,
+          Text(
+            "... gleich geht's los!",
+            style: textTheme.headlineMedium!.copyWith(color: primaryColorV3),
+          ),
+          smallVerticalSpacer,
+          Expanded(
+            child: Center(
+              child: Image.asset(
+                'assets/mobiscore_logos/logo_with_text_primary.png',
+                height: sizeLogo,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
