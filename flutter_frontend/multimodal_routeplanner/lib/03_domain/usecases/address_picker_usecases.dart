@@ -3,10 +3,16 @@ import 'package:multimodal_routeplanner/03_domain/repositories/address_picker_re
 import 'package:multimodal_routeplanner/04_infrastructure/repositories/address_picker_repository_impl.dart';
 
 class AddressPickerUsecases {
-  final AddressPickerRepository addressRepository =
-      AddressPickerRepositoryImpl();
+  final AddressPickerRepository addressRepository = AddressPickerRepositoryImpl();
 
   Future<List<Address>> getAddress({required String inputAddress}) async {
-    return addressRepository.getAddressFromApi(address: inputAddress);
+    List<Address> addressList = await addressRepository.getAddressFromApi(address: inputAddress);
+
+    // only keep elements, where Address.Properties.city at least contains or is "München"
+    addressList = addressList
+        .where((element) => element.properties.city != null && element.properties.city!.contains('München'))
+        .toList();
+
+    return addressList;
   }
 }
