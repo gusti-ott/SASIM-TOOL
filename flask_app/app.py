@@ -71,9 +71,9 @@ def save_logs_to_csv():
     # daily_summary_path = os.path.join(ROOT_DIR, 'tracking', 'daily_summary.csv')
 
     try:
-        # Ensure 'tracking' directory exists
-        if not os.path.exists(tracking_dir_path):
-            os.makedirs(tracking_dir_path)
+        # # Ensure 'tracking' directory exists
+        # if not os.path.exists(tracking_dir_path):
+        #     os.makedirs(tracking_dir_path)
 
         # Write detailed logs to CSV file
         file_exists = os.path.isfile(detailed_log_path)

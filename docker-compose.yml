@@ -13,6 +13,7 @@ services:
       - ./tracking:/usr/src/app/tracking
     env_file:
       - ./env/.env
+      - ./env/allowed_ips.env
     networks:
       - otp_network
 
