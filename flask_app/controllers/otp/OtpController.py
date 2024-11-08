@@ -92,7 +92,7 @@ class OtpController:
 
         def make_request(start_loc: str, end_loc: str) -> json:
 
-            is_dev = os.getenv('DEV')
+            is_dev = os.getenv('DEV', '').lower() == 'true'
 
             if is_dev:
                 # Local IP for testing
