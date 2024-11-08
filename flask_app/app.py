@@ -71,9 +71,9 @@ def save_logs_to_csv():
     # daily_summary_path = os.path.join(ROOT_DIR, 'tracking', 'daily_summary.csv')
 
     try:
-        # # Ensure 'tracking' directory exists
-        # if not os.path.exists(tracking_dir_path):
-        #     os.makedirs(tracking_dir_path)
+        # Ensure 'tracking' directory exists
+        if not os.path.exists(tracking_dir_path):
+            os.makedirs(tracking_dir_path)
 
         # Write detailed logs to CSV file
         file_exists = os.path.isfile(detailed_log_path)
@@ -178,9 +178,9 @@ def return_otp_trip():
 def return_trip():
     global daily_summary
 
-    # Restrict access based on IP
-    if request.remote_addr not in ALLOWED_IPS:
-        abort(403, 'IP is not allowed')  # Forbidden
+    # # Restrict access based on IP
+    # if request.remote_addr not in ALLOWED_IPS:
+    #     abort(403, 'IP is not allowed')  # Forbidden
 
     # increment for each call of this endpoint
     daily_summary['total_calls'] += 1
