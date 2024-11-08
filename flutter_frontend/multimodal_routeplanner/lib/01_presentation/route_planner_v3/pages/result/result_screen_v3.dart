@@ -96,7 +96,8 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
           tripNotAvailable = true;
           notAvailableMode = tripMode;
         });
-        logger.e('trip not found');
+        // log error with selection mode, electric and sharing information
+        logger.e('trip not available for mode: $tripMode, electric: $updatedIsElectric, shared: $updatedIsShared');
       }
     } else {
       setState(() {
