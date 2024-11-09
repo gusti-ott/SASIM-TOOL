@@ -68,7 +68,11 @@ BlocBuilder<AddressPickerBloc, AddressPickerState> startAddressPickerBuilder(Add
                   addressPickerBloc.add(PickStartAddress(address));
                   onAddressSelectedCallback(address, lat, lon);
                 });
+          } else {
+            return addressNotFoundItem(context);
           }
+        } else if (state is StartAddressError) {
+          return addressNotFoundItem(context);
         }
         return SizedBox(height: !isMobile ? 200 : null);
       });
@@ -92,7 +96,11 @@ BlocBuilder<AddressPickerBloc, AddressPickerState> endAddressPickerBuilder(
                   addressPickerBloc.add(PickEndAddress(address));
                   onAddressSelectedCallback(address, lat, lon);
                 });
+          } else {
+            return addressNotFoundItem(context);
           }
+        } else if (state is EndAddressError) {
+          return addressNotFoundItem(context);
         }
         return SizedBox(height: !isMobile ? 200 : null);
       });

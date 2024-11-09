@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/address_picker/Address.dart';
 
@@ -28,38 +29,40 @@ class AddressPickerListV3 extends StatelessWidget {
         ),
         width: width,
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ListView.builder(
-            padding: EdgeInsets.zero,
-            shrinkWrap: true,
-            itemCount: listAddressNames.length < 3 ? listAddressNames.length : 3,
-            itemBuilder: (BuildContext context, int index) {
-              String name = listAddressNames[index];
-              String lon = listAddresses[index].geometry.coordinates[0].toString();
-              String lat = listAddresses[index].geometry.coordinates[1].toString();
+            padding: const EdgeInsets.all(8.0),
+            child: listAddressNames.isNotEmpty
+                ? ListView.builder(
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    itemCount: listAddressNames.length < 3 ? listAddressNames.length : 3,
+                    itemBuilder: (BuildContext context, int index) {
+                      String name = listAddressNames[index];
+                      String lon = listAddresses[index].geometry.coordinates[0].toString();
+                      String lat = listAddresses[index].geometry.coordinates[1].toString();
 
-              if (index + 1 == listAddressNames.length) {
-                return addressItem(context, name: name, addressInputController: addressInputController, onTap: () {
-                  onAddressSelectedCallback(name, lat, lon);
-                });
-              } else {
-                return Column(
-                  children: [
-                    addressItem(
-                      context,
-                      name: name,
-                      addressInputController: addressInputController,
-                      onTap: () {
-                        onAddressSelectedCallback(name, lat, lon);
-                      },
-                    ),
-                    const Divider()
-                  ],
-                );
-              }
-            },
-          ),
-        ),
+                      if (index + 1 == listAddressNames.length) {
+                        return addressItem(context, name: name, addressInputController: addressInputController,
+                            onTap: () {
+                          onAddressSelectedCallback(name, lat, lon);
+                        });
+                      } else {
+                        return Column(
+                          children: [
+                            addressItem(
+                              context,
+                              name: name,
+                              addressInputController: addressInputController,
+                              onTap: () {
+                                onAddressSelectedCallback(name, lat, lon);
+                              },
+                            ),
+                            const Divider()
+                          ],
+                        );
+                      }
+                    },
+                  )
+                : addressNotFoundItem(context)),
       ),
     );
   }
@@ -84,6 +87,26 @@ Widget addressItem(
           name,
           style: textTheme.labelMedium,
           textAlign: TextAlign.center,
+        ),
+      ],
+    ),
+  );
+}
+
+Widget addressNotFoundItem(BuildContext context) {
+  AppLocalizations lang = AppLocalizations.of(context)!;
+  return Padding(
+    padding: EdgeInsets.all(smallPadding),
+    child: Row(
+      children: [
+        const Icon(Icons.error_outline_outlined, color: Colors.red),
+        smallHorizontalSpacer,
+        Expanded(
+          child: Text(
+            lang.address_not_found_text,
+            style: Theme.of(context).textTheme.labelMedium,
+            textAlign: TextAlign.center,
+          ),
         ),
       ],
     ),

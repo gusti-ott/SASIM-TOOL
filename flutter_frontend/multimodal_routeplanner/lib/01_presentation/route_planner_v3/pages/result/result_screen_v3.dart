@@ -75,7 +75,8 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
   ContentLayer contentLayer = ContentLayer.layer1;
 
   bool updateSelectedTrip({SelectionMode? updatedSelectionMode, bool? updatedIsElectric, bool? updatedIsShared}) {
-    logger.i('updating selected trip');
+    logger.i(
+        'updating selected trip to mode: $updatedSelectionMode, electric: $updatedIsElectric, shared: $updatedIsShared');
     updatedSelectionMode ??= selectionMode;
     updatedIsElectric ??= isElectric;
     updatedIsShared ??= isShared;
@@ -96,7 +97,8 @@ class _ResultScreenV3State extends State<ResultScreenV3> with SingleTickerProvid
           tripNotAvailable = true;
           notAvailableMode = tripMode;
         });
-        logger.e('trip not found');
+        // log error with selection mode, electric and sharing information
+        logger.e('trip not available for mode: $tripMode, electric: $updatedIsElectric, shared: $updatedIsShared');
       }
     } else {
       setState(() {

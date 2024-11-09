@@ -225,5 +225,6 @@
   "mode_not_available": "Das ausgewählte Verkehrsmittel ist für diese Route nicht verfügbar.",
   "x_not_available": " ist für diese Route nicht verfügbar.",
   "try_another_route": "Wenn du die wahren Kosten dieses Verkehrsmittels dennoch vergleichen willst, dann wähle eine andere Route",
-  "continue": "Weiter"
+  "continue": "Weiter",
+  "address_not_found_text": "Diese Adresse konnte nicht gefunden werden. Liegt sie in München? Versuche es nochmal mit einer anderen Adresse!"
 }

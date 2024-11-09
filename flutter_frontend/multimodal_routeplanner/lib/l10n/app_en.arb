@@ -225,5 +225,6 @@
   "mode_not_available": "This mode of transportation is not available for this route.",
   "x_not_available": " is not available for this route.",
   "try_another_route": "If you still want to compare the true costs of this mode of transportation, please choose another route",
-  "resume": "Weiter"
+  "resume": "Weiter",
+  "address_not_found_text": "This address could not be found. Is it located in Munich? Try again with a different one!"
 }

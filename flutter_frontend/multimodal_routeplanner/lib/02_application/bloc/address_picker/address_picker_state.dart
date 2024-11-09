@@ -37,4 +37,6 @@ class StartAddressPicked implements AddressPicked {}
 
 class EndAddressPicked implements AddressPicked {}
 
-class AddressError extends AddressPickerState {}
+class StartAddressError extends AddressPickerState {}
+
+class EndAddressError extends AddressPickerState {}
