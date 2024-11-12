@@ -34,7 +34,7 @@ Follow these steps to set up and run the project locally:
    ```
 
 2. **Create an Environment File**
-   Add an `.env` file at the root of the project. Refer to the `.env.example` file in the repository for the required format.
+   Add an `.env` file at the root of the project. Refer to the `.env.example` file in the `flask_app` folder.
 
 3. **Prepare the Frontend**
    Navigate to the frontend directory:
