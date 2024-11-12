@@ -1,202 +1,116 @@
 # SASIM Web App
 
-### a fullcost based multimodal route planner
+### Multimodal Route Planner with Full-Cost Insights
 
-The VMRP Web App is a routeplanner for the city of Munich, that enables to plan and compare routes with many different
-modes (private, sharing and public transport). It is part of the research project SASIM of M-Cube (Munich Cluster for
-the Future of Mobility in Metropolitan Regions). The goal of this project is, to give users a better understanding of
-the external effects of their mobility behaviour.
+The SASIM Web App is a versatile tool for planning and comparing multimodal routes within the city of Munich. It helps users make informed decisions by highlighting the external costs associated with different transport modes, including private vehicles, shared mobility, and public transit. The app is part of the SASIM research project under the The Munich Cluster for the Future of Mobility in Metropolitan Regions (MCube) initiative.
 
-## Features
+Version: **1.1.0**  
+Access the app: [https://sasim.mcube-cluster.de/](https://sasim.mcube-cluster.de/)
 
-- plan multiple routes for a start- and destination address and a mobility mode
-- compare different routes in a result list
-- MobiScore: the MobiScore is a score developed by M-Cube, to evaluate the sustainability of a mobility choice for a
-  particular route. The MobiScore calculation is based on the distance and the external costs of a route.
-- compare costs, distance and travel time in a bar chart
-- get further information on the external costs of a particular route
+<img width="1277" alt="image" src="https://github.com/user-attachments/assets/5ff3be07-5462-4246-8218-b4c6dbad1985">
 
-## Use of Web-App (coming soon ...)
+**Important Note:**  
+While the code is open source, it is currently not possible to fully set up the project locally using the provided MVV EFA API, as this API is not publicly accessible. If you are interested in setting up the application for Munich or adapting it for another city, feel free to contact the SASIM team. Alternatively, you can replace the API with your local public transport provider’s API. The affected files can be found in the `flask_app/controllers/efa_mvv/` directory.
 
-The VMRP Web-App is already deployed and can be accessed at http://www.sasim.mcube-cluster.de. It is to note, that the
-current version 0.2 is a beta-version, and bugs can occur.
+## Developer Guide
 
-## Get started for Developers
+### Tech Stack
 
-### Run Project locally
+- **Backend**: Flask (Python)
+- **Frontend**: Flutter (Dart)
+- **Routing Engine**: Local OpenTripPlanner (OTP) instance for all non-public transport routes.
+- **Geocoding**: [Komoot Photon API](https://photon.komoot.io/) for search suggestions.
+- **Public Transit Routing**: [EFA MVV API](https://www.mvv-muenchen.de/fahrplanauskunft/fuer-entwickler/index.html) (not publicly accessible).
+- **Mapping**: [OpenStreetMap](https://www.openstreetmap.org/) with the [FlutterMap library](https://pub.dev/packages/flutter_map).
 
-Before the project can be run, make sure following steps are done:
+### Local Setup Instructions
 
-1. clone project to your local repository
+Follow these steps to set up and run the project locally:
 
-2. add your own API keys to the file config/api_keys.py. Currently you'll only need a TIER API key and add it as a
-   string by replacing following attribute:
+1. **Clone the Repository**
+   ```bash
+   git clone <repository-url>
+   cd sasim-web-app
+   ```
 
-```
-    tierkey = '[Own TIER API-Key]'
-```
+2. **Create an Environment File**
+   Add an `.env` file at the root of the project. Refer to the `.env.example` file in the `flask_app` folder.
 
-3. Make sure, your have the right root directory selected, by changing constant ROOT_DIR in config/definitions to
-   VARIANT 2 by commenting other variants and uncommenting VARIANT 2. VARIANT 1 for e.g. is needed if you want to build
-   an .exe
-   file
+3. **Prepare the Frontend**
+   Navigate to the frontend directory:
+   ```bash
+   cd flutter_frontend/multimodal_routeplanner
+   ```
 
-4. The application server can be then deployed locally by runing following command in the root of the flask_app project
+   Generate localization files:
+   ```bash
+   flutter gen-l10n
+   ```
 
-``` console
-    python wsgi.py 
-```
+   Build the web application:
+   ```bash
+   flutter build web --web-renderer canvaskit
+   ```
 
-### REST-API
+4. **Update Build Configuration**
+   Go to the `build/web` directory:
+   ```bash
+   cd build/web
+   ```
 
-The Backend REST-Api can be accessed at localhost:8000/platform/ with the following params:
+   Modify the `index.html` file. Replace:
+   ```html
+   <base href="/">
+   ```
+   with:
+   ```html
+   <base href="/web/">
+   ```
 
-- inputStartAddress:
-  a Munich address as type string in format "[Streetname] [#], München"
-- inputEndAddress:
-  a Munich address as type string in format "[Streetname] [#], München"
-- tripMode: a valid tripMode
+5. **Start the Backend**
+   From the `flask_app` directory, launch the Flask server:
+   ```bash
+   python wsgi.py
+   ```
 
-following modes can be used as the param tripMode:
+### Region-Specific Data
 
-- "CAR" : trip with a private gasoline car
-- "ECAR" : trip with a private electric car
-- "MOPED" : trip with a private moped
-- "EMOPED" : trip with a private electric moped
-- "BICYCLE" : trip with a private bicycle
-- "EBICYCLE" : trip with a private electric bicycle
-- "EMMY: trip using the closest Emmy sharing electric moped and walking to the vehicle
-- "TIER" : trip using the closest TIER sharing e-scooter and walking to the vehicle
-- (DB API deprecated - not used in frontend) "CAB": trip using the closest Call a Bike sharing bicycle and walking to
-  the vehicle
-- (DB API deprecated - not used in frontend) "FLINKSTER": trip using the closest Flinkster sharing car and walking to
-  the vehicle
-- "SHARENOW" : trip using the closest Sharenow sharing car and walking to the vehicle
-- "PT" : trip using public transport and walking to the first station
-- "INTERMODAL_PT_BIKE" : trip using public transport and using the bicycle to get to the first station
-
-For accessing the Web-App Frontend, use localhost:5000/web/ (ideally in chrome web browser)
-
-### Structure of Backend
-
-The backend uses an MVC Architecture. The Model is specified in the directories model/entities and model/enums.
-Furthermode multiple controller classes are used for the core functionalities, which are called by the TripController
-class, to create a new trip. To plan a new route create an object of the class TripController and execute the method
-get_trip() with the input variables start_location and end_location of the internal class Location, and trip_mode of the
-internal class TripMode.
-
-#### example: creating a trip
-
-```python
-trip_controller = TripController()
-
-start_location = Location(lat=48.1663834, lon=11.5748712)
-end_location = Location(lat=48.1377949, lon=48.1377949)
-trip_mode = TripMode.BICYCLE
-
-trip = trip_controller.get_trip(start_location, end_location, trip_mode)
-```
-
-#### pseudo database
-
-All munich and mode specific variables from research are stored in the directory db in csv files. If the values in
-current research or pricing plans of the mobility sharing services change, these csv. files must be updated.
-
-### Frontend
-
-The frontend was developed using the Dart and SDK Flutter.
-
-#### integration into flask web app
-
-To integrate the frontend into the flask application server, a Flutter build file has to be created by using the build
-command
-
-```console
-  flutter build web
-```
-
-and then the content of build/web folder has to be added to the flask_app/templates folder. IMPORTANT: in
-flask_app/templates/index.html the line
-
-```html
-    <base href="/">
-```
-
-has to be replaced by
-
-```
-  <base href="/web/">
-```
-
-#### running flutter web server locally
-
-to run to flutter web server locally use the command
-
-```console
-  flutter run
-```
-
-by default the remote backend server deployed at the Institute of Automotive Technology TUM is used. To use your own
-local backend server change the url property in
-flutter_frontend/multimodal_routeplanner/lib/04_infrastructure/datasources/route_remote_datasource.dart
-
-### Deploy using docker container
-
-The Web-App can be easily deployed using a docker-container. For own deployment the server_name attribute in
-nginx/project.config has to be replaced by personal url.
+The `flask_app/db` directory contains region-specific constants and MobiScore values. If you are setting up the project for a different city, these values can be recalculated based on the methodology outlined in the paper:  
+**Ending the Myth of Mobility at Zero Costs: An External Cost Analysis**  
+[https://linkinghub.elsevier.com/retrieve/pii/S0739885922000713](https://linkinghub.elsevier.com/retrieve/pii/S0739885922000713)
 
 ## Contributors
 
-### Research
+### Project Partners
 
-External Costs for Munich:
-Schröder, Kirn et al. - Ending the myth of mobility at zero costs: An external cost analysis
-https://www.sciencedirect.com/science/article/pii/S0739885922000713?via%3Dihub
+Key partners include:
+- Bavarian Ministry of Housing, Construction and Transport
+- BMW Group
+- MVV
+- TUM
+- Mobility Department of the City of Munich
 
-### Development
+### Individual Contributors
 
-flask backend-server and flutter frontend developed by Gusztáv Ottrubay
+- **Design**: [Anelli Studio](https://anelli.studio/)
+- **Illustrations**: [Chiara Vercesi](https://www.chiaravercesi.com/)
+- **Development**: [Gusztáv Ottrubay](https://github.com/gusti-ott)
 
-(gusztav.ottrubay@proton.me | https://github.com/gusti-ott)
+## API Usage
 
-### Open Source Software
+This project relies on the following APIs and services:
 
-#### Maps:
+- **[Komoot Photon API](https://photon.komoot.io/)**: For geocoding and search suggestions.
+- **[EFA MVV API](https://www.mvv-muenchen.de/fahrplanauskunft/fuer-entwickler/index.html)**: For public transport routing.
+- **[OpenStreetMap](https://www.openstreetmap.org/)**: Integrated via the **[FlutterMap](https://pub.dev/packages/flutter_map)** library.
 
-OpenStreetMap
-https://www.openstreetmap.org/
+Please ensure compliance with the terms of use for each service.
 
-#### Geocoding:
+## License
 
-Nominatim with OpenStreetMap data
-https://nominatim.org/
+This project is licensed under the **MIT License**. See the `LICENSE` file for more information.
 
-### Open APIs
+## Contact
 
-#### Muenchen API
-
-routing car, bicycle, walk and public transport paths
-
-#### MVV API
-
-routing public transport paths and fetching price data
-
-#### EMMY API
-
-fetching location of EMMY vehicles
-
-#### TIER API
-
-fetching location of TIER vehicles
-
-#### SHARENOW API
-
-fetching location of SHARENOW vehicles
-
-## Support
-
-contact daniel.schroeder@tum.de for support
-
-## Licence
-
-MIT Public Licence
+For support or questions, please contact:  
+**sasim@mcube-cluster.com**

@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 
 from apscheduler.schedulers.background import BackgroundScheduler
-from flask import Flask, request, redirect, jsonify, abort
+from flask import Flask, request, redirect, jsonify
 from flask import render_template
 from flask import send_from_directory
 from flask_caching import Cache
@@ -15,7 +15,6 @@ from controllers.efa_mvv.EfaMvvStopFinderController import EfaMvvStopFinder
 from controllers.geocoding.GeocodingController import GeocodingController
 from controllers.trip.TripController import TripController
 from controllers.otp.OtpController import OtpController
-from config.definitions import ROOT_DIR
 from helpers.ApiHelper import ApiHelper
 from model.entities.location.Location import Location
 from model.entities.segment.Segment import Segment
