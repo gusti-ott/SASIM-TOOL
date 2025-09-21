@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/helpers/mode_mapping_helper.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/route_planner/advanced_route_planner_bloc.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/MobilityMode.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
+import 'package:multimodal_routeplanner/l10n/app_localizations.dart';
 
 class AdvancedSelectionIconButton extends StatelessWidget {
   final MobilityMode mode;

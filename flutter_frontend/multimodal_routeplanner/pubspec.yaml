@@ -7,7 +7,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.17.0 <=3.4.3"
+  sdk: ">=2.17.0 <4.0.0"
 
 dependencies:
   bloc: ^8.0.3
@@ -71,4 +71,5 @@ flutter:
     - assets/flags/
     - assets/partners_logos/
     - assets/research_data/
+    - lib/l10n/
 

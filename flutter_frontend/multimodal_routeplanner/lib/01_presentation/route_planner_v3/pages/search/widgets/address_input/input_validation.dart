@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:multimodal_routeplanner/l10n/app_localizations.dart';
 
 String? validateInput(BuildContext context, String? value) {
   AppLocalizations lang = AppLocalizations.of(context)!;

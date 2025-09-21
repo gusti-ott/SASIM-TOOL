@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:multimodal_routeplanner/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:multimodal_routeplanner/01_presentation/commons/mcube_logo.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/spacers.dart';

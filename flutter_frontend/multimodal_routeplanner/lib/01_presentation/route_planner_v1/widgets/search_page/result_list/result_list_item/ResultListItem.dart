@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:multimodal_routeplanner/l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/helpers/mode_mapping_helper.dart';
 import 'package:multimodal_routeplanner/01_presentation/helpers/string_formatting_helper.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v1/widgets/search_page/result_list/result_list_item/RouteIndicator.dart';

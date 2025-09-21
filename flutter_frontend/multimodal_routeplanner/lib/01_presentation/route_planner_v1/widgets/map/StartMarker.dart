@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/helpers/mode_mapping_helper.dart';
+import 'package:multimodal_routeplanner/l10n/app_localizations.dart';
 
 class StartMarker extends StatelessWidget {
   const StartMarker({super.key, required this.mode});

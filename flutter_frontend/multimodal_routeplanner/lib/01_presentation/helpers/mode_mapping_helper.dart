@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:logger/logger.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/MobilityMode.dart';
 import 'package:multimodal_routeplanner/03_domain/enums/MobilityModeEnum.dart';
+import 'package:multimodal_routeplanner/l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/logger.dart';
 
 class ModeMappingHelper {

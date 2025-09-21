@@ -10,7 +10,9 @@ class AddressPickerUsecases {
 
     // only keep elements, where Address.Properties.city at least contains or is "München"
     addressList = addressList
-        .where((element) => element.properties.city != null && element.properties.city!.contains('München'))
+        .where((element) =>
+            element.properties.city != null &&
+            (element.properties.city!.contains('München') || element.properties.city!.contains('Munich')))
         .toList();
 
     return addressList;
