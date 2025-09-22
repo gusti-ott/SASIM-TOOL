@@ -81,7 +81,7 @@ class _VmrpAppState extends State<VmrpApp> {
             }
 
             return MaterialApp.router(
-              title: 'mobiscore',
+              title: 'Mobi-Score®',
               theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme, textTheme: textTheme),
               darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme, textTheme: textTheme),
               themeMode: ThemeMode.light,
