@@ -11,6 +11,7 @@ part 'address_picker_state.dart';
 
 class AddressPickerBloc extends Bloc<AddressPickerEvent, AddressPickerState> {
   final AddressPickerUsecases addressPickerUsecases;
+
   AddressPickerBloc(this.addressPickerUsecases) : super(AddressPickerInitial()) {
     Logger logger = getLogger();
 
@@ -31,9 +32,17 @@ class AddressPickerBloc extends Bloc<AddressPickerEvent, AddressPickerState> {
                 (element) => element.properties.city != 'München' && element.properties.country != 'Deutschland');
 
             if (event is StartAddressInputChanged) {
-              emit(StartAddressRetrieved(listAddresses));
+              if (event.addressInput.isEmpty) {
+                emit(StartAddressEmpty());
+              } else {
+                emit(StartAddressRetrieved(listAddresses));
+              }
             } else if (event is EndAddressInputChanged) {
-              emit(EndAddressRetrieved(listAddresses));
+              if (event.addressInput.isEmpty) {
+                emit(EndAddressEmpty());
+              } else {
+                emit(EndAddressRetrieved(listAddresses));
+              }
             }
           } catch (e) {
             if (event is StartAddressInputChanged) {

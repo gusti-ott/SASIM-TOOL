@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/commons/headers.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/results_section/ResultSection.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/search_screen/SearchScreen.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/sasim_2/trips_cubit.dart';
+import 'package:multimodal_routeplanner/l10n/app_localizations.dart';
 
 class ResultScreen extends StatelessWidget {
   const ResultScreen({super.key, required this.startAddress, required this.endAddress});
@@ -25,8 +25,7 @@ class ResultScreen extends StatelessWidget {
         child: Column(
           children: [
             TitleImage(
-                imagePath: 'assets/title_image/titelbild_ubahn.png',
-                titleText: lang.that_are_the_true_costs_header),
+                imagePath: 'assets/title_image/titelbild_ubahn.png', titleText: lang.that_are_the_true_costs_header),
             fromToHeader(context, lang),
             BlocBuilder<TripsCubit, TripsState>(
               builder: (context, state) {
@@ -85,10 +84,7 @@ class ResultScreen extends StatelessWidget {
               ),
               child: Text(lang.new_route,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge!
-                      .copyWith(color: colorScheme.onPrimaryContainer)),
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: colorScheme.onPrimaryContainer)),
             ),
           )
         ],
@@ -104,10 +100,7 @@ class ResultScreen extends StatelessWidget {
       children: [
         Text(
           label,
-          style: Theme.of(context)
-              .textTheme
-              .titleMedium!
-              .copyWith(color: contentColor, fontWeight: FontWeight.bold),
+          style: Theme.of(context).textTheme.titleMedium!.copyWith(color: contentColor, fontWeight: FontWeight.bold),
         ),
         Text(
           address,

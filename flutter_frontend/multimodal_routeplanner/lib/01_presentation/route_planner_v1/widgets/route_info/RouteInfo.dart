@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multimodal_routeplanner/01_presentation/helpers/mode_mapping_helper.dart';
 import 'package:multimodal_routeplanner/01_presentation/helpers/string_formatting_helper.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v1/widgets/route_info/ExternalCostsDetailRow.dart';
@@ -8,6 +7,7 @@ import 'package:multimodal_routeplanner/02_application/bloc/route_info/info_drop
 import 'package:multimodal_routeplanner/02_application/bloc/route_info/info_dropdown_mobiscore_cubit.dart';
 import 'package:multimodal_routeplanner/02_application/bloc/route_info/route_info_bloc.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
+import 'package:multimodal_routeplanner/l10n/app_localizations.dart';
 
 class RouteInfo extends StatelessWidget {
   final Trip trip;

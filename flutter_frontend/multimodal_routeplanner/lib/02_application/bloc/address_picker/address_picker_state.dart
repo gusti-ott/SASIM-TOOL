@@ -40,3 +40,7 @@ class EndAddressPicked implements AddressPicked {}
 class StartAddressError extends AddressPickerState {}
 
 class EndAddressError extends AddressPickerState {}
+
+class StartAddressEmpty extends AddressPickerState {}
+
+class EndAddressEmpty extends AddressPickerState {}

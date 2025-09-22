@@ -40,7 +40,7 @@ jobs:
           sed -i 's|<base href="/">|<base href="/web/">|' build/web/index.html
 
       - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: flutter-web-build
           path: ./flutter_frontend/multimodal_routeplanner/build/web
@@ -63,7 +63,8 @@ jobs:
           mkdir -p ./flask_app/templates
 
       - name: Download build artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/upload-artifact@v4
+
         with:
           name: flutter-web-build
           path: ./flask_app/templates/

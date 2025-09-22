@@ -68,6 +68,8 @@ BlocBuilder<AddressPickerBloc, AddressPickerState> startAddressPickerBuilder(Add
                   addressPickerBloc.add(PickStartAddress(address));
                   onAddressSelectedCallback(address, lat, lon);
                 });
+          } else if (state is StartAddressEmpty) {
+            return const SizedBox();
           } else {
             return addressNotFoundItem(context);
           }
@@ -96,6 +98,8 @@ BlocBuilder<AddressPickerBloc, AddressPickerState> endAddressPickerBuilder(
                   addressPickerBloc.add(PickEndAddress(address));
                   onAddressSelectedCallback(address, lat, lon);
                 });
+          } else if (state is EndAddressEmpty) {
+            return const SizedBox();
           } else {
             return addressNotFoundItem(context);
           }

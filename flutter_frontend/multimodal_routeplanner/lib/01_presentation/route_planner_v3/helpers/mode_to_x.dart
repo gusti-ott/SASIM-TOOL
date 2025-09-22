@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:multimodal_routeplanner/l10n/app_localizations.dart';
 
 IconData getIconDataFromMode(String mode, {bool isOutlined = true}) {
   switch (mode) {
