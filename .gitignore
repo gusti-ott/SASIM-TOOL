@@ -5,3 +5,13 @@ flask_app/config/api_keys.py
 /flask_app/tracking/daily_summary.csv
 /flask_app/tracking/detailed_logs.csv
 /flask_app/allowed_ips.env
+/flask_app/.idea
+/flask_app/venv
+
+.idea
+
+otp/*
+!otp/example-graph.osm.pbf
+/.env
+/.env.dev
+/flask_app/templates/
