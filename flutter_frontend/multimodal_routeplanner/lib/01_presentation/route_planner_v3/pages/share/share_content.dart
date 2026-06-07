@@ -10,6 +10,7 @@ import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/r
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/result/values.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/pages/search/search_screen_v3.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
+import 'package:multimodal_routeplanner/config/app_config.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ShareContent extends StatelessWidget {
@@ -276,7 +277,7 @@ class ShareContent extends StatelessWidget {
 
   void copyLinkToClipboard(BuildContext context) {
     AppLocalizations lang = AppLocalizations.of(context)!;
-    String link = 'https://sasim.mcube-cluster.de/web/#/result?'
+    String link = '${AppConfig.baseUrl}/web/#/result?'
         'startAddress=$startAddress&endAddress=$endAddress';
     if (startCoordinates != null) {
       link += '&startCoordinates=$startCoordinates';

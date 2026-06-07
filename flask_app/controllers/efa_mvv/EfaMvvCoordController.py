@@ -27,11 +27,11 @@ class EfaMvvCoordController:
         start = time.time()
 
         if not quick_response:
-            url = self.base_url + self.path + '&coordRadius=' + str(location.lon) + ':' + str(
+            url = self.base_url + "/" + self.path + '&coordRadius=' + str(location.lon) + ':' + str(
                 location.lat) + ':WGS84[dd.ddddd]:' + str(radius)
 
         else:
-            url = self.base_url + self.path_quick + '&coordRadius=' + str(location.lon) + ':' + str(
+            url = self.base_url + "/" + self.path_quick + '&coordRadius=' + str(location.lon) + ':' + str(
                 location.lat) + ':WGS84[dd.ddddd]:' + str(radius)
 
         response = requests.get(url)

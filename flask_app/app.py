@@ -1,5 +1,6 @@
 import csv
 import os
+import traceback
 from datetime import datetime
 
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -8,7 +9,6 @@ from flask import render_template
 from flask import send_from_directory
 from flask_caching import Cache
 from flask_cors import CORS
-from dotenv import dotenv_values
 
 from controllers.efa_mvv.EfaMvvCoordController import EfaMvvCoordController
 from controllers.efa_mvv.EfaMvvStopFinderController import EfaMvvStopFinder
@@ -43,13 +43,7 @@ daily_summary = {
 }
 
 
-# Load allowed IPs from allowed_ips.env file
-def load_allowed_ips():
-    ip_config = dotenv_values("allowed_ips.env")  # Load IPs from file
-    return list(ip_config.values())  # Return only the IP values
-
-
-ALLOWED_IPS = load_allowed_ips()
+ALLOWED_IPS = os.environ.get('ALLOWED_IPS', '').split(',')
 
 # Scheduler for daily log writing task
 scheduler = BackgroundScheduler()
@@ -376,6 +370,8 @@ def return_trip():
 
     except Exception as e:
         print('Error in trip routing: ' + str(e))
+        if os.getenv('DEV', 'false').lower() == 'true':
+            traceback.print_exc()
         daily_summary['error_calls'] += 1
         log_entry = {
             "date": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),

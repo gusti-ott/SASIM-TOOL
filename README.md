@@ -25,53 +25,128 @@ While the code is open source, it is currently not possible to fully set up the 
 
 ### Local Setup Instructions
 
-Follow these steps to set up and run the project locally:
+#### 1. Clone the Repository
 
-1. **Clone the Repository**
-   ```bash
-   git clone <repository-url>
-   cd sasim-web-app
-   ```
+```bash
+git clone <repository-url>
+cd sasim-web-app
+```
 
-2. **Create an Environment File**
-   Add an `.env` file at the root of the project. Refer to the `.env.example` file in the `flask_app` folder.
+#### 2. Create an Environment File
 
-3. **Prepare the Frontend**
-   Navigate to the frontend directory:
-   ```bash
-   cd flutter_frontend/multimodal_routeplanner
-   ```
+Copy the example file and fill in your values:
 
-   Generate localization files:
-   ```bash
-   flutter gen-l10n
-   ```
+```bash
+cp .env.example .env
+```
 
-   Build the web application:
-   ```bash
-   flutter build web --web-renderer canvaskit
-   ```
+Copy the example and fill in your values:
 
-4. **Update Build Configuration**
-   Go to the `build/web` directory:
-   ```bash
-   cd build/web
-   ```
+```bash
+cp .env.example .env
+```
 
-   Modify the `index.html` file. Replace:
-   ```html
-   <base href="/">
-   ```
-   with:
-   ```html
-   <base href="/web/">
-   ```
+Key variables to set:
 
-5. **Start the Backend**
-   From the `flask_app` directory, launch the Flask server:
-   ```bash
-   python wsgi.py
-   ```
+```env
+APP_BASE_URL=http://127.0.0.1:5000   # or your server URL for production
+APP_BACKEND_PATH=platform
+OTP_BASE_URL=http://localhost:8080    # or http://otp:8080 when using docker-compose
+```
+
+See [Environment Files](#environment-files) below if you want to maintain multiple env files.
+
+#### 3. Build the Flutter Frontend
+
+Navigate to the frontend directory and run the build script, which reads `APP_BASE_URL` and `APP_BACKEND_PATH` from the root `.env` automatically:
+
+```bash
+cd flutter_frontend/multimodal_routeplanner
+bash build.sh
+```
+
+To build against a different environment file (e.g. staging):
+
+```bash
+ENV_FILE=../../.env.dev bash build.sh
+```
+
+The script handles localization generation, patching `index.html`, and copying the output to `flask_app/templates/`.
+
+#### 4a. Run Locally Without Docker
+
+Start the Flask server from the `flask_app` directory:
+
+```bash
+cd flask_app
+python wsgi.py
+```
+
+OTP must be running separately. Before starting OTP, place both required data files in the `otp/` directory:
+
+- **OSM `.pbf` file** — road network for your region (e.g. from [Geofabrik](https://download.geofabrik.de/))
+- **GTFS `.zip` file** — public transit schedules for your region (e.g. from your local transit authority); required so OTP can determine the correct timezone
+
+Then start OTP:
+
+**First run — build and save the graph:**
+```bash
+docker run --rm -v $(pwd)/otp:/var/opentripplanner opentripplanner/opentripplanner:latest --build --save --serve
+```
+
+**Subsequent runs — load the saved graph:**
+```bash
+docker run --rm -v $(pwd)/otp:/var/opentripplanner -p 8080:8080 opentripplanner/opentripplanner:latest --load --serve
+```
+
+Once OTP and Flask are both running, the app is available at the URL defined in `APP_BASE_URL` in your env file.
+
+#### 4b. Run Locally With Docker Compose
+
+`docker-compose.local.yml` starts both the Flask app and OTP together, reading your root `.env`.
+
+Before starting, place both required data files in the `otp/` directory:
+
+- **OSM `.pbf` file** — road network for your region (e.g. from [Geofabrik](https://download.geofabrik.de/))
+- **GTFS `.zip` file** — public transit schedules for your region (e.g. from your local transit authority); required so OTP can determine the correct timezone
+
+**First run — build and save the OTP graph:**
+
+Run OTP as a one-off to build `graph.obj` from the `.pbf` file and save it to the `otp/` directory:
+
+```bash
+docker-compose -f docker-compose.local.yml run --rm otp --build --save
+```
+
+**Subsequent runs — load the saved graph:**
+
+Start the full stack. OTP will load the existing `graph.obj` and the Flask app will be available at the URL defined in `APP_BASE_URL`:
+
+```bash
+docker compose -f docker-compose.local.yml up
+```
+
+To use a specific env file, pass `--env-file` (if omitted, `.env` is used by default):
+
+```bash
+docker compose --env-file .env.dev -f docker-compose.local.yml up
+```
+
+> Graph building can take several minutes depending on the size of the OSM data.
+
+---
+
+### Environment Files
+
+`.env.example` is the only env file committed to the repo. All others are gitignored.
+
+By default, `build.sh` and `docker-compose.local.yml` read from `.env`. If you want to maintain multiple env files (e.g. one per environment), pass the path explicitly when building:
+
+```bash
+ENV_FILE=../../.env.dev bash build.sh
+```
+
+For `docker-compose.local.yml`, swap the `env_file` path in the file or copy your preferred env file to `.env` before running.
 
 ### Region-Specific Data
 
