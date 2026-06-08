@@ -23,16 +23,18 @@ While the code is open source, it is currently not possible to fully set up the 
 - **Public Transit Routing**: [EFA MVV API](https://www.mvv-muenchen.de/fahrplanauskunft/fuer-entwickler/index.html) (not publicly accessible).
 - **Mapping**: [OpenStreetMap](https://www.openstreetmap.org/) with the [FlutterMap library](https://pub.dev/packages/flutter_map).
 
-### Local Setup Instructions
+---
 
-#### 1. Clone the Repository
+## A) Deployment with Docker Compose
+
+### 1. Clone the Repository
 
 ```bash
 git clone <repository-url>
-cd sasim-web-app
+cd SASIM-TOOL
 ```
 
-#### 2. Create an Environment File
+### 2. Configure Environment
 
 Copy the example file and fill in your values:
 
@@ -40,132 +42,116 @@ Copy the example file and fill in your values:
 cp .env.example .env
 ```
 
-Copy the example and fill in your values:
+> ⚠️ The MVV API credentials (`MVV_API_*`) are confidential and not publicly accessible. Without them the app will not function. Contact the SASIM team at **sasim@mcube-cluster.com** to obtain access, or replace the MVV integration with your own public transport API (see `flask_app/controllers/efa_mvv/`).
+
+| Variable | Description |
+|---|---|
+| `APP_BASE_URL` | URL the app is served at (e.g. `https://sasim.mcube-cluster.de`) |
+| `APP_BACKEND_PATH` | Backend endpoint path — set to `platform` |
+| `OTP_BASE_URL` | OTP instance URL — use `http://otp:8080` when running via Docker Compose |
+| `OTP_ROUTE_PATH` | OTP routing path — set to `otp/routers/default/plan` |
+| `OTP_ENDPOINT_PATH` | A random path that creates a dedicated OTP endpoint in the Flask app |
+| `JAVA_TOOL_OPTIONS` | JVM memory for OTP — `-Xmx4g` recommended minimum |
+| `MVV_API_BASE_URL` | Confidential — contact the SASIM team |
+| `MVV_API_STOP_FINDER_PATH` | Confidential — contact the SASIM team |
+| `MVV_API_STOP_FINDER_PATH_COORD` | Confidential — contact the SASIM team |
+| `MVV_API_COORDS_PATH` | Confidential — contact the SASIM team |
+| `MVV_API_COORDS_PATH_QUICK` | Confidential — contact the SASIM team |
+| `MVV_API_ROUTE_PATH` | Confidential — contact the SASIM team |
+
+### 3. Add OTP Data
+
+Place both required files in the `otp/` directory. The `.pbf` filename does not matter, but the GTFS file **must be named `gtfs.zip`** — OTP 2.2.0 does not reliably detect GTFS feeds with other filenames.
+
+For Munich/Oberbayern:
 
 ```bash
-cp .env.example .env
+wget https://download.geofabrik.de/europe/germany/bayern/oberbayern-latest.osm.pbf -P otp/
+wget https://www.mvg.de/static/gtfs/google_transit.zip -O otp/gtfs.zip
 ```
 
-Key variables to set:
+### 4. Build OTP Graph and Start
 
-```env
-APP_BASE_URL=http://127.0.0.1:5000   # or your server URL for production
-APP_BACKEND_PATH=platform
-OTP_BASE_URL=http://localhost:8080    # or http://otp:8080 when using docker-compose
+First, build and save the OTP graph (one-off, only needed when map data changes):
+
+```bash
+docker compose run --rm otp --build --save
 ```
 
-See [Environment Files](#environment-files) below if you want to maintain multiple env files.
+> ℹ️ Graph building can take several minutes. `-Xmx4g` is the recommended minimum for `JAVA_TOOL_OPTIONS`. If your server has less than 4 GB of available RAM, enable swap before building:
+> ```bash
+> sudo fallocate -l 4G /swapfile
+> sudo chmod 600 /swapfile
+> sudo mkswap /swapfile
+> sudo swapon /swapfile
+> ```
+> Swap is lost on reboot — re-enable it if you ever need to rebuild the graph.
 
-#### 3. Build the Flutter Frontend
+Then start the full stack:
 
-Navigate to the frontend directory and run the build script, which reads `APP_BASE_URL` and `APP_BACKEND_PATH` from the root `.env` automatically:
+```bash
+docker compose up -d --build --remove-orphans
+```
+
+The `--build` flag rebuilds the Flask image to pick up backend or template changes. The OTP graph does **not** need to be rebuilt unless the `.pbf` or GTFS data changes.
+
+The app is now available at the URL defined in `APP_BASE_URL`.
+
+To use a different env file (e.g. for staging):
+
+```bash
+docker compose --env-file .env.staging up -d --build --remove-orphans
+```
+
+---
+
+## B) Local Development
+
+### Running Locally
+
+**1. OTP** — run OTP locally using the Docker image. Place the `.pbf` and `gtfs.zip` files in the `otp/` directory and refer to the [OTP 2.2.0 documentation](https://docs.opentripplanner.org/en/v2.2.0/) and [container image docs](https://docs.opentripplanner.org/en/v2.2.0/Container-Image/) for setup.
+
+**2. Flutter frontend** — if you made frontend changes, rebuild before running Flask:
 
 ```bash
 cd flutter_frontend/multimodal_routeplanner
 bash build.sh
 ```
 
-To build against a different environment file (e.g. staging):
+The script reads `APP_BASE_URL` and `APP_BACKEND_PATH` from the root `.env`, builds Flutter web, patches `index.html`, and copies the output to `flask_app/templates/`. To use a different env file:
 
 ```bash
 ENV_FILE=../../.env.dev bash build.sh
 ```
 
-The script handles localization generation, patching `index.html`, and copying the output to `flask_app/templates/`.
-
-#### 4a. Run Locally Without Docker
-
-Start the Flask server from the `flask_app` directory:
+**3. Flask backend** — start the Flask server from the `flask_app` directory:
 
 ```bash
 cd flask_app
 python wsgi.py
 ```
 
-OTP must be running separately. Before starting OTP, place both required data files in the `otp/` directory:
-
-- **OSM `.pbf` file** — road network for your region (e.g. from [Geofabrik](https://download.geofabrik.de/))
-- **GTFS `.zip` file** — public transit schedules for your region (e.g. from your local transit authority); required so OTP can determine the correct timezone
-
-Filenames do not matter — OTP automatically picks up any `.pbf` and `.zip` file in the directory.
-
-Then start OTP:
-
-**First run — build and save the graph:**
-```bash
-docker run --rm -v $(pwd)/otp:/var/opentripplanner opentripplanner/opentripplanner:latest --build --save --serve
-```
-
-**Subsequent runs — load the saved graph:**
-```bash
-docker run --rm -v $(pwd)/otp:/var/opentripplanner -p 8080:8080 opentripplanner/opentripplanner:latest --load --serve
-```
-
-Once OTP and Flask are both running, the app is available at the URL defined in `APP_BASE_URL` in your env file.
-
-#### 4b. Run Locally With Docker Compose
-
-`docker-compose.local.yml` starts both the Flask app and OTP together, reading your root `.env`.
-
-Before starting, place both required data files in the `otp/` directory:
-
-- **OSM `.pbf` file** — road network for your region (e.g. from [Geofabrik](https://download.geofabrik.de/))
-- **GTFS `.zip` file** — public transit schedules for your region (e.g. from your local transit authority); required so OTP can determine the correct timezone
-
-Filenames do not matter — OTP automatically picks up any `.pbf` and `.zip` file in the directory.
-
-**First run — build and save the OTP graph:**
-
-Run OTP as a one-off to build `graph.obj` from the `.pbf` file and save it to the `otp/` directory:
-
-```bash
-docker-compose -f docker-compose.local.yml run --rm otp --build --save
-```
-
-**Subsequent runs — load the saved graph:**
-
-Start the full stack. OTP will load the existing `graph.obj` and the Flask app will be available at the URL defined in `APP_BASE_URL`:
-
-```bash
-docker compose -f docker-compose.local.yml up
-```
-
-To use a specific env file, pass `--env-file` (if omitted, `.env` is used by default):
-
-```bash
-docker compose --env-file .env.dev -f docker-compose.local.yml up
-```
-
-> Graph building can take several minutes depending on the size of the OSM data.
-
----
-
 ### CI/CD
 
-The GitHub Actions workflow (`.github/workflows/deploy.yml`) runs on every pull request and every merge to `main`:
+The GitHub Actions workflow (`.github/workflows/deploy.yml`) automates build checks and deployment:
 
-- **On pull request** — runs two checks in parallel:
+- **On pull request to main** — runs two checks in parallel:
   - Flask backend syntax check
   - Flutter web build check
 - **On merge to main** — runs the same checks, then builds Flutter with the production URL, patches `index.html`, and commits the output into `flask_app/templates/` with `[skip ci]` to avoid loops
 
-`flask_app/templates/` is gitignored locally so you never accidentally commit build output yourself. On the server, a `git pull` after a merge will include the freshly built templates, and a `docker compose up` brings the new version live.
+`flask_app/templates/` and Flutter build output are gitignored locally — you never need to commit them manually. After a merge, the server just needs `git pull` + `docker compose up` to pick up the new build.
+
+The following secrets must be configured in GitHub (Settings → Secrets and variables → Actions) and correspond to the same variables in your `.env`:
+
+| Secret | Description |
+|---|---|
+| `APP_BASE_URL` | Production URL (e.g. `https://sasim.mcube-cluster.de`) |
+| `APP_BACKEND_PATH` | Backend endpoint path (e.g. `platform`) |
 
 ---
 
-### Environment Files
-
-`.env.example` is the only env file committed to the repo. All others are gitignored.
-
-By default, `build.sh` and `docker-compose.local.yml` read from `.env`. If you want to maintain multiple env files (e.g. one per environment), pass the path explicitly when building:
-
-```bash
-ENV_FILE=../../.env.dev bash build.sh
-```
-
-For `docker-compose.local.yml`, swap the `env_file` path in the file or copy your preferred env file to `.env` before running.
-
-### Region-Specific Data
+## Region-Specific Data
 
 The `flask_app/db` directory contains region-specific constants and MobiScore values. If you are setting up the project for a different city, these values can be recalculated based on the methodology outlined in the paper:  
 **Ending the Myth of Mobility at Zero Costs: An External Cost Analysis**  
