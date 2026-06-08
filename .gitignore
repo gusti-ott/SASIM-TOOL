@@ -11,7 +11,6 @@ flask_app/config/api_keys.py
 .idea
 
 otp/*
-!otp/example-graph.osm.pbf
 /.env
 /.env.dev
 /flask_app/templates/

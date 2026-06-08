@@ -87,6 +87,8 @@ OTP must be running separately. Before starting OTP, place both required data fi
 - **OSM `.pbf` file** — road network for your region (e.g. from [Geofabrik](https://download.geofabrik.de/))
 - **GTFS `.zip` file** — public transit schedules for your region (e.g. from your local transit authority); required so OTP can determine the correct timezone
 
+Filenames do not matter — OTP automatically picks up any `.pbf` and `.zip` file in the directory.
+
 Then start OTP:
 
 **First run — build and save the graph:**
@@ -109,6 +111,8 @@ Before starting, place both required data files in the `otp/` directory:
 
 - **OSM `.pbf` file** — road network for your region (e.g. from [Geofabrik](https://download.geofabrik.de/))
 - **GTFS `.zip` file** — public transit schedules for your region (e.g. from your local transit authority); required so OTP can determine the correct timezone
+
+Filenames do not matter — OTP automatically picks up any `.pbf` and `.zip` file in the directory.
 
 **First run — build and save the OTP graph:**
 
@@ -136,6 +140,19 @@ docker compose --env-file .env.dev -f docker-compose.local.yml up
 
 ---
 
+### CI/CD
+
+The GitHub Actions workflow (`.github/workflows/deploy.yml`) runs on every pull request and every merge to `main`:
+
+- **On pull request** — runs two checks in parallel:
+  - Flask backend syntax check
+  - Flutter web build check
+- **On merge to main** — runs the same checks, then builds Flutter with the production URL, patches `index.html`, and commits the output into `flask_app/templates/` with `[skip ci]` to avoid loops
+
+`flask_app/templates/` is gitignored locally so you never accidentally commit build output yourself. On the server, a `git pull` after a merge will include the freshly built templates, and a `docker compose up` brings the new version live.
+
+---
+
 ### Environment Files
 
 `.env.example` is the only env file committed to the repo. All others are gitignored.
@@ -160,7 +177,6 @@ The `flask_app/db` directory contains region-specific constants and MobiScore va
 
 Key partners include:
 - Bavarian Ministry of Housing, Construction and Transport
-- BMW Group
 - MVV
 - TUM
 - Mobility Department of the City of Munich
