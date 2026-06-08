@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:multimodal_routeplanner/03_domain/entities/MobilityMode.dart';
+import 'package:multimodal_routeplanner/config/app_config.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
 import 'package:multimodal_routeplanner/03_domain/enums/MobilityModeEnum.dart';
 import 'package:multimodal_routeplanner/04_infrastructure/datasources/mock_trip_1.dart';
@@ -41,25 +42,8 @@ class RouteRemoteDatasourceImpl implements RouteRemoteDatasource {
 
     bool isMocked = false;
 
-    /*// Construct URI for local server
-    var uri = Uri.http(
-      '127.0.0.1:5000',
-      '/platform',
-      {
-        'inputStartAddress': startInput,
-        'inputEndAddress': endInput,
-        'tripMode': modeString,
-        'quickResponse': quickResponseString,
-        if (startCoordinates != null) 'startCoordinates': startCoordinates,
-        if (endCoordinates != null) 'endCoordinates': endCoordinates,
-      },
-    );*/
-
-    // URI for production server
-    var uri = Uri.https(
-      'sasim.mcube-cluster.de',
-      '/platform',
-      {
+    var uri = Uri.parse(AppConfig.apiUrl).replace(
+      queryParameters: {
         'inputStartAddress': startInput,
         'inputEndAddress': endInput,
         'tripMode': modeString,

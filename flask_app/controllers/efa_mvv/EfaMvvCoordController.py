@@ -26,15 +26,13 @@ class EfaMvvCoordController:
 
         start = time.time()
 
-        if not quick_response:
-            url = self.base_url + self.path + '&coordRadius=' + str(location.lon) + ':' + str(
-                location.lat) + ':WGS84[dd.ddddd]:' + str(radius)
+        path = self.path if not quick_response else self.path_quick
+        coord_radius = f"{location.lon}:{location.lat}:WGS84[dd.ddddd]:{radius}"
 
-        else:
-            url = self.base_url + self.path_quick + '&coordRadius=' + str(location.lon) + ':' + str(
-                location.lat) + ':WGS84[dd.ddddd]:' + str(radius)
-
-        response = requests.get(url)
+        response = requests.get(
+            self.base_url + "/" + path,
+            params={"coordRadius": coord_radius}
+        )
         print("Efa MVV API Coord response: " + str(response))
         end = time.time()
         print("Efa MVV API Coord time: " + str(end - start))

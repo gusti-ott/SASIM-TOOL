@@ -29,7 +29,7 @@ class OtpHelper:
         return otp_mode
 
     def location_to_otp_format(self, location: Location):
-        otp_location = (str(location.lat) + ", " + str(location.lon))
+        otp_location = (str(location.lat) + "," + str(location.lon))
         return otp_location
 
 class OtpMode(Enum):

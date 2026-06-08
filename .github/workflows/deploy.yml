@@ -1,88 +1,91 @@
 name: Build and Deploy
 
 on:
-  push:
-    branches:
-      - '**'  # Run build on all branches
   pull_request:
     branches:
-      - main  # Run build on PRs to main
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
-  build:
+  check-flask:
+    name: Check Flask Backend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./flask_app
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Check syntax
+        run: python -m py_compile app.py
+
+  build-flutter:
     name: Build Flutter Frontend
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./flutter_frontend/multimodal_routeplanner
-
     steps:
-      - name: Checkout Git Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
         with:
-          fetch-depth: '0'
-
-      - name: Print Commit SHA
-        run: echo "Checked out commit $(git rev-parse HEAD)"
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.22.2'
-
-      - name: Clean previous Builds
-        run: flutter clean
+          flutter-version: '3.35.4'
 
       - name: Build Flutter Web
         run: |
           flutter gen-l10n
-          flutter build web --web-renderer canvaskit
-          sed -i 's|<base href="/">|<base href="/web/">|' build/web/index.html
-
-      - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: flutter-web-build
-          path: ./flutter_frontend/multimodal_routeplanner/build/web
+          flutter build web \
+            --dart-define=APP_BASE_URL=${{ secrets.APP_BASE_URL }} \
+            --dart-define=APP_BACKEND_PATH=${{ secrets.APP_BACKEND_PATH }}
 
   deploy:
-    needs: build
-    if: github.ref == 'refs/heads/main'
+    name: Commit build to main
+    needs: [check-flask, build-flutter]
+    if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write
+    defaults:
+      run:
+        working-directory: ./flutter_frontend/multimodal_routeplanner
     steps:
-      - name: Checkout Git Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Print Commit SHA
-        run: echo "Checked out commit $(git rev-parse HEAD)"
-
-      - name: Ensure templates directory is empty
-        run: |
-          rm -rf ./flask_app/templates/*
-          mkdir -p ./flask_app/templates
-
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-
+      - uses: subosito/flutter-action@v2
         with:
-          name: flutter-web-build
-          path: ./flask_app/templates/
+          flutter-version: '3.35.4'
 
-      - name: Remove build artifacts
-        run: rm -rf ./flask_app/templates/flutter-web-build
-
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Build and push Docker image
-        env:
-          GITHUB_SHA: ${{ github.sha }}
+      - name: Build Flutter Web
         run: |
-          docker build --no-cache -t gusott/sasim:${GITHUB_SHA} ./flask_app
-          docker tag gusott/sasim:${GITHUB_SHA} gusott/sasim:latest
-          docker push gusott/sasim:${GITHUB_SHA}
-          docker push gusott/sasim:latest
+          flutter gen-l10n
+          flutter build web \
+            --dart-define=APP_BASE_URL=${{ secrets.APP_BASE_URL }} \
+            --dart-define=APP_BACKEND_PATH=${{ secrets.APP_BACKEND_PATH }}
+
+      - name: Commit build output
+        working-directory: .
+        run: |
+          sed -i 's|<base href="/">|<base href="/web/">|' flutter_frontend/multimodal_routeplanner/build/web/index.html
+          rm -rf flask_app/templates/*
+          mkdir -p flask_app/templates
+          cp -r flutter_frontend/multimodal_routeplanner/build/web/. flask_app/templates/
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f flask_app/templates/
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: update flutter web build [skip ci]"
+            git push
+          fi

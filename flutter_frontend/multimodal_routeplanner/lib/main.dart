@@ -16,9 +16,11 @@ import 'package:multimodal_routeplanner/config/setup_dependencies.dart';
 
 import '02_application/bloc/route_info/route_info_bloc.dart';
 import '02_application/bloc/visualization/visualization_bloc.dart';
+import 'config/app_config.dart';
 import 'l10n/app_localizations.dart';
 
 void main() async {
+  AppConfig.validate();
   setupDependencies();
   runApp(const VmrpApp());
 }
