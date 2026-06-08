@@ -108,9 +108,9 @@ docker run --rm -v $(pwd)/otp:/var/opentripplanner -p 8080:8080 opentripplanner/
 
 Once OTP and Flask are both running, the app is available at the URL defined in `APP_BASE_URL` in your env file.
 
-#### 4b. Run Locally With Docker Compose
+#### 4b. Run With Docker Compose
 
-`docker-compose.local.yml` starts both the Flask app and OTP together, reading your root `.env`.
+`docker-compose.yml` starts both the Flask app and OTP together. By default it reads `.env` from the project root. For different configurations (e.g. staging or dev), pass a different env file via `--env-file`.
 
 Before starting, place both required data files in the `otp/` directory:
 
@@ -126,26 +126,22 @@ wget https://www.mvg.de/static/gtfs/google_transit.zip -O otp/gtfs.zip
 
 **First run — build and save the OTP graph:**
 
-Run OTP as a one-off to build `graph.obj` from the `.pbf` file and save it to the `otp/` directory:
-
 ```bash
-docker compose -f docker-compose.local.yml run --rm otp --build --save
+docker compose run --rm otp --build --save
 ```
 
 **Subsequent runs — load the saved graph:**
 
-Start the full stack. OTP will load the existing `graph.obj` and the Flask app will be available at the URL defined in `APP_BASE_URL`:
-
 ```bash
-docker compose -f docker-compose.local.yml up -d --build --remove-orphans
+docker compose up -d --build --remove-orphans
 ```
 
-The `--build` flag rebuilds the Flask image to pick up any backend or template changes. The OTP graph does **not** need to be rebuilt unless you change the `.pbf` or GTFS data. The `--remove-orphans` flag cleans up containers for any services removed from the compose file.
+The `--build` flag rebuilds the Flask image to pick up any backend or template changes. The OTP graph does **not** need to be rebuilt unless you change the `.pbf` or GTFS data.
 
-To use a different env file (e.g. for a dev environment):
+To use a different env file:
 
 ```bash
-docker compose --env-file .env.dev -f docker-compose.local.yml up -d --build --remove-orphans
+docker compose --env-file .env.dev up -d --build --remove-orphans
 ```
 
 > Graph building can take several minutes depending on the size of the OSM data.
@@ -185,13 +181,15 @@ The following secrets must be set in GitHub (Settings → Secrets and variables 
 
 `.env.example` is the only env file committed to the repo. All others are gitignored.
 
-By default, `build.sh` and `docker-compose.local.yml` read from `.env`. If you want to maintain multiple env files (e.g. one per environment), pass the path explicitly when building:
+By default, `build.sh` and `docker-compose.yml` read from `.env`. To use a different env file, pass it explicitly:
 
 ```bash
 ENV_FILE=../../.env.dev bash build.sh
 ```
 
-For `docker-compose.local.yml`, swap the `env_file` path in the file or copy your preferred env file to `.env` before running.
+```bash
+docker compose --env-file .env.dev up -d --build --remove-orphans
+```
 
 ### Region-Specific Data
 
