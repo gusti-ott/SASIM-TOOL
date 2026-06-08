@@ -85,9 +85,14 @@ python wsgi.py
 OTP must be running separately. Before starting OTP, place both required data files in the `otp/` directory:
 
 - **OSM `.pbf` file** — road network for your region (e.g. from [Geofabrik](https://download.geofabrik.de/))
-- **GTFS `.zip` file** — public transit schedules for your region (e.g. from your local transit authority); required so OTP can determine the correct timezone
+- **GTFS file** — must be named **`gtfs.zip`** — public transit schedules for your region (e.g. from your local transit authority); required so OTP can determine the correct timezone. OTP 2.2.0 does not reliably detect GTFS feeds with other zip filenames.
 
-Filenames do not matter — OTP automatically picks up any `.pbf` and `.zip` file in the directory.
+The `.pbf` filename does not matter. For Munich/Oberbayern, download both directly into the `otp/` directory:
+
+```bash
+wget https://download.geofabrik.de/europe/germany/bayern/oberbayern-latest.osm.pbf -P otp/
+wget https://www.mvg.de/static/gtfs/google_transit.zip -O otp/gtfs.zip
+```
 
 Then start OTP:
 
@@ -110,9 +115,14 @@ Once OTP and Flask are both running, the app is available at the URL defined in 
 Before starting, place both required data files in the `otp/` directory:
 
 - **OSM `.pbf` file** — road network for your region (e.g. from [Geofabrik](https://download.geofabrik.de/))
-- **GTFS `.zip` file** — public transit schedules for your region (e.g. from your local transit authority); required so OTP can determine the correct timezone
+- **GTFS file** — must be named **`gtfs.zip`** — public transit schedules for your region (e.g. from your local transit authority); required so OTP can determine the correct timezone. OTP 2.2.0 does not reliably detect GTFS feeds with other zip filenames.
 
-Filenames do not matter — OTP automatically picks up any `.pbf` and `.zip` file in the directory.
+The `.pbf` filename does not matter. For Munich/Oberbayern, download both directly into the `otp/` directory:
+
+```bash
+wget https://download.geofabrik.de/europe/germany/bayern/oberbayern-latest.osm.pbf -P otp/
+wget https://www.mvg.de/static/gtfs/google_transit.zip -O otp/gtfs.zip
+```
 
 **First run — build and save the OTP graph:**
 
@@ -139,6 +149,8 @@ docker compose --env-file .env.dev -f docker-compose.local.yml up -d --build --r
 ```
 
 > Graph building can take several minutes depending on the size of the OSM data.
+>
+> OTP memory usage is controlled by `JAVA_TOOL_OPTIONS` in your `.env` (default: `-Xmx8g`). Reduce this value if your server has limited RAM — e.g. `-Xmx2g` for a server with ~2.4 GB available. The graph build is the most memory-intensive step; once built, OTP uses significantly less memory in serve mode. If the build process gets killed, try a smaller value or use a smaller `.pbf` file for your region.
 
 ---
 
