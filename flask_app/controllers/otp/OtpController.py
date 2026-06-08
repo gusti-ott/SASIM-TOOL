@@ -93,10 +93,17 @@ class OtpController:
         def make_request(start_loc: str, end_loc: str) -> json:
 
             response = requests.get(
-                self.base_url + "/" + self.path + "?fromPlace=" + start_loc + "&toPlace=" + end_loc + "&time=" + str(
-                    input_time.hour) + ":" + str(input_time.minute) + "&date=" +
-                str(input_time.month) + "-" + str(input_time.day) + "-" + str(input_time.year) + "&mode=" +
-                mode + "&maxWalkDistance=50000&arriveBy=false")
+                self.base_url + "/" + self.path,
+                params={
+                    "fromPlace": start_loc,
+                    "toPlace": end_loc,
+                    "time": f"{input_time.hour}:{input_time.minute}",
+                    "date": f"{input_time.month}-{input_time.day}-{input_time.year}",
+                    "mode": mode,
+                    "maxWalkDistance": 50000,
+                    "arriveBy": "false"
+                }
+            )
 
             print(response.url)
             print("otp response: " + str(response))
@@ -154,10 +161,17 @@ class OtpController:
         input_time = datetime.now()
 
         response = requests.get(
-            self.base_url + "/" + self.path + "?fromPlace=" + start_coordinates + "&toPlace=" + end_coordinates + "&time=" + str(
-                input_time.hour) + ":" + str(input_time.minute) + "&date=" +
-            str(input_time.month) + "-" + str(input_time.day) + "-" + str(input_time.year) + "&mode=" +
-            otp_mode + "&maxWalkDistance=50000&arriveBy=false")
+            self.base_url + "/" + self.path,
+            params={
+                "fromPlace": start_coordinates,
+                "toPlace": end_coordinates,
+                "time": f"{input_time.hour}:{input_time.minute}",
+                "date": f"{input_time.month}-{input_time.day}-{input_time.year}",
+                "mode": otp_mode,
+                "maxWalkDistance": 50000,
+                "arriveBy": "false"
+            }
+        )
 
         print(response.url)
         print("otp response: " + str(response))

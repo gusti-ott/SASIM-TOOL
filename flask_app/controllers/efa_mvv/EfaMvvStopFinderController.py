@@ -17,9 +17,10 @@ class EfaMvvStopFinder:
     def get_response(self, address: str) -> json:
         start = time.time()
 
-        url = (self.base_url + "/" + self.path + '&name_sf=' + str(address))
-
-        response = requests.get(url)
+        response = requests.get(
+            self.base_url + "/" + self.path,
+            params={"name_sf": str(address)}
+        )
 
         print("Efa MVV API StopFinder response: " + str(response))
         end = time.time()
@@ -31,10 +32,10 @@ class EfaMvvStopFinder:
     def get_response_coord(self, location: Location) -> json:
         start = time.time()
 
-        url = (self.base_url + "/" + self.path_coord + '&name_sf=' + str(location.lon) + ':' + str(location.lat) +
-               ':WGS84[DD.ddddd]')
-
-        response = requests.get(url)
+        response = requests.get(
+            self.base_url + "/" + self.path_coord,
+            params={"name_sf": f"{location.lon}:{location.lat}:WGS84[DD.ddddd]"}
+        )
 
         print("Efa MVV API StopFinder response: " + str(response))
         end = time.time()

@@ -43,8 +43,6 @@ daily_summary = {
 }
 
 
-ALLOWED_IPS = os.environ.get('ALLOWED_IPS', '').split(',')
-
 # Scheduler for daily log writing task
 scheduler = BackgroundScheduler()
 
@@ -170,10 +168,6 @@ def return_otp_trip():
 @server.route('/platform', methods=['GET'])
 def return_trip():
     global daily_summary
-
-    # # Restrict access based on IP
-    # if request.remote_addr not in ALLOWED_IPS:
-    #     abort(403, 'IP is not allowed')  # Forbidden
 
     # increment for each call of this endpoint
     daily_summary['total_calls'] += 1
