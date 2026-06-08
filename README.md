@@ -127,13 +127,15 @@ docker-compose -f docker-compose.local.yml run --rm otp --build --save
 Start the full stack. OTP will load the existing `graph.obj` and the Flask app will be available at the URL defined in `APP_BASE_URL`:
 
 ```bash
-docker compose -f docker-compose.local.yml up
+docker compose -f docker-compose.local.yml up -d --build --remove-orphans
 ```
 
-To use a specific env file, pass `--env-file` (if omitted, `.env` is used by default):
+The `--build` flag rebuilds the Flask image to pick up any backend or template changes. The OTP graph does **not** need to be rebuilt unless you change the `.pbf` or GTFS data. The `--remove-orphans` flag cleans up containers for any services removed from the compose file.
+
+To use a different env file (e.g. for a dev environment):
 
 ```bash
-docker compose --env-file .env.dev -f docker-compose.local.yml up
+docker compose --env-file .env.dev -f docker-compose.local.yml up -d --build --remove-orphans
 ```
 
 > Graph building can take several minutes depending on the size of the OSM data.
