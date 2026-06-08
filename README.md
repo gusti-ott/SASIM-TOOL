@@ -129,7 +129,7 @@ wget https://www.mvg.de/static/gtfs/google_transit.zip -O otp/gtfs.zip
 Run OTP as a one-off to build `graph.obj` from the `.pbf` file and save it to the `otp/` directory:
 
 ```bash
-docker-compose -f docker-compose.local.yml run --rm otp --build --save
+docker compose -f docker-compose.local.yml run --rm otp --build --save
 ```
 
 **Subsequent runs — load the saved graph:**
@@ -150,7 +150,14 @@ docker compose --env-file .env.dev -f docker-compose.local.yml up -d --build --r
 
 > Graph building can take several minutes depending on the size of the OSM data.
 >
-> OTP memory usage is controlled by `JAVA_TOOL_OPTIONS` in your `.env` (default: `-Xmx8g`). Reduce this value if your server has limited RAM — e.g. `-Xmx2g` for a server with ~2.4 GB available. The graph build is the most memory-intensive step; once built, OTP uses significantly less memory in serve mode. If the build process gets killed, try a smaller value or use a smaller `.pbf` file for your region.
+> OTP memory usage is controlled by `JAVA_TOOL_OPTIONS` in your `.env`. **`-Xmx4g` is the recommended minimum** for building the Oberbayern graph. If your server has less than 4 GB of available RAM, enable swap first to make up the difference:
+> ```bash
+> sudo fallocate -l 4G /swapfile
+> sudo chmod 600 /swapfile
+> sudo mkswap /swapfile
+> sudo swapon /swapfile
+> ```
+> The graph build is the most memory-intensive step — once built, OTP uses significantly less memory in serve mode. Swap is only needed for the graph build and is lost on reboot, so if you ever need to rebuild the graph you will need to re-enable it.
 
 ---
 
@@ -164,6 +171,13 @@ The GitHub Actions workflow (`.github/workflows/deploy.yml`) runs on every pull 
 - **On merge to main** — runs the same checks, then builds Flutter with the production URL, patches `index.html`, and commits the output into `flask_app/templates/` with `[skip ci]` to avoid loops
 
 `flask_app/templates/` is gitignored locally so you never accidentally commit build output yourself. On the server, a `git pull` after a merge will include the freshly built templates, and a `docker compose up` brings the new version live.
+
+The following secrets must be set in GitHub (Settings → Secrets and variables → Actions):
+
+| Secret | Description |
+|---|---|
+| `APP_BASE_URL` | Production URL of the app (e.g. `https://sasim.mcube-cluster.de`) |
+| `APP_BACKEND_PATH` | Backend endpoint path (e.g. `platform`) |
 
 ---
 
