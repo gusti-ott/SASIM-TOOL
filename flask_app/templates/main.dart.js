@@ -110117,7 +110117,7 @@ p=t.p
 return A.an(A.b([B.ae,A.bd(o,A.an(A.b([r,A.ax(new A.aj(new A.a5(32,32,32,32),A.an(A.b([n,B.aO,A.hb(q,o,m,B.uc,new A.aDV(this,a),!0,q,o,o)],p),B.h,B.aB,B.f),o),o,o)],p),B.h,B.l,B.f),B.q,o,o,s,o,o,o,o,o,o,o,1/0)],p),B.h,B.l,B.f)},
 a09(a){var s,r,q=this,p=A.aS(a,B.z,t.J)
 p.toString
-s="http://37.27.211.55:5000/web/#/result?startAddress="+q.c+"&endAddress="+q.e
+s="https://sasim.mcube-cluster.de/web/#/result?startAddress="+q.c+"&endAddress="+q.e
 r=q.d
 if(r!=null)s+="&startCoordinates="+r
 r=q.f
@@ -110758,7 +110758,7 @@ a8j(a,b,c,d,e,f){var s=0,r=A.Q(t.xQ),q,p=this,o,n,m,l,k,j
 var $async$zi=A.R(function(g,h){if(g===1)return A.N(h,r)
 while(true)switch(s){case 0:n=p.aEa(c)
 m=d!=null?String(d):"false"
-l=A.ej("http://37.27.211.55:5000/platform",0,null)
+l=A.ej("https://sasim.mcube-cluster.de/platform",0,null)
 k=t.N
 j=A.r(k,t.z)
 j.m(0,"inputStartAddress",f)
