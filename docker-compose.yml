@@ -23,23 +23,11 @@ services:
     command: --load --serve
     environment:
       - JAVA_TOOL_OPTIONS=${JAVA_TOOL_OPTIONS:--Xmx8g}
+      - JDK_JAVA_OPTIONS=-XX:-UseContainerSupport
     volumes:
       - ./otp:/var/opentripplanner
     ports:
       - 127.0.0.1:8080:8080
-    networks:
-      - otp_network
-
-  nginx:
-    image: nginx:alpine
-    restart: always
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-    depends_on:
-      - flask_app
     networks:
       - otp_network
 
