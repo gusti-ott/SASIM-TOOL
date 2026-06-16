@@ -115,7 +115,7 @@ class _DetailRouteInfoMapState extends State<DetailRouteInfoMap> with TickerProv
   TileLayer osmTileLayer() {
     return TileLayer(
       urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-      userAgentPackageName: 'com.example.app',
+      userAgentPackageName: 'de.mcube-cluster.sasim',
     );
   }
 

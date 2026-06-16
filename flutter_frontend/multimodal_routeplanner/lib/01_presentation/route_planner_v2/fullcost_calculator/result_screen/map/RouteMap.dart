@@ -64,8 +64,8 @@ class _RouteMapState extends State<RouteMap> {
       ],
       children: [
         TileLayer(
-          urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-          subdomains: const ['a', 'b', 'c'],
+          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+          userAgentPackageName: 'de.mcube-cluster.sasim',
         ),
         TappablePolylineLayer(
             polylineCulling: true,
