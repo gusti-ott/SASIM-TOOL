@@ -1,8 +1,8 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_tappable_polyline/flutter_map_tappable_polyline.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:multimodal_routeplanner/01_presentation/helpers/osm_tile_layer.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v3/helpers/flutter_map_helper.dart';
 import 'package:multimodal_routeplanner/01_presentation/theme_data/colors_v3.dart';
 import 'package:multimodal_routeplanner/03_domain/entities/Trip.dart';
@@ -113,15 +113,6 @@ class _DetailRouteInfoMapState extends State<DetailRouteInfoMap> with TickerProv
     animateMapToLatLng(targetCenter); // Animate to the center of the bounds
   }
 
-  TileLayer osmTileLayer() {
-    if (kIsWeb) {
-      return TileLayer(urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png');
-    }
-    return TileLayer(
-      urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-      userAgentPackageName: 'de.mcube-cluster.sasim',
-    );
-  }
 
   TappablePolylineLayer routePolylineLayer(Trip trip) {
     return TappablePolylineLayer(

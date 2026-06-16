@@ -1,7 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_tappable_polyline/flutter_map_tappable_polyline.dart';
+import 'package:multimodal_routeplanner/01_presentation/helpers/osm_tile_layer.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v1/widgets/map/StartMarker.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v1/widgets/map/StopMarker.dart';
 import 'package:multimodal_routeplanner/01_presentation/route_planner_v2/fullcost_calculator/result_screen/map/route_map_helper_methods.dart';
@@ -64,13 +64,7 @@ class _RouteMapState extends State<RouteMap> {
         ),
       ],
       children: [
-        if (kIsWeb)
-          TileLayer(urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png')
-        else
-          TileLayer(
-            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-            userAgentPackageName: 'de.mcube-cluster.sasim',
-          ),
+        osmTileLayer(),
         TappablePolylineLayer(
             polylineCulling: true,
             polylines: [

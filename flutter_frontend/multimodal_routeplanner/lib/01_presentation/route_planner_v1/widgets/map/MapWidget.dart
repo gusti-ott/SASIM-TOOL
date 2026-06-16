@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:multimodal_routeplanner/01_presentation/helpers/osm_tile_layer.dart';
 import 'package:flutter_map_tappable_polyline/flutter_map_tappable_polyline.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:multimodal_routeplanner/01_presentation/commons/mode_colors.dart';
@@ -66,10 +67,7 @@ class _MapContentState extends State<MapContent> {
             ),
           ],
           children: [
-            TileLayer(
-              urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-              subdomains: const ['a', 'b', 'c'],
-            ),
+            osmTileLayer(),
             if (state is VisualizationChangedState)
               TappablePolylineLayer(
                   polylineCulling: true,
