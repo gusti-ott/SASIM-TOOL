@@ -64,10 +64,13 @@ class _RouteMapState extends State<RouteMap> {
         ),
       ],
       children: [
-        TileLayer(
-          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-          userAgentPackageName: kIsWeb ? null : 'de.mcube-cluster.sasim',
-        ),
+        if (kIsWeb)
+          TileLayer(urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png')
+        else
+          TileLayer(
+            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+            userAgentPackageName: 'de.mcube-cluster.sasim',
+          ),
         TappablePolylineLayer(
             polylineCulling: true,
             polylines: [

@@ -114,9 +114,12 @@ class _DetailRouteInfoMapState extends State<DetailRouteInfoMap> with TickerProv
   }
 
   TileLayer osmTileLayer() {
+    if (kIsWeb) {
+      return TileLayer(urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png');
+    }
     return TileLayer(
       urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-      userAgentPackageName: kIsWeb ? null : 'de.mcube-cluster.sasim',
+      userAgentPackageName: 'de.mcube-cluster.sasim',
     );
   }
 
