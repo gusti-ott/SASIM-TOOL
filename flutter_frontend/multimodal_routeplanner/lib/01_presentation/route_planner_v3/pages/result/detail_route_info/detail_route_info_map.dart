@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_tappable_polyline/flutter_map_tappable_polyline.dart';
@@ -113,6 +114,9 @@ class _DetailRouteInfoMapState extends State<DetailRouteInfoMap> with TickerProv
   }
 
   TileLayer osmTileLayer() {
+    if (kIsWeb) {
+      return TileLayer(urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png');
+    }
     return TileLayer(
       urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
       userAgentPackageName: 'de.mcube-cluster.sasim',
