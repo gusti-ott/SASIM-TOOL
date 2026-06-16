@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_tappable_polyline/flutter_map_tappable_polyline.dart';
@@ -65,7 +66,7 @@ class _RouteMapState extends State<RouteMap> {
       children: [
         TileLayer(
           urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-          userAgentPackageName: 'de.mcube-cluster.sasim',
+          userAgentPackageName: kIsWeb ? null : 'de.mcube-cluster.sasim',
         ),
         TappablePolylineLayer(
             polylineCulling: true,
